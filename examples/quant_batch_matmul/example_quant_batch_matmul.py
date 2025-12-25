@@ -37,7 +37,7 @@ def simple_quant_batch_matmul(
     def main(
             A: T.Tensor([Batch, M, K], in_dtype),              # type: ignore
             B: T.Tensor([Batch, K, N], in_dtype),              # type: ignore
-            scale: T.Tensor([N_scale], scale_dtype),       # type: ignore
+            scale: T.Tensor([N_scale], scale_dtype),           # type: ignore
             C: T.Tensor([Batch, M, N], out_dtype),             # type: ignore
             workspace_1: T.Tensor([Batch, M, N], accum_dtype), # type: ignore
     ):
