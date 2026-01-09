@@ -123,7 +123,7 @@ cd build
 echo "set(USE_ASCEND ON)" >> config.cmake
 
 echo "Running CMake for TileLang..."
-cmake ..
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. 
 if [ $? -ne 0 ]; then
     echo "Error: CMake configuration failed."
     exit 1
@@ -131,12 +131,52 @@ fi
 
 echo "Building TileLang with make..."
 
+CORES=$(nproc)
+# MemAvailable from /proc (host view)
+MEM_AVAIL_MB=$(awk '/MemAvailable/ {print int($2/1024)}' /proc/meminfo)
+MEM_LIMIT_MB=$MEM_AVAIL_MB
+# cgroup v2
+if [ -f /sys/fs/cgroup/memory.max ]; then
+  CGROUP_MEM=$(cat /sys/fs/cgroup/memory.max)
+  if [ "$CGROUP_MEM" != "max" ]; then
+    MEM_LIMIT_MB=$(( CGROUP_MEM / 1024 / 1024 ))
+  fi
+# cgroup v1
+elif [ -f /sys/fs/cgroup/memory/memory.limit_in_bytes ]; then
+  CGROUP_MEM=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
+  MEM_LIMIT_MB=$(( CGROUP_MEM / 1024 / 1024 ))
+fi
+# never use 100% of memory limit
+if [ "$MEM_LIMIT_MB" -lt "$MEM_AVAIL_MB" ]; then
+  # cgroup-limited → leave safety margin
+  EFFECTIVE_MEM_MB=$(( MEM_LIMIT_MB * 70 / 100 ))
+else
+  # bare metal → use MemAvailable directly
+  EFFECTIVE_MEM_MB=$MEM_AVAIL_MB
+fi
+# Conservative peak memory per C++ compile job
+MEM_PER_JOB_MB=2500
+JOBS_BY_MEM=$(( EFFECTIVE_MEM_MB / MEM_PER_JOB_MB ))
+[ "$JOBS_BY_MEM" -lt 1 ] && JOBS_BY_MEM=1
+# Also limit by CPU
 # Calculate 75% of available CPU cores
 # Other wise, make will use all available cores
 # and it may cause the system to be unresponsive
-CORES=$(nproc)
-MAKE_JOBS=$(( CORES * 75 / 100 ))
-make -j${MAKE_JOBS}
+JOBS_BY_CPU=$(( CORES * 75 / 100 ))
+[ "$JOBS_BY_CPU" -lt 1 ] && JOBS_BY_CPU=1
+MAKE_JOBS=$(( JOBS_BY_MEM < JOBS_BY_CPU ? JOBS_BY_MEM : JOBS_BY_CPU ))
+
+echo "========== Build configuration =========="
+echo "CPU cores              : $CORES"
+echo "MemAvailable (/proc)   : ${MEM_AVAIL_MB} MB"
+echo "Memory limit (cgroup)  : ${MEM_LIMIT_MB} MB"
+echo "Effective memory       : ${EFFECTIVE_MEM_MB} MB"
+echo "Jobs by memory         : $JOBS_BY_MEM"
+echo "Jobs by CPU            : $JOBS_BY_CPU"
+echo "==> make -j$MAKE_JOBS"
+echo "========================================="
+
+make -j$MAKE_JOBS
 
 if [ $? -ne 0 ]; then
     echo "Error: TileLang build failed."
