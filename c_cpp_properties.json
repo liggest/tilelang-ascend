@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/src/layout",
+                "${workspaceFolder}/src/op",
+                "${workspaceFolder}/src/runtime",
+                "${workspaceFolder}/src/target",
+                "${workspaceFolder}/src/tl_templates",
+                "${workspaceFolder}/src/transform",
+                "${workspaceFolder}/src/transform/common"
+            ],
+            "defines": [],
+            "compilerPath": "cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64",
+            "compilerArgs": []
+        }
+    ],
+    "version": 4
+}
