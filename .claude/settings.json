@@ -1,0 +1,59 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(ascend-docs-search)",
+      "Skill(evaluate)",
+      "Skill(compare)",
+      "Task(subagent_type=code-analyzer)",
+      "Task(subagent_type=comparator)",
+      "Task(subagent_type=evaluator)",
+      "Task(subagent_type=Explore)",
+      "Task(subagent_type=Plan)",
+      "Task(subagent_type=general-purpose)",
+      "Task(subagent_type=claude-code-guide)",
+      "WebSearch",
+      "WebFetch(domain:support.huawei.com)",
+      "WebFetch(domain:www.huawei.com)",
+      "WebFetch(domain:www.hiascend.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:gitee.com)",
+      "WebFetch(domain:gitcode.com)",
+      "Edit",
+      "Write",
+      "Read",
+      "Glob",
+      "Grep",
+      "LSP",
+      "NotebookEdit",
+      "MultiEdit",
+      "AskUserQuestion",
+      "TodoWrite",
+      "EnterPlanMode",
+      "ExitPlanMode",
+      "Bash",
+      "KillShell",
+      "TaskOutput"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/session_stop_handle.py"
+          }
+        ]
+      }
+    ]
+  },
+  "sandbox": {
+    "enabled": false,
+    "autoAllowBashIfSandboxed": false
+  },
+  "enabledPlugins": {
+  }
+}
