@@ -1,0 +1,212 @@
+---
+name: tilelang-ascend-op
+description: TileLang-Ascend 算子开发与调试指南 - 涵盖从需求分析、代码编写、到调试测试的完整流程，包括 Cube Core 和 Vector Core 核心使用、内存管理、类型转换、C/V 核间数据传递等关键技术点
+---
+
+# TileLang-Ascend 算子开发与调试指南
+
+本技能提供 TileLang-Ascend 算子开发的完整流程指南，涵盖从需求分析、代码编写、到调试测试的全过程。
+
+## 使用时机
+
+当用户需要使用 TileLang 为华为昇腾 NPU 开发 AI 计算算子时，包括：
+- 矩阵运算（GEMM, GEMV, addmv 等）
+- 元素级运算（加法、乘法、激活函数等）
+- 注意力机制算子（FlashAttention, Sparse FlashAttention）
+- 其他自定义算子
+
+## 开发流程
+
+### 1. 需求分析与参考查阅
+
+1. **确认算子定义**：明确输入输出形状，计算公式，数据类型要求
+2. **查找参考实现**：
+   - 优先搜索 `examples/` 目录下是否有类似算子
+   - 查看 `tilelang/language/` 下的接口定义
+   - 必要时使用 `ascend-docs-search` 查询 Ascend C API
+
+### 2. 选择实现核心类型
+
+| 特性 | Cube Core | Vector Core |
+|------|-----------|--------------|
+| 优势 | 矩阵运算性能高，使用 `T.gemm_v0` 或 `T.mma` | 元素级运算灵活，使用 `T.tile.*` API |
+| 适用 | GEMM, GEMV 等大规模矩阵运算 | 元素加法、reduce_sum 等 |
+| 内存 | 使用 L0A/L0B/L0C 专用 buffer | 使用 UB (Unified Buffer) |
+
+### 3. 编写算子代码
+
+#### 基本结构
+
+```python
+import torch
+import tilelang as tl
+import tilelang.language as T
+
+tl.cache.clear_cache()
+
+@tl.jit(
+    out_idx=[-1],
+    pass_configs={
+        tl.PassConfigKey.TIR_MERGE_STATIC_SMEM: True,
+        tl.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
+    }
+)
+def operator_name(N, K, block_N, block_K, dtype="float16", accum_dtype="float32"):
+    @T.prim_func
+    def main(
+        in0: T.Tensor((shape1,), dtype),
+        in1: T.Tensor((shape2,), dtype),
+        out: T.Tensor((out_shape,), dtype),
+    ):
+        with T.Kernel(num_blocks, is_npu=True) as (cid, vid):
+            # 分配片上内存
+            buf = T.alloc_ub((size,), dtype)
+
+            # 使用 T.Scope 指定核心类型
+            with T.Scope("C"):
+                T.gemm_v0(...)
+
+            with T.Scope("V"):
+                T.tile.add(...)
+                T.reduce_sum(...)
+
+            T.copy(src, dst)
+    return main
+```
+
+#### 内存分配 API
+
+```python
+T.alloc_L1((shape,), dtype)      # L1 缓存
+T.alloc_ub((shape,), dtype)      # UB (Vector 专用)
+T.alloc_L0A((shape,), dtype)     # L0A (Cube)
+T.alloc_L0B((shape,), dtype)     # L0B (Cube)
+T.alloc_L0C((shape,), accum_dtype) # L0C (累加器)
+```
+
+#### 关键计算原语
+
+```python
+# 矩阵运算 (Cube Core)
+T.gemm_v0(A_L1, B_L1, C_L0, transpose_B=True, init=True)
+T.mma(A_L0, B_L0, C_L0)
+
+# 向量运算 (Vector Core)
+T.tile.mul(dst, src0, src1)   # 逐元素乘法
+T.tile.add(dst, src0, src1)   # 逐元素加法
+T.tile.axpy(dst, src0, scalar)
+T.reduce_sum(buffer, out, tmp, dim=-1)
+T.tile.cast(dst, src, mode, count)
+
+# 数据搬移
+T.copy(src, dst)
+T.barrier_all()
+```
+
+### 4. C/V 核间数据传递
+
+```python
+@tl.jit(
+    out_idx=[3],          # 输出索引
+    workspace_idx=[4],    # 工作空间索引
+    pass_configs={
+        tl.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
+        tl.PassConfigKey.TL_ASCEND_AUTO_CV_SYNC: True,
+    }
+)
+def operator(N, K, ...):
+    @T.prim_func
+    def main(
+        x: T.Tensor((K,), dtype),
+        A: T.Tensor((N, K), dtype),
+        y: T.Tensor((N,), dtype),
+        y_out: T.Tensor((N,), dtype),
+        workspace: T.Tensor((N,), dtype),
+    ):
+        with T.Kernel(n_num, is_npu=True) as (cid, _):
+            with T.Scope("C"):
+                T.gemm_v0(...)
+                T.copy(C_L0, workspace[bn * block_N])
+
+            with T.Scope("V"):
+                T.copy(workspace[bn * block_N], y_ub)
+                T.copy(y[bn * block_N], y_orig_ub)
+                T.tile.add(y_ub, y_orig_ub, y_ub)
+                T.copy(y_ub, y_out[bn * block_N])
+    return main
+```
+
+### 5. 类型转换注意事项
+
+**重要**：使用 `T.tile.cast()` 而不是 `.astype()` 循环
+
+```python
+# 正确方式
+def cast_or_copy(dst, src, mode, count):
+    if not_same_dtype:
+        return T.tile.cast(dst, src, mode, count)
+    else:
+        return T.copy(src, dst)
+
+# 使用
+cast_or_copy(x_32_ub, x_ub, "CAST_NONE", block_K)
+
+# 错误方式
+for i in T.serial(block_K):
+    x_32_ub[0, i] = x_ub[0, i].astype("float32")
+```
+
+### 6. 调试流程
+
+#### 环境变量设置
+
+```bash
+source /home/developer/Ascend/cann-8.5.0-beta.1/set_env.sh
+source set_env.sh
+```
+
+#### 分步测试策略
+
+1. **测试数据正确性**
+2. **测试单个模块**：先测试 GEMV，再测试加法
+3. **小规模测试**：N=64, K=64
+4. **不同 dtype**：float16 和 float32
+
+#### 常见错误及解决
+
+| 错误 | 原因 | 解决方法 |
+|------|------|----------|
+| `has no attribute access_ptr` | `T.tile.cast` src 是 slice | 先 copy 到 UB 再 cast |
+| `Buffer shape mismatch` | 2D buffer 与 1D index | 检查索引维度 |
+| 精度错误（2倍结果） | 累加器未初始化 | `T.tile.fill(accum, 0.0)` |
+| 结果只含部分数据 | VEC_NUM 多核数据块问题 | 检查 `bn = (cid * VEC_NUM + vid) % n_num` |
+
+### 7. 单元测试模板
+
+```python
+def ref_program(x, A, y):
+    return y + (A @ x)
+
+def check_case(N, K, block_N, block_K, dtype="float16"):
+    torch_dtype_map = {"float16": torch.half, "float32": torch.float32}
+
+    x = torch.randn(K).to(torch_dtype_map[dtype]).npu()
+    A = torch.randn(N, K).to(torch_dtype_map[dtype]).npu()
+    y = torch.randn(N).to(torch_dtype_map[dtype]).npu()
+
+    kernel = operator_name(N, K, block_N, block_K, dtype=dtype)
+    y_result = kernel(x, A, y)
+    ref_y = ref_program(x, A, y)
+
+    torch.testing.assert_close(y_result, ref_y, rtol=1e-2, atol=1e-2)
+```
+
+## 参考文件
+
+| 文件 | 说明 |
+|------|------|
+| `examples/gemm/` | 矩阵乘法示例 |
+| `examples/gemv/` | 矩阵向量乘法示例 |
+| `examples/elementwise/` | 元素级运算示例 |
+| `examples/flash_attention/` | 注意力算子示例 |
+| `tilelang/language/ascend_tile.py` | Tile 级 API |
