@@ -23,7 +23,7 @@ TileLang Ascend 提供两种编程模式，位于编译降级流程的不同层�
 | 维度 | Developer 模式 | Expert 模式 |
 |------|---------------|-------------|
 | **内存分配** | `T.alloc_shared(shape, dtype)` — 编译器自动映射到 L1 或 UB | `T.alloc_L1()` / `T.alloc_ub()` — 显式指定存储位置 |
-| | `T.alloc_fragment(shape, dtype)` — 编译器自动映射到 L0A/B/C | `T.alloc_L0A()` / `T.alloc_L0B()` / `T.alloc_L0C()` — 显式指定 |
+| | `T.alloc_fragment(shape, dtype)` — 编译器自动映射到 L0C | `T.alloc_L0A()` / `T.alloc_L0B()` / `T.alloc_L0C()` — 显式指定 |
 | **计算表达** | `T.Parallel` + 符号 API（`+`, `T.exp`, `T.max` 等） | `T.tile.add()`, `T.tile.exp()`, `T.tile.max()` 等 |
 | **执行作用域** | 无需指定，编译器通过 `AUTO_CV_COMBINE` 自动分离 Cube/Vector | 需要显式 `with T.Scope("C"):` 和 `with T.Scope("V"):` |
 | **同步控制** | 自动（`AUTO_SYNC` + `AUTO_CV_SYNC`） | 手动 `T.barrier_all()`, `T.set_flag/wait_flag`, `T.set_cross_flag/wait_cross_flag` |
@@ -31,14 +31,15 @@ TileLang Ascend 提供两种编程模式，位于编译降级流程的不同层�
 
 ## 何时选择哪种模式
 
-### 使用 Developer 模式
+### 推荐：使用 Developer 模式
 
 - 快速原型开发
 - 算法验证阶段
 - 追求代码可读性和可维护性
 - 不熟悉 Ascend 硬件细节
+- 大多数算子开发场景
 
-### 使用 Expert 模式
+### 选择 Expert 模式
 
 - 性能关键路径的极致优化
 - 需要精确控制流水线同步时机
