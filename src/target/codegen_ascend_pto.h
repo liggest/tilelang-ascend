@@ -203,6 +203,9 @@ private:
 
   void CopyL1ToL0Codegen(const CallNode *call, bool is_a);
 
+  void CopyCVExperimentCodegen(const CallNode *op);
+  void CopyVCExperimentCodegen(const CallNode *op);
+
   std::string PrintBufferOffset(const CallNode *op);
 
   std::string GetTempVarName(const std::string &temp_name);
