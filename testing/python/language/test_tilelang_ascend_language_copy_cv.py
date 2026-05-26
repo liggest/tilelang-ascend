@@ -42,7 +42,7 @@ def _copy_vc_experiment_kernel(M=128, N=128, K=128, dtype="float16"):
 
             with T.Scope("C"):
                 # UB → L1
-                T.wait_cross_flag(0, "mte3")
+                T.wait_cross_flag(0, "M")
                 # GM → L1
                 T.copy(B, B_l1)
                 T.set_flag("mte2", "m", 1)
@@ -58,8 +58,8 @@ def _copy_vc_experiment_kernel(M=128, N=128, K=128, dtype="float16"):
                 # GM → UB
                 T.copy(A[vid * M_half: (vid + 1) * M_half, :], A_ub)
                 # UB → L1 (TINSERT)
-                T.set_flag("mte2", "mte3", 3)
-                T.wait_flag("mte2", "mte3", 3)
+                T.set_flag("mte2", "v", 3)
+                T.wait_flag("mte2", "v", 3)
                 T.copy_op.copy_vc_experiment(A_ub, A_l1[vid * M_half, 0], A_ub_nz_tmp)
                 T.set_cross_flag("mte3", 0)
     return main
@@ -97,7 +97,7 @@ def _copy_cv_experiment_kernel(M=128, N=128, K=128, dtype="float16"):
 
             with T.Scope("V"):
                 # L0C → UB
-                T.wait_cross_flag("V", 0)
+                T.wait_cross_flag(0, "MTE3")
                 # UB → GM
                 T.copy(C_ub, C[vid * M_half: (vid + 1) * M_half, :])
     return main
