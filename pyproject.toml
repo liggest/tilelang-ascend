@@ -45,6 +45,16 @@ docstring-code-line-length = "dynamic"
 "testing/**.py" = ["UP", "FA"]
 "examples/**.py" = ["UP", "FA"]
 
+[tool.pytest.ini_options]
+pythonpath = ["testing/python", "."]
+testpaths = ["testing"]
+markers = [
+    "l0: Gate test — must pass to merge",
+    "l1: Functional test — must pass to merge",
+    "l2: Boundary/exception test — recommended",
+    "compile_time: Compile-time test, no NPU needed",
+]
+
 [tool.ruff.lint]
 select = [
     # pycodestyle
