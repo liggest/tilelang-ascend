@@ -25,6 +25,8 @@ endif()
 
 message(STATUS "Ascend Backend is enabled")
 
+include("${CMAKE_CURRENT_LIST_DIR}/a2a3/CMakeLists.txt")
+
 # Native profiling is available when the CANN profiling headers are installed.
 # Detect them on each configure without adding a user-facing profiling build
 # option; builds without CANN simply skip the reporting path.
