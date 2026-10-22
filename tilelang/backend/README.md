@@ -333,6 +333,8 @@ and the selected execution backend decides whether and when it is invoked.
 | `tilelang/cpu` | `c`, `llvm` | CPU pipeline, codegen, and scalar CPU tile-op implementations. |
 | `tilelang/metal` | `metal` | Metal pipeline, codegen, host hook, and Metal language extensions. |
 | `tilelang/webgpu/backend.py` | `webgpu` | WebGPU compiler component registration. |
+| `tilelang/ascend/backend.py` | `ascend` | Official AscendC and PTO variants for A5 targets. |
+| `tilelang/ascend/a2a3/backend.py` | `ascend` with `arch=dav-2201` | A2/A3 AscendC and PTO variants; lowering and codegen are pending migration. |
 
 ## Common Backend Infrastructure
 

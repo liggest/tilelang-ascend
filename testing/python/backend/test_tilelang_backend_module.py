@@ -18,6 +18,8 @@ def test_builtin_backend_modules_are_explicit():
         "webgpu": (("webgpu",), ["tvm_ffi"]),
         "ascend": (("ascend",), ["tvm_ffi", "cython"]),
         "pto": (("ascend",), ["pto"]),
+        "ascend_a2a3": (("ascend",), ["cython"]),
+        "pto_a2a3": (("ascend",), ["cython"]),
     }
 
     assert {
@@ -65,13 +67,13 @@ def test_backend_variants_require_target_predicates():
     [
         ("c", "cpu", "c"),
         ("llvm", "cpu", "llvm"),
-        ("cuda", "cuda", "cuda"),
+        ({"kind": "cuda", "arch": "sm_90a"}, "cuda", "cuda"),
         ("hip", "rocm", "hip"),
         ("metal", "metal", "metal"),
         ("webgpu", "webgpu", "webgpu"),
     ],
 )
-def test_backend_methods_are_the_primary_component_interface(target_kind: str, backend_name: str, component_name: str):
+def test_backend_methods_are_the_primary_component_interface(target_kind: str | dict, backend_name: str, component_name: str):
     context = create_backend_context(target_kind, "c", "auto")
     target = context.target
     backend = context.module
@@ -113,7 +115,7 @@ def test_webgpu_only_exposes_tvm_ffi_execution():
 
 
 def test_create_backend_context_binds_compile_state():
-    context = create_backend_context("cuda", "c", "tvm_ffi")
+    context = create_backend_context({"kind": "cuda", "arch": "sm_90a"}, "c", "tvm_ffi")
 
     assert isinstance(context, BackendContext)
     assert context.module is get_backend("cuda")

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 from tvm.target import Target
 
 from tilelang.backend.target import (
@@ -30,23 +32,72 @@ def _with_pto_key(target: Target) -> Target:
     return Target(target_dict)
 
 
-def _make_pto_target() -> Target:
-    return _with_pto_key(_make_ascend_target())
-
-
 def target_is_ascend(target: Target) -> bool:
     """Return whether *target* uses the Ascend architecture."""
     return _target_ffi_api().TargetIsAscend(target)
 
 
 def target_is_pto(target: Target) -> bool:
-    """Return whether *target* selects PTO within the Ascend architecture."""
-    return target_is_ascend(target) and "pto" in target.keys
+    """Return whether *target* selects the official A5 PTO backend."""
+    return target_is_ascend(target) and not is_a2a3_target(target) and "pto" in target.keys
 
 
 def target_is_plain_ascend(target: Target) -> bool:
-    """Return whether *target* selects AscendC rather than PTO codegen."""
-    return target_is_ascend(target) and "pto" not in target.keys
+    """Return whether *target* selects the official A5 AscendC backend."""
+    return target_is_ascend(target) and not is_a2a3_target(target) and "pto" not in target.keys
+
+
+def is_a2a3_target(target: Target) -> bool:
+    """Return whether an Ascend target selects the A2/A3 compiler variant."""
+    return target_is_ascend(target) and str(target.attrs.get("arch", "")) == "dav-2201"
+
+
+def _get_soc_name() -> str | None:
+    try:
+        import acl
+
+        name = acl.get_soc_name()
+        if name:
+            return str(name)
+    except Exception:
+        pass
+
+    try:
+        import torch
+
+        if hasattr(torch, "npu") and torch.npu.is_available():
+            return str(torch.npu.get_device_name())
+    except Exception:
+        pass
+    return None
+
+
+def detect_a2a3_arch() -> str | None:
+    """Select A2/A3 only when requested or detected; unknown devices use A5."""
+    env_platform = os.environ.get("TL_PLATFORM")
+    if env_platform:
+        platform = env_platform.strip().upper()
+        if platform in ("A2", "A3"):
+            return "dav-2201"
+        if platform == "A5":
+            return None
+        raise ValueError(f"Invalid TL_PLATFORM={env_platform!r}; expected A2, A3, or A5")
+
+    soc_name = _get_soc_name()
+    if soc_name is None:
+        return None
+    soc_name = soc_name.upper()
+    if "950" in soc_name or "910_95" in soc_name:
+        return None
+    if "910" in soc_name:
+        return "dav-2201"
+    return None
+
+
+def _detected_ascend_target(*, pto: bool = False) -> Target:
+    arch = detect_a2a3_arch()
+    target = _make_ascend_target({"arch": arch} if arch else None)
+    return _with_pto_key(target) if pto else target
 
 
 def check_ascend_availability() -> bool:
@@ -59,29 +110,22 @@ def check_ascend_availability() -> bool:
 
 
 def _detect_ascend_target() -> Target | None:
-    if check_ascend_availability():
-        return _make_ascend_target()
+    target = _detected_ascend_target()
+    if os.environ.get("TL_PLATFORM") or is_a2a3_target(target) or check_ascend_availability():
+        return target
     return None
 
 
 def normalize_ascend_target(target: TargetLike) -> Target | None:
     if not isinstance(target, str) or target.strip() != "ascend":
         return None
-
-    try:
-        return _make_ascend_target()
-    except Exception:
-        return None
+    return _detected_ascend_target()
 
 
 def normalize_pto_target(target: TargetLike) -> Target | None:
     if not isinstance(target, str) or target.strip() != "pto":
         return None
-
-    try:
-        return _make_pto_target()
-    except Exception:
-        return None
+    return _detected_ascend_target(pto=True)
 
 
 def normalize_pto_execution_target(target: Target, execution_backend: str | None) -> Target | None:
@@ -91,7 +135,7 @@ def normalize_pto_execution_target(target: Target, execution_backend: str | None
         return None
     if not target_is_ascend(target):
         return None
-    if target_is_pto(target):
+    if "pto" in target.keys:
         return target
     return _with_pto_key(target)
 

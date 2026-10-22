@@ -71,7 +71,8 @@ def test_native_ascend_kind_drives_backend_identity():
     assert get_backend("ascend").resolve_execution_backend("auto", target).name == "tvm_ffi"
 
 
-def test_pto_execution_backend_selects_pto_target_variant():
+def test_pto_execution_backend_selects_pto_target_variant(monkeypatch):
+    monkeypatch.setenv("TL_PLATFORM", "A5")
     context = create_backend_context("ascend", "c", "pto")
 
     assert context.name == "pto"
@@ -90,7 +91,8 @@ def test_pto_execution_backend_preserves_ascend_target_options():
     assert target_is_pto(context.target)
 
 
-def test_auto_execution_backend_keeps_plain_ascend_codegen():
+def test_auto_execution_backend_keeps_plain_ascend_codegen(monkeypatch):
+    monkeypatch.setenv("TL_PLATFORM", "A5")
     context = create_backend_context("ascend", "c", "auto")
 
     assert context.name == "ascend"
