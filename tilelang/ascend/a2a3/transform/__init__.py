@@ -44,3 +44,11 @@ def AscendInferBufferScope():
 
 def LayoutInference():
     return tvm.ffi.get_global_func("tl.transform.A2A3LayoutInference")()
+
+
+def InjectTmpBuffer(target, plan_vid_reduction: bool = False):
+    return tvm.ffi.get_global_func("tl.transform.A2A3InjectTmpBuffer")(target, plan_vid_reduction)
+
+
+def AscendVidReduction():
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendVidReduction")()
