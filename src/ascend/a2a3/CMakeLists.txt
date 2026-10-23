@@ -10,5 +10,6 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/op/builtin.cc
   src/ascend/a2a3/transform/ascend_collect_buffer_shape.cc
   src/ascend/a2a3/transform/ascend_host.cc
+  src/ascend/a2a3/transform/ascend_lower_opaque_block.cc
   src/ascend/a2a3/transform/ascend_pto_save_buffer_shape.cc
 )

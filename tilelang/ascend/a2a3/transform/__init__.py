@@ -13,3 +13,7 @@ def Flatten2DBuffer():
 
 def CollectBufferShapes():
     return tvm.ffi.get_global_func("tl.transform.A2A3CollectBufferShapes")()
+
+
+def AscendLowerOpaqueBlock():
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendLowerOpaqueBlock")()
