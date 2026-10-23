@@ -1,0 +1,1082 @@
+{
+  "ta_commit": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "tirx_history": "b939fa0137086ee05729be2ce7a066d0e102159d",
+  "proposal_exclusive_files": [
+    "allocate_tmp_buffer.cc",
+    "ascend_collect_buffer_shape.cc",
+    "ascend_combinecv.cc",
+    "ascend_host.cc",
+    "ascend_infer_buffer_scope.cc",
+    "ascend_lower_opaque_block.cc",
+    "ascend_lower_parallel_to_vector.cc",
+    "ascend_memory_planning.cc",
+    "ascend_pto_save_buffer_shape.cc",
+    "ascend_storage_rewrite.cc",
+    "ascend_sync_insert.cc",
+    "ascend_sync_insert_vs.cc",
+    "ascend_tail_mask_propagation.cc",
+    "ascend_vector_instruction_selection.cc",
+    "ascend_vector_mask_legalize.cc",
+    "ascend_vid_reduction.cc",
+    "ascend_workspace_reduction.cc",
+    "cross_core_pipeline.cc"
+  ],
+  "proposal_shared_passes": [
+    "AnnotateDeviceRegions",
+    "ConfigIndexBitwidth",
+    "FlattenBuffer",
+    "InjectSoftwarePipeline",
+    "LayoutInference",
+    "LegalizeSafeMemoryAccess",
+    "LegalizeVectorizedLoop",
+    "LowerTileOp",
+    "PipelinePlanning",
+    "VectorizeLoop"
+  ],
+  "mappings": [
+    {
+      "source": "target.build.tilelang_ascend",
+      "target": "target.build.tilelang_ascend_a2a3",
+      "source_path": "src/target/rt_mod_ascend.cc",
+      "source_sha256": "68242bfe75c438fc7cbbe71cc68954f4cc5c6c7648149c96831c1be0314528f4",
+      "target_path": "src/ascend/a2a3/codegen/rt_mod_ascend.cc",
+      "uses": [],
+      "scope": "auxiliary_optional",
+      "proposal": false,
+      "kind": "build"
+    },
+    {
+      "source": "target.build.tilelang_ascend_pto",
+      "target": "target.build.tilelang_pto_a2a3",
+      "source_path": "src/target/rt_mod_ascend_pto.cc",
+      "source_sha256": "7555db8afd89d0bcf4948a87ae8b40cc2e0ef8a679157b1ce07be4bdecdbfd9d",
+      "target_path": "src/ascend/a2a3/codegen/rt_mod_ascend_pto.cc",
+      "uses": [],
+      "scope": "auxiliary_optional",
+      "proposal": false,
+      "kind": "build"
+    },
+    {
+      "source": "tl.transform.AnnotateDeviceRegions",
+      "target": "tl.transform.A2A3AnnotateDeviceRegions",
+      "source_path": "src/transform/annotate_device_regions.cc",
+      "source_sha256": "fd3b1f5e95128721419ce673b30fed9b00829af0ce7c03748ea25b57b830b2a9",
+      "target_path": "src/ascend/a2a3/transform/annotate_device_regions.cc",
+      "uses": [],
+      "scope": "proposal_retained",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendLowerOpaqueBlock",
+      "target": "tl.transform.A2A3AscendLowerOpaqueBlock",
+      "source_path": "src/transform/ascend_lower_opaque_block.cc",
+      "source_sha256": "a260fb83f8f4e221f1bb12b28c81ec120055a87c4c157987da6d28090dda37b5",
+      "target_path": "src/ascend/a2a3/transform/ascend_lower_opaque_block.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 109,
+          "python_name": "AscendLowerOpaqueBlock",
+          "ffi_names": [
+            "tl.transform.AscendLowerOpaqueBlock"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendLowerParallelToVector",
+      "target": "tl.transform.A2A3AscendLowerParallelToVector",
+      "source_path": "src/transform/ascend_lower_parallel_to_vector.cc",
+      "source_sha256": "82f31aaf8f73d7172565d804f9ec322676e4ce1583c3c080d782b132917f8fec",
+      "target_path": "src/ascend/a2a3/transform/ascend_lower_parallel_to_vector.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 66,
+          "python_name": "AscendLowerParallelToVector",
+          "ffi_names": [
+            "tl.transform.AscendLowerParallelToVector"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendMemoryPlanning",
+      "target": "tl.transform.A2A3AscendMemoryPlanning",
+      "source_path": "src/transform/ascend_memory_planning.cc",
+      "source_sha256": "1611e1810043c8cfe7f012dc5a5e68975066e08c97236c063c27de31e410a852",
+      "target_path": "src/ascend/a2a3/transform/ascend_memory_planning.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 124,
+          "python_name": "AscendMemoryPlanning",
+          "ffi_names": [
+            "tl.transform.AscendMemoryPlanning"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendResourceScopeVerify",
+      "target": "tl.transform.A2A3AscendResourceScopeVerify",
+      "source_path": "src/transform/ascend_combinecv.cc",
+      "source_sha256": "a61fc5a30d8a77c5046c1f89f3172f57374ebee129ff1f20f22153398bdb7f6c",
+      "target_path": "src/ascend/a2a3/transform/ascend_combinecv.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 135,
+          "python_name": "AscendResourceScopeVerify",
+          "ffi_names": [
+            "tl.transform.AscendResourceScopeVerify"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendStorageRewrite",
+      "target": "tl.transform.A2A3AscendStorageRewrite",
+      "source_path": "src/transform/ascend_storage_rewrite.cc",
+      "source_sha256": "c917e7ffe8ede18bec88b2fb329dc112e25eb0df7ea6f39b9c5c78b79df1770e",
+      "target_path": "src/ascend/a2a3/transform/ascend_storage_rewrite.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 117,
+          "python_name": "AscendStorageRewrite",
+          "ffi_names": [
+            "tl.transform.AscendStorageRewrite"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendSyncInsert",
+      "target": "tl.transform.A2A3AscendSyncInsert",
+      "source_path": "src/transform/ascend_sync_insert.cc",
+      "source_sha256": "a84e82582b7e91a81f9189c12c4a44947f63750b9e03c9bddd05bb272f1f6560",
+      "target_path": "src/ascend/a2a3/transform/ascend_sync_insert.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 125,
+          "python_name": "AscendSyncInsert",
+          "ffi_names": [
+            "tl.transform.AscendSyncInsert"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendSyncInsertVS",
+      "target": "tl.transform.A2A3AscendSyncInsertVS",
+      "source_path": "src/transform/ascend_sync_insert_vs.cc",
+      "source_sha256": "dfbc64e733ace55ba651f975d25b1c286096f46c3c475cadc90ec938c13902dc",
+      "target_path": "src/ascend/a2a3/transform/ascend_sync_insert_vs.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 126,
+          "python_name": "AscendSyncInsertVS",
+          "ffi_names": [
+            "tl.transform.AscendSyncInsertVS"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendTailMaskPropagation",
+      "target": "tl.transform.A2A3AscendTailMaskPropagation",
+      "source_path": "src/transform/ascend_tail_mask_propagation.cc",
+      "source_sha256": "fa7c49b1a638cbc96837ec2f1a97e71c8ea4fcca862c6c4e4f70d4558827cb1d",
+      "target_path": "src/ascend/a2a3/transform/ascend_tail_mask_propagation.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 82,
+          "python_name": "AscendTailMaskPropagation",
+          "ffi_names": [
+            "tl.transform.AscendTailMaskPropagation"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendVectorInstructionSelection",
+      "target": "tl.transform.A2A3AscendVectorInstructionSelection",
+      "source_path": "src/transform/ascend_vector_instruction_selection.cc",
+      "source_sha256": "1adaa532056978a67a96c7d993a1aee556bd6fa4803533a166a6ee55870b070e",
+      "target_path": "src/ascend/a2a3/transform/ascend_vector_instruction_selection.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 137,
+          "python_name": "AscendVectorInstructionSelection",
+          "ffi_names": [
+            "tl.transform.AscendVectorInstructionSelection"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendVectorMaskLegalize",
+      "target": "tl.transform.A2A3AscendVectorMaskLegalize",
+      "source_path": "src/transform/ascend_vector_mask_legalize.cc",
+      "source_sha256": "e676aa7ea380acb30febea3f6827c61a7d96f25d7d87e9ed42833d3f327d6cb3",
+      "target_path": "src/ascend/a2a3/transform/ascend_vector_mask_legalize.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 138,
+          "python_name": "AscendVectorMaskLegalize",
+          "ffi_names": [
+            "tl.transform.AscendVectorMaskLegalize"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendVectorTerminalCatalog",
+      "target": "tl.transform.A2A3AscendVectorTerminalCatalog",
+      "source_path": "src/transform/ascend_vector_mask.cc",
+      "source_sha256": "3f6c20d31dec4ddf80756e00c5d99436529c52154a5f1190b4e65afa46c72744",
+      "target_path": "src/ascend/a2a3/transform/ascend_vector_mask.cc",
+      "uses": [],
+      "scope": "auxiliary_optional",
+      "proposal": false,
+      "kind": "auxiliary"
+    },
+    {
+      "source": "tl.transform.AscendVidReduction",
+      "target": "tl.transform.A2A3AscendVidReduction",
+      "source_path": "src/transform/ascend_vid_reduction.cc",
+      "source_sha256": "85d96793d3dc860ad8461ff88b424a9b9d7c4499996a2ba702a1f2fd0fe952f4",
+      "target_path": "src/ascend/a2a3/transform/ascend_vid_reduction.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 55,
+          "python_name": "AscendVidReduction",
+          "ffi_names": [
+            "tl.transform.AscendVidReduction"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.AscendWorkspaceReduction",
+      "target": "tl.transform.A2A3AscendWorkspaceReduction",
+      "source_path": "src/transform/ascend_workspace_reduction.cc",
+      "source_sha256": "53d55fd21d63723c485ad2dc6ed7202ffed226cee436988bc9aa7853045cbb3b",
+      "target_path": "src/ascend/a2a3/transform/ascend_workspace_reduction.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 84,
+          "python_name": "AscendWorkspaceReduction",
+          "ffi_names": [
+            "tl.transform.AscendWorkspaceReduction"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.BufferShapeCollector",
+      "target": "tl.transform.A2A3BufferShapeCollector",
+      "source_path": "src/transform/ascend_collect_buffer_shape.cc",
+      "source_sha256": "318f61e392ceb7e043663ade2fe750d56720c410545350d75e9ddaa488e85aa1",
+      "target_path": "src/ascend/a2a3/transform/ascend_collect_buffer_shape.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 57,
+          "python_name": "BufferShapeCollector",
+          "ffi_names": [
+            "tl.transform.BufferShapeCollector"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.CollectBufferShapes",
+      "target": "tl.transform.A2A3CollectBufferShapes",
+      "source_path": "src/transform/ascend_pto_save_buffer_shape.cc",
+      "source_sha256": "63dbc09e17b57be076651dd5fa9732fc6cad3d4596d2bd21ee33fafdb876f536",
+      "target_path": "src/ascend/a2a3/transform/ascend_pto_save_buffer_shape.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 69,
+          "python_name": "CollectBufferShapes",
+          "ffi_names": [
+            "tl.transform.CollectBufferShapes"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.CombineCV",
+      "target": "tl.transform.A2A3CombineCV",
+      "source_path": "src/transform/ascend_combinecv.cc",
+      "source_sha256": "a61fc5a30d8a77c5046c1f89f3172f57374ebee129ff1f20f22153398bdb7f6c",
+      "target_path": "src/ascend/a2a3/transform/ascend_combinecv.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 104,
+          "python_name": "CombineCV",
+          "ffi_names": [
+            "tl.transform.CombineCV"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.ConfigIndexBitwidth",
+      "target": "tl.transform.A2A3ConfigIndexBitwidth",
+      "source_path": "src/transform/config_index_bitwidth.cc",
+      "source_sha256": "02f52277c8f8b6e577030ea9b404351046b9576ce1532f783f49ffc8c64d5284",
+      "target_path": "src/ascend/a2a3/transform/config_index_bitwidth.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 111,
+          "python_name": "ConfigIndexBitwidth",
+          "ffi_names": [
+            "tl.transform.ConfigIndexBitwidth"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.CrossCorePipeline",
+      "target": "tl.transform.A2A3CrossCorePipeline",
+      "source_path": "src/transform/cross_core_pipeline.cc",
+      "source_sha256": "b6aa8687e5a8019ed57af912e553897f8887eaa7dc09b9eb2f3e14f7cdd1c82a",
+      "target_path": "src/ascend/a2a3/transform/cross_core_pipeline.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 103,
+          "python_name": "CrossCorePipeline",
+          "ffi_names": [
+            "tl.transform.CrossCorePipeline"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.Flatten2DBuffer",
+      "target": "tl.transform.A2A3Flatten2DBuffer",
+      "source_path": "src/transform/ascend_collect_buffer_shape.cc",
+      "source_sha256": "318f61e392ceb7e043663ade2fe750d56720c410545350d75e9ddaa488e85aa1",
+      "target_path": "src/ascend/a2a3/transform/ascend_collect_buffer_shape.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 113,
+          "python_name": "Flatten2DBuffer",
+          "ffi_names": [
+            "tl.transform.Flatten2DBuffer"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.FlattenBuffer",
+      "target": "tl.transform.A2A3FlattenBuffer",
+      "source_path": "src/transform/flatten_buffer.cc",
+      "source_sha256": "6bc73602758287a3ee0a3183ebb97bcb5774a7f95714be7daab9ba02b9db3f78",
+      "target_path": "src/ascend/a2a3/transform/flatten_buffer.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 114,
+          "python_name": "FlattenBuffer",
+          "ffi_names": [
+            "tl.transform.FlattenBuffer"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.FrontendLegalize",
+      "target": "tl.transform.A2A3FrontendLegalize",
+      "source_path": "src/transform/frontend_legalize.cc",
+      "source_sha256": "ee461dad746b883fcb067a902e60c2fb2c948d177ebbbd1d94a2f78e7ad22c1e",
+      "target_path": "src/ascend/a2a3/transform/frontend_legalize.cc",
+      "uses": [],
+      "scope": "auxiliary_optional",
+      "proposal": false,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.HostLegalize",
+      "target": "tl.transform.A2A3HostLegalize",
+      "source_path": "src/transform/ascend_host.cc",
+      "source_sha256": "d0b8a9e21b0360f7b9a23a44c24bebb6d10b82743c8e2c4fcdf9dd17b0c7f16e",
+      "target_path": "src/ascend/a2a3/transform/ascend_host.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 61,
+          "python_name": "HostProcesser",
+          "ffi_names": [
+            "tl.transform.HostLegalize"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.InferAllocScope",
+      "target": "tl.transform.A2A3InferAllocScope",
+      "source_path": "src/transform/ascend_infer_buffer_scope.cc",
+      "source_sha256": "c27313d15ae0cc8a97f6c17bd235d852435bb250950685b7f4d8c06260b460b3",
+      "target_path": "src/ascend/a2a3/transform/ascend_infer_buffer_scope.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 51,
+          "python_name": "AscendInferBufferScope",
+          "ffi_names": [
+            "tl.transform.InferAllocScope"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.InjectSoftwarePipeline",
+      "target": "tl.transform.A2A3InjectSoftwarePipeline",
+      "source_path": "src/transform/inject_pipeline.cc",
+      "source_sha256": "a34472626824f3f53ecc3df8f4ad467e6e6f52b0b422c259c51ef028aee11282",
+      "target_path": "src/ascend/a2a3/transform/inject_pipeline.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 108,
+          "python_name": "InjectSoftwarePipeline",
+          "ffi_names": [
+            "tl.transform.InjectSoftwarePipeline"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.InjectTmpBuffer",
+      "target": "tl.transform.A2A3InjectTmpBuffer",
+      "source_path": "src/transform/allocate_tmp_buffer.cc",
+      "source_sha256": "5263a292d2482a1748fd571aff8df589db3bf99ccca6e0d2d57ef00cd7626ef2",
+      "target_path": "src/ascend/a2a3/transform/allocate_tmp_buffer.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 53,
+          "python_name": "InjectTmpBuffer",
+          "ffi_names": [
+            "tl.transform.InjectTmpBuffer"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.LayoutInference",
+      "target": "tl.transform.A2A3LayoutInference",
+      "source_path": "src/transform/layout_inference.cc",
+      "source_sha256": "a379861fd755ce8ac7a10c926a2f4b0c345d73e9df1612fba673aae6e71fa7c6",
+      "target_path": "src/ascend/a2a3/transform/layout_inference.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 68,
+          "python_name": "LayoutInference",
+          "ffi_names": [
+            "tl.transform.LayoutInference"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.LegalizeSafeMemoryAccess",
+      "target": "tl.transform.A2A3LegalizeSafeMemoryAccess",
+      "source_path": "src/transform/legalize_safe_memory_access.cc",
+      "source_sha256": "0d85f66b583212f84fb85d23dc74cd504501bbfded4dfe31ee5b60d7079b1663",
+      "target_path": "src/ascend/a2a3/transform/legalize_safe_memory_access.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 88,
+          "python_name": "LegalizeSafeMemoryAccess",
+          "ffi_names": [
+            "tl.transform.LegalizeSafeMemoryAccess"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.LegalizeVectorizedLoop",
+      "target": "tl.transform.A2A3LegalizeVectorizedLoop",
+      "source_path": "src/transform/legalize_vectorized_loop.cc",
+      "source_sha256": "ba8b08eb9c09acfb13ae8cc54ad8608f730348e5399f8a9dc680f7ec1453f309",
+      "target_path": "src/ascend/a2a3/transform/legalize_vectorized_loop.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 86,
+          "python_name": "LegalizeVectorizedLoop",
+          "ffi_names": [
+            "tl.transform.LegalizeVectorizedLoop"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.LoopVectorizeDynamic",
+      "target": "tl.transform.A2A3LoopVectorizeDynamic",
+      "source_path": "src/transform/loop_vectorize_dynamic.cc",
+      "source_sha256": "f8b2cce5c2be83b391e4ec8dc997f478871a5ee40ac44e0704a5a5ac3b678c9d",
+      "target_path": "src/ascend/a2a3/transform/loop_vectorize_dynamic.cc",
+      "uses": [],
+      "scope": "auxiliary_optional",
+      "proposal": false,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.LowerDeviceStorageAccessInfo",
+      "target": "tl.transform.A2A3LowerDeviceStorageAccessInfo",
+      "source_path": "src/transform/lower_device_storage_access_info.cc",
+      "source_sha256": "914fc78139ed41bca03d0f65fde3c85641816947c92cc6d40ed4bd0b7dd04171",
+      "target_path": "src/ascend/a2a3/transform/lower_device_storage_access_info.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/lower.py",
+          "function": "host_codegen",
+          "line": 148,
+          "python_name": "LowerDeviceStorageAccessInfo",
+          "ffi_names": [
+            "tl.transform.LowerDeviceStorageAccessInfo"
+          ]
+        },
+        {
+          "file": "tilelang/engine/lower.py",
+          "function": "device_codegen_without_compile",
+          "line": 176,
+          "python_name": "LowerDeviceStorageAccessInfo",
+          "ffi_names": [
+            "tl.transform.LowerDeviceStorageAccessInfo"
+          ]
+        }
+      ],
+      "scope": "engine_helper",
+      "proposal": false,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.LowerTileOp",
+      "target": "tl.transform.A2A3LowerTileOp",
+      "source_path": "src/transform/lower_tile_op.cc",
+      "source_sha256": "dcd5181f1535849de379bc816a0c48a076b2b4f3575152247630f9aec9b26ccf",
+      "target_path": "src/ascend/a2a3/transform/lower_tile_op.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "LowerAndLegalize",
+          "line": 71,
+          "python_name": "LowerTileOp",
+          "ffi_names": [
+            "tl.transform.LowerTileOp"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.PipelinePlanning",
+      "target": "tl.transform.A2A3PipelinePlanning",
+      "source_path": "src/transform/pipeline_planning.cc",
+      "source_sha256": "02a057cbc3837a90fd8e78253b80a3bdbc301718a45ff949404a162762239806",
+      "target_path": "src/ascend/a2a3/transform/pipeline_planning.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 107,
+          "python_name": "PipelinePlanning",
+          "ffi_names": [
+            "tl.transform.PipelinePlanning"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    },
+    {
+      "source": "tl.transform.VectorizeLoop",
+      "target": "tl.transform.A2A3VectorizeLoop",
+      "source_path": "src/transform/vectorize_loop.cc",
+      "source_sha256": "34a673792a2fff93fdbdad1ad510f1fe73607669ae8290227ff26d0d93025e8b",
+      "target_path": "src/ascend/a2a3/transform/vectorize_loop.cc",
+      "uses": [
+        {
+          "file": "tilelang/engine/phase.py",
+          "function": "OptimizeForTarget",
+          "line": 116,
+          "python_name": "VectorizeLoop",
+          "ffi_names": [
+            "tl.transform.VectorizeLoop"
+          ]
+        }
+      ],
+      "scope": "phase",
+      "proposal": true,
+      "kind": "pass"
+    }
+  ],
+  "pipeline_calls": [
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 51,
+      "python_name": "AscendInferBufferScope",
+      "ffi_names": [
+        "tl.transform.InferAllocScope"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 53,
+      "python_name": "InjectTmpBuffer",
+      "ffi_names": [
+        "tl.transform.InjectTmpBuffer"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 55,
+      "python_name": "AscendVidReduction",
+      "ffi_names": [
+        "tl.transform.AscendVidReduction"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 57,
+      "python_name": "BufferShapeCollector",
+      "ffi_names": [
+        "tl.transform.BufferShapeCollector"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 61,
+      "python_name": "HostProcesser",
+      "ffi_names": [
+        "tl.transform.HostLegalize"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 66,
+      "python_name": "AscendLowerParallelToVector",
+      "ffi_names": [
+        "tl.transform.AscendLowerParallelToVector"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 68,
+      "python_name": "LayoutInference",
+      "ffi_names": [
+        "tl.transform.LayoutInference"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 69,
+      "python_name": "CollectBufferShapes",
+      "ffi_names": [
+        "tl.transform.CollectBufferShapes"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 71,
+      "python_name": "LowerTileOp",
+      "ffi_names": [
+        "tl.transform.LowerTileOp"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 82,
+      "python_name": "AscendTailMaskPropagation",
+      "ffi_names": [
+        "tl.transform.AscendTailMaskPropagation"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 84,
+      "python_name": "AscendWorkspaceReduction",
+      "ffi_names": [
+        "tl.transform.AscendWorkspaceReduction"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 86,
+      "python_name": "LegalizeVectorizedLoop",
+      "ffi_names": [
+        "tl.transform.LegalizeVectorizedLoop"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "LowerAndLegalize",
+      "line": 88,
+      "python_name": "LegalizeSafeMemoryAccess",
+      "ffi_names": [
+        "tl.transform.LegalizeSafeMemoryAccess"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 103,
+      "python_name": "CrossCorePipeline",
+      "ffi_names": [
+        "tl.transform.CrossCorePipeline"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 104,
+      "python_name": "CombineCV",
+      "ffi_names": [
+        "tl.transform.CombineCV"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 107,
+      "python_name": "PipelinePlanning",
+      "ffi_names": [
+        "tl.transform.PipelinePlanning"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 108,
+      "python_name": "InjectSoftwarePipeline",
+      "ffi_names": [
+        "tl.transform.InjectSoftwarePipeline"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 109,
+      "python_name": "AscendLowerOpaqueBlock",
+      "ffi_names": [
+        "tl.transform.AscendLowerOpaqueBlock"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 111,
+      "python_name": "ConfigIndexBitwidth",
+      "ffi_names": [
+        "tl.transform.ConfigIndexBitwidth"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 113,
+      "python_name": "Flatten2DBuffer",
+      "ffi_names": [
+        "tl.transform.Flatten2DBuffer"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 114,
+      "python_name": "FlattenBuffer",
+      "ffi_names": [
+        "tl.transform.FlattenBuffer"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 116,
+      "python_name": "VectorizeLoop",
+      "ffi_names": [
+        "tl.transform.VectorizeLoop"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 117,
+      "python_name": "AscendStorageRewrite",
+      "ffi_names": [
+        "tl.transform.AscendStorageRewrite"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 124,
+      "python_name": "AscendMemoryPlanning",
+      "ffi_names": [
+        "tl.transform.AscendMemoryPlanning"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 125,
+      "python_name": "AscendSyncInsert",
+      "ffi_names": [
+        "tl.transform.AscendSyncInsert"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 126,
+      "python_name": "AscendSyncInsertVS",
+      "ffi_names": [
+        "tl.transform.AscendSyncInsertVS"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 135,
+      "python_name": "AscendResourceScopeVerify",
+      "ffi_names": [
+        "tl.transform.AscendResourceScopeVerify"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 137,
+      "python_name": "AscendVectorInstructionSelection",
+      "ffi_names": [
+        "tl.transform.AscendVectorInstructionSelection"
+      ]
+    },
+    {
+      "file": "tilelang/engine/phase.py",
+      "function": "OptimizeForTarget",
+      "line": 138,
+      "python_name": "AscendVectorMaskLegalize",
+      "ffi_names": [
+        "tl.transform.AscendVectorMaskLegalize"
+      ]
+    },
+    {
+      "file": "tilelang/engine/lower.py",
+      "function": "host_codegen",
+      "line": 148,
+      "python_name": "LowerDeviceStorageAccessInfo",
+      "ffi_names": [
+        "tl.transform.LowerDeviceStorageAccessInfo"
+      ]
+    },
+    {
+      "file": "tilelang/engine/lower.py",
+      "function": "device_codegen_without_compile",
+      "line": 176,
+      "python_name": "LowerDeviceStorageAccessInfo",
+      "ffi_names": [
+        "tl.transform.LowerDeviceStorageAccessInfo"
+      ]
+    }
+  ],
+  "excluded_registrations": {
+    "tl.transform.ClusterPlanning": [
+      "src/transform/cluster_planning.cc:135"
+    ],
+    "tl.transform.EliminateStorageSyncForMBarrier": [
+      "src/transform/eliminate_storage_sync_for_mbarrier.cc:120"
+    ],
+    "tl.transform.IfStmtBinding": [
+      "src/transform/if_stmt_binding.cc:86"
+    ],
+    "tl.transform.InjectFenceProxy": [
+      "src/transform/inject_fence_proxy.cc:196"
+    ],
+    "tl.transform.InjectPTXAsyncCopy": [
+      "src/transform/inject_ptx_async_copy.cc:236"
+    ],
+    "tl.transform.InjectTmaBarrier": [
+      "src/transform/inject_tma_barrier.cc:307"
+    ],
+    "tl.transform.LowerHopperIntrin": [
+      "src/transform/lower_hopper_intrin.cc:153"
+    ],
+    "tl.transform.MakePackedAPI": [
+      "src/transform/make_packed_api.cc:519"
+    ],
+    "tl.transform.MergeIfStmt": [
+      "src/transform/merge_if_stmt.cc:96"
+    ],
+    "tl.transform.MergeSharedMemoryAllocations": [
+      "src/transform/merge_shared_memory_allocations.cc:1013"
+    ],
+    "tl.transform.MultiVersionBuffer": [
+      "src/transform/multi_version_buffer_rewriter.cc:332"
+    ],
+    "tl.transform.Simplify": [
+      "src/transform/simplify.cc:468"
+    ],
+    "tl.transform.ThreadPartialSync": [
+      "src/transform/thread_partial_sync.cc:377"
+    ],
+    "tl.transform.ThreadSync": [
+      "src/transform/thread_storage_sync.cc:561"
+    ],
+    "tl.transform.WarpSpecialized": [
+      "src/transform/warp_specialized_rewriter.cc:1203"
+    ],
+    "tl.transform.RewriteWgmmaSync": [
+      "src/transform/wgmma_sync_rewriter.cc:284"
+    ]
+  },
+  "destination_collisions": [
+    {
+      "target": "tl.transform.A2A3HostLegalize",
+      "locations": [
+        "src/ascend/a2a3/transform/ascend_host.cc:99"
+      ]
+    }
+  ]
+}
