@@ -23,11 +23,19 @@ def _build_ascendc(mod, target):
     )
 
 
+def _preserve_physical_terminals(mod, _target):
+    # A2/A3 mask legalization is the final TIR transformation. Its physical
+    # terminals must reach the source builder without the shared preparation.
+    return mod
+
+
 def _pto_not_implemented(_mod, _target):
     raise NotImplementedError("A2/A3 PTO code generation is not implemented yet")
 
 
 # The TA native builder emits source. The shared Cython execution backend compiles
 # that source separately, so both device-codegen modes use the same builder.
-ASCENDC_CODEGEN = DeviceCodegen("ascend_a2a3", build=_build_ascendc, build_without_compile=_build_ascendc)
+ASCENDC_CODEGEN = DeviceCodegen(
+    "ascend_a2a3", build=_build_ascendc, build_without_compile=_build_ascendc, preprocess=_preserve_physical_terminals
+)
 PTO_CODEGEN = DeviceCodegen("pto_a2a3", build=_pto_not_implemented, build_without_compile=_pto_not_implemented)

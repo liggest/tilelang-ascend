@@ -97,12 +97,12 @@ def _prepare_device_codegen_mod(device_mod: tvm.IRModule) -> tvm.IRModule:
 
 
 def device_codegen(device_mod: tvm.IRModule, context: BackendContext) -> tvm.IRModule:
-    device_mod = _prepare_device_codegen_mod(device_mod)
+    device_mod = context.preprocess_device_codegen(device_mod, _prepare_device_codegen_mod)
     return context.codegen_device(device_mod, compile_device=True)
 
 
 def device_codegen_without_compile(device_mod: tvm.IRModule, context: BackendContext) -> tvm.IRModule:
-    device_mod = _prepare_device_codegen_mod(device_mod)
+    device_mod = context.preprocess_device_codegen(device_mod, _prepare_device_codegen_mod)
     return context.codegen_device(device_mod, compile_device=False)
 
 
@@ -134,6 +134,10 @@ def lower_to_host_device_ir(
             PreLowerSemanticCheck(mod)
 
             mod = context.lower(mod)
+            if not runtime_only:
+                lowered_params = context.extract_parameters(mod)
+                if lowered_params is not None:
+                    params = lowered_params
 
             host_mod = tirx.transform.Filter(_is_host_call)(mod)
             device_mod = tirx.transform.Filter(_is_device_call)(mod)

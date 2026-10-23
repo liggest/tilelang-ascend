@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from tilelang.backend.execution_backend import ExecutionBackendSpec
     from tilelang.backend.host_codegen import HostCodegen, HostCodegenHook
     from tilelang.backend.pass_pipeline import PassPipeline
+    from tilelang.engine.param import KernelParam
 
 BackendCallback = Callable[..., object]
 TargetPredicate = Callable[[Target], bool]
@@ -125,6 +126,12 @@ class BackendModule:
 
         return self.get_device_codegen(target).lower(mod, target, compile_device=compile_device)
 
+    def preprocess_device_codegen(self, mod: IRModule, target: Target, default_preprocess: Callable[[IRModule], IRModule]) -> IRModule:
+        """Use backend preparation when declared, otherwise the shared chain."""
+
+        preprocess = self.get_device_codegen(target).preprocess
+        return default_preprocess(mod) if preprocess is None else preprocess(mod, target)
+
     def get_host_codegen(self, target_host: Target) -> HostCodegen:
         """Return the host codegen declared for the host target."""
 
@@ -213,12 +220,21 @@ class BackendContext:
 
         return self.module.lower(mod, self.target)
 
+    def extract_parameters(self, mod: IRModule) -> list[KernelParam] | None:
+        """Read optional final-kernel metadata contributed by the pipeline."""
+        return self.module.get_pipeline(self.target).extract_parameters(mod)
+
     def codegen_device(self, mod: IRModule, *, compile_device: bool | None = None) -> IRModule:
         """Generate device code using the selected execution policy by default."""
 
         if compile_device is None:
             compile_device = self.execution_backend.enable_device_compile
         return self.module.codegen_device(mod, self.target, compile_device=compile_device)
+
+    def preprocess_device_codegen(self, mod: IRModule, default_preprocess: Callable[[IRModule], IRModule]) -> IRModule:
+        """Prepare device IR through the already selected codegen component."""
+
+        return self.module.preprocess_device_codegen(mod, self.target, default_preprocess)
 
     def preprocess_host_codegen(self, mod: IRModule) -> IRModule:
         """Apply selected-backend hooks before host code generation."""

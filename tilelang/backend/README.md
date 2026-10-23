@@ -214,6 +214,11 @@ the pipeline only contributes its backend-specific phase scope when a session
 is already active. Calling the backend interface without a session still runs
 the lowering pipeline normally, without developer-tool instrumentation.
 
+A `PassPipeline` can contribute an optional `parameter_extractor` that reads
+final kernel arguments after lowering. The default keeps metadata from the
+original input. This allows a backend that appends automatic workspace arguments
+to describe the same argument order as its final exported device function.
+
 The ordered pass list lives in `tilelang/<backend>/pipeline.py`. Backend-only
 passes must be called there rather than dispatched from
 `tilelang/engine/lower.py`. A backend pipeline may use small shared helpers from
@@ -241,6 +246,13 @@ supports both. `HostCodegen` is selected from the concrete host target, usually
 `c` or `llvm`. `HostCodegenHook` lets a device backend prepare host IR without
 adding target checks to the shared engine; Metal uses such a hook to mark
 functions that require Metal runtime context.
+
+A `DeviceCodegen` may declare a `preprocess` callback for compiler-entry IR
+preparation. Without it, the shared LowerIntrin, Simplify, and
+HoistBroadcastValues chain remains in place. A backend whose final legalization
+produces physical terminals can explicitly preserve that IR. Direct
+`DeviceCodegen.lower` calls remain builder-only; preparation is dispatched by
+the resolved context at the compiler entry boundary.
 
 The engine must not contain a `target.kind.name` dispatch table for backend
 codegen. Backend variants, such as CUDA and CuTeDSL, declare their own codegen

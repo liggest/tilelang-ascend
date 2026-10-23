@@ -36,6 +36,9 @@ class DeviceCodegen:
     name: str
     build: DeviceCodegenFunc | None = None
     build_without_compile: DeviceCodegenFunc | None = None
+    # Overrides shared compiler-entry preparation; direct lower() still calls
+    # only the builder, preserving its existing interface.
+    preprocess: DeviceCodegenFunc | None = None
 
     def lower(self, mod: IRModule, target: Target, *, compile_device: bool) -> IRModule:
         build_func = self.build if compile_device else self.build_without_compile
