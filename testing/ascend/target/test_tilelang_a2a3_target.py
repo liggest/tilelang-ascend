@@ -5,6 +5,8 @@ import pytest
 from tilelang import tvm
 from tilelang.ascend import target as ascend_target
 from tilelang.backend import create_backend_context
+from tilelang.backend import target as target_registry
+from tilelang.ascend.a2a3.target import target_is_ascend_a2a3, target_is_pto_a2a3
 from tilelang.backend.target import determine_target
 from tvm.target import Target
 
@@ -29,10 +31,13 @@ def test_invalid_platform_override_is_actionable(monkeypatch):
     ("soc", "expected_arch"),
     [
         ("Ascend910B1", "dav-2201"),
+        ("Ascend910C", "dav-2201"),
         ("Ascend910_9392", "dav-2201"),
         ("Ascend950PR_9599", None),
         ("Ascend910_9599", None),
         ("unknown", None),
+        ("Ascend910Z", None),
+        ("Ascend910A", None),
         (None, None),
     ],
 )
@@ -76,6 +81,61 @@ def test_a5_and_a2a3_predicates_are_disjoint(monkeypatch):
     assert create_backend_context(Target({"kind": "ascend", "arch": "dav-2201"}), "c", "auto").name == "ascend_a2a3"
 
 
+@pytest.mark.parametrize("arch", ["dav-2201", "dav-3510"])
+@pytest.mark.parametrize("pto", [False, True])
+def test_four_backend_predicates_match_exactly_once(arch, pto):
+    target = Target({"kind": "ascend", "arch": arch, "keys": ["pto", "ascend"] if pto else ["ascend"]})
+    matches = [
+        ascend_target.target_is_plain_ascend(target),
+        ascend_target.target_is_pto(target),
+        target_is_ascend_a2a3(target),
+        target_is_pto_a2a3(target),
+    ]
+    assert sum(matches) == 1
+    expected_index = (2 if arch == "dav-2201" else 0) + pto
+    assert matches[expected_index]
+
+
+@pytest.mark.parametrize("arch", ["dav-2201", "dav-3510"])
+@pytest.mark.parametrize("pto", [False, True])
+@pytest.mark.parametrize("as_object", [False, True])
+def test_explicit_arch_has_priority_over_detection_and_environment(monkeypatch, arch, pto, as_object):
+    monkeypatch.setenv("TL_PLATFORM", "A5" if arch == "dav-2201" else "A3")
+
+    def unexpected_probe():
+        pytest.fail("An explicit target must not probe hardware")
+
+    monkeypatch.setattr(ascend_target, "_get_soc_name", unexpected_probe)
+    target = {"kind": "ascend", "arch": arch, "keys": ["pto", "ascend"] if pto else ["ascend"]}
+    context = create_backend_context(Target(target) if as_object else target, "c", "auto")
+    expected = "pto" if pto else "ascend"
+    if arch == "dav-2201":
+        expected += "_a2a3"
+    assert context.name == expected
+    assert str(context.target.attrs["arch"]) == arch
+
+
+@pytest.mark.parametrize(
+    ("soc", "a2a3"),
+    [("Ascend910B1", True), ("Ascend910C", True), ("Ascend950", False), ("unknown", False), (None, False)],
+)
+@pytest.mark.parametrize("target", ["ascend", "pto", "ascendc", "auto"])
+def test_detected_target_routes(monkeypatch, soc, a2a3, target):
+    monkeypatch.delenv("TL_PLATFORM", raising=False)
+    monkeypatch.setattr(ascend_target, "_get_soc_name", lambda: soc)
+    monkeypatch.setattr(ascend_target, "check_ascend_availability", lambda: soc is not None)
+    # Isolate Ascend detection from CUDA/ROCm devices on the test host.
+    monkeypatch.setattr(target_registry, "_TARGET_DETECTORS", {"ascend": target_registry._TARGET_DETECTORS["ascend"]})
+    if target == "auto" and soc is None:
+        with pytest.raises(ValueError, match="No registered target detector"):
+            create_backend_context(target, "c", "auto")
+        return
+    expected = "pto" if target == "pto" else "ascend"
+    if a2a3 or target == "ascendc":
+        expected += "_a2a3"
+    assert create_backend_context(target, "c", "auto").name == expected
+
+
 def test_auto_ascend_detector_selects_a2a3(monkeypatch):
     monkeypatch.setenv("TL_PLATFORM", "A2")
     detected = ascend_target._detect_ascend_target()
@@ -89,10 +149,13 @@ def test_pto_execution_backend_is_not_a2a3_pto(monkeypatch):
         create_backend_context("ascend", "c", "pto")
 
 
-def test_unported_pipeline_fails_explicitly(monkeypatch):
+@pytest.mark.parametrize("target", ["ascendc", "pto"])
+def test_unported_pipeline_fails_explicitly(monkeypatch, target):
     monkeypatch.setenv("TL_PLATFORM", "A3")
-    context = create_backend_context("ascend", "c", "auto")
+    context = create_backend_context(target, "c", "auto")
     with pytest.raises(NotImplementedError, match="A2/A3 Ascend lowering"):
         context.lower(tvm.IRModule({}))
     with pytest.raises(NotImplementedError, match="A2/A3 Ascend code generation"):
         context.codegen_device(tvm.IRModule({}), compile_device=False)
+    with pytest.raises(NotImplementedError, match="A2/A3 Ascend code generation"):
+        context.codegen_device(tvm.IRModule({}), compile_device=True)

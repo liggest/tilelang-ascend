@@ -89,7 +89,7 @@ def detect_a2a3_arch() -> str | None:
     soc_name = soc_name.upper()
     if "950" in soc_name or "910_95" in soc_name:
         return None
-    if "910" in soc_name:
+    if any(model in soc_name for model in ("910B", "910C", "910_93")):
         return "dav-2201"
     return None
 
