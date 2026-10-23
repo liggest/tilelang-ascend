@@ -73,6 +73,13 @@ This is equivalent to passing `target="ascend", execution_backend="pto"` to
 `tilelang.compile` or `@tilelang.jit`. Omitting the execution backend, or using
 `execution_backend="auto"`, keeps the default AscendC code generator.
 
+A2/A3 uses a dedicated AscendC compiler pipeline. For an explicit, device-independent
+compiler target, use `{"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": ["ascendc"]}`
+(or `model="A2"`). Here `model` identifies the hardware; target keys identify the
+dialect. The A2/A3 compiler accepts one exported device kernel and preserves
+automatic GM workspace parameters in the source-generation result. The PTO
+execution example above applies to A5; A2/A3 PTO lowering remains unavailable.
+
 For target options, use a JSON object string. This is useful in scripts that rely on the default target through
 `tilelang.compile(..., target=None)`, `@tilelang.jit`, or autotuning:
 

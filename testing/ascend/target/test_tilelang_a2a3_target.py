@@ -150,11 +150,15 @@ def test_pto_execution_backend_is_not_a2a3_pto(monkeypatch):
 
 
 @pytest.mark.parametrize("target", ["ascendc", "pto"])
-def test_unported_pipeline_fails_explicitly(monkeypatch, target):
+def test_a2a3_compiler_and_pto_stub_are_separate(monkeypatch, target):
     monkeypatch.setenv("TL_PLATFORM", "A3")
     context = create_backend_context(target, "c", "auto")
-    with pytest.raises(NotImplementedError, match="A2/A3 Ascend lowering"):
-        context.lower(tvm.IRModule({}))
+    if target == "ascendc":
+        with pytest.raises(ValueError, match="exactly one exported source"):
+            context.lower(tvm.IRModule({}))
+    else:
+        with pytest.raises(NotImplementedError, match="A2/A3 PTO lowering"):
+            context.lower(tvm.IRModule({}))
     if target == "pto":
         for compile_device in (False, True):
             with pytest.raises(NotImplementedError, match="A2/A3 PTO code generation"):

@@ -1,4 +1,4 @@
-"""Migrated TA pass factories; the complete A2/A3 pipeline is still pending."""
+"""Backend-local factories for the complete migrated TA components."""
 
 from tilelang import tvm
 
@@ -120,3 +120,7 @@ def AscendVectorInstructionSelection(target, platform):
 
 def AscendVectorMaskLegalize(target, platform):
     return tvm.ffi.get_global_func("tl.transform.A2A3AscendVectorMaskLegalize")(target, platform)
+
+
+def HostProcesser():
+    return tvm.ffi.get_global_func("tl.transform.A2A3HostLegalize")()
