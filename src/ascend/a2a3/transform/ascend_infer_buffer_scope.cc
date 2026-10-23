@@ -212,7 +212,7 @@ private:
             return;
           }
 
-          Var first_buf_handle;
+          Optional<Var> first_buf_handle;
           const CallNode *first_region = op->args[0].as<CallNode>();
           if (first_region && !first_region->args.empty() &&
               first_region->args[0].as<BufferLoadNode>()) {
@@ -221,7 +221,7 @@ private:
             first_buf_handle = first_buf_load->buffer->data;
           }
 
-          Var second_buf_handle;
+          Optional<Var> second_buf_handle;
           const CallNode *second_region = op->args[1].as<CallNode>();
           if (second_region && !second_region->args.empty() &&
               second_region->args[0].as<BufferLoadNode>()) {
@@ -230,33 +230,33 @@ private:
             second_buf_handle = second_buf_load->buffer->data;
           }
 
-          if (first_buf_handle.defined() && second_buf_handle.defined()) {
-            std::string first_name = first_buf_handle->name_hint;
-            std::string second_name = second_buf_handle->name_hint;
-            ascend_copy_buffer_pairs_.emplace_back(first_buf_handle,
-                                                   second_buf_handle);
+          if (first_buf_handle.has_value() && second_buf_handle.has_value()) {
+            std::string first_name = first_buf_handle.value()->name_hint;
+            std::string second_name = second_buf_handle.value()->name_hint;
+            ascend_copy_buffer_pairs_.emplace_back(first_buf_handle.value(),
+                                                   second_buf_handle.value());
             AscendCopyPositionInfo &first_info =
-                ascend_copy_position_info[first_buf_handle];
+                ascend_copy_position_info[first_buf_handle.value()];
             AscendCopyPositionInfo &second_info =
-                ascend_copy_position_info[second_buf_handle];
+                ascend_copy_position_info[second_buf_handle.value()];
 
             first_info.is_first_in_at_least_one = true;
-            first_info.first_second_pairs.emplace_back(first_buf_handle,
-                                                       second_buf_handle);
+            first_info.first_second_pairs.emplace_back(
+                first_buf_handle.value(), second_buf_handle.value());
 
             second_info.is_second_in_at_least_one = true;
-            second_info.second_first_pairs.emplace_back(second_buf_handle,
-                                                        first_buf_handle);
+            second_info.second_first_pairs.emplace_back(
+                second_buf_handle.value(), first_buf_handle.value());
           }
 
-          if (first_buf_handle.defined()) {
-            BufferUseInfo &info = buffer_use_info[first_buf_handle];
+          if (first_buf_handle.has_value()) {
+            BufferUseInfo &info = buffer_use_info[first_buf_handle.value()];
             info.func_names.insert("tl.ascend_copy");
             info.call_sites.push_back(GetRef<Call>(op));
           }
 
-          if (second_buf_handle.defined()) {
-            BufferUseInfo &info = buffer_use_info[second_buf_handle];
+          if (second_buf_handle.has_value()) {
+            BufferUseInfo &info = buffer_use_info[second_buf_handle.value()];
             info.func_names.insert("tl.ascend_copy");
             info.call_sites.push_back(GetRef<Call>(op));
           }

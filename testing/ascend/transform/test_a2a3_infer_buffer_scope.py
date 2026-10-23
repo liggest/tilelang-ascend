@@ -120,3 +120,18 @@ def test_unchanged_non_l1_explicit_layout_remains_the_only_entry():
     layouts = result.body.block.annotations["layout_map"]
     assert len(layouts) == 1
     assert layout_str(layouts[original[0].data]) == "layout::ColumnMajor"
+
+
+@pytest.mark.parametrize("valid_first", [True, False])
+def test_partial_region_copy_keeps_unknown_scope_inference_conservative(valid_first):
+    first = tir.decl_buffer((16, 32), "float16", name="first", scope="shared")
+    second = tir.decl_buffer((16, 32), "float16", name="second", scope="shared")
+    region = tir.call_intrin("handle", tvm.ir.Op.get("tl.region"), (first if valid_first else second)[0, 0], 1, 16, 32)
+    first_arg = region if valid_first else first.access_ptr("r")
+    second_arg = second.access_ptr("w") if valid_first else region
+    call = tir.call_intrin("handle", tvm.ir.Op.get("tl.ascend_copy"), first_arg, second_arg)
+    block = tir.SBlock([], [], [], "compute", tir.Evaluate(call), alloc_buffers=[first, second])
+    func = tir.PrimFunc([], tir.SBlockRealize([], True, block))
+    # Source sees no complete region pair and cannot infer the first buffer's
+    # role. A default-constructed C++ Var is a real v, not a missing pointer.
+    assert [buffer.scope() for buffer in _allocations(_run(func))] == ["shared", "shared"]
