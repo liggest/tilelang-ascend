@@ -44,4 +44,5 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/ascend_combinecv.cc
   src/ascend/a2a3/transform/cross_core_pipeline.cc
   src/ascend/a2a3/transform/pipeline_planning.cc
+  src/ascend/a2a3/transform/ascend_sync_insert.cc
 )

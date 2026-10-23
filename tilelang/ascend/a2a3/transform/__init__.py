@@ -96,3 +96,7 @@ def CrossCorePipeline():
 
 def PipelinePlanning():
     return tvm.ffi.get_global_func("tl.transform.A2A3PipelinePlanning")()
+
+
+def AscendSyncInsert(target, platform):
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendSyncInsert")(target, platform)
