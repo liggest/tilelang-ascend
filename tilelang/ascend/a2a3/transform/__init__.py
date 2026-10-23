@@ -52,3 +52,7 @@ def InjectTmpBuffer(target, plan_vid_reduction: bool = False):
 
 def AscendVidReduction():
     return tvm.ffi.get_global_func("tl.transform.A2A3AscendVidReduction")()
+
+
+def LowerTileOp():
+    return tvm.ffi.get_global_func("tl.transform.A2A3LowerTileOp")()

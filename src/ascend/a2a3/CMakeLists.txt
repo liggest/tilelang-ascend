@@ -14,6 +14,10 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/op/parallel.cc
   src/ascend/a2a3/op/ascend.cc
   src/ascend/a2a3/op/builtin.cc
+  src/ascend/a2a3/op/elem.cc
+  src/ascend/a2a3/op/generic.cc
+  src/ascend/a2a3/op/gemm.cc
+  src/ascend/a2a3/op/reduce.cc
   src/ascend/a2a3/transform/allocate_tmp_buffer.cc
   src/ascend/a2a3/transform/ascend_collect_buffer_shape.cc
   src/ascend/a2a3/transform/ascend_host.cc
@@ -23,6 +27,7 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/ascend_vector_mask.cc
   src/ascend/a2a3/transform/ascend_vid_reduction.cc
   src/ascend/a2a3/transform/layout_inference.cc
+  src/ascend/a2a3/transform/lower_tile_op.cc
   src/ascend/a2a3/transform/legalize_safe_memory_access.cc
   src/ascend/a2a3/transform/flatten_buffer.cc
   src/ascend/a2a3/transform/config_index_bitwidth.cc
