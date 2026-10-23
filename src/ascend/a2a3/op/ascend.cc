@@ -183,7 +183,7 @@ AscendAtomicAddNode::AscendAtomicAddNode(Array<PrimExpr> args,
                     {BufferRegion(dst, dst_range), kAccessReadWrite}});
 }
 
-Stmt AscendCopyNode::Lower(const LowerArgs &T,
+Stmt AscendCopyNode::Lower(const ::tvm::tl::LowerArgs &T,
                            arith::Analyzer *analyzer) const {
   auto get_dtype = [](const Buffer &buf) -> std::string {
     auto dtype = buf->dtype;
@@ -724,7 +724,7 @@ Stmt AscendCopyNode::Lower(const LowerArgs &T,
   return Evaluate(new_call);
 }
 
-Stmt AscendAtomicAddNode::Lower(const LowerArgs &T,
+Stmt AscendAtomicAddNode::Lower(const ::tvm::tl::LowerArgs &T,
                                 arith::Analyzer *analyzer) const {
   auto get_dtype = [](const Buffer &buf) -> std::string {
     auto dtype = buf->dtype;
@@ -1048,14 +1048,14 @@ Stmt AscendAtomicAddNode::Lower(const LowerArgs &T,
   return Evaluate(new_call);
 }
 
-LayoutMap AscendCopyNode::InferLayout(const LayoutInferArgs &T,
+LayoutMap AscendCopyNode::InferLayout(const ::tvm::tl::LayoutInferArgs &T,
                                       InferLevel level) const {
   LayoutMap results;
   // TODO: add logic to infer layout for AscendCopy
   return results;
 }
 
-LayoutMap AscendAtomicAddNode::InferLayout(const LayoutInferArgs &T,
+LayoutMap AscendAtomicAddNode::InferLayout(const ::tvm::tl::LayoutInferArgs &T,
                                            InferLevel level) const {
   LayoutMap results;
   return results;

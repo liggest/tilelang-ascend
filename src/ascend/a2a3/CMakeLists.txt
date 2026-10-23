@@ -9,6 +9,9 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/codegen/rt_mod_ascend.cc
   src/ascend/a2a3/codegen/utils.cc
   src/ascend/a2a3/layout/ascend_layout.cc
+  src/ascend/a2a3/layout/utils.cc
+  src/ascend/a2a3/op/operator.cc
+  src/ascend/a2a3/op/parallel.cc
   src/ascend/a2a3/op/ascend.cc
   src/ascend/a2a3/op/builtin.cc
   src/ascend/a2a3/transform/ascend_collect_buffer_shape.cc
@@ -21,5 +24,6 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/flatten_buffer.cc
   src/ascend/a2a3/transform/config_index_bitwidth.cc
   src/ascend/a2a3/transform/legalize_vectorized_loop.cc
+  src/ascend/a2a3/transform/loop_partition.cc
   src/ascend/a2a3/transform/loop_vectorize.cc
 )

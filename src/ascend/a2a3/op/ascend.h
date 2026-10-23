@@ -23,8 +23,10 @@ using namespace ffi;
 class AscendCopyNode : public TileOperatorNode {
 public:
   AscendCopyNode(Array<PrimExpr> args, Map<String, ObjectRef> annotations);
-  Stmt Lower(const LowerArgs &T, arith::Analyzer *analyzer) const final;
-  LayoutMap InferLayout(const LayoutInferArgs &T, InferLevel level) const final;
+  Stmt Lower(const ::tvm::tl::LowerArgs &T,
+             arith::Analyzer *analyzer) const final;
+  LayoutMap InferLayout(const ::tvm::tl::LayoutInferArgs &T,
+                        InferLevel level) const final;
   TileOperator Clone() const final;
   static void RegisterReflection();
   TVM_FFI_DECLARE_OBJECT_INFO_FINAL("tl.ascend.a2a3.AscendCopy", AscendCopyNode,
@@ -65,8 +67,10 @@ private:
 class AscendAtomicAddNode : public TileOperatorNode {
 public:
   AscendAtomicAddNode(Array<PrimExpr> args, Map<String, ObjectRef> annotations);
-  Stmt Lower(const LowerArgs &T, arith::Analyzer *analyzer) const final;
-  LayoutMap InferLayout(const LayoutInferArgs &T, InferLevel level) const final;
+  Stmt Lower(const ::tvm::tl::LowerArgs &T,
+             arith::Analyzer *analyzer) const final;
+  LayoutMap InferLayout(const ::tvm::tl::LayoutInferArgs &T,
+                        InferLevel level) const final;
   TileOperator Clone() const final;
   static void RegisterReflection();
   TVM_FFI_DECLARE_OBJECT_INFO_FINAL("tl.ascend.a2a3.AscendAtomicAdd",
