@@ -25,3 +25,7 @@ def LegalizeSafeMemoryAccess():
 
 def ConfigIndexBitwidth():
     return tvm.ffi.get_global_func("tl.transform.A2A3ConfigIndexBitwidth")()
+
+
+def LegalizeVectorizedLoop():
+    return tvm.ffi.get_global_func("tl.transform.A2A3LegalizeVectorizedLoop")()

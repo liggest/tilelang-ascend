@@ -18,4 +18,6 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/ascend_vector_mask.cc
   src/ascend/a2a3/transform/legalize_safe_memory_access.cc
   src/ascend/a2a3/transform/config_index_bitwidth.cc
+  src/ascend/a2a3/transform/legalize_vectorized_loop.cc
+  src/ascend/a2a3/transform/loop_vectorize.cc
 )
