@@ -20,6 +20,7 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/ascend_lower_opaque_block.cc
   src/ascend/a2a3/transform/ascend_pto_save_buffer_shape.cc
   src/ascend/a2a3/transform/ascend_vector_mask.cc
+  src/ascend/a2a3/transform/layout_inference.cc
   src/ascend/a2a3/transform/legalize_safe_memory_access.cc
   src/ascend/a2a3/transform/flatten_buffer.cc
   src/ascend/a2a3/transform/config_index_bitwidth.cc

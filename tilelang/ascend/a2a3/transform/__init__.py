@@ -40,3 +40,7 @@ def AscendInferBufferScope():
     from .. import layout  # noqa: F401
 
     return tvm.ffi.get_global_func("tl.transform.A2A3InferAllocScope")()
+
+
+def LayoutInference():
+    return tvm.ffi.get_global_func("tl.transform.A2A3LayoutInference")()
