@@ -7,6 +7,10 @@ def BufferShapeCollector():
     return tvm.ffi.get_global_func("tl.transform.A2A3BufferShapeCollector")()
 
 
+def AscendLowerParallelToVector():
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendLowerParallelToVector")()
+
+
 def Flatten2DBuffer():
     return tvm.ffi.get_global_func("tl.transform.A2A3Flatten2DBuffer")()
 
