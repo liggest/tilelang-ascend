@@ -29,3 +29,7 @@ def ConfigIndexBitwidth():
 
 def LegalizeVectorizedLoop():
     return tvm.ffi.get_global_func("tl.transform.A2A3LegalizeVectorizedLoop")()
+
+
+def FlattenBuffer():
+    return tvm.ffi.get_global_func("tl.transform.A2A3FlattenBuffer")()
