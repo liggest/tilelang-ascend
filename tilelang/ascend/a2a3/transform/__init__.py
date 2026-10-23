@@ -60,3 +60,7 @@ def LowerTileOp():
 
 def VectorizeLoop(enable_vectorize=True):
     return tvm.ffi.get_global_func("tl.transform.A2A3VectorizeLoop")(enable_vectorize)
+
+
+def AscendWorkspaceReduction():
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendWorkspaceReduction")()
