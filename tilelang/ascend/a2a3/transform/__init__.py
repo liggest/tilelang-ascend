@@ -33,3 +33,10 @@ def LegalizeVectorizedLoop():
 
 def FlattenBuffer():
     return tvm.ffi.get_global_func("tl.transform.A2A3FlattenBuffer")()
+
+
+def AscendInferBufferScope():
+    # The native pass calls the backend's default tagged zN layout factory.
+    from .. import layout  # noqa: F401
+
+    return tvm.ffi.get_global_func("tl.transform.A2A3InferAllocScope")()
