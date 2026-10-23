@@ -147,3 +147,30 @@ def test_target_is_required():
     factory = tvm.ffi.get_global_func("tl.transform.A2A3PipelinePlanning")
     with pytest.raises(Exception, match="Require the target"):
         factory()(tvm.IRModule({"main": _planning_case()}))
+
+
+@pytest.mark.parametrize("value", [2, tir.IntImm("int32", 2), tir.IntImm("int64", 2)])
+def test_num_stages_any_primitive_and_intimm_abi(value):
+    before = _planning_case(annotations={"num_stages": value})
+    actual = _loops(before)[0].annotations["num_stages"]
+    assert isinstance(actual, (int, tir.IntImm))
+    loop = _loops(_run(before))[0]
+    assert list(loop.annotations["software_pipeline_stage"]) == [0, 1]
+    assert list(loop.annotations["software_pipeline_order"]) == [0, 1]
+
+
+def test_real_language_pipelined_producer():
+    from tilelang.ascend.a2a3 import language as T
+
+    @T.prim_func
+    def func(source: T.Tensor((64,), "float32"), output: T.Tensor((64,), "float32")):
+        with T.Kernel(1, is_npu=True):
+            local = T.alloc_ub((16,), "float32")
+            for k in T.Pipelined(4, num_stages=2):
+                local[0] = source[k]
+                output[k] = local[0] + 1
+
+    before = _loops(func)[0]
+    assert isinstance(before.annotations["num_stages"], tir.IntImm)
+    loop = _loops(_run(func))[0]
+    assert list(loop.annotations["software_pipeline_stage"]) == [0, 1]
