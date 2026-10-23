@@ -48,4 +48,5 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/inject_pipeline.cc
   src/ascend/a2a3/transform/ascend_sync_insert_vs.cc
   src/ascend/a2a3/transform/annotate_device_regions.cc
+  src/ascend/a2a3/transform/ascend_vector_instruction_selection.cc
 )
