@@ -88,3 +88,7 @@ def CombineCV():
 
 def AscendResourceScopeVerify():
     return tvm.ffi.get_global_func("tl.transform.A2A3AscendResourceScopeVerify")()
+
+
+def CrossCorePipeline():
+    return tvm.ffi.get_global_func("tl.transform.A2A3CrossCorePipeline")()
