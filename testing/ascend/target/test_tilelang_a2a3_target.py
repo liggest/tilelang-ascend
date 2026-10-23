@@ -155,7 +155,7 @@ def test_unported_pipeline_fails_explicitly(monkeypatch, target):
     context = create_backend_context(target, "c", "auto")
     with pytest.raises(NotImplementedError, match="A2/A3 Ascend lowering"):
         context.lower(tvm.IRModule({}))
-    with pytest.raises(NotImplementedError, match="A2/A3 Ascend code generation"):
-        context.codegen_device(tvm.IRModule({}), compile_device=False)
-    with pytest.raises(NotImplementedError, match="A2/A3 Ascend code generation"):
-        context.codegen_device(tvm.IRModule({}), compile_device=True)
+    if target == "pto":
+        for compile_device in (False, True):
+            with pytest.raises(NotImplementedError, match="A2/A3 PTO code generation"):
+                context.codegen_device(tvm.IRModule({}), compile_device=compile_device)
