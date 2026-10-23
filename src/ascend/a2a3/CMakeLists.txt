@@ -5,5 +5,6 @@
 # so their availability must not gate this native, source-only build.
 list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/ir.cc
+  src/ascend/a2a3/layout/ascend_layout.cc
   src/ascend/a2a3/transform/ascend_host.cc
 )
