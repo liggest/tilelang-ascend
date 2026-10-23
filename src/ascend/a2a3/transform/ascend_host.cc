@@ -3,55 +3,102 @@
 
 /*!
  * \file ascend_host.cc
- * \brief Preserve the A2/A3 host tiling attributes during TIRX migration.
+ * \brief host specialized for Ascend npu
  */
 
-#include <tvm/arith/analyzer.h>
-#include <tvm/ffi/reflection/registry.h>
-#include <tvm/ir/attrs.h>
-#include <tvm/tirx/transform.h>
-
+#include <unordered_set>
 #include <utility>
 
+#include <tvm/ffi/reflection/registry.h>
+#include <tvm/ir/attrs.h>
+#include <tvm/tirx/builtin.h>
+#include <tvm/tirx/stmt_functor.h>
+#include <tvm/tirx/transform.h>
+
 #include "arith/ir_mutator_with_analyzer.h"
+#include "tirx/analysis/var_use_def_analysis.h"
 
 namespace tvm {
 namespace tl {
 namespace a2a3 {
 
 using namespace tirx;
+using namespace ffi;
 
-namespace {
+class HostProcesser : arith::IRMutatorWithAnalyzer {
+public:
+  static PrimFunc Substitute(PrimFunc f) {
+    arith::Analyzer analyzer;
+    HostProcesser substituter(&analyzer);
+    PrimFuncNode *fptr = f.CopyOnWrite();
+    fptr->body = substituter(f->body);
+    f = WithAttr(std::move(f), "tiling_map", substituter.tiling_map_);
+    f = WithAttr(std::move(f), "var_sequence", substituter.var_sequence_);
+    return f;
+  }
 
-PrimFunc ProcessHost(PrimFunc func) {
-  arith::Analyzer analyzer;
-  arith::IRMutatorWithAnalyzer mutator(&analyzer);
-  Stmt body = func->body;
-  func.CopyOnWrite()->body = mutator(std::move(body));
+private:
+  using arith::IRMutatorWithAnalyzer::IRMutatorWithAnalyzer;
 
-  // The TA pass always wrote these attributes, even though its current
-  // tiling collector never fills either container. Its AscendC and PTO
-  // codegens read them, so preserve the contract while porting the pipeline.
-  func = WithAttr(std::move(func), "tiling_map",
-                  ffi::Map<Var, PrimExpr>{});
-  return WithAttr(std::move(func), "var_sequence", ffi::Array<Var>{});
-}
+  bool isNeedTiling(const Var &var, const PrimExpr &value) {
+    auto check_var = [this](const tirx::VarNode *v) {
+      return this->cmp_set_.count(GetRef<Var>(v));
+    };
+    if (UsesVar(value, check_var)) {
+      this->cmp_set_.insert(var);
+      return false;
+    }
+    if (value->IsInstance<IntImmNode>()) {
+      this->cmp_set_.insert(var);
+      return false;
+    }
+    return true;
+  }
 
-}  // namespace
+  Stmt VisitStmt_(const BindNode *op) final {
+    // disable temporarily
+    return arith::IRMutatorWithAnalyzer::VisitStmt_(op);
+  }
+
+  Stmt VisitStmt_(const ForNode *op) final {
+    if (isNeedTiling(op->loop_var, op->min) ||
+        isNeedTiling(op->loop_var, op->extent)) {
+      return arith::IRMutatorWithAnalyzer::VisitStmt_(op);
+    }
+    return arith::IRMutatorWithAnalyzer::VisitStmt_(op);
+  }
+
+  Stmt VisitStmt_(const AttrStmtNode *op) final {
+    if (op->attr_key == "thread_extent") {
+      IterVar iv = Downcast<IterVar>(op->node);
+      cmp_set_.insert(iv->var);
+      after_thread_flag = true;
+    }
+    return arith::IRMutatorWithAnalyzer::VisitStmt_(op);
+  }
+
+  Map<Var, PrimExpr> tiling_map_;
+  Array<Var> var_sequence_;
+  std::unordered_set<Var, ObjectPtrHash, ObjectPtrEqual> cmp_set_;
+  bool after_thread_flag = false;
+};
+
+using namespace tirx::transform;
 
 tvm::transform::Pass A2A3HostLegalize() {
-  auto pass_func = [](PrimFunc func, const IRModule &,
-                      const tvm::transform::PassContext &) {
-    return ProcessHost(std::move(func));
+  auto pass_func = [=](PrimFunc f, IRModule m, PassContext ctx) {
+    auto new_func = HostProcesser::Substitute(std::move(f));
+    return new_func;
   };
-  return tirx::transform::CreatePrimFuncPass(pass_func, 0, "tl.A2A3HostLegalize", {});
+  return CreatePrimFuncPass(pass_func, 0, "tl.A2A3HostLegalize", {});
 }
 
+// regist host path
 TVM_FFI_STATIC_INIT_BLOCK() {
   namespace refl = tvm::ffi::reflection;
   refl::GlobalDef().def("tl.transform.A2A3HostLegalize", A2A3HostLegalize);
 }
 
-}  // namespace a2a3
-}  // namespace tl
-}  // namespace tvm
+} // namespace a2a3
+} // namespace tl
+} // namespace tvm
