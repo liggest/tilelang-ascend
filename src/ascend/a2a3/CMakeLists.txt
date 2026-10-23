@@ -25,6 +25,7 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/ascend_lower_opaque_block.cc
   src/ascend/a2a3/transform/ascend_lower_parallel_to_vector.cc
   src/ascend/a2a3/transform/ascend_pto_save_buffer_shape.cc
+  src/ascend/a2a3/transform/ascend_tail_mask_propagation.cc
   src/ascend/a2a3/transform/ascend_vector_mask.cc
   src/ascend/a2a3/transform/ascend_vid_reduction.cc
   src/ascend/a2a3/transform/ascend_workspace_reduction.cc

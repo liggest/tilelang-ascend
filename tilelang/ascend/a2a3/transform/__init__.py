@@ -68,3 +68,7 @@ def VectorizeLoop(enable_vectorize=True):
 
 def AscendWorkspaceReduction():
     return tvm.ffi.get_global_func("tl.transform.A2A3AscendWorkspaceReduction")()
+
+
+def AscendTailMaskPropagation(rewrite_reduce: bool = True):
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendTailMaskPropagation")(rewrite_reduce)
