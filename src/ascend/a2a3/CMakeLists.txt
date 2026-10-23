@@ -5,6 +5,9 @@
 # so their availability must not gate this native, source-only build.
 list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/ir.cc
+  src/ascend/a2a3/codegen/codegen_ascend.cc
+  src/ascend/a2a3/codegen/rt_mod_ascend.cc
+  src/ascend/a2a3/codegen/utils.cc
   src/ascend/a2a3/layout/ascend_layout.cc
   src/ascend/a2a3/op/ascend.cc
   src/ascend/a2a3/op/builtin.cc
@@ -12,6 +15,7 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/ascend_host.cc
   src/ascend/a2a3/transform/ascend_lower_opaque_block.cc
   src/ascend/a2a3/transform/ascend_pto_save_buffer_shape.cc
+  src/ascend/a2a3/transform/ascend_vector_mask.cc
   src/ascend/a2a3/transform/legalize_safe_memory_access.cc
   src/ascend/a2a3/transform/config_index_bitwidth.cc
 )
