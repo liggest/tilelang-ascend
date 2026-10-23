@@ -20,6 +20,11 @@ cdef class CythonKernelWrapper:
         object static_contiguous_list  # A list contains contiguous buffers
         object ptr_map                 # Maps pointer arguments to their corresponding buffer indices
         list result_idx                # Indices of output tensors in the params list
+        list allocation_idx            # Output and optional target-owned workspace slots
+        list workspace_idx             # A2A3 user-declared automatic workspace slots
+        list auto_gm_idx               # A2A3 compiler-derived automatic workspace slots
+        bint a2a3_runtime               # TA void-call / automatic-memory ABI
+        object allocation_shape_resolver
         list params                    # List of parameter specifications (includes both inputs and outputs)
         object lib                     # Reference to the compiled library containing the kernel
         # Add new cache attributes
@@ -31,6 +36,11 @@ cdef class CythonKernelWrapper:
     def __cinit__(self, result_idx, params, lib, get_current_device=None, get_current_stream=None):
         # Initialize wrapper with kernel configuration
         self.result_idx = result_idx
+        self.allocation_idx = result_idx
+        self.workspace_idx = []
+        self.auto_gm_idx = []
+        self.a2a3_runtime = False
+        self.allocation_shape_resolver = None
         self.params = params
         self.lib = lib
         # Convert TVM types to native Python types during initialization
@@ -50,6 +60,17 @@ cdef class CythonKernelWrapper:
                 else:
                     native_shape.append(dim)
             self.param_shapes.append(native_shape)
+
+    def set_a2a3_runtime(self, workspace_idx, auto_gm_idx):
+        # Opt in only from the A2A3 adapter. Other targets retain their existing
+        # output allocation, validation and status-return calling convention.
+        from tilelang.ascend.a2a3.runtime import resolve_allocation_shape
+        self.workspace_idx = list(workspace_idx)
+        self.auto_gm_idx = list(auto_gm_idx)
+        self.allocation_idx = sorted(set(self.result_idx + self.workspace_idx + self.auto_gm_idx))
+        self.a2a3_runtime = True
+        self.allocation_shape_resolver = resolve_allocation_shape
+        return self
 
     def set_dynamic_symbolic_map(self, dynamic_symbolic_map):
         self.dynamic_symbolic_map = dynamic_symbolic_map
@@ -177,7 +198,7 @@ cdef class CythonKernelWrapper:
         cdef int total_dynamic_symbolics = len(self.dynamic_symbolic_map)
 
         # Ensure the number of inputs matches expected parameter count
-        if total_params != total_inputs + total_result_idx:
+        if not self.a2a3_runtime and total_params != total_inputs + total_result_idx:
             raise ValueError(
                 f"Expected {len(self.params)} inputs, got {len(inputs) + len(self.result_idx)} with {len(inputs)} inputs and {len(self.result_idx)} outputs"
             )
@@ -202,28 +223,34 @@ cdef class CythonKernelWrapper:
         # resolved even when the output that needs it comes earlier in the signature;
         # the outputs are then allocated below, in parameter order.
         for i in range(len(self.params)):
-            if i not in self.result_idx:
+            if i not in self.allocation_idx:
                 tensor_list[i] = inputs[ins_idx]
                 ins_idx += 1
 
         # Prepare output tensors
         for i in range(len(self.params)):
-            if i in self.result_idx:
+            if i in self.allocation_idx:
                 dtype = self.param_dtypes[i]
                 shape = []
                 # Now working with native Python list, no FFI calls needed
-                for s in self.param_shapes[i]:
-                    if isinstance(s, tirx.Var):
-                        for key in self.dynamic_symbolic_map:
-                            if str(s) == str(key):
-                                ref_id, ref_tensor_idx, ref_shape_idx, stride_scale = self.dynamic_symbolic_map[key]
-                                if ref_id == 0:
-                                    shape.append(tensor_list[ref_tensor_idx].shape[ref_shape_idx])
-                                else:
-                                    shape.append(tensor_list[ref_tensor_idx].stride(ref_shape_idx) * stride_scale)
-                    else:  # Already converted to Python int during initialization
-                        shape.append(s)
-
+                if self.a2a3_runtime:
+                    shape = self.allocation_shape_resolver(
+                        self.param_shapes[i], self.dynamic_symbolic_map,
+                        self.dynamic_symbolic_sources, tensor_list,
+                        i in self.auto_gm_idx and i not in self.result_idx and i not in self.workspace_idx,
+                    )
+                else:
+                    for s in self.param_shapes[i]:
+                        if isinstance(s, tirx.Var):
+                            for key in self.dynamic_symbolic_map:
+                                if str(s) == str(key):
+                                    ref_id, ref_tensor_idx, ref_shape_idx, stride_scale = self.dynamic_symbolic_map[key]
+                                    if ref_id == 0:
+                                        shape.append(tensor_list[ref_tensor_idx].shape[ref_shape_idx])
+                                    else:
+                                        shape.append(tensor_list[ref_tensor_idx].stride(ref_shape_idx) * stride_scale)
+                        else:  # Already converted to Python int during initialization
+                            shape.append(s)
                 if device is None:
                     device = self._infer_output_device(inputs)
 
@@ -278,8 +305,9 @@ cdef class CythonKernelWrapper:
         if not skip_tensor_validation:
             self._check_buffer_device(tensor_list)
             self._check_buffer_dtype(tensor_list)
-            self._check_static_shape(tensor_list)
-            self._check_static_strides(tensor_list)
+            if not self.a2a3_runtime:
+                self._check_static_shape(tensor_list)
+                self._check_static_strides(tensor_list)
             self._check_static_contiguous(tensor_list)
 
         # Add dynamic dimension values to kernel arguments
@@ -303,7 +331,7 @@ cdef class CythonKernelWrapper:
 
         # Execute the kernel
         result = self.lib.call(*call_args)
-        if result != 0:
+        if not self.a2a3_runtime and result != 0:
             error_msg = self.lib.get_last_error().decode('utf-8')
             raise RuntimeError(f"Kernel call failed: {error_msg}")
 
