@@ -17,3 +17,7 @@ def CollectBufferShapes():
 
 def AscendLowerOpaqueBlock():
     return tvm.ffi.get_global_func("tl.transform.A2A3AscendLowerOpaqueBlock")()
+
+
+def LegalizeSafeMemoryAccess():
+    return tvm.ffi.get_global_func("tl.transform.A2A3LegalizeSafeMemoryAccess")()
