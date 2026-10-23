@@ -72,3 +72,7 @@ def AscendWorkspaceReduction():
 
 def AscendTailMaskPropagation(rewrite_reduce: bool = True):
     return tvm.ffi.get_global_func("tl.transform.A2A3AscendTailMaskPropagation")(rewrite_reduce)
+
+
+def AscendStorageRewrite(is_npu=False):
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendStorageRewrite")(is_npu)

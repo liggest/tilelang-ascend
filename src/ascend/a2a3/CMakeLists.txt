@@ -8,6 +8,7 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/codegen/codegen_ascend.cc
   src/ascend/a2a3/codegen/rt_mod_ascend.cc
   src/ascend/a2a3/codegen/utils.cc
+  src/ascend/a2a3/target/memory_info.cc
   src/ascend/a2a3/layout/ascend_layout.cc
   src/ascend/a2a3/layout/utils.cc
   src/ascend/a2a3/op/operator.cc
@@ -22,6 +23,7 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/transform/ascend_collect_buffer_shape.cc
   src/ascend/a2a3/transform/ascend_host.cc
   src/ascend/a2a3/transform/ascend_infer_buffer_scope.cc
+  src/ascend/a2a3/transform/ascend_storage_rewrite.cc
   src/ascend/a2a3/transform/ascend_lower_opaque_block.cc
   src/ascend/a2a3/transform/ascend_lower_parallel_to_vector.cc
   src/ascend/a2a3/transform/ascend_pto_save_buffer_shape.cc
