@@ -92,3 +92,7 @@ def AscendResourceScopeVerify():
 
 def CrossCorePipeline():
     return tvm.ffi.get_global_func("tl.transform.A2A3CrossCorePipeline")()
+
+
+def PipelinePlanning():
+    return tvm.ffi.get_global_func("tl.transform.A2A3PipelinePlanning")()

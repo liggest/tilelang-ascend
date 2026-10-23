@@ -1,0 +1,149 @@
+"""The TA planner keeps dependency, annotation, and empty-stage policies."""
+
+import pytest
+from tilelang import tvm
+
+
+tir = tvm.tirx
+
+
+def _planning_case(kind="buffer", stages=2, dtype="float32", extent=4, annotations=None):
+    source = tir.decl_buffer((64,), dtype, name="source")
+    output = tir.decl_buffer((64,), dtype, name="output")
+    local = tir.decl_buffer((16,), dtype, name="local", scope="shared.ub")
+    k = tir.Var("k", "int32")
+    copy = tir.BufferStore(local, tir.BufferLoad(source, [k * 16]), [0])
+    use = tir.BufferStore(output, tir.BufferLoad(local, [0]) + tir.const(1, dtype), [k * 16])
+    if kind == "extern":
+        copy = tir.Evaluate(
+            tir.call_extern(
+                "handle", f"tl::ascend::copy_gm_to_ub<{dtype}, 16>", source.access_ptr("r"), local.access_ptr("w"), 16, 1, 16, 0, 16
+            )
+        )
+    elif kind == "intrinsic":
+        use = tir.Evaluate(tir.call_intrin("handle", tvm.ir.Op.get("tl.ascend_exp"), output.access_ptr("w"), local.access_ptr("r"), 16))
+    elif kind == "address":
+        use = tir.Evaluate(tir.call_extern("handle", "unknown", tir.address_of(local[0])))
+    elif kind == "conditional":
+        copy = tir.IfThenElse(k < 3, copy, None)
+    elif kind == "overlap":
+        use = tir.BufferStore(local, tir.BufferLoad(source, [k * 16 + 1]), [0])
+    elif kind == "disjoint":
+        use = tir.BufferStore(local, tir.BufferLoad(source, [k * 16 + 1]), [1])
+    elif kind == "empty":
+        copy, use = tir.Evaluate(0), tir.Evaluate(0)
+    body = copy if kind == "single" else tir.SeqStmt([copy, use])
+    if kind == "block":
+        body = tir.SBlockRealize([], True, tir.SBlock([], [], [], "body", body))
+    elif kind == "block_if":
+        body = tir.SBlockRealize([], True, tir.SBlock([], [], [], "body", tir.IfThenElse(k < 3, body, None)))
+    elif kind == "block_else":
+        body = tir.SBlockRealize([], True, tir.SBlock([], [], [], "body", tir.IfThenElse(k < 3, body, tir.Evaluate(0))))
+    attrs = {"num_stages": stages, "user_marker": 7} if annotations is None else annotations
+    loop = tir.For(k, 0, extent, tir.ForKind.PARALLEL if kind == "parallel" else tir.ForKind.SERIAL, body, annotations=attrs)
+    block = tir.SBlock([], [], [], "root", loop, alloc_buffers=[local])
+    return tir.PrimFunc(
+        [source.data, output.data], tir.SBlockRealize([], True, block), buffer_map={source.data: source, output.data: output}
+    )
+
+
+def _run(func, target=None):
+    if target is None:
+        target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "keys": ["ascend"], "model": "A3"})
+    func = func.with_attr("target", target)
+    factory = tvm.ffi.get_global_func("tl.transform.A2A3PipelinePlanning")
+    return factory()(tvm.IRModule({"main": func}))["main"]
+
+
+def _loops(func):
+    result = []
+    tir.stmt_functor.post_order_visit(func.body, lambda node: result.append(node) if isinstance(node, tir.For) else None)
+    return result
+
+
+@pytest.mark.parametrize("stages,order,stage", [(1, [1, 0], [0, 1]), (2, [0, 1], [0, 1]), (3, [0, 1], [0, 2])])
+@pytest.mark.parametrize("dtype", ["float16", "float32", "int32"])
+def test_copy_dependency_schedule(stages, order, stage, dtype):
+    loop = _loops(_run(_planning_case(stages=stages, dtype=dtype)))[0]
+    assert list(loop.annotations["software_pipeline_order"]) == order
+    assert list(loop.annotations["software_pipeline_stage"]) == stage
+    assert "num_stages" not in loop.annotations
+    assert int(loop.annotations["user_marker"]) == 7
+    assert "software_pipeline_async_stages" not in loop.annotations
+
+
+@pytest.mark.parametrize("kind", ["extern", "intrinsic", "conditional", "block", "block_if"])
+def test_collector_and_stage_containers(kind):
+    loop = _loops(_run(_planning_case(kind)))[0]
+    assert list(loop.annotations["software_pipeline_stage"]) == [0, 1]
+    assert list(loop.annotations["software_pipeline_order"]) == [0, 1]
+
+
+@pytest.mark.parametrize("extent", [0, 1, 4])
+def test_empty_stage_preserves_loop_and_only_removes_scheduling(extent):
+    attrs = {
+        "num_stages": 3,
+        "tl_pipeline_order": [0, 1],
+        "tl_pipeline_stage": [0, 2],
+        "software_pipeline_order": [0, 1],
+        "software_pipeline_stage": [0, 2],
+        "software_pipeline_async_stages": [0],
+        "user_marker": 7,
+    }
+    loop = _loops(_run(_planning_case("empty", extent=extent, annotations=attrs)))[0]
+    assert int(loop.extent) == extent
+    assert dict(loop.annotations) == {"user_marker": 7}
+
+
+def test_explicit_annotations_and_source_retained_keys():
+    attrs = {"tl_pipeline_order": [0, 1], "tl_pipeline_stage": [0, 2], "user_marker": 7}
+    loop = _loops(_run(_planning_case(annotations=attrs)))[0]
+    assert list(loop.annotations["software_pipeline_order"]) == [0, 1]
+    assert list(loop.annotations["software_pipeline_stage"]) == [0, 2]
+    # The two source copy loops also retain the original tl_* keys.
+    assert list(loop.annotations["tl_pipeline_order"]) == [0, 1]
+    assert list(loop.annotations["tl_pipeline_stage"]) == [0, 2]
+
+
+@pytest.mark.parametrize("key", ["tl_pipeline_order", "tl_pipeline_stage"])
+def test_source_minus_one_annotation_is_left_for_other_planners(key):
+    attrs = {"tl_pipeline_order": [0, 1], "tl_pipeline_stage": [0, 2]}
+    attrs[key] = [-1, 1]
+    loop = _loops(_run(_planning_case(annotations=attrs)))[0]
+    assert "software_pipeline_stage" not in loop.annotations
+    assert list(loop.annotations[key]) == [-1, 1]
+
+
+@pytest.mark.parametrize(
+    "kind,model,keys", [("ascend", "A2", ["ascend"]), ("ascend", "A3", ["ascend"]), ("ascend", "A3", ["ascend", "pto"])]
+)
+def test_ascend_targets_do_not_enable_cuda_async_annotations(kind, model, keys):
+    target = tvm.target.Target({"kind": kind, "arch": "dav-2201", "model": model, "keys": keys})
+    loop = _loops(_run(_planning_case(), target))[0]
+    assert "software_pipeline_async_stages" not in loop.annotations
+    assert list(loop.annotations["software_pipeline_stage"]) == [0, 1]
+
+
+def test_no_request_is_unchanged():
+    before = _planning_case(annotations={"user_marker": 7})
+    after = _run(before)
+    tvm.ir.assert_structural_equal(before.body, after.body)
+
+
+@pytest.mark.parametrize(
+    "kind,pattern", [("overlap", "Multiple writes"), ("single", "SeqStmt"), ("parallel", "Serial"), ("block_else", "Can't handle")]
+)
+def test_source_rejections(kind, pattern):
+    with pytest.raises(Exception, match=pattern):
+        _run(_planning_case(kind))
+
+
+def test_num_stages_requires_positive_value():
+    with pytest.raises(Exception, match="num_stages >= 1"):
+        _run(_planning_case(stages=0))
+
+
+def test_target_is_required():
+    factory = tvm.ffi.get_global_func("tl.transform.A2A3PipelinePlanning")
+    with pytest.raises(Exception, match="Require the target"):
+        factory()(tvm.IRModule({"main": _planning_case()}))
