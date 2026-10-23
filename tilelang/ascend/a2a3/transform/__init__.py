@@ -80,3 +80,11 @@ def AscendStorageRewrite(is_npu=False):
 
 def AscendMemoryPlanning():
     return tvm.ffi.get_global_func("tl.transform.A2A3AscendMemoryPlanning")()
+
+
+def CombineCV():
+    return tvm.ffi.get_global_func("tl.transform.A2A3CombineCV")()
+
+
+def AscendResourceScopeVerify():
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendResourceScopeVerify")()
