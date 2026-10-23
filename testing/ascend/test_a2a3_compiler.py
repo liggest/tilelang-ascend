@@ -1,0 +1,337 @@
+"""AscendC compiler identity, source command ordering and simulator contracts."""
+
+from dataclasses import FrozenInstanceError
+import json
+import os
+from pathlib import Path
+import subprocess
+from types import SimpleNamespace
+
+import pytest
+
+from tilelang import tvm
+from tilelang.ascend.a2a3 import compiler
+
+
+@pytest.fixture
+def toolchain(monkeypatch, tmp_path):
+    for key in ["TL_CCE_AUTO_SYNC", "TL_CCE_OPT_LEVEL", "TL_PTO_DEBUG", "TL_RUN_MODE", "TL_ROOT", "ASCEND_HOME_PATH", "ASCEND_HOME"]:
+        monkeypatch.delenv(key, raising=False)
+    package = tmp_path / "package"
+    (package / "tilelang/src").mkdir(parents=True)
+    for directory in ["catlass/include", "shmem/include", "shmem/src/device"]:
+        (package / "3rdparty" / directory).mkdir(parents=True)
+    monkeypatch.setattr(compiler, "TILELANG_PACKAGE_PATH", package / "tilelang")
+    monkeypatch.setattr(compiler, "TILELANG_TEMPLATE_PATH", str(package / "tilelang/src"))
+    sdk = tmp_path / "cann"
+    (sdk / "tools/simulator/Ascend910B1/lib").mkdir(parents=True)
+    monkeypatch.setenv("ASCEND_HOME_PATH", str(sdk))
+    bindir = tmp_path / "bin"
+    bindir.mkdir()
+    binary = bindir / "bisheng"
+    binary.write_text("#!/bin/sh\nexit 0\n")
+    binary.chmod(0o755)
+    monkeypatch.setenv("PATH", str(bindir))
+    work = tmp_path / "project"
+    work.mkdir()
+    (work / "local/include").mkdir(parents=True)
+    monkeypatch.chdir(work)
+    return SimpleNamespace(package=package, sdk=sdk, binary=binary, work=work)
+
+
+def _target(platform="A2", *, keys=None, arch="dav-2201"):
+    return tvm.target.Target({"kind": "ascend", "arch": arch, "model": platform, "keys": keys or ["ascendc", "ascend"]})
+
+
+def _config(toolchain, **kwargs):
+    return compiler.resolve_compile_config(_target(), **kwargs)
+
+
+def _capture_compile(monkeypatch):
+    calls = []
+
+    def run(command, **kwargs):
+        calls.append((command, kwargs))
+        Path(command[-1]).write_bytes(b"shared")
+        return SimpleNamespace(returncode=0)
+
+    monkeypatch.setattr(compiler.subprocess, "run", run)
+    return calls
+
+
+def test_original_defaults_vs_pairing_and_read_only_environment(toolchain):
+    before = dict(os.environ)
+    assert compiler.normalize_compiler_options() == {"cce_auto_sync": True, "opt_level": 2, "pto_debug": False}
+    assert compiler.normalize_compiler_options({"tl.ascend_auto_sync_vs": True}) == {
+        "cce_auto_sync": False,
+        "opt_level": 3,
+        "pto_debug": False,
+    }
+    assert compiler.resolve_compile_flags("ascendc", {"tl.ascend_auto_sync_vs": True}, ["-O0", "--cce-auto-sync=on"]) == [
+        "-O3",
+        "--cce-auto-sync=off",
+        "-O0",
+        "--cce-auto-sync=on",
+    ]
+    assert os.environ == before
+
+
+@pytest.mark.parametrize("value,enabled", [("off", False), (" OFF ", False), ("on", True), ("false", True), ("0", True), ("", True)])
+def test_auto_sync_environment_keeps_source_exact_off_rule(toolchain, monkeypatch, value, enabled):
+    monkeypatch.setenv("TL_CCE_AUTO_SYNC", value)
+    assert compiler.normalize_compiler_options()["cce_auto_sync"] is enabled
+
+
+@pytest.mark.parametrize("value,enabled", [("1", True), (" 1 ", True), ("true", False), ("0", False), ("", False)])
+def test_pto_debug_environment_keeps_source_exact_one_rule(toolchain, monkeypatch, value, enabled):
+    monkeypatch.setenv("TL_PTO_DEBUG", value)
+    assert compiler.normalize_compiler_options()["pto_debug"] is enabled
+    assert compiler.resolve_compile_flags("pto") == (["-O2", "-D_DEBUG", "--cce-enable-print"] if enabled else ["-O2"])
+
+
+@pytest.mark.parametrize("value,level", [("0", 0), (" 1 ", 1), ("2", 2), ("3", 3)])
+def test_optimization_environment_matches_original_parser(toolchain, monkeypatch, value, level):
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", value)
+    assert compiler.normalize_compiler_options()["opt_level"] == level
+
+
+@pytest.mark.parametrize("value", ["4", "-1", "", "fast", "2.0"])
+def test_invalid_optimization_is_source_value_error(toolchain, monkeypatch, value):
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", value)
+    with pytest.raises(ValueError, match="Invalid opt_level"):
+        compiler.normalize_compiler_options()
+
+
+def test_environment_overrides_derived_vs_defaults_before_caller_flags(toolchain, monkeypatch):
+    monkeypatch.setenv("TL_CCE_AUTO_SYNC", "on")
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", "1")
+    assert compiler.resolve_compile_flags("ascendc", {"tl.ascend_auto_sync_vs": True}, "-O0 --cce-auto-sync=off") == [
+        "-O1",
+        "-O0 --cce-auto-sync=off",
+    ]
+    config = _config(toolchain, pass_configs={"tl.ascend_auto_sync_vs": True}, compile_flags="-O0 --cce-auto-sync=off")
+    assert config.flags == ("-O1", "-O0", "--cce-auto-sync=off")
+
+
+def test_config_is_immutable_json_stable_and_rehydrates_without_environment(toolchain, monkeypatch):
+    config = _config(toolchain, compile_flags=["-O0"])
+    metadata = json.loads(json.dumps(config.to_metadata(), sort_keys=True))
+    assert config.dialect == "ascendc"
+    assert metadata["dialect"] == "ascendc"
+    assert "execution_backend" not in metadata
+    assert compiler.LibraryGenerator(config).target == config.dialect
+    identity = json.dumps(config.cache_identity)
+    assert hash(config.cache_identity)
+    with pytest.raises(FrozenInstanceError):
+        config.platform = "A3"
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", "invalid-after-freeze")
+    monkeypatch.setenv("TL_RUN_MODE", "sim")
+    for name in ["_get_tl_root", "_get_ascend_home_path", "_get_simulator_lib_path", "_normalize_options"]:
+        monkeypatch.setattr(compiler, name, lambda *args, **kwargs: pytest.fail("metadata re-resolved compiler identity"))
+    restored = compiler.CompileConfig.from_metadata(metadata)
+    assert restored == config
+    assert json.dumps(restored.cache_identity) == identity
+
+
+def test_platform_mode_paths_and_cwd_are_distinct_cache_identities(toolchain, monkeypatch, tmp_path):
+    first = _config(toolchain)
+    other_platform = compiler.resolve_compile_config(_target("A3"))
+    sim = _config(toolchain, run_mode="sim")
+    moved = tmp_path / "other-project"
+    moved.mkdir()
+    monkeypatch.chdir(moved)
+    other_cwd = _config(toolchain)
+    assert len({cfg.cache_identity for cfg in [first, other_platform, sim, other_cwd]}) == 4
+
+
+def test_complete_command_preserves_headers_link_order_source_and_last_flags(toolchain, monkeypatch):
+    config = _config(toolchain, compile_flags=["-O0", "-mllvm", "one", "-mllvm", "two", "-std=c++17"])
+    calls = _capture_compile(monkeypatch)
+    library = compiler.LibraryGenerator(config)
+    library.update_lib_code("source text")
+    library.compile_lib(timeout=7)
+    [(command, kwargs)] = calls
+    assert command[0] == str(toolchain.binary)
+    assert command[1:4] == ["--npu-arch=dav-2201", "-std=c++17", "-xasc"]
+    for relative in ["catlass/include", "shmem/include", "shmem/src/device"]:
+        assert f"-I{toolchain.package}/3rdparty/{relative}" in command
+    assert "-DBACKEND_HYBM" in command
+    assert command.index("--shared") < command.index(library.srcpath)
+    assert command[command.index(library.srcpath) + 1 : -2] == ["-O2", "-O0", "-mllvm", "one", "-mllvm", "two"]
+    assert command.count("-std=c++17") == 1
+    assert command[-2:] == ["-o", library.libpath]
+    assert kwargs == {"timeout": 7, "cwd": str(toolchain.work)}
+    assert Path(library.get_source_path()).read_text() == "source text"
+    assert Path(library.get_lib_path()).read_bytes() == b"shared"
+    library.remove_lib()
+    assert library.libpath is None
+
+
+def test_compile_and_flag_assignment_use_snapshot_after_environment_and_cwd_change(toolchain, monkeypatch, tmp_path):
+    config = _config(toolchain, compile_flags=["-Ilocal/include", "-O0"])
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", "invalid")
+    monkeypatch.setenv("TL_ROOT", "/missing")
+    monkeypatch.setenv("ASCEND_HOME_PATH", "/another-sdk")
+    monkeypatch.setenv("TL_RUN_MODE", "sim")
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    monkeypatch.chdir(elsewhere)
+    calls = _capture_compile(monkeypatch)
+    library = compiler.LibraryGenerator(compiler.CompileConfig.from_metadata(config.to_metadata()))
+    library.assign_compile_flags(config.flags)
+    with pytest.raises(ValueError, match="frozen"):
+        library.set_compile_flags(["-O3"])
+    library.update_lib_code("frozen")
+    library.compile_lib()
+    [(command, kwargs)] = calls
+    assert kwargs["cwd"] == str(toolchain.work)
+    assert Path(kwargs["cwd"], "local/include").is_dir()
+    assert "-Ilocal/include" in command
+    assert f"-L{toolchain.sdk}/lib64" in command
+    assert "-lruntime" in command and "-lruntime_camodel" not in command
+
+
+@pytest.mark.parametrize("platform", ["A2", "A3"])
+def test_simulator_command_keeps_original_transitive_link_order(toolchain, monkeypatch, platform):
+    config = compiler.resolve_compile_config(_target(platform), run_mode="sim")
+    calls = _capture_compile(monkeypatch)
+    library = compiler.LibraryGenerator(config)
+    library.update_lib_code("sim")
+    library.compile_lib()
+    [(command, _)] = calls
+    simdir = str(toolchain.sdk / "tools/simulator/Ascend910B1/lib")
+    begin = command.index(f"-L{simdir}")
+    assert command[begin : begin + 4] == [f"-L{simdir}", f"-Wl,-rpath,{simdir}", "-Wl,--disable-new-dtags", f"-L{toolchain.sdk}/lib64"]
+    assert "-lruntime_camodel" in command and "-lruntime" not in command
+
+
+def test_simulator_discovery_uses_lib_configuration_not_camodel(toolchain):
+    first = toolchain.sdk / "tools/simulator/Ascend910B1/lib"
+    first.rmdir()
+    (first.parent / "camodel").mkdir()
+    with pytest.raises(FileNotFoundError, match="Simulator library not found"):
+        compiler._get_simulator_lib_path(str(toolchain.sdk), "A2")
+    fallback = toolchain.sdk / "tools/simulator/Ascend910_9599/lib"
+    fallback.mkdir(parents=True)
+    assert compiler._get_simulator_lib_path(str(toolchain.sdk), "A3") == str(fallback)
+
+
+def test_sim_load_only_prepends_frozen_library_path_and_deduplicates(toolchain, monkeypatch):
+    config = _config(toolchain, run_mode="sim")
+    monkeypatch.setenv("TL_RUN_MODE", "npu")
+    monkeypatch.setenv("ASCEND_HOME_PATH", "/changed")
+    monkeypatch.setenv("LD_LIBRARY_PATH", "/existing")
+    loaded = []
+    monkeypatch.setattr(compiler.ctypes, "CDLL", lambda path: loaded.append(path) or object())
+    library = compiler.LibraryGenerator(config)
+    library.set_lib_path("cached.so")
+    library.load_lib()
+    assert loaded == ["cached.so"]
+    assert os.environ["LD_LIBRARY_PATH"] == config.simulator_lib_path + ":/existing"
+    library.load_lib()
+    assert os.environ["LD_LIBRARY_PATH"] == config.simulator_lib_path + ":/existing"
+
+
+@pytest.mark.parametrize("target", [_target(keys=["pto", "ascend"]), _target(arch="dav-3510")])
+def test_target_boundaries_are_strict_before_toolchain_resolution(toolchain, target):
+    with pytest.raises((ValueError, NotImplementedError), match="A2/A3|PTO"):
+        compiler.resolve_compile_config(target)
+
+
+def test_explicit_platform_cannot_change_frozen_model(toolchain):
+    with pytest.raises(ValueError, match="conflicts with frozen"):
+        compiler.resolve_compile_config(_target("A2"), platform="A3")
+
+
+@pytest.mark.parametrize("change", ["schema", "command", "runtime", "flags_type"])
+def test_metadata_rejects_incomplete_or_inconsistent_snapshots(toolchain, change):
+    metadata = _config(toolchain).to_metadata()
+    if change == "schema":
+        del metadata["working_directory"]
+    elif change == "command":
+        metadata["command_options"].append("--changed")
+    elif change == "runtime":
+        metadata["run_mode"] = "sim"
+    else:
+        metadata["flags"] = "-O2"
+    with pytest.raises(ValueError):
+        compiler.CompileConfig.from_metadata(metadata)
+
+
+def test_compile_failure_and_timeout_preserve_original_error_contract(toolchain, monkeypatch):
+    library = compiler.LibraryGenerator(_config(toolchain))
+    library.update_lib_code("bad source")
+    monkeypatch.setattr(compiler.subprocess, "run", lambda *args, **kwargs: SimpleNamespace(returncode=3))
+    with pytest.raises(RuntimeError, match="Compilation Failed"):
+        library.compile_lib()
+
+    def timeout(*args, **kwargs):
+        raise subprocess.TimeoutExpired(args[0], 0.1)
+
+    monkeypatch.setattr(compiler.subprocess, "run", timeout)
+    with pytest.raises(RuntimeError, match="Compile kernel failed"):
+        library.compile_lib(timeout=0.1)
+
+
+@pytest.mark.parametrize(
+    "configured", ["-O1 --cce-auto-sync=off -mllvm one -mllvm two", ["-O1", "--cce-auto-sync=off", "-mllvm one", "-mllvm two"]]
+)
+def test_mainline_configured_flags_precede_explicit_flags_without_losing_pairs(toolchain, monkeypatch, configured):
+    config = _config(
+        toolchain,
+        pass_configs={"tl.ascend_auto_sync_vs": True, "tl.device_compile_flags": configured},
+        compile_flags=["-O0", "--cce-auto-sync=on", "-mllvm", "three"],
+    )
+    assert config.flags == (
+        "-O3",
+        "--cce-auto-sync=off",
+        "-O1",
+        "--cce-auto-sync=off",
+        "-mllvm",
+        "one",
+        "-mllvm",
+        "two",
+        "-O0",
+        "--cce-auto-sync=on",
+        "-mllvm",
+        "three",
+    )
+    calls = _capture_compile(monkeypatch)
+    library = compiler.LibraryGenerator(config)
+    library.update_lib_code("options")
+    library.compile_lib()
+    [(command, _)] = calls
+    tail = command[command.index(library.srcpath) + 1 : -2]
+    assert tail == list(config.flags)
+    assert [flag for flag in tail if flag.startswith("-O")] == ["-O3", "-O1", "-O0"]
+    assert [flag for flag in tail if flag.startswith("--cce-auto-sync=")] == [
+        "--cce-auto-sync=off",
+        "--cce-auto-sync=off",
+        "--cce-auto-sync=on",
+    ]
+
+
+def test_mainline_configured_quoted_option_is_one_argv_token(toolchain, monkeypatch):
+    config = _config(toolchain, pass_configs={"tl.device_compile_flags": '-I"relative include"'}, compile_flags=["-O0"])
+    assert config.flags == ("-O2", "-Irelative include", "-O0")
+    calls = _capture_compile(monkeypatch)
+    library = compiler.LibraryGenerator(config)
+    library.assign_compile_flags(config.flags)
+    library.update_lib_code("quoted")
+    library.compile_lib()
+    assert "-Irelative include" in calls[0][0]
+    assert "-Irelative" not in calls[0][0]
+
+
+def test_explicit_load_path_is_saved_for_mainline_cache_export_protocol(toolchain, monkeypatch, tmp_path):
+    path = tmp_path / "restored.so"
+    path.write_bytes(b"restored")
+    loaded = []
+    monkeypatch.setattr(compiler.ctypes, "CDLL", lambda value: loaded.append(value) or object())
+    library = compiler.LibraryGenerator(_config(toolchain))
+    library.load_lib(str(path))
+    assert loaded == [str(path)]
+    assert library.get_lib_path() == str(path)
+    library.remove_lib()
+    assert library.libpath is None
+    assert not path.exists()
