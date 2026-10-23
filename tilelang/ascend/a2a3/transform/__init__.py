@@ -116,3 +116,7 @@ def AnnotateDeviceRegions():
 
 def AscendVectorInstructionSelection(target, platform):
     return tvm.ffi.get_global_func("tl.transform.A2A3AscendVectorInstructionSelection")(target, platform)
+
+
+def AscendVectorMaskLegalize(target, platform):
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendVectorMaskLegalize")(target, platform)
