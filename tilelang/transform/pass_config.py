@@ -114,6 +114,18 @@ class PassConfigKey(str, Enum):
     TL_CONFIG_INDEX_BITWIDTH = "tl.config_index_bitwidth"
     """Bitwidth for configuration indices. Default: 32"""
 
+    # A2/A3 Ascend options. Native defaults and registration remain owned by
+    # their original backend passes; only PTO has a Python target default.
+    TL_ASCEND_AUTO_SYNC = "tl.ascend_auto_sync"
+    TL_ASCEND_AUTO_SYNC_VS = "tl.ascend_auto_sync_vs"
+    TL_ASCEND_MEMORY_PLANNING = "tl.ascend_memory_planning"
+    TL_ASCEND_AUTO_CV_COMBINE = "tl.ascend_auto_cv_combine"
+    TL_ASCEND_AUTO_CV_SYNC = "tl.ascend_auto_cross_core_sync"
+    TL_ASCEND_VECTOR_MASK_REUSE = "tl.ascend_vector_mask_reuse"
+    TL_ASCEND_TAIL_MASK = "tl.ascend_tail_mask"
+    TL_ASCEND_PTO_USE_PIPE_IN_CV_COPY = "tl.ascend_pto_use_pipe_in_cv_copy"
+    TL_ASCEND_EXCEPTION_DUMP = "tl.ascend_exception_dump"
+
     TL_ENABLE_REDUCER_PLAN_VERBOSE = "tl.enable_reducer_plan_verbose"
     """Log each reducer epoch's chosen physical plan (and narrow-plan
     rejection reason) at INFO level during ReducerPlanAndMaterialize.
