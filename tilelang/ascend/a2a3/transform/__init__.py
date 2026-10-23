@@ -104,3 +104,7 @@ def AscendSyncInsert(target, platform):
 
 def InjectSoftwarePipeline():
     return tvm.ffi.get_global_func("tl.transform.A2A3InjectSoftwarePipeline")()
+
+
+def AscendSyncInsertVS(target, platform):
+    return tvm.ffi.get_global_func("tl.transform.A2A3AscendSyncInsertVS")(target, platform)
