@@ -21,3 +21,7 @@ def AscendLowerOpaqueBlock():
 
 def LegalizeSafeMemoryAccess():
     return tvm.ffi.get_global_func("tl.transform.A2A3LegalizeSafeMemoryAccess")()
+
+
+def ConfigIndexBitwidth():
+    return tvm.ffi.get_global_func("tl.transform.A2A3ConfigIndexBitwidth")()
