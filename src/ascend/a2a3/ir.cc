@@ -9,14 +9,14 @@
  * they do not replace the official A5 mixed launch or its execution regions.
  */
 
-#include "ir.h"
+#include "../../ir.h"
 
 #include <tvm/ffi/reflection/registry.h>
 #include <tvm/script/ir_builder/base.h>
 #include <tvm/script/ir_builder/tir/ir.h>
 #include <tvm/tirx/stmt.h>
 
-#include "transform/common/attr.h"
+#include "../../transform/common/attr.h"
 
 namespace tvm {
 namespace tl {
@@ -77,7 +77,8 @@ KernelLaunchFrame KernelLaunch(const Array<PrimExpr> &grid_size,
         tirx::StringImm(vector_count->value == 1 ? "cv_1_1" : "cv_1_2"));
   }
 
-  SBlockFrame main_block = script::ir_builder::tirx::Block(DeviceMainBlockName);
+  SBlockFrame main_block =
+      script::ir_builder::tirx::Block(::tvm::tl::DeviceMainBlockName);
   main_block->reads = Array<tirx::BufferRegion>();
   main_block->writes = Array<tirx::BufferRegion>();
   main_block->annotations = attrs;
