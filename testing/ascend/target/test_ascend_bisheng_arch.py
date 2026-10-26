@@ -7,6 +7,7 @@ import pytest
 from tvm.target import Target
 
 from tilelang.contrib import bisheng
+from tilelang.backend import create_backend_context
 from tilelang.jit.adapter import libgen
 from tilelang.jit import kernel as jit_kernel
 from tilelang.transform import PassConfigKey
@@ -77,6 +78,9 @@ def test_cython_compile_preserves_target_and_options(monkeypatch, tmp_path, conf
 
     if via_jit:
         kernel = object.__new__(jit_kernel.JITKernel)
+        kernel.backend_context = create_backend_context(target, execution_backend="cython")
+        kernel.backend = kernel.backend_context.module
+        assert kernel.backend.name == "ascend"
         kernel.target = target
         kernel.target_host = None
         kernel.execution_backend = "cython"
