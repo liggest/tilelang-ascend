@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "validated_main_native_checkpoint": "03d12088987a47256c58afb745a764344541985a",
+  "validation_date_utc": "2026-10-26",
+  "scope": "Six original assets only; 266 blocked candidates and the remaining ecology are not completed ports.",
+  "entries": [
+    {
+      "source_path": "examples/gemm/example_gemm.py",
+      "destination_path": "examples/ascend_a2a3/gemm/example_gemm.py",
+      "source_git_blob": "91fb657422cd599c54dc277ef16a2038950ab115",
+      "source_sha256": "9f7d3855e6ed2ac0a936a5dfb9f4edb50db9a169396f740d68b7ddd52f658f59",
+      "destination_sha256": "1ec1bef408952a473ec1ee44d475e29ce487d4423bf86450903429bd0dc09af7",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 NPU dialect kernel/configuration; source body and all original cases reviewed.",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original kernel algorithm/decorator flags/precision thresholds preserved.",
+        "Move CLI, cache clearing, allocation, compilation and NPU execution into main(); import torch_npu there.",
+        "Replace removed tilelang.cache.clear_cache() with the actual A2A3CythonKernelCache singleton clear_cache(); no global alias or disable_cache substitution."
+      ],
+      "validation": {
+        "CLI_original_default_shape": [
+          1024,
+          1024,
+          1024
+        ],
+        "rtol": 0.01,
+        "atol": 0.01,
+        "actual_A3_passed": true
+      },
+      "state": "reviewed_first_batch",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/gemm/example_gemm_pto_developer.py",
+      "destination_path": "examples/ascend_a2a3/gemm/example_gemm_pto_developer.py",
+      "source_git_blob": "2ac2c7a3edc9dd5fe4880f37b5690d31e75170a6",
+      "source_sha256": "aac0dd5796672e52f11e425598f2d9337220486eefd6f150e815ae250620b374",
+      "destination_sha256": "4840dc035cddce1d4658a91f4e0433d34506e4b69e3dc28e94271bb7a3f7a7c7",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 NPU dialect kernel/configuration; source body and all original cases reviewed.",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original kernel algorithm/decorator flags/precision thresholds preserved.",
+        "Move CLI, cache clearing, allocation, compilation and NPU execution into main(); import torch_npu there.",
+        "Replace removed tilelang.cache.clear_cache() with the actual A2A3CythonKernelCache singleton clear_cache(); no global alias or disable_cache substitution."
+      ],
+      "validation": {
+        "CLI_original_default_shape": [
+          1024,
+          1024,
+          1024
+        ],
+        "rtol": 0.01,
+        "atol": 0.01,
+        "actual_A3_passed": true
+      },
+      "state": "reviewed_first_batch",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/compile_flags/compile_flags_example.py",
+      "destination_path": "examples/ascend_a2a3/compile_flags/compile_flags_example.py",
+      "source_git_blob": "0e5ddd783cf4d3bdc9b84c55127fc77dabcbbfc3",
+      "source_sha256": "11e9d109c505434c0689c22bd63e4a983582d024affeb19b21cd022a94f8fc6f",
+      "destination_sha256": "c0a125d7d046179f46d5fb00eb28b566dee8cbf4984686fda18516e746ecfec8",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 NPU dialect kernel/configuration; source body and all original cases reviewed.",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original kernel algorithm/decorator flags/precision thresholds preserved.",
+        "Move CLI, cache clearing, allocation, compilation and NPU execution into main(); import torch_npu there.",
+        "Replace removed tilelang.cache.clear_cache() with the actual A2A3CythonKernelCache singleton clear_cache(); no global alias or disable_cache substitution."
+      ],
+      "validation": {
+        "CLI_original_default_shape": [
+          256,
+          256
+        ],
+        "rtol": 0.01,
+        "atol": 0.01,
+        "actual_A3_passed": true,
+        "both_original_custom_and_default_flags": true
+      },
+      "state": "reviewed_first_batch",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_src_code.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_src_code.py",
+      "source_git_blob": "7d4afd819ea83dd43190c626e1f2c24a9c9348d6",
+      "source_sha256": "9b4e913f4777fc914d486bec3b15afbf5d1d6e4c732259c0cb7c623163869f36",
+      "destination_sha256": "a35fe390b464eddd9ba5da0c0d131715dcd87e404f0578e8ac24a1654ed93948",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 NPU dialect kernel/configuration; source body and all original cases reviewed.",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original kernel algorithm/decorator flags/precision thresholds preserved.",
+        "Use explicit source-only A2 target objects for original AscendC/PTO dialects; no hardware probe or unknown-platform fallback.",
+        "Mark native-builder requirement at runtime; preserve all five raw-code assertions.",
+        "Per-case cache-disable fixture restores the original underlying CacheState in finally, including when a global disable environment variable is present."
+      ],
+      "validation": {
+        "original_cases": 5,
+        "TA_and_main_source_tests_passed": true,
+        "no_NPU_required": true
+      },
+      "state": "reviewed_first_batch",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_legacy_flags.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_legacy_flags.py",
+      "source_git_blob": "478591848ac34300b7229a6d84377370b7d77b68",
+      "source_sha256": "16c12a83e1065a948eb3c3d9cf39d5ad2ebca9398f8281838f0e732893c8efbb",
+      "destination_sha256": "a6a486842752150bb1aa4492c2d71a564a993c043a4b37b594174fbfaf95a5dd",
+      "classification_draft": "uncertain",
+      "review_decision": "a2a3",
+      "review_reason": "Private A2/A3 negative-export contract is valid without native hardware; all source assertions retained.",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original kernel algorithm/decorator flags/precision thresholds preserved.",
+        "Pure Python negative-export contract; continues to run on USE_ASCEND=OFF."
+      ],
+      "validation": {
+        "original_cases": 1,
+        "TA_and_main_passed": true,
+        "actual_OFF_passed": true
+      },
+      "state": "reviewed_first_batch",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_mma.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_mma.py",
+      "source_git_blob": "2de3f0bd374149f9fd72dae3202cc10821e14521",
+      "source_sha256": "ddc28fc2fd8d118574c96803142a0fbb27fc5edf43dc70ced24d204a4209ad6d",
+      "destination_sha256": "641dced53553eec92891530cddd35359fd27c3d3325171ddb68a9dad7683d333",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 NPU dialect kernel/configuration; source body and all original cases reviewed.",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original kernel algorithm/decorator flags/precision thresholds preserved.",
+        "Redirect make_zn_layout to backend-owned layout helper; preserve all layout annotations.",
+        "Replace removed cache clear helper with the actual A2A3 cache singleton.",
+        "Mark both original device cases; gate actual A2/A3 hardware without deleting cases.",
+        "Each original test uses its own tmp_path cache directory and memory dictionary, restoring prior cache overrides and caller memory after teardown; clearing cannot remove another case/caller artifacts."
+      ],
+      "validation": {
+        "original_cases": 2,
+        "original_shape": [
+          8192,
+          1024,
+          8192
+        ],
+        "rtol": 0.001,
+        "atol": 0.001,
+        "actual_A3_passed": true,
+        "small_factory_TA_main_source_and_Bisheng": true
+      },
+      "state": "reviewed_first_batch",
+      "all_original_cases_retained": true
+    }
+  ],
+  "test_isolation_validation": {
+    "scope_followup": "Real pytest runs original five source cases before a fixture-free cache audit; also exercises the actual two per-case isolation fixtures and caller sentinels.",
+    "prior_states": [
+      "enabled",
+      "disabled",
+      "globally_disabled_with_underlying_enabled"
+    ],
+    "host_checks_passed": 27,
+    "NPU_or_SDK_rerun": false
+  }
+}
