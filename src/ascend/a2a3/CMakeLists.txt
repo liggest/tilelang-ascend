@@ -7,6 +7,8 @@ list(APPEND TILE_LANG_SRCS
   src/ascend/a2a3/ir.cc
   src/ascend/a2a3/codegen/codegen_ascend.cc
   src/ascend/a2a3/codegen/rt_mod_ascend.cc
+  src/ascend/a2a3/codegen/codegen_ascend_pto.cc
+  src/ascend/a2a3/codegen/rt_mod_ascend_pto.cc
   src/ascend/a2a3/codegen/constant.cc
   src/ascend/a2a3/codegen/utils.cc
   src/ascend/a2a3/target/memory_info.cc
