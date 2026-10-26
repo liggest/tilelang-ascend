@@ -3,10 +3,20 @@ from tilelang.language import common as T
 from tvm.tirx import PrimExpr, Buffer, BufferRegion, Var
 from typing import Union, Literal  # noqa: F401, UP035
 from tvm import DataType, tirx as tir
+from tvm.ir import Span
 from tvm.runtime import DataTypeCode
 
 
 _pipe = Literal["fix", "mte1", "mte2", "mte3", "m", "v", "s"]
+
+
+def infinity(dtype: str, span: Span | None = None) -> PrimExpr:
+    """Preserve TA's native infinity expression in the A2/A3 dialect.
+
+    The shared language uses a TileLang intrinsic instead; the original A2/A3
+    native code generators consume the FloatImm returned by this TVM API.
+    """
+    return tir.op.infinity(dtype, span)
 
 
 def _dtype(buf):
