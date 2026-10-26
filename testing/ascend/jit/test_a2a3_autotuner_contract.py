@@ -19,10 +19,12 @@ from tilelang import tvm, env
 from tilelang.ascend.a2a3 import compiler
 from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 from tilelang.autotuner import AutoTuner
-from tilelang.autotuner.param import CompileArgs
+from tilelang.autotuner.param import CompileArgs, AutotuneResult
 from tilelang.backend import create_backend_context
 
-from test_a2a3_public_execution import TARGET, _small_func
+from tilelang.jit.adapter.cython import adapter as adapter_module
+
+from test_a2a3_public_execution import TARGET, _factories, _small_func
 
 
 def _factory(size=16):
@@ -41,7 +43,7 @@ def snapshot_paths(monkeypatch, tmp_path):
 
 
 def _args(**kwargs):
-    return CompileArgs(target=TARGET, execution_backend="cython", **kwargs)
+    return CompileArgs(target=kwargs.pop("target", TARGET), execution_backend="cython", **kwargs)
 
 
 def test_default_creation_and_offline_key_have_no_target_or_compiler_probe(monkeypatch):
@@ -232,3 +234,516 @@ def test_shared_compile_forwarding_keeps_existing_defaults_and_new_requested_fla
     replace(args, compile_flags=["-DREQUESTED=1"]).compile_program(program)
     assert captured[-1]["compile_flags"] == ["-DREQUESTED=1"]
     assert captured[-1]["target"] == "llvm" and captured[-1]["execution_backend"] == "tvm_ffi"
+
+
+@pytest.mark.parametrize("dialect", ["ascendc", "pto"])
+def test_real_decorator_callbacks_freeze_outer_cache_and_keep_debug_artifacts(snapshot_paths, monkeypatch, tmp_path, dialect):
+    from tilelang.autotuner import autotune
+    from tilelang.autotuner.param import AutotuneResult
+    import tilelang.ascend.a2a3.language as T
+
+    target = {"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect]}
+    records = []
+    runs = []
+
+    @autotune(configs=[{"size": 8}, {"size": 16, "pass_configs": {"tl.ascend_auto_sync_vs": True}}])
+    @tilelang.jit(
+        target=target,
+        execution_backend="cython",
+        out_idx=[2],
+        workspace_idx=[-2],
+        compile_flags=["-DEXPLICIT=1"],
+        pass_configs={"tl.ascend_auto_sync_vs": False},
+        debug_root_path=str(tmp_path / "debug"),
+    )
+    def factory(size: int):
+        current = tvm.target.Target.current(allow_none=True)
+        assert current.attrs["model"] == "A3" and dialect in current.keys
+
+        @T.prim_func
+        def program(A: T.Tensor((16, 16), "float16"), B: T.Tensor((16, 16), "float16"), C: T.Tensor((16, 16), "float16")):
+            with T.Kernel(1, is_npu=True):
+                T.evaluate(0)
+
+        return program.with_attr("tune_size", size)
+
+    def cached(self, program, out_idx, **kwargs):
+        record = dict(program=program, out_idx=out_idx, **kwargs)
+        records.append(record)
+        return types.SimpleNamespace(get_kernel_source=lambda: f"// source {int(program.attrs['tune_size'])}")
+
+    def run(tuner, *args, **kwargs):
+        runs.append(tuner.compile_args)
+        assert tuner._kernel_parameters == ((), ())
+        # A candidate must use the request frozen before this environment change.
+        with monkeypatch.context() as changed:
+            changed.setenv("TL_PLATFORM", "A2")
+            changed.setenv("TL_RUN_MODE", "sim")
+            changed.setenv("TL_CCE_OPT_LEVEL", "invalid-after-lookup")
+            changed.setenv("TILELANG_LAYOUT_COST_MODEL", "io-aware")
+            first = tuner.jit_compile(size=8)
+            best = tuner.jit_compile(size=16, __pass_configs__={"tl.ascend_auto_sync_vs": True})
+        assert first is not best
+        return AutotuneResult(kernel=best, config={"size": 16, "pass_configs": {"tl.ascend_auto_sync_vs": True}})
+
+    monkeypatch.setattr(A2A3CythonKernelCache, "cached", cached)
+    monkeypatch.setattr(AutoTuner, "run", run)
+    original_configs = factory.jit_impl.pass_configs.copy()
+    first = factory()
+    assert factory() is first and len(runs) == 1
+    assert [record["compile_config"].flags[0] for record in records] == ["-O2", "-O3"]
+    for record in records:
+        assert record["workspace_idx"] == [-2] and record["out_idx"] == [2]
+        assert record["compile_config"].dialect == dialect and record["compile_config"].platform == "A3"
+        assert record["compile_config"].run_mode == "npu" and record["compile_config"].flags[-1] == "-DEXPLICIT=1"
+        assert record["pass_configs"]["tl.layout_cost_model"] == "register-count"
+    assert factory.jit_impl.pass_configs == original_configs
+    debug = tmp_path / "debug"
+    assert (debug / "tilelang_jit_kernel_factory.c").read_text() == "// source 16\n"
+    assert (debug / "tilelang_jit_program_factory.py").read_text() == records[-1]["program"].script() + "\n"
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", "0")
+    second = factory()
+    assert second is not first and len(runs) == 2
+    assert [record["compile_config"].flags[0] for record in records[-2:]] == ["-O0", "-O0"]
+
+
+def test_shared_outer_cache_keeps_the_original_argument_key(monkeypatch):
+    from tilelang.autotuner import autotune
+    from tilelang.autotuner.param import AutotuneResult
+
+    @autotune(configs=[{"size": 16}])
+    @tilelang.jit(target="llvm", execution_backend="tvm_ffi")
+    def factory(size: int = 16):
+        return _small_func()
+
+    sentinel = object()
+    calls = []
+    monkeypatch.setattr(
+        AutoTuner,
+        "run",
+        lambda tuner, *args, **kwargs: calls.append(tuner.compile_args) or AutotuneResult(kernel=sentinel, config={"size": 16}),
+    )
+    assert factory() is sentinel
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", "1")
+    assert factory() is sentinel and len(calls) == 1
+    assert calls[0]._frozen is None
+    assert next(iter(factory._tuner_cache)) == ((), ())
+
+
+def test_npu_compile_threads_bind_the_device_captured_by_the_caller(snapshot_paths, monkeypatch):
+    import threading
+    import torch
+
+    caller = threading.get_ident()
+    events = []
+    local = threading.local()
+
+    def current_device():
+        assert threading.get_ident() == caller
+        events.append(("capture", caller, 7))
+        return 7
+
+    def set_device(device):
+        local.device = device
+        events.append(("bind", threading.get_ident(), device))
+
+    monkeypatch.setattr(
+        torch, "npu", types.SimpleNamespace(is_available=lambda: True, current_device=current_device, set_device=set_device), raising=False
+    )
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    tuner = AutoTuner(_factory, [])
+    tuner.compile_args = _args().freeze()
+    monkeypatch.setattr(tuner, "_resolve_num_compile_workers", lambda: 2)
+
+    def compile_candidate(**config):
+        assert threading.get_ident() != caller and local.device == 7
+        return config["size"]
+
+    pool, futures, _, _ = tuner._prepare_compile_execution([{"size": 8}, {"size": 16}], False, 1, compile_candidate, lambda **kwargs: None)
+    try:
+        assert [future.result()[0][2] for future in futures] == [8, 16]
+    finally:
+        pool.shutdown(wait=True)
+    assert events[0] == ("capture", caller, 7)
+    assert all(event[1] != caller and event[2] == 7 for event in events[1:])
+
+
+@pytest.fixture
+def actual_toolchain(monkeypatch, tmp_path):
+    if tvm.ffi.get_global_func("tl.transform.A2A3AscendVectorMaskLegalize", allow_missing=True) is None:
+        pytest.skip("requires fresh USE_ASCEND native components")
+    monkeypatch.setenv("TL_RUN_MODE", "npu")
+    monkeypatch.delenv("TL_CCE_OPT_LEVEL", raising=False)
+    monkeypatch.delenv("TL_CCE_AUTO_SYNC", raising=False)
+    try:
+        compiler.resolve_compile_config(tvm.target.Target(TARGET))
+    except (FileNotFoundError, ValueError) as error:
+        pytest.skip(f"requires actual AscendC toolchain/resources: {error}")
+    monkeypatch.setattr(env, "TILELANG_CACHE_DIR", str(tmp_path / "kernel_cache"))
+    monkeypatch.setattr(adapter_module.CythonKernelAdapter, "_process_buffer_device", lambda self: {})
+    import torch
+
+    monkeypatch.setattr(adapter_module, "_device_providers", lambda: (lambda: torch.device("cpu"), lambda device: 0))
+    A2A3CythonKernelCache()._memory_cache.clear()
+
+
+@pytest.mark.parametrize("dialect", ["ascendc", "pto"])
+def test_actual_result_restore_preserves_candidate_flags_workspace_and_environment(actual_toolchain, monkeypatch, tmp_path, dialect):
+    target = {"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect]}
+    configs = {
+        "tl.ascend_auto_sync": True,
+        "tl.ascend_auto_cross_core_sync": True,
+        "tl.ascend_auto_cv_combine": True,
+        "tl.ascend_memory_planning": True,
+        "tl.ascend_auto_sync_vs": False,
+    }
+    args = _args(target=target, out_idx=[2], workspace_idx=[-1], compile_flags=["-DEXPLICIT=1"], pass_configs=configs).freeze()
+    per_config = {"tl.device_compile_flags": ["-DCANDIDATE=1"]}
+    candidate = replace(args, pass_configs={**args.pass_configs, **per_config})
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", "0")
+    program = _factories().matmul_add(256, 256, 128, 128, 128, 64)
+    kernel = candidate.compile_program(program)
+    assert kernel.compile_config.flags == ("-O2", "-DCANDIDATE=1", "-DEXPLICIT=1")
+    result = AutotuneResult(latency=1.0, config={"size": 128, "pass_configs": per_config}, func=kernel.prim_func, kernel=kernel)
+    path = tmp_path / "results" / "workspace"
+    result.save_to_disk(path)
+    assert (path / "a2a3_runtime.json").exists()
+    monkeypatch.setattr(compiler.LibraryGenerator, "compile_lib", lambda *args, **kwargs: pytest.fail("result restore compiled"))
+    restored = AutotuneResult.load_from_disk(path, args)
+    assert restored.kernel.workspace_idx == [4] and restored.kernel.out_idx == [2]
+    assert restored.kernel.compile_config.cache_identity == kernel.compile_config.cache_identity
+    assert restored.kernel.artifact is None
+    # A fresh request from the changed environment cannot accept this snapshot.
+    with pytest.raises(ValueError, match="compiler identity"):
+        AutotuneResult.load_from_disk(
+            path, _args(target=target, out_idx=[2], workspace_idx=[-1], compile_flags=["-DEXPLICIT=1"], pass_configs=configs).freeze()
+        )
+    with pytest.raises(ValueError, match="workspace"):
+        AutotuneResult.load_from_disk(path, replace(args, workspace_idx=[1]))
+    (path / "a2a3_runtime.json").unlink()
+    assert not AutotuneResult._is_complete_result_dir(path, "cython", a2a3=True)
+    assert AutotuneResult.load_from_disk(path, args) is None
+
+
+@pytest.mark.parametrize("dialect", ["ascendc", "pto"])
+def test_actual_auto_gm_result_survives_new_process_restore(actual_toolchain, monkeypatch, tmp_path, dialect):
+    import tilelang.ascend.a2a3.language as T
+    import subprocess
+    import sys
+
+    @T.prim_func
+    def automatic(A: T.Tensor((16, 16), "float16"), B: T.Tensor((16, 16), "float16"), C: T.Tensor((16, 16), "float16")):
+        with T.Kernel(1, is_npu=True) as (cid, vid):
+            a = T.alloc_L1((16, 16), "float16")
+            b = T.alloc_L1((16, 16), "float16")
+            c0 = T.alloc_L0C((16, 16), "float")
+            ub = T.alloc_ub((16, 16), "float16")
+            with T.Scope("C"):
+                T.copy(A, a)
+                T.copy(B, b)
+                T.gemm_v0(a, b, c0, init=True)
+                T.copy(c0, ub)
+            with T.Scope("V"):
+                T.copy(ub, C)
+
+    target = {"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect]}
+    args = _args(target=target, out_idx=[2]).freeze()
+    kernel = args.compile_program(automatic)
+    assert len(automatic.params) == 3 and len(kernel.params) == 4
+    assert kernel.auto_gm_idx == [3]
+    path = tmp_path / "results" / "auto_gm"
+    AutotuneResult(latency=1.0, config={}, func=kernel.prim_func, kernel=kernel).save_to_disk(path)
+    script = tmp_path / "restore_gm.py"
+    script.write_text("""import importlib.util,json,os,sys
+if os.environ.get("A2A3_TEST_CYTHON_MODULE"):
+ s=importlib.util.spec_from_file_location("tilelang_cython_wrapper",os.environ["A2A3_TEST_CYTHON_MODULE"]);m=importlib.util.module_from_spec(s);sys.modules[s.name]=m;s.loader.exec_module(m)
+from pathlib import Path
+import tilelang,tilelang_cython_wrapper
+from tilelang.autotuner.param import CompileArgs,AutotuneResult
+from tilelang.ascend.a2a3 import compiler
+from tilelang.jit.adapter.cython import adapter
+adapter.CythonKernelAdapter._process_buffer_device=lambda self:{}
+compiler.LibraryGenerator.compile_lib=lambda *a,**kw:(_ for _ in ()).throw(AssertionError("restore compiled"))
+args=CompileArgs(target=json.loads(sys.argv[2]),execution_backend="cython",out_idx=[2]).freeze()
+os.environ.update(TL_PLATFORM="A2",TL_CCE_OPT_LEVEL="invalid-after-freeze",TL_RUN_MODE="sim",TILELANG_LAYOUT_COST_MODEL="io-aware")
+k=AutotuneResult.load_from_disk(Path(sys.argv[1]),args).kernel
+assert k.artifact is None
+print("RESTORE_GM="+json.dumps({"count":len(k.params),"gm":k.auto_gm_idx,"shape":[int(d)for d in k.params[3].shape],"flags":list(k.compile_config.flags),"module":tilelang.__file__,"cython":tilelang_cython_wrapper.__file__,"native":sorted({line.split()[-1]for line in Path("/proc/self/maps").read_text().splitlines()if "libtilelang.so"in line})}))
+""")
+    child = subprocess.run([sys.executable, str(script), str(path), json.dumps(target)], capture_output=True, text=True)
+    (tmp_path / "child_restore.stdout").write_text(child.stdout)
+    (tmp_path / "child_restore.stderr").write_text(child.stderr)
+    assert child.returncode == 0, child.stdout + child.stderr
+    metadata = json.loads(next(line.removeprefix("RESTORE_GM=") for line in child.stdout.splitlines() if line.startswith("RESTORE_GM=")))
+    module = metadata.pop("module")
+    native = metadata.pop("native")
+    cython = metadata.pop("cython")
+    assert Path(module).resolve() == Path(tilelang.__file__).resolve()
+    import tilelang_cython_wrapper
+
+    parent_native = sorted({line.split()[-1] for line in Path("/proc/self/maps").read_text().splitlines() if "libtilelang.so" in line})
+    assert native and native == parent_native
+    assert Path(cython).resolve() == Path(tilelang_cython_wrapper.__file__).resolve()
+    assert metadata == {
+        "count": 4,
+        "gm": [3],
+        "shape": [512] if dialect == "pto" else [1, 16, 16],
+        "flags": ["-O3"] if dialect == "pto" else ["-O2"],
+    }
+    print("fresh-process modules:", module, cython, native)
+    sidecar = path / "a2a3_runtime.json"
+    invalid = json.loads(sidecar.read_text())
+    invalid["auto_gm_idx"] = []
+    sidecar.write_text(json.dumps(invalid))
+    with pytest.raises(ValueError, match="auto-GM"):
+        AutotuneResult.load_from_disk(path, args)
+    print("fresh-process tuning result ABI:", metadata)
+
+
+def test_eager_autotune_uses_the_frozen_candidate_and_frontend_outputs(snapshot_paths, monkeypatch):
+    import torch
+    import tilelang.ascend.a2a3.language as T
+    from tilelang.autotuner import autotune
+
+    @autotune(configs=[{"block": 8}])
+    @tilelang.jit(target=TARGET, execution_backend="cython", compile_flags=["-DEAGER=1"])
+    def eager(A: T.Tensor((16,), "float32"), block: int):
+        C = T.empty((16,), "float32")
+        with T.Kernel(1, is_npu=True):  # noqa: SIM117
+            with T.Scope("V"):
+                for i in T.serial(16):
+                    C[i] = A[i] + T.float32(block)
+        return C
+
+    records = []
+    kernel = object()
+    monkeypatch.setattr(
+        A2A3CythonKernelCache, "cached", lambda self, program, out_idx, **kwargs: records.append((program, out_idx, kwargs)) or kernel
+    )
+
+    def run(tuner, *args, **kwargs):
+        with monkeypatch.context() as changed:
+            changed.setenv("TL_CCE_OPT_LEVEL", "invalid-after-freeze")
+            compiled = tuner.jit_compile(block=8)
+        return AutotuneResult(kernel=compiled, config={"block": 8})
+
+    monkeypatch.setattr(AutoTuner, "run", run)
+    assert eager(torch.zeros(16), __return_kernel=True) is kernel
+    [(program, out_idx, kwargs)] = records
+    assert out_idx == [-1] and len(program.params) == 2
+    assert kwargs["compile_config"].flags == ("-O2", "-DEAGER=1")
+
+
+def test_public_jit_get_tir_compile_and_debug_output_keep_their_default_route(monkeypatch, tmp_path):
+    import importlib
+    import tilelang.language as T
+
+    jit_module = importlib.import_module("tilelang.jit")
+
+    @tilelang.jit(target="llvm", execution_backend="tvm_ffi", compile_flags=["-DPUBLIC=1"], debug_root_path=str(tmp_path))
+    def public_factory(size: int = 16):
+        @T.prim_func
+        def program(A: T.Tensor((size,), "float32")):
+            T.evaluate(0)
+
+        return program
+
+    source = "// ordinary public JIT source"
+    kernel = types.SimpleNamespace(get_kernel_source=lambda: source)
+    captured = []
+    monkeypatch.setattr(jit_module, "compile", lambda program, **kwargs: captured.append((program, kwargs)) or kernel)
+    program = public_factory.get_tir(16)
+    assert public_factory.compile(16) is kernel
+    [(compiled, kwargs)] = captured
+    tvm.ir.assert_structural_equal(program, compiled)
+    assert kwargs["target"] == "llvm" and kwargs["compile_flags"] == ["-DPUBLIC=1"]
+    assert (tmp_path / "tilelang_jit_kernel_public_factory.c").read_text() == source + "\n"
+    assert (tmp_path / "tilelang_jit_program_public_factory.py").read_text() == compiled.script() + "\n"
+
+
+@pytest.mark.parametrize("dialect", ["ascendc", "pto"])
+def test_actual_default_tuner_candidate_memory_and_result_cache(actual_toolchain, monkeypatch, tmp_path, dialect):
+    target = {"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect]}
+    config = {
+        "M": 256,
+        "N": 256,
+        "K": 128,
+        "block_M": 128,
+        "block_N": 128,
+        "block_K": 64,
+        "pass_configs": {"tl.ascend_auto_sync_vs": True, "tl.device_compile_flags": ["-DCANDIDATE=1"]},
+    }
+    tuner = (
+        AutoTuner(_factories().matmul_add, [config])
+        .set_compile_args(
+            target=target,
+            execution_backend="cython",
+            out_idx=[2],
+            workspace_idx=-1,
+            compile_flags=["-DREQUEST=1"],
+            pass_configs={
+                "tl.ascend_auto_sync": True,
+                "tl.ascend_auto_cv_combine": True,
+                "tl.ascend_memory_planning": True,
+                "tl.ascend_auto_cross_core_sync": True,
+                "tl.ascend_auto_sync_vs": False,
+            },
+        )
+        .set_profile_args(skip_check=True, warmup=1, rep=1, timeout=0)
+    )
+    benchmarked = []
+    monkeypatch.setattr(tuner, "_resolve_num_compile_workers", lambda: 1)
+
+    def benchmark(*, jit_kernel, **kwargs):
+        # Hardware-independent execution of the real tuner orchestration and
+        # Bisheng candidates; this stub is explicitly not a numerical benchmark.
+        benchmarked.append(jit_kernel)
+        assert jit_kernel.workspace_idx == [4]
+        assert jit_kernel.compile_config.flags == (
+            "-O3",
+            *(["--cce-auto-sync=off"] if dialect == "ascendc" else []),
+            "-DCANDIDATE=1",
+            "-DREQUEST=1",
+        )
+        monkeypatch.setenv("TL_CCE_OPT_LEVEL", "invalid-after-candidate")
+        return 1.0, None
+
+    monkeypatch.setattr(tuner, "_benchmark_target", benchmark)
+    was_enabled = env.is_cache_enabled()
+    env.enable_cache()
+    try:
+        cold = tuner.run()
+        assert len(benchmarked) == 1
+        assert tuner.run() is cold
+        assert list(tuner.cache_dir.rglob("a2a3_runtime.json"))
+        tuner._memory_cache.clear()
+        monkeypatch.setattr(
+            compiler.LibraryGenerator, "compile_lib", lambda *args, **kwargs: pytest.fail("autotune result cache recompiled")
+        )
+        restored = tuner.run()
+        assert restored.kernel.artifact is None and len(benchmarked) == 1
+        assert restored.kernel.workspace_idx == [4]
+        assert restored.kernel.compile_config.cache_identity == cold.kernel.compile_config.cache_identity
+    finally:
+        if not was_enabled:
+            env.disable_cache()
+
+
+@pytest.mark.parametrize("timeout", [0, 1])
+def test_npu_benchmark_scope_reaches_worker_and_timeout_call_threads(snapshot_paths, monkeypatch, timeout):
+    from contextlib import contextmanager
+    import queue
+    import threading
+    import torch
+    from tilelang.autotuner.tuner import _BenchmarkWorkerState
+
+    caller = threading.get_ident()
+    events = []
+    local = threading.local()
+
+    def current_device():
+        assert threading.get_ident() == caller
+        events.append(("capture", caller, 7))
+        return 7
+
+    @contextmanager
+    def device(index):
+        local.device = index
+        events.append(("enter", threading.get_ident(), index))
+        try:
+            yield
+        finally:
+            events.append(("exit", threading.get_ident(), index))
+            del local.device
+
+    monkeypatch.setattr(
+        torch, "npu", types.SimpleNamespace(is_available=lambda: True, current_device=current_device, device=device), raising=False
+    )
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "current_device", lambda: pytest.fail("A2A3 benchmarking consulted the CUDA device"))
+    tuner = AutoTuner(_factory, [])
+    tuner.compile_args = _args().freeze()
+    active, devices = tuner._resolve_benchmark_devices(benchmark_multi_gpu=False, benchmark_devices=None, target_kind="ascend")
+    assert not active and devices == [7]
+    work, results = queue.Queue(), queue.Queue()
+    start = threading.Event()
+    work.put((object(), {}, 0))
+    work.put(None)
+
+    def benchmark(**kwargs):
+        assert kwargs["benchmark_device"] is None and local.device == 7
+        events.append(("benchmark", threading.get_ident(), local.device))
+        return 1.0, None
+
+    worker = threading.Thread(
+        target=tuner._benchmark_worker_loop, args=(7, work, results, start, "ascend", benchmark, timeout, _BenchmarkWorkerState())
+    )
+    worker.start()
+    start.set()
+    result = results.get(timeout=5)
+    worker.join(timeout=5)
+    assert not worker.is_alive() and result[3:5] == (1.0, None) and result[5] is None and result[6] == ""
+    assert events[0] == ("capture", caller, 7)
+    assert [event[0] for event in events[1:]] == ["enter", "benchmark", "exit"]
+    invocation_thread = events[2][1]
+    assert invocation_thread != caller
+    assert (invocation_thread == worker.ident) is (timeout == 0)
+
+
+@pytest.mark.parametrize("dialect", ["ascendc", "pto"])
+def test_actual_dynamic_workspace_result_restores_the_shape_graph_and_host_abi(actual_toolchain, monkeypatch, tmp_path, dialect):
+    import subprocess
+    import sys
+
+    target = {"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect]}
+    if dialect == "pto":
+        from test_a2a3_pto_public_execution import _dynamic_workspace_kernel
+
+        program = _dynamic_workspace_kernel()
+        options = dict(out_idx=5, workspace_idx=6)
+        names = ["M", "N"]
+    else:
+        program = _factories().indexer_dynamic(1, 32, 64, 1024, 512, 4, 128, 256, 64)
+        options = dict(out_idx=-1, workspace_idx=-3)
+        names = ["B", "S1", "S2"]
+    args = _args(target=target, pass_configs={"tl.ascend_memory_planning": True}, **options).freeze()
+    kernel = args.compile_program(program)
+    saved = tmp_path / "result"
+    AutotuneResult(latency=1.0, config={}, func=kernel.prim_func, kernel=kernel).save_to_disk(saved)
+    sources = [kernel.get_host_source(), kernel.get_kernel_source()]
+    declaration = next(line for source in sources if source for line in source.splitlines() if "void call(" in line)
+    positions = [declaration.index(f"int64_t {name}") for name in names]
+    assert positions == sorted(positions)
+    expected = {
+        "symbols": names,
+        "slots": [list(slot) for slot in kernel.adapter.dynamic_symbolic_map.values()],
+        "workspace": kernel.workspace_idx,
+        "gm": kernel.auto_gm_idx,
+        "library_sha256": hashlib.sha256(Path(kernel.adapter.libpath).read_bytes()).hexdigest(),
+    }
+    script = tmp_path / "restore_dynamic.py"
+    script.write_text("""import hashlib,json,os,sys
+from pathlib import Path
+import tilelang
+from tilelang.autotuner.param import CompileArgs,AutotuneResult
+from tilelang.ascend.a2a3 import compiler
+from tilelang.jit.adapter.cython import adapter
+adapter.CythonKernelAdapter._process_buffer_device=lambda self:{}
+compiler.LibraryGenerator.compile_lib=lambda *a,**kw:(_ for _ in ()).throw(AssertionError("result restore compiled"))
+args=CompileArgs(target=json.loads(sys.argv[2]),execution_backend="cython",pass_configs={"tl.ascend_memory_planning":True},**json.loads(sys.argv[3])).freeze()
+os.environ.update(TL_CCE_OPT_LEVEL="invalid-after-freeze",TL_RUN_MODE="sim",TILELANG_LAYOUT_COST_MODEL="io-aware")
+k=AutotuneResult.load_from_disk(Path(sys.argv[1]),args).kernel
+assert k.artifact is None
+print("DYNAMIC_RESULT="+json.dumps({"symbols":[str(v)for v in k.adapter.dynamic_symbolic_map],"slots":list(k.adapter.dynamic_symbolic_map.values()),"workspace":k.workspace_idx,"gm":k.auto_gm_idx,"library_sha256":hashlib.sha256(Path(k.adapter.libpath).read_bytes()).hexdigest(),"module":tilelang.__file__}))
+""")
+    child = subprocess.run(
+        [sys.executable, str(script), str(saved), json.dumps(target), json.dumps(options)], text=True, capture_output=True
+    )
+    (tmp_path / "dynamic_child.stdout").write_text(child.stdout)
+    (tmp_path / "dynamic_child.stderr").write_text(child.stderr)
+    assert child.returncode == 0, child.stdout + child.stderr
+    row = json.loads(next(line.removeprefix("DYNAMIC_RESULT=") for line in child.stdout.splitlines() if line.startswith("DYNAMIC_RESULT=")))
+    assert Path(row.pop("module")).resolve() == Path(tilelang.__file__).resolve()
+    assert row == expected
+    print("dynamic host ABI:", declaration)
+    print("new-process autotune result:", row)

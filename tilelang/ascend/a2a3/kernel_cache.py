@@ -28,6 +28,24 @@ def _workspace_request(indices):
     raise ValueError("workspace_idx should be a list of integers")
 
 
+def runtime_metadata(kernel):
+    """Describe the final ABI alongside the frozen compiler identity."""
+    return {
+        "schema_version": 1,
+        "workspace_idx": kernel.workspace_idx,
+        "auto_gm_idx": kernel.auto_gm_idx,
+        "compiler_config": kernel.compile_config.to_metadata(),
+        "runtime_signature": dump_runtime_signature(kernel.adapter.prim_func),
+    }
+
+
+def stamp_runtime_request(func, workspace_idx, config):
+    """Derive the cache identity without mutating a frontend function."""
+    return func.with_attr(WORKSPACE_IDX_ATTR, _workspace_request(workspace_idx)).with_attr(
+        COMPILER_CONFIG_ATTR, json.dumps(config.to_metadata(), sort_keys=True, separators=(",", ":"))
+    )
+
+
 class A2A3CythonKernelCache(CythonKernelCache):
     """Keep A2/A3 compiler identity and final GM argument metadata together."""
 
@@ -54,9 +72,7 @@ class A2A3CythonKernelCache(CythonKernelCache):
             raise ValueError("A2A3 compiler snapshot requires the same frozen target.model platform")
         if config.dialect != ("pto" if "pto" in context.target.keys else "ascendc"):
             raise ValueError("A2A3 compiler snapshot requires the same target dialect keys")
-        derived = func.with_attr(WORKSPACE_IDX_ATTR, _workspace_request(workspace_idx)).with_attr(
-            COMPILER_CONFIG_ATTR, json.dumps(config.to_metadata(), sort_keys=True, separators=(",", ":"))
-        )
+        derived = stamp_runtime_request(func, workspace_idx, config)
         kwargs.update(backend_context=context, pass_configs=effective)
         return super().cached(derived, out_idx, *args, **kwargs)
 
@@ -65,13 +81,7 @@ class A2A3CythonKernelCache(CythonKernelCache):
 
     def _save_kernel_source_code_to_disk(self, kernel, cache_path, verbose=False):
         super()._save_kernel_source_code_to_disk(kernel, cache_path, verbose)
-        metadata = {
-            "schema_version": 1,
-            "workspace_idx": kernel.workspace_idx,
-            "auto_gm_idx": kernel.auto_gm_idx,
-            "compiler_config": kernel.compile_config.to_metadata(),
-            "runtime_signature": dump_runtime_signature(kernel.adapter.prim_func),
-        }
+        metadata = runtime_metadata(kernel)
         self._safe_write_file(
             os.path.join(cache_path, self.runtime_metadata_path),
             "w",

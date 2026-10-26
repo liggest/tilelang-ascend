@@ -383,11 +383,12 @@ class JITImpl(Generic[_P, _KP, _T, _Ret]):
         self._call_form_cache: _CallFormCache = _CallFormCache()
         self._tuner_cache: dict[tuple, Kernel] = {}
 
-    def _get_frontend_target_context(self):
-        if self.target is None:
+    def _get_frontend_target_context(self, target=None):
+        target = self.target if target is None else target
+        if target is None:
             return nullcontext()
         try:
-            target = determine_target(self.target, return_object=True)
+            target = determine_target(target, return_object=True)
         except Exception:
             return nullcontext()
         if isinstance(target, Target):
@@ -398,8 +399,12 @@ class JITImpl(Generic[_P, _KP, _T, _Ret]):
         """
         Retrieve a TIR (Tensor Intermediate Representation) PrimFunc from the stored callable or object.
         """
+        return self._get_tir_with_target(self.target, *args, **kwargs)
+
+    def _get_tir_with_target(self, target, *args, **kwargs):
+        """Elaborate with an already selected target without changing JIT state."""
         self.initialize_jit_mode(*args, **kwargs)
-        with self._get_frontend_target_context():
+        with self._get_frontend_target_context(target):
             if isinstance(self.func, PrimFunc):
                 tir = self.func
             elif callable(self.func):
@@ -483,18 +488,27 @@ class JITImpl(Generic[_P, _KP, _T, _Ret]):
         )
 
     def compile(self, *args: _P.args, **kwargs: _P.kwargs) -> _Ret:
-        prim_func = self.get_tir(*args, **kwargs)
-        kernel_result = compile(
-            prim_func,
-            out_idx=self.out_idx,
-            execution_backend=self.execution_backend,
-            target=self.target,
-            target_host=self.target_host,
-            verbose=self.verbose,
-            pass_configs=self.pass_configs,
-            compile_flags=self.compile_flags,
-            **({"workspace_idx": self.workspace_idx} if self.workspace_idx is not None else {}),
+        def compile_program(prim_func):
+            return compile(
+                prim_func,
+                out_idx=self.out_idx,
+                execution_backend=self.execution_backend,
+                target=self.target,
+                target_host=self.target_host,
+                verbose=self.verbose,
+                pass_configs=self.pass_configs,
+                compile_flags=self.compile_flags,
+                **({"workspace_idx": self.workspace_idx} if self.workspace_idx is not None else {}),
+            )
+
+        return self._compile_with(compile_program, None, *args, **kwargs)
+
+    def _compile_with(self, compile_program, frontend_target, *args, **kwargs):
+        """Use a private compile callback while retaining normal debug artifacts."""
+        prim_func = (
+            self.get_tir(*args, **kwargs) if frontend_target is None else self._get_tir_with_target(frontend_target, *args, **kwargs)
         )
+        kernel_result = compile_program(prim_func)
 
         if self.debug_root_path:
             if isinstance(self.func, PrimFunc):

@@ -421,6 +421,11 @@ class AutotuneResult:
         if verbose:
             logger.debug(f"Saving kernel parameters to disk: {params_path}")
         self._safe_write_file(params_path, "w", lambda f: f.write(dump_kernel_params(kernel.params)))
+        if getattr(getattr(kernel, "backend", None), "name", None) in {"ascend_a2a3", "pto_a2a3"}:
+            from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache, runtime_metadata
+
+            metadata_path = os.path.join(cache_path, A2A3CythonKernelCache.runtime_metadata_path)
+            self._safe_write_file(metadata_path, "w", lambda file: json.dump(runtime_metadata(kernel), file, sort_keys=True))
 
     def _load_kernel_from_disk(
         self,
@@ -431,6 +436,7 @@ class AutotuneResult:
         compile_flags: list[str] | str | None = None,
         func: Callable = None,
         verbose: bool = False,
+        compile_args: CompileArgs | None = None,
     ) -> JITKernel:
         """
         Loads a previously compiled kernel from disk cache.
@@ -460,6 +466,10 @@ class AutotuneResult:
         params_path = os.path.join(cache_path, PARAMS_PATH)
 
         required_files = [*self._get_required_kernel_files(Path(cache_path), execution_backend), Path(params_path)]
+        if backend_context.module.name in {"ascend_a2a3", "pto_a2a3"}:
+            from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+
+            required_files.append(Path(cache_path) / A2A3CythonKernelCache.runtime_metadata_path)
         if not all(file.exists() for file in required_files):
             return None
 
@@ -495,6 +505,26 @@ class AutotuneResult:
             logger.error(f"Error loading kernel parameters from disk: {e}")
 
         if host_kernel_source and device_kernel_source and kernel_params:
+            if backend_context.module.name in {"ascend_a2a3", "pto_a2a3"}:
+                from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache, stamp_runtime_request
+
+                if compile_args is None:
+                    raise ValueError("A2A3 tuning restore requires the frozen compile request")
+                if compile_args._frozen is None:
+                    compile_args = compile_args.freeze(backend_context)
+                requested_out, effective, flags, config = compile_args._prepare_a2a3_program(func)
+                derived = stamp_runtime_request(func, compile_args.workspace_idx, config)
+                return A2A3CythonKernelCache()._build_kernel(
+                    derived,
+                    CachedTextSource(text=host_kernel_source),
+                    CachedTextSource(text=device_kernel_source),
+                    kernel_lib_path,
+                    kernel_params,
+                    backend_context,
+                    requested_out,
+                    effective,
+                    flags,
+                )
             return JITKernel.from_database(
                 func=func,
                 host_kernel_source=CachedTextSource(text=host_kernel_source),
@@ -521,7 +551,9 @@ class AutotuneResult:
         half-written result.
         """
         # Already saved (e.g. another process won the race with a complete entry).
-        if self._is_complete_result_dir(path, self.kernel.execution_backend):
+        a2a3 = getattr(getattr(self.kernel, "backend", None), "name", None) in {"ascend_a2a3", "pto_a2a3"}
+        variant_options = {"a2a3": True} if a2a3 else {}
+        if self._is_complete_result_dir(path, self.kernel.execution_backend, **variant_options):
             return
 
         # Keep autotuner staging under the shared namespace staging root so stale cleanup
@@ -576,13 +608,13 @@ class AutotuneResult:
             # save kernel
             self._save_kernel_to_disk(staging_path, self.kernel, verbose)
 
-            missing_files = self._get_missing_complete_result_files(staging_path, self.kernel.execution_backend)
+            missing_files = self._get_missing_complete_result_files(staging_path, self.kernel.execution_backend, **variant_options)
             if missing_files:
                 missing_names = ", ".join(path.name for path in missing_files)
                 raise RuntimeError(f"Incomplete autotune staging directory is missing required file(s): {missing_names}")
 
             # Repair stale/incomplete entries before making the new directory visible.
-            self._remove_incomplete_result_dir(path, self.kernel.execution_backend)
+            self._remove_incomplete_result_dir(path, self.kernel.execution_backend, **variant_options)
 
             # Durability barrier: keep the staged data ahead of the rename so a
             # crash cannot publish a truncated cache entry.
@@ -612,17 +644,28 @@ class AutotuneResult:
         verbose = compile_args.verbose
         from tilelang.backend.module import create_backend_context
 
-        requested_backend = compile_args.execution_backend
-        backend_context = create_backend_context(
-            compile_args.target,
-            compile_args.target_host,
-            requested_backend,
+        compile_args = compile_args.freeze()
+        state = compile_args._frozen
+        backend_context = (
+            state.context
+            if state is not None
+            else create_backend_context(compile_args.target, compile_args.target_host, compile_args.execution_backend)
         )
         # load best config
         if verbose:
             logger.debug(f"Loading best config from file: {path / BEST_CONFIG_PATH}")
         with open(path / BEST_CONFIG_PATH) as f:
             config = json.load(f)
+        if backend_context.module.name in {"ascend_a2a3", "pto_a2a3"}:
+            if compile_args._frozen is None:
+                compile_args = compile_args.freeze(backend_context)
+            # The public result stores the original config dictionary. The
+            # internal __pass_configs__ key exists only in compile-unit kwargs.
+            per_config = (config or {}).get("pass_configs")
+            if per_config:
+                merged = dict(compile_args.pass_configs or {})
+                merged.update(per_config)
+                compile_args = replace(compile_args, pass_configs=merged)
 
         # load function
         if verbose:
@@ -652,8 +695,9 @@ class AutotuneResult:
             backend_context,
             out_idx_override if out_idx_override is not None else compile_args.out_idx,
             compile_args.pass_configs,
-            None,  # compile_flags not tracked here
+            compile_args.compile_flags,
             func,
+            **({"compile_args": compile_args} if backend_context.module.name in {"ascend_a2a3", "pto_a2a3"} else {}),
         )
         if kernel is None:
             return None
@@ -692,9 +736,9 @@ class AutotuneResult:
         return files
 
     @classmethod
-    def _get_complete_result_files(cls, path: Path, execution_backend: str) -> list[Path]:
+    def _get_complete_result_files(cls, path: Path, execution_backend: str, *, a2a3=False) -> list[Path]:
         """Return the full file set that marks an autotune result complete."""
-        return list(
+        files = list(
             dict.fromkeys(
                 [
                     path / BEST_CONFIG_PATH,
@@ -707,21 +751,26 @@ class AutotuneResult:
                 ]
             )
         )
+        if a2a3:
+            from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+
+            files.append(path / A2A3CythonKernelCache.runtime_metadata_path)
+        return files
 
     @classmethod
-    def _get_missing_complete_result_files(cls, path: Path, execution_backend: str) -> list[Path]:
+    def _get_missing_complete_result_files(cls, path: Path, execution_backend: str, *, a2a3=False) -> list[Path]:
         """Return complete-result files missing from a candidate cache path."""
-        return [file for file in cls._get_complete_result_files(path, execution_backend) if not file.exists()]
+        return [file for file in cls._get_complete_result_files(path, execution_backend, a2a3=a2a3) if not file.exists()]
 
     @classmethod
-    def _is_complete_result_dir(cls, path: Path, execution_backend: str) -> bool:
+    def _is_complete_result_dir(cls, path: Path, execution_backend: str, *, a2a3=False) -> bool:
         """Return whether a cache directory contains all required files."""
-        return path.is_dir() and not cls._get_missing_complete_result_files(path, execution_backend)
+        return path.is_dir() and not cls._get_missing_complete_result_files(path, execution_backend, a2a3=a2a3)
 
     @classmethod
-    def _remove_incomplete_result_dir(cls, path: Path, execution_backend: str) -> bool:
+    def _remove_incomplete_result_dir(cls, path: Path, execution_backend: str, *, a2a3=False) -> bool:
         """Remove a stale incomplete result directory when present."""
-        if not path.is_dir() or cls._is_complete_result_dir(path, execution_backend):
+        if not path.is_dir() or cls._is_complete_result_dir(path, execution_backend, a2a3=a2a3):
             return False
         shutil.rmtree(path)
         return True

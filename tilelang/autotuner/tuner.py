@@ -416,6 +416,9 @@ class AutoTuner:
     ) -> tilelang.JITKernel:
         per_config_pass_configs = config_arg.pop(_PASS_CONFIGS_KEY, None)
         compile_args = self._merge_pass_configs_into_compile_args(per_config_pass_configs)
+        if compile_args._frozen is not None:
+            with compile_args._frozen.context.target:
+                return compile_args.compile_program(self.fn(**config_arg))
         return compile_args.compile_program(self.fn(**config_arg))
 
     def _default_elaborate(self, **config_arg) -> PrimFunc:
@@ -486,6 +489,9 @@ class AutoTuner:
         str,
     ]:
         num_workers = self._resolve_num_compile_workers()
+        npu_device = None
+        if self.compile_args._frozen is not None and hasattr(torch, "npu") and torch.npu.is_available():
+            npu_device = torch.npu.current_device()
         pool = concurrent.futures.ThreadPoolExecutor(max_workers=num_workers)
         futures: list[concurrent.futures.Future] = []
         future_to_unit: dict[concurrent.futures.Future, list[UnitItem]] = {}
@@ -497,8 +503,17 @@ class AutoTuner:
 
             return inner
 
+        def npu_device_wrapper(func, device):
+            def inner(**config_arg):
+                torch.npu.set_device(device)
+                return func(**config_arg)
+
+            return inner
+
         def get_compile_func():
             compile_impl = compile_func
+            if npu_device is not None:
+                return npu_device_wrapper(compile_func, npu_device)
             if torch.cuda.is_available():
                 device = torch.cuda.current_device()
                 compile_impl = cuda_device_wrapper(compile_func, device)
@@ -575,6 +590,7 @@ class AutoTuner:
                 logger.debug("Error: %s", traceback.format_exc())
 
         benchmark_device = worker_device if torch.cuda.is_available() and target_kind == "cuda" else None
+        npu_benchmark = self.compile_args._frozen is not None and hasattr(torch, "npu") and torch.npu.is_available()
 
         def _call_benchmark_target(
             jit_kernel: tilelang.JITKernel,
@@ -589,6 +605,9 @@ class AutoTuner:
                     benchmark_device=benchmark_device,
                 )
 
+            if npu_benchmark:
+                with torch.npu.device(worker_device):
+                    return invoke()
             if benchmark_device is None:
                 return invoke()
             with torch.cuda.device(benchmark_device):
@@ -763,6 +782,11 @@ class AutoTuner:
         benchmark_devices: list[int] | None,
         target_kind: str,
     ) -> tuple[bool, list[int]]:
+        if self.compile_args._frozen is not None and hasattr(torch, "npu") and torch.npu.is_available():
+            current_device = torch.npu.current_device()
+            if benchmark_multi_gpu:
+                logger.warning("Multi-GPU benchmarking is CUDA-only; using the caller NPU device %s.", current_device)
+            return False, [current_device]
         current_device = torch.cuda.current_device() if torch.cuda.is_available() else 0
         single_device = [current_device]
 
@@ -1235,7 +1259,9 @@ class AutoTuneImpl(Generic[_P, _T]):
         self._tuner_cache = {}
         self._pass_configs_lock = threading.Lock()
 
-    def _make_jit_compile_func(self, mode: str, args: tuple, kwargs: dict) -> Callable[..., JITKernel]:
+    def _make_jit_compile_func(
+        self, mode: str, args: tuple, kwargs: dict, compile_args: CompileArgs | None = None
+    ) -> Callable[..., JITKernel]:
         """Create a jit_compile closure for the given mode ('lazy' or 'eager').
 
         All compilation paths are serialized under _pass_configs_lock because
@@ -1244,6 +1270,16 @@ class AutoTuneImpl(Generic[_P, _T]):
 
         def jit_compile(**config_arg):
             per_config_pass_configs = config_arg.pop(_PASS_CONFIGS_KEY, None)
+            if compile_args is not None and compile_args._frozen is not None:
+                candidate = compile_args
+                if per_config_pass_configs is not None:
+                    merged_pc = dict(candidate.pass_configs or {})
+                    merged_pc.update(per_config_pass_configs)
+                    candidate = replace(candidate, pass_configs=merged_pc)
+                merged = dict(kwargs)
+                merged.update(config_arg)
+                with self._pass_configs_lock:
+                    return self.jit_impl._compile_with(candidate.compile_program, candidate._frozen.context.target, *args, **merged)
             with self._pass_configs_lock:
                 original_pass_configs = self.jit_impl.pass_configs
                 if per_config_pass_configs is not None:
@@ -1319,17 +1355,25 @@ class AutoTuneImpl(Generic[_P, _T]):
             norm_args = _normalize_value(args, sort_dict_items=True)
             norm_kwargs = _normalize_value(kwargs, sort_dict_items=True)
         key = (norm_args, norm_kwargs)
+        # Freeze the actual request before the outer in-memory lookup as well
+        # as before the tuner's memory/disk lookup. Shared targets retain their
+        # original key and JIT callback path.
+        autotuner.compile_args = autotuner.compile_args.freeze()
+        if autotuner.compile_args._frozen is not None:
+            key = (*key, hash(autotuner.compile_args))
         if key not in self._tuner_cache:
 
             def jit_elaborate(**config_arg):
                 config_arg.pop(_PASS_CONFIGS_KEY, None)
                 merged = dict(kwargs)
                 merged.update(config_arg)
+                if autotuner.compile_args._frozen is not None:
+                    return self.jit_impl._get_tir_with_target(autotuner.compile_args._frozen.context.target, *args, **merged)
                 return self.jit_impl.get_tir(*args, **merged)
 
-            autotuner.jit_compile = self._make_jit_compile_func(mode, args, kwargs)
+            autotuner.jit_compile = self._make_jit_compile_func(mode, args, kwargs, autotuner.compile_args)
             autotuner.jit_elaborate = jit_elaborate
-            autotuner.set_kernel_parameters(key, self.jit_impl.signature.parameters)
+            autotuner.set_kernel_parameters((norm_args, norm_kwargs), self.jit_impl.signature.parameters)
 
             artifact = autotuner.run()
             self._tuner_cache[key] = artifact.kernel, artifact.config
