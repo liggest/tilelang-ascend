@@ -1108,6 +1108,11 @@ class TLWrapper(BaseWrapper):
         elif is_hip_target(self.target):
             wrapper_class = TLHIPSourceWrapper
         elif is_ascend_target(self.target):
+            from tilelang.ascend.target import is_a2a3_target
+
+            if is_a2a3_target(self.target):
+                # TA codegen already includes its own void host launcher.
+                return c_source
             wrapper_class = TLAscendSourceWrapper
         elif is_cpu_target(self.target):
             wrapper_class = TLCPUSourceWrapper

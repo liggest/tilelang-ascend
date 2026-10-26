@@ -206,7 +206,7 @@ cdef class CythonKernelWrapper:
         device = None
         if stream == -1:
             if self.get_current_stream is not None:
-                device = self._infer_output_device(inputs)
+                device = self.get_current_device() if self.a2a3_runtime else self._infer_output_device(inputs)
                 stream = self.get_current_stream(device)
             elif torch.cuda.is_available():
                 try:
@@ -251,7 +251,11 @@ cdef class CythonKernelWrapper:
                                         shape.append(tensor_list[ref_tensor_idx].stride(ref_shape_idx) * stride_scale)
                         else:  # Already converted to Python int during initialization
                             shape.append(s)
-                if device is None:
+                if self.a2a3_runtime:
+                    # TA allocates on the first supplied input's device. Keep
+                    # its scalar/None-first unsupported boundary target-local.
+                    device = inputs[0].device if inputs else self.get_current_device()
+                elif device is None:
                     device = self._infer_output_device(inputs)
 
                 if len(shape) == 0:
@@ -288,7 +292,12 @@ cdef class CythonKernelWrapper:
         for i, tensor in enumerate(tensor_list):
             if isinstance(tensor, torch.Tensor):
                 call_args.append(ctypes.c_void_p(tensor.data_ptr()))
-            elif isinstance(tensor, (int, float, bool)):
+            elif self.a2a3_runtime and isinstance(tensor, int):
+                # Source bools also take this branch (bool subclasses int).
+                call_args.append(ctypes.c_void_p(tensor) if i in self.ptr_map else tensor)
+            elif self.a2a3_runtime and isinstance(tensor, float):
+                call_args.append(ctypes.c_float(tensor))
+            elif not self.a2a3_runtime and isinstance(tensor, (int, float, bool)):
                 if i in self.ptr_map:
                     call_args.append(ctypes.c_void_p(tensor))
                 else:
@@ -296,13 +305,17 @@ cdef class CythonKernelWrapper:
                     if dtype not in dtype_to_ctype:
                         raise ValueError(f"Unsupported tensor dtype: {dtype}")
                     call_args.append(dtype_to_ctype[dtype](tensor))
-            elif tensor is None:
+            elif tensor is None and not self.a2a3_runtime:
                 call_args.append(ctypes.c_void_p(0))
             else:
                 raise ValueError(f"Unsupported tensor type: {type(tensor)}")
 
         # Check buffer device
         if not skip_tensor_validation:
+            if self.a2a3_runtime and tensor_list and not isinstance(tensor_list[0], torch.Tensor):
+                for _, (buffer_idx, _) in self.buffer_device_map.items():
+                    if isinstance(tensor_list[buffer_idx], torch.Tensor):
+                        raise ValueError("A2A3 tensor device validation requires a tensor in the first parameter slot, as in TA")
             self._check_buffer_device(tensor_list)
             self._check_buffer_dtype(tensor_list)
             if not self.a2a3_runtime:

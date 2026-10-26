@@ -82,3 +82,23 @@ def resolve_allocation_shape(
 def configure_void_call(library) -> None:
     """Use the self-contained TA host launcher's void C return convention."""
     library.call.restype = None
+
+
+def dump_runtime_signature(func: tirx.PrimFunc) -> str:
+    """Persist the final parameter/buffer contract without compiler-only IR nodes."""
+    symbol = func.attrs.get("global_symbol") if func.attrs else None
+    if symbol is None:
+        raise ValueError("A2A3 runtime signature requires an exported global_symbol")
+    signature = tirx.PrimFunc(func.params, tirx.Evaluate(0), func.ret_type, func.buffer_map).with_attr("global_symbol", symbol)
+    for key in ("calling_conv", "auto_gm_indices"):
+        if key in func.attrs:
+            signature = signature.with_attr(key, func.attrs[key])
+    return tvm.ir.save_json(signature)
+
+
+def load_runtime_signature(text: str) -> tirx.PrimFunc:
+    """Restore a signature using TVM reflection, never Python pickle or eval."""
+    signature = tvm.ir.load_json(text)
+    if not isinstance(signature, tirx.PrimFunc) or not signature.attrs or not signature.attrs.get("global_symbol"):
+        raise ValueError("Invalid A2A3 cached runtime signature")
+    return signature

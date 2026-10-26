@@ -68,6 +68,7 @@ class CythonKernelAdapter(BaseKernelAdapter):
 
     # Class attributes to store compiled kernel information
     target: str | Target = "cuda"
+    _a2a3_runtime: bool = False
     ir_module: tvm.IRModule | None = None
     # The global source code of the kernel -> global means the source code of the kernel
     # that is not wrapped by the wrapper code
@@ -108,6 +109,10 @@ class CythonKernelAdapter(BaseKernelAdapter):
         verbose: bool = False,
         pass_configs: dict[str, Any] | None = None,
         compile_flags: list[str] | None = None,
+        workspace_idx: list[int] | int | None = None,
+        auto_gm_idx: list[int] | None = None,
+        compile_config=None,
+        runtime_func: tirx.PrimFunc | None = None,
     ):
         """Initialize the adapter with the given TIR function or module.
 
@@ -119,16 +124,26 @@ class CythonKernelAdapter(BaseKernelAdapter):
             verbose: Enable verbose logging
         """
         self.params = params
+        self.target = Target(determine_target(target))
+        from tilelang.ascend.target import is_a2a3_target
+
+        self._a2a3_runtime = is_a2a3_target(self.target)
+        self.compile_config = compile_config
         self.result_idx = self._legalize_result_idx(result_idx)
         self.device_kernel_source = device_kernel_source
         self.kernel_global_source = device_kernel_source  # Set alias for compatibility
 
+        if self._a2a3_runtime and device_mod is not None:
+            from tilelang.ascend.a2a3.pipeline import get_device_kernel
+
+            func_or_mod = get_device_kernel(device_mod)
+        if runtime_func is not None:
+            func_or_mod = runtime_func
         if isinstance(func_or_mod, tirx.PrimFunc):
             self.ir_module = tvm.IRModule({func_or_mod.attrs["global_symbol"]: func_or_mod})
         else:
             self.ir_module = func_or_mod
-
-        self.target = Target(determine_target(target))
+        self._configure_auto_memory(workspace_idx, auto_gm_idx)
 
         self.dynamic_symbolic_map = self._process_dynamic_symbolic()
         self.dynamic_symbolic_sources = self._process_dynamic_symbolic_sources()
@@ -143,9 +158,11 @@ class CythonKernelAdapter(BaseKernelAdapter):
 
         self.verbose = verbose
         self.wrapper = TLWrapper(self.target)
-        self.lib_generator = LibraryGenerator(self.target, verbose=verbose)
+        generator_options = {"compile_config": compile_config} if self._a2a3_runtime else {}
+        self.lib_generator = LibraryGenerator(self.target, verbose=verbose, **generator_options)
         self.lib_generator.assign_pass_configs(pass_configs)
-        self.lib_generator.assign_compile_flags(compile_flags)
+        if not self._a2a3_runtime or compile_config is None:
+            self.lib_generator.assign_compile_flags(compile_flags)
 
         self.wrapper.assign_optimized_module(self.ir_module)
         self.wrapper.assign_pass_configs(pass_configs)
@@ -157,22 +174,8 @@ class CythonKernelAdapter(BaseKernelAdapter):
         self.lib_generator.compile_lib()
         self.lib = self.lib_generator.load_lib()
 
-        self.lib.get_last_error.restype = ctypes.c_char_p
-        result = self.lib.init()
-        if result != 0:
-            error_msg = self.lib.get_last_error().decode("utf-8")
-            error_msg += f"\n{self.lib_code}"
-            raise RuntimeError(f"Initialization failed: {error_msg}")
-
-        self.cython_wrapper = CythonKernelWrapper(self.result_idx, self.params, self.lib, *_device_providers())
-        self.cython_wrapper.set_dynamic_symbolic_map(self.dynamic_symbolic_map)
-        self.cython_wrapper.set_dynamic_symbolic_sources(self.dynamic_symbolic_sources)
-        self.cython_wrapper.set_buffer_dtype_map(self.buffer_dtype_map)
-        self.cython_wrapper.set_static_shape_map(self.static_shape_map)
-        self.cython_wrapper.set_static_strides_map(self.static_strides_map)
-        self.cython_wrapper.set_static_contiguous_list(self.static_contiguous_list)
-        self.cython_wrapper.set_buffer_device_map(self.buffer_device_map)
-        self.cython_wrapper.set_ptr_map(self.ptr_map)
+        self._initialize_library(include_source=True)
+        self._create_cython_wrapper()
         self._post_init()
 
     @classmethod
@@ -188,22 +191,32 @@ class CythonKernelAdapter(BaseKernelAdapter):
         verbose: bool = False,
         pass_configs: dict[str, Any] | None = None,
         compile_flags: list[str] | None = None,
+        workspace_idx: list[int] | int | None = None,
+        auto_gm_idx: list[int] | None = None,
+        compile_config=None,
+        runtime_func: tirx.PrimFunc | None = None,
     ):
         adapter = cls.__new__(cls)
         adapter.params = params
+        adapter.target = Target(determine_target(target))
+        from tilelang.ascend.target import is_a2a3_target
+
+        adapter._a2a3_runtime = is_a2a3_target(adapter.target)
+        adapter.compile_config = compile_config
         adapter.result_idx = adapter._legalize_result_idx(result_idx)
         adapter._set_cached_text_source("host_kernel_source", "_host_kernel_source_path", host_kernel_source)
         device_kernel_source = adapter._set_cached_text_source("device_kernel_source", "_device_kernel_source_path", device_kernel_source)
         adapter.kernel_global_source = device_kernel_source.text  # Set alias for compatibility
         adapter.pass_configs = pass_configs
 
+        if runtime_func is not None:
+            func_or_mod = runtime_func
         if isinstance(func_or_mod, tirx.PrimFunc):
             adapter.ir_module = tvm.IRModule({func_or_mod.attrs["global_symbol"]: func_or_mod})
         else:
             adapter.ir_module = func_or_mod
 
-        target = determine_target(target, return_object=True)
-        adapter.target = Target(determine_target(target))
+        adapter._configure_auto_memory(workspace_idx, auto_gm_idx)
 
         adapter.dynamic_symbolic_map = adapter._process_dynamic_symbolic()
         adapter.dynamic_symbolic_sources = adapter._process_dynamic_symbolic_sources()
@@ -217,29 +230,67 @@ class CythonKernelAdapter(BaseKernelAdapter):
         adapter.static_contiguous_list = static_buffer_infos[2]
 
         adapter.verbose = verbose
-        adapter.lib_generator = LibraryGenerator(adapter.target, verbose=verbose)
+        generator_options = {"compile_config": compile_config} if adapter._a2a3_runtime else {}
+        adapter.lib_generator = LibraryGenerator(adapter.target, verbose=verbose, **generator_options)
         adapter.lib_generator.assign_pass_configs(pass_configs)
-        adapter.lib_generator.assign_compile_flags(compile_flags)
+        if not adapter._a2a3_runtime or compile_config is None:
+            adapter.lib_generator.assign_compile_flags(compile_flags)
         adapter.lib = adapter.lib_generator.load_lib(lib_path=kernel_lib_path)
 
-        adapter.lib.get_last_error.restype = ctypes.c_char_p
-        result = adapter.lib.init()
-        if result != 0:
-            error_msg = adapter.lib.get_last_error().decode("utf-8")
-            raise RuntimeError(f"Initialization failed: {error_msg}")
-
-        adapter.cython_wrapper = CythonKernelWrapper(adapter.result_idx, adapter.params, adapter.lib, *_device_providers())
-        adapter.cython_wrapper.set_dynamic_symbolic_map(adapter.dynamic_symbolic_map)
-        adapter.cython_wrapper.set_dynamic_symbolic_sources(adapter.dynamic_symbolic_sources)
-        adapter.cython_wrapper.set_buffer_dtype_map(adapter.buffer_dtype_map)
-        adapter.cython_wrapper.set_static_shape_map(adapter.static_shape_map)
-        adapter.cython_wrapper.set_static_strides_map(adapter.static_strides_map)
-        adapter.cython_wrapper.set_static_contiguous_list(adapter.static_contiguous_list)
-        adapter.cython_wrapper.set_buffer_device_map(adapter.buffer_device_map)
-        adapter.cython_wrapper.set_ptr_map(adapter.ptr_map)
+        adapter._initialize_library()
+        adapter._create_cython_wrapper()
 
         adapter._post_init()
         return adapter
+
+    def _configure_auto_memory(self, workspace_idx, auto_gm_idx):
+        self.workspace_idx = []
+        self.auto_gm_idx = []
+        if not self._a2a3_runtime:
+            if workspace_idx is not None or auto_gm_idx is not None:
+                raise ValueError("workspace_idx and auto_gm_idx are supported only by the A2A3 Cython backend")
+            self._automatic_indices = set(self.result_idx)
+            return
+        if "pto" in self.target.keys:
+            raise NotImplementedError("A2/A3 PTO execution is deferred to migration stage 2")
+        from tilelang.ascend.a2a3.runtime import normalize_memory_indices
+
+        if self.compile_config is not None and str(self.target.attrs.get("model", "")) != self.compile_config.platform:
+            raise ValueError("A2A3 compiler snapshot requires the same frozen target.model platform")
+        if len(self.params) != len(self.prim_func.params):
+            raise ValueError("A2A3 runtime parameters must describe the final device kernel, including compiler-derived GM workspaces")
+        self.workspace_idx = normalize_memory_indices(workspace_idx, len(self.params), "workspace_idx")
+        if auto_gm_idx is None:
+            auto_gm_idx = [int(value) for value in self.prim_func.attrs.get("auto_gm_indices", [])]
+        self.auto_gm_idx = normalize_memory_indices(auto_gm_idx, len(self.params), "auto_gm_idx")
+        self._automatic_indices = set(self.result_idx + self.workspace_idx + self.auto_gm_idx)
+
+    def _initialize_library(self, include_source=False):
+        if self._a2a3_runtime:
+            from tilelang.ascend.a2a3.runtime import configure_void_call
+
+            configure_void_call(self.lib)
+            return
+        self.lib.get_last_error.restype = ctypes.c_char_p
+        result = self.lib.init()
+        if result != 0:
+            error_msg = self.lib.get_last_error().decode("utf-8")
+            if include_source:
+                error_msg += f"\n{self.lib_code}"
+            raise RuntimeError(f"Initialization failed: {error_msg}")
+
+    def _create_cython_wrapper(self):
+        self.cython_wrapper = CythonKernelWrapper(self.result_idx, self.params, self.lib, *_device_providers())
+        self.cython_wrapper.set_dynamic_symbolic_map(self.dynamic_symbolic_map)
+        self.cython_wrapper.set_dynamic_symbolic_sources(self.dynamic_symbolic_sources)
+        self.cython_wrapper.set_buffer_dtype_map(self.buffer_dtype_map)
+        self.cython_wrapper.set_static_shape_map(self.static_shape_map)
+        self.cython_wrapper.set_static_strides_map(self.static_strides_map)
+        self.cython_wrapper.set_static_contiguous_list(self.static_contiguous_list)
+        self.cython_wrapper.set_buffer_device_map(self.buffer_device_map)
+        self.cython_wrapper.set_ptr_map(self.ptr_map)
+        if self._a2a3_runtime:
+            self.cython_wrapper.set_a2a3_runtime(self.workspace_idx, self.auto_gm_idx)
 
     def _process_dynamic_symbolic(self) -> dict[tirx.Var, tuple[int, int, int, int]]:
         """Extract information about dynamic shapes from the TIR function.
@@ -258,8 +309,11 @@ class CythonKernelAdapter(BaseKernelAdapter):
         # while that output is being allocated, so a dimension mentioned by both an
         # input and an output must be owned by the input; owning it on the output
         # would make the allocation loop read a slot it has not filled yet.
-        ordered = [i for i in range(len(params)) if i not in self.result_idx]
-        ordered += [i for i in range(len(params)) if i in self.result_idx]
+        if self._a2a3_runtime:
+            ordered = [i for i in range(len(params)) if i not in self._automatic_indices]
+        else:
+            ordered = [i for i in range(len(params)) if i not in self.result_idx]
+            ordered += [i for i in range(len(params)) if i in self.result_idx]
         for i in ordered:
             param = params[i]
             if param in buffer_map:
@@ -267,6 +321,10 @@ class CythonKernelAdapter(BaseKernelAdapter):
                 for j, shape in enumerate(buffer.shape):
                     if isinstance(shape, tirx.Var) and (shape not in dynamic_symbolic_map) and (shape not in params):
                         dynamic_symbolic_map[shape] = (0, i, j, 1)
+        if self._a2a3_runtime:
+            # TA's self-contained host launcher appends shape symbols only;
+            # its codegen does not append independent stride symbols.
+            return dynamic_symbolic_map
         for i in ordered:
             param = params[i]
             if param in buffer_map:
@@ -290,6 +348,8 @@ class CythonKernelAdapter(BaseKernelAdapter):
         buffer_map = func.buffer_map
         sources: dict[str, list[tuple[int, int, int, int]]] = {}
         for i, param in enumerate(params):
+            if self._a2a3_runtime and i in self._automatic_indices:
+                continue
             if param in buffer_map:
                 buffer = buffer_map[param]
                 element_bits = buffer.dtype.bits * buffer.dtype.lanes
@@ -301,7 +361,7 @@ class CythonKernelAdapter(BaseKernelAdapter):
                             sources[key] = []
                         sources[key].append((0, i, j, 1))
                 for j, stride in enumerate(buffer.strides):
-                    if isinstance(stride, tirx.Var) and stride not in params:
+                    if not self._a2a3_runtime and isinstance(stride, tirx.Var) and stride not in params:
                         key = str(stride)
                         if key not in sources:
                             sources[key] = []
@@ -398,6 +458,8 @@ class CythonKernelAdapter(BaseKernelAdapter):
                 static_strides_map[buffer.name] = (i, static_strides)
                 if is_contiguous:
                     static_contiguous_list.append((i, buffer.name))
+        if self._a2a3_runtime:
+            static_contiguous_list = [(i, buffer_map[param].name) for i, param in enumerate(params) if param in buffer_map]
         return static_shape_map, static_strides_map, static_contiguous_list
 
     def _process_buffer_device(self) -> dict[tirx.Var, tuple[int, torch.device]]:

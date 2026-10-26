@@ -15,10 +15,12 @@ from tilelang_cython_wrapper import CythonKernelWrapper
 tir = tvm.tirx
 
 
-def _wrapper(params, result_idx, workspace_idx=(), auto_gm_idx=(), symbolic=None, *, a2a3=True, library=None):
+def _wrapper(params, result_idx, workspace_idx=(), auto_gm_idx=(), symbolic=None, *, a2a3=True, library=None, providers=None):
     if library is None:
         library = SimpleNamespace(call=lambda *args: None if a2a3 else 0)
-    wrapper = CythonKernelWrapper(result_idx, params, library, lambda: torch.device("cpu"), lambda device: 0)
+    if providers is None:
+        providers = (lambda: torch.device("cpu"), lambda device: 0)
+    wrapper = CythonKernelWrapper(result_idx, params, library, *providers)
     wrapper.set_dynamic_symbolic_map(symbolic or {})
     wrapper.set_dynamic_symbolic_sources({})
     wrapper.set_buffer_device_map({})
@@ -173,3 +175,95 @@ def test_shared_default_status_return_errors_remain_visible():
     wrapper = _wrapper(_params((4,), (4,)), [1], a2a3=False, library=library)
     with pytest.raises(RuntimeError, match="original status failure"):
         wrapper.forward([torch.zeros(4)], stream=0)
+
+
+def test_real_derived_workspace_parameter_extractor_and_signature_roundtrip():
+    import importlib.util
+    from pathlib import Path
+    from tvm.ir import CallingConv
+    from tilelang.ascend.a2a3.pipeline import ASCENDC_PIPELINE, get_device_kernel
+    from tilelang.ascend.a2a3.runtime import dump_runtime_signature, load_runtime_signature
+
+    if tvm.ffi.get_global_func("tl.transform.A2A3AscendWorkspaceReduction", allow_missing=True) is None:
+        pytest.skip("requires the real A2A3 workspace pass in a USE_ASCEND build")
+    path = Path(__file__).parents[1] / "transform" / "test_a2a3_workspace_reduction.py"
+    spec = importlib.util.spec_from_file_location("a2a3_workspace_source_fixture", path)
+    source = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(source)
+    # A real migrated source pass adds the GM argument. Do not fake the public
+    # pipeline or replace the native workspace algorithm to manufacture it.
+    before = source._kernel("v2c", threads=2)
+    assert len(before.params) == 0
+    after = source._run(before).with_attr("calling_conv", CallingConv.DEVICE_KERNEL_LAUNCH)
+    module = tvm.IRModule({"main": after})
+    selected = get_device_kernel(module)
+    params = ASCENDC_PIPELINE.extract_parameters(module)
+    assert len(params) == len(selected.params) == 1
+    assert list(params[0].shape) == [4, 16, 16]
+    assert [int(value) for value in selected.attrs["auto_gm_indices"]] == [0]
+    restored = load_runtime_signature(dump_runtime_signature(selected))
+    assert len(restored.params) == 1
+    assert list(restored.buffer_map[restored.params[0]].shape) == [4, 16, 16]
+    assert restored.buffer_map[restored.params[0]].dtype == params[0].dtype
+    assert [int(value) for value in restored.attrs["auto_gm_indices"]] == [0]
+    # Compare under the PrimFunc parameter binders; a bare identity-keyed map
+    # has no binder establishing correspondence for restored handle keys.
+    tvm.ir.assert_structural_equal(
+        tir.PrimFunc(selected.params, tir.Evaluate(0), buffer_map=selected.buffer_map),
+        tir.PrimFunc(restored.params, tir.Evaluate(0), buffer_map=restored.buffer_map),
+    )
+
+
+@pytest.mark.parametrize("integer", [17, 2**40 + 7])
+def test_a2a3_preserves_source_scalar_argument_encoding(integer):
+    calls = []
+    params = [KernelParam(tvm.DataType(dtype), shape) for dtype, shape in [("float32", [4]), ("int64", []), ("float64", []), ("bool", [])]]
+    wrapper = _wrapper(params, [], library=SimpleNamespace(call=lambda *args: calls.append(args)))
+    wrapper.forward([torch.zeros(4), integer, 1.25, True], stream=0)
+    assert calls[0][1] is integer
+    # This deliberately preserves TA's c_float encoding, including its old
+    # double/big-integer limitation. No native numeric result is claimed.
+    assert isinstance(calls[0][2], ctypes.c_float)
+    assert calls[0][2].value == 1.25
+    assert calls[0][3] is True
+
+
+def test_a2a3_none_rejection_does_not_change_shared_nullable_inputs():
+    wrapper = _wrapper(_params((4,)), [])
+    with pytest.raises(ValueError, match="Unsupported tensor type"):
+        wrapper.forward([None], stream=0)
+    shared = _wrapper(_params((4,)), [], a2a3=False)
+    assert shared.forward([None], stream=0) == []
+
+
+def test_a2a3_first_input_device_rule_keeps_source_scalar_first_boundary():
+    params = [KernelParam(tvm.DataType("int32"), []), *_params((4,), (4,))]
+    wrapper = _wrapper(params, [2])
+    with pytest.raises(AttributeError, match="device"):
+        wrapper.forward([3, torch.zeros(4)], stream=0)
+    shared = _wrapper(params, [2], a2a3=False)
+    assert shared.forward([3, torch.zeros(4)], stream=0).shape == (4,)
+
+
+def test_source_device_validation_does_not_accept_scalar_first_tensor_kernels():
+    params = [KernelParam(tvm.DataType("int32"), []), *_params((4,))]
+    wrapper = _wrapper(params, [])
+    wrapper.set_buffer_device_map({"input": (1, torch.device("cpu"))})
+    with pytest.raises(ValueError, match="first parameter slot"):
+        wrapper.forward([3, torch.zeros(4)], stream=0)
+    shared = _wrapper(params, [], a2a3=False)
+    shared.set_buffer_device_map({"input": (1, torch.device("cpu"))})
+    assert shared.forward([3, torch.zeros(4)], stream=0) == []
+
+
+def test_a2a3_stream_uses_current_device_and_shared_uses_input_device():
+    observed = []
+    providers = (lambda: torch.device("cpu", 7), lambda device: (observed.append(device), 17)[1])
+    source = torch.zeros(4)
+    wrapper = _wrapper(_params((4,), (4,)), [1], providers=providers)
+    assert wrapper.forward([source]).device == source.device
+    assert observed == [torch.device("cpu", 7)]
+    observed.clear()
+    shared = _wrapper(_params((4,), (4,)), [1], providers=providers, a2a3=False)
+    assert shared.forward([source]).device == source.device
+    assert observed == [source.device]
