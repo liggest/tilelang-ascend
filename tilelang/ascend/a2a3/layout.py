@@ -4,34 +4,35 @@
 # Source: TA 0deb8b93 tilelang/intrinsics/ascend_layout.py and the Layout
 # constructor metadata from tilelang/layout/layout.py.
 
-import tvm
 from tvm import arith, DataType
 import tvm_ffi
 from tilelang.layout import Layout as _SharedLayout
 from enum import Enum
+from ._native import register_optional_object, require_native
 
 
-@tvm_ffi.register_object("tl.A2A3Layout")
+@register_optional_object("tl.A2A3Layout", "tl.ascend.a2a3.WrapLayout")
 class Layout(_SharedLayout):
     """TA coordinate map with its explicit template tag (default RowMajor)."""
 
     def __init__(self, shape, forward_fn, layout_tag=0):
+        constructor = require_native("tl.ascend.a2a3.WrapLayout", "Layout")
         base = _SharedLayout(shape, forward_fn)
-        self.__init_handle_by_constructor__(tvm.ffi.get_global_func("tl.ascend.a2a3.WrapLayout"), base, int(layout_tag))
+        self.__init_handle_by_constructor__(constructor, base, int(layout_tag))
 
 
 def wrap_layout(layout, layout_tag):
     """Explicitly bridge a shared Layout with a known TA template tag."""
     tag = layout_tag.value if isinstance(layout_tag, AscendLayout) else int(layout_tag)
-    return tvm.ffi.get_global_func("tl.ascend.a2a3.WrapLayout")(layout, tag)
+    return require_native("tl.ascend.a2a3.WrapLayout", "wrap_layout")(layout, tag)
 
 
 def layout_str(layout):
-    return tvm.ffi.get_global_func("tl.ascend.a2a3.LayoutStr")(layout)
+    return require_native("tl.ascend.a2a3.LayoutStr", "layout_str")(layout)
 
 
 def physical_allocation_shape(layout, dtype):
-    return tvm.ffi.get_global_func("tl.ascend.a2a3.PhysicalAllocationShape")(layout, DataType(dtype))
+    return require_native("tl.ascend.a2a3.PhysicalAllocationShape", "physical_allocation_shape")(layout, DataType(dtype))
 
 
 class AscendLayout(Enum):

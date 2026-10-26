@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from tvm import tirx
 
-from tilelang import _ffi_api
+from .._native import require_native
 from tilelang.jit.exceptions import JITNoBuilderError
 from tilelang.language.kernel import (
     FrameStack,
@@ -65,6 +65,7 @@ def Kernel(
     compatibility argument; the original implementation does not consume it.
     """
     if is_npu:
+        kernel_launch = require_native("tl.A2A3KernelLaunch", "Kernel")
         from tilelang.language.eager.builder import Builder
 
         if Builder.current() is None:
@@ -88,7 +89,7 @@ def Kernel(
             attrs["tilelang.is_npu_kernel_frame_dev_mode"] = True
         # Keep the TA NPU early-return path; prelude is consumed only by the
         # generic launch below in the source implementation.
-        return _ffi_api.A2A3KernelLaunch(blocks, threads, attrs)
+        return kernel_launch(blocks, threads, attrs)
 
     if not is_cpu and threads is None:
         threads = 128
