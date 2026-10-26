@@ -21,6 +21,7 @@ from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 from tilelang.autotuner import AutoTuner
 from tilelang.autotuner.param import CompileArgs, AutotuneResult
 from tilelang.backend import create_backend_context
+from tilelang.env import CacheState
 
 from tilelang.jit.adapter.cython import adapter as adapter_module
 
@@ -93,13 +94,10 @@ def test_actual_run_freezes_before_first_lookup_without_mutating_shared_default(
         "generate_cache_key",
         lambda *args: "frozen-key" if tuner.compile_args._frozen is not None else pytest.fail("lookup before freeze"),
     )
-    was_enabled = env.is_cache_enabled()
-    env.enable_cache()
-    try:
-        assert tuner.run() is sentinel
-    finally:
-        if not was_enabled:
-            env.disable_cache()
+    monkeypatch.setattr(CacheState, "_enabled", True)
+    monkeypatch.setattr(vars(type(env))["TILELANG_DISABLE_CACHE"], "_forced_value", "0")
+    monkeypatch.setattr(vars(type(env))["TILELANG_AUTO_TUNING_DISABLE_CACHE"], "_forced_value", "0")
+    assert tuner.run() is sentinel
     assert len(resolutions) == 1
     assert default._frozen is None
     assert tuner.compile_args._frozen.compiler_config.platform == "A3"
@@ -379,12 +377,18 @@ def actual_toolchain(monkeypatch, tmp_path):
         compiler.resolve_compile_config(tvm.target.Target(TARGET))
     except (FileNotFoundError, ValueError) as error:
         pytest.skip(f"requires actual AscendC toolchain/resources: {error}")
-    monkeypatch.setattr(env, "TILELANG_CACHE_DIR", str(tmp_path / "kernel_cache"))
+    # Preserve the raw descriptor override, including None/live environment
+    # behavior, instead of restoring a previously resolved directory string.
+    monkeypatch.setattr(vars(type(env))["TILELANG_CACHE_DIR"], "_forced_value", str(tmp_path / "kernel_cache"))
+    monkeypatch.setattr(vars(type(env))["TILELANG_DISABLE_CACHE"], "_forced_value", "0")
+    monkeypatch.setattr(vars(type(env))["TILELANG_AUTO_TUNING_DISABLE_CACHE"], "_forced_value", "0")
+    monkeypatch.setattr(CacheState, "_enabled", True)
     monkeypatch.setattr(adapter_module.CythonKernelAdapter, "_process_buffer_device", lambda self: {})
     import torch
 
     monkeypatch.setattr(adapter_module, "_device_providers", lambda: (lambda: torch.device("cpu"), lambda device: 0))
-    A2A3CythonKernelCache()._memory_cache.clear()
+    monkeypatch.setattr(A2A3CythonKernelCache(), "_memory_cache", {})
+    monkeypatch.setattr(AutoTuner, "_memory_cache", {})
 
 
 @pytest.mark.parametrize("dialect", ["ascendc", "pto"])
@@ -609,24 +613,16 @@ def test_actual_default_tuner_candidate_memory_and_result_cache(actual_toolchain
         return 1.0, None
 
     monkeypatch.setattr(tuner, "_benchmark_target", benchmark)
-    was_enabled = env.is_cache_enabled()
-    env.enable_cache()
-    try:
-        cold = tuner.run()
-        assert len(benchmarked) == 1
-        assert tuner.run() is cold
-        assert list(tuner.cache_dir.rglob("a2a3_runtime.json"))
-        tuner._memory_cache.clear()
-        monkeypatch.setattr(
-            compiler.LibraryGenerator, "compile_lib", lambda *args, **kwargs: pytest.fail("autotune result cache recompiled")
-        )
-        restored = tuner.run()
-        assert restored.kernel.artifact is None and len(benchmarked) == 1
-        assert restored.kernel.workspace_idx == [4]
-        assert restored.kernel.compile_config.cache_identity == cold.kernel.compile_config.cache_identity
-    finally:
-        if not was_enabled:
-            env.disable_cache()
+    cold = tuner.run()
+    assert len(benchmarked) == 1
+    assert tuner.run() is cold
+    assert list(tuner.cache_dir.rglob("a2a3_runtime.json"))
+    tuner._memory_cache.clear()
+    monkeypatch.setattr(compiler.LibraryGenerator, "compile_lib", lambda *args, **kwargs: pytest.fail("autotune result cache recompiled"))
+    restored = tuner.run()
+    assert restored.kernel.artifact is None and len(benchmarked) == 1
+    assert restored.kernel.workspace_idx == [4]
+    assert restored.kernel.compile_config.cache_identity == cold.kernel.compile_config.cache_identity
 
 
 @pytest.mark.parametrize("timeout", [0, 1])
