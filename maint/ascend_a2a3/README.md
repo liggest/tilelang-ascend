@@ -106,3 +106,67 @@ replace `CHECK` macros, or port codegen base classes. Language/IR entry points s
 as TA `tl.Scope` and Op ABI compatibility have their own migration review; this
 inventory covers pass and build FFI only. Required dependency `.h`/`.cc` files that
 register no FFI must come from the separate source inventory.
+
+## Stage 3 ecology candidates
+
+`ecosystem.py` handles example/test import candidates separately from native IR
+migration. Its checked-in `ecosystem_manifest.json` fixes all 632 inventoried TA
+assets (340 Python files) to the same source pin, with blob IDs, SHA256, draft
+classification, and classification evidence. This is an inventory, not a list of
+supported or completed ports. Docs, skills, shell files, gitlinks, A5 assets, and
+unresolved IR/runtime APIs remain explicit review work.
+
+The pure `destination_for(original_ta_path: str) -> str` contract is:
+
+- `examples/<relative>` → `examples/ascend_a2a3/<relative>`;
+- `examples_experiment/<relative>` → `examples_experiment/ascend_a2a3/<relative>`;
+- `testing/<relative>` → `testing/ascend_a2a3/<relative>`.
+
+It rejects absolute paths, non-normalized paths, traversal, and already adopted
+paths. Mapping alone does not authorize a migration. CI resolvers may use these
+paths only after checking which layout they are running in; they must never fall
+back to a same-named main CUDA/A5 file. TA CI workflows/scripts and their dependency
+closure are protected for separate review under the user's latest CI requirement.
+
+For example, use a new output directory for each reviewed batch:
+
+```bash
+python maint/ascend_a2a3/ecosystem.py \
+  --ta-root /workspace/baitian/tilelang-ascend \
+  --output-dir /tmp/a2a3-ecology-batch-01 \
+  --path examples/gemm/example_gemm.py \
+  --path testing/python/language/test_tilelang_ascend_language_src_code.py
+python -m unittest discover -s maint/ascend_a2a3 -p 'test_*.py' -v
+```
+
+Success returns **2**: it writes only `*.candidate.py` files with an execution
+blocker, adjacent provenance/manual-review JSON, and `batch.json`. Return **1**
+means rejection. There is no install, overwrite, force, or guard-removal option.
+The entire batch is checked before a new output directory is created. The tool
+checks TA HEAD, pinned blob/hash, and selected working-tree bytes, without
+importing source modules or touching the TA tree. Repeated identical invocations
+with fresh directories produce identical candidates and sidecars.
+
+Only explicit aliased language imports and approved layout helper imports are
+rewritten. Mixed single-line imports preserve generic names; comments, strings,
+kernel bodies, decorators, flags, lists, thresholds, and platform choices stay
+unchanged. Bare module imports, unknown submodules, comment-bearing mixed imports,
+legacy TIR/FFI/platform/runtime calls, and source side effects are recorded for
+manual review. Even an import-only candidate stays blocked until its real factory,
+IR/source, SDK, and applicable device checks have been reviewed. In particular,
+never import a whole legacy example just to validate the candidate: many execute
+cache clearing, argument parsing, and NPU work at module scope.
+
+An uncertain/other classification requires a per-file decision JSON with a
+nonempty evidence-based reason, passed via `--decisions`:
+
+```json
+{"testing/python/example.py": {"decision": "a2a3", "reason": "record source-specific evidence here"}}
+```
+
+Explicit A5 assets cannot be redirected with a decision. The regular
+`examples/autotune/` files belong to the autotuner owner and are refused here.
+The original Carver example is retained for later evaluation by user scope;
+Ascend Carver policy is deferred, without substituting static configurations or
+claiming it verified. Other docs/skills assets remain an inventory for later
+assigned packages.
