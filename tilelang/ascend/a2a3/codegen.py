@@ -46,13 +46,9 @@ def _prepare_pto_codegen(mod, _target):
     return tvm.tirx.transform.Simplify()(mod)
 
 
-def _pto_not_implemented(_mod, _target):
-    raise NotImplementedError("A2/A3 PTO code generation is not implemented yet")
-
-
 # The TA native builder emits source. The shared Cython execution backend compiles
 # that source separately, so both device-codegen modes use the same builder.
 ASCENDC_CODEGEN = DeviceCodegen(
     "ascend_a2a3", build=_build_ascendc, build_without_compile=_build_ascendc, preprocess=_preserve_physical_terminals
 )
-PTO_CODEGEN = DeviceCodegen("pto_a2a3", build=_pto_not_implemented, build_without_compile=_pto_not_implemented)
+PTO_CODEGEN = DeviceCodegen("pto_a2a3", build=_build_pto, build_without_compile=_build_pto, preprocess=_prepare_pto_codegen)

@@ -1,4 +1,4 @@
-"""Pinned TA lowering for both dialects; PTO activation waits for full closure."""
+"""Complete pinned TA lowering for the A2/A3 AscendC and PTO dialects."""
 
 from __future__ import annotations
 
@@ -222,9 +222,5 @@ def _lower_a2a3(mod, target):
     return OptimizeForTarget(mod, target, platform)
 
 
-def _pto_not_implemented(_mod, _target):
-    raise NotImplementedError("A2/A3 PTO lowering is not implemented yet")
-
-
 ASCENDC_PIPELINE = PassPipeline("ascend", _lower_ascendc, parameter_extractor=_extract_parameters)
-PTO_PIPELINE = PassPipeline("ascend", _pto_not_implemented)
+PTO_PIPELINE = PassPipeline("ascend", _lower_pto, parameter_extractor=_extract_parameters)

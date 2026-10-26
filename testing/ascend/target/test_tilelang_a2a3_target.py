@@ -150,16 +150,15 @@ def test_pto_execution_backend_is_not_a2a3_pto(monkeypatch):
 
 
 @pytest.mark.parametrize("target", ["ascendc", "pto"])
-def test_a2a3_compiler_and_pto_stub_are_separate(monkeypatch, target):
+def test_a2a3_dialects_share_single_export_contract(monkeypatch, target):
     monkeypatch.setenv("TL_PLATFORM", "A3")
     context = create_backend_context(target, "c", "auto")
-    if target == "ascendc":
-        with pytest.raises(ValueError, match="exactly one exported source"):
-            context.lower(tvm.IRModule({}))
-    else:
-        with pytest.raises(NotImplementedError, match="A2/A3 PTO lowering"):
-            context.lower(tvm.IRModule({}))
-    if target == "pto":
-        for compile_device in (False, True):
-            with pytest.raises(NotImplementedError, match="A2/A3 PTO code generation"):
-                context.codegen_device(tvm.IRModule({}), compile_device=compile_device)
+    assert context.name == ("ascend_a2a3" if target == "ascendc" else "pto_a2a3")
+    assert context.execution_backend.name == "cython"
+    assert ("pto" in context.target.keys) == (target == "pto")
+    with pytest.raises(ValueError, match="exactly one exported source"):
+        context.lower(tvm.IRModule({}))
+    func = tvm.tirx.PrimFunc([], tvm.tirx.Evaluate(0)).with_attr("global_symbol", "kernel")
+    for compile_device in (False, True):
+        generated = context.codegen_device(tvm.IRModule.from_expr(func), compile_device=compile_device)
+        assert "kernel_kernel" in generated.inspect_source()

@@ -125,9 +125,9 @@ def test_missing_native_component_fails_before_partial_lowering(monkeypatch):
     assert not trace.names
 
 
-def test_pto_stays_an_explicit_stage_two_stub():
+def test_pto_pipeline_applies_the_same_single_export_contract():
     target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": ["pto", "ascend"]})
-    with pytest.raises(NotImplementedError, match="PTO lowering"):
+    with pytest.raises(ValueError, match="exactly one exported source"):
         pipeline.PTO_PIPELINE.lower(tvm.IRModule({}), target)
 
 

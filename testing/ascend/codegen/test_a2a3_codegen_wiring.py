@@ -101,9 +101,10 @@ def test_a5_stays_outside_and_pto_freezes_the_same_platform(monkeypatch):
     normalized_pto = normalize_target_for_execution(pto, "auto")
     assert normalized_pto.attrs["model"] == "A3"
     assert list(normalized_pto.keys) == list(pto.keys)
-    # The earlier shared PTO normalizer wins; this package does not change that
-    # registry contract or implement the phase-2 PTO execution path.
+    # Preserve the earlier shared PTO execution-name specialization. A2/A3
+    # consumes either source dialect through the shared Cython executor.
     with pytest.raises(ValueError, match="Allowed: cython"):
         create_backend_context("ascendc", "c", "pto")
-    with pytest.raises(NotImplementedError, match="A2/A3 PTO"):
-        codegen.PTO_CODEGEN.lower(tvm.IRModule({}), pto, compile_device=False)
+    result = codegen.PTO_CODEGEN.lower(tvm.IRModule.from_expr(_make_func(tvm.tirx.Evaluate(0))), normalized_pto, compile_device=False)
+    assert "ascend/a2a3/tl_templates/pto/common.h" in result.inspect_source()
+    assert 'extern "C" void call(' in result.inspect_source()

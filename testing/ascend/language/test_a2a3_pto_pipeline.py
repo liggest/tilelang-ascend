@@ -1,4 +1,4 @@
-"""PTO's original 27 native pass chain, before public stage-2 activation."""
+"""PTO's original 27 native pass chain and backend-local launch metadata."""
 
 import pytest
 from tilelang import tvm
