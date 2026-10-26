@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "original_testing_assets": 76,
+  "original_testing_python_assets": 72,
+  "prior_reviewed_testing_assets": 3,
+  "entries": [
+    {
+      "source_path": "testing/python/language/test_exception_dump.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_exception_dump.py",
+      "source_git_blob": "db3ae32ba62befde96116b3535aeabef9d834fce",
+      "source_sha256": "74b814b171c1c763f39cb75021ccb7945b3d6bb5f6fdec1cfb9dc81956880280",
+      "destination_sha256": "5971e1f37c4fcaa5419249503d3e60d5553536bbf3007f5d0b19f71f9f4e7f1f",
+      "adaptations": [
+        "Explicit A2A3 dialect and backend-local parser imports.",
+        "Retain all three ci_skip decorators, two dialect parameterizations, kernel/test body AST, hardware-exception script and original tolerance.",
+        "Use per-case a2a3_device markers instead of import-time NPU availability; preserve CacheState raw bit through monkeypatch.",
+        "Add two source-only native registration checks; register original ci_skip/low_priority marker names in adopted conftest."
+      ],
+      "validation": {
+        "native_source_cases": 2,
+        "original_device_cases_collected": 6,
+        "original_device_cases_run": 0,
+        "body_AST_comparison": true
+      },
+      "all_original_cases_retained": true
+    }
+  ],
+  "dependencies": [
+    {
+      "source_path": "tilelang/tools/ascend_exception_dump_bin.py",
+      "destination_path": "tilelang/ascend/a2a3/tools/parse_exception_dump.py",
+      "source_git_blob": "7e740fcca8e2845ae8102489518dab7ce9fc9667",
+      "source_sha256": "3f9bd0d02eb5b7ec547b7aa91a76f3614273dfec0fa872eec67ca6b66d9b8e99",
+      "destination_sha256": "3f9bd0d02eb5b7ec547b7aa91a76f3614273dfec0fa872eec67ca6b66d9b8e99",
+      "adaptations": [
+        "Relocate the complete source utility under backend ownership; source bytes and all public/helper signatures unchanged."
+      ],
+      "validation": {
+        "host_parser_tests": 5,
+        "device_exception_injection_run": false
+      },
+      "all_original_cases_retained": true
+    }
+  ]
+}
