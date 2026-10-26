@@ -25,12 +25,12 @@ def normalize_ascendc_target(target: TargetLike) -> Target | None:
     return None
 
 
-def normalize_ascendc_execution_target(target: Target, execution_backend: str | None) -> Target | None:
-    """Resolve AscendC platform metadata before creating a compilation cache key."""
-    if not target_is_ascend_a2a3(target) or str(execution_backend).lower() == "pto":
+def normalize_a2a3_execution_target(target: Target, execution_backend: str | None) -> Target | None:
+    """Freeze either dialect's platform before creating a compilation cache key."""
+    if not is_a2a3_target(target) or str(execution_backend).lower() == "pto":
         return None
     return normalize_a2a3_platform_target(target, execution_backend)
 
 
-register_target_execution_normalizer("ascend_a2a3", normalize_ascendc_execution_target)
+register_target_execution_normalizer("ascend_a2a3", normalize_a2a3_execution_target)
 register_target_normalizer("ascendc", normalize_ascendc_target)

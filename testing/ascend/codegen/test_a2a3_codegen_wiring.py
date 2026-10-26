@@ -93,12 +93,14 @@ def test_resolved_platform_is_part_of_the_kernel_cache_key(monkeypatch):
     assert keys[0] != keys[1]
 
 
-def test_a5_and_pto_are_outside_ascendc_platform_normalization(monkeypatch):
+def test_a5_stays_outside_and_pto_freezes_the_same_platform(monkeypatch):
     monkeypatch.setenv("TL_PLATFORM", "A3")
     a5 = Target({"kind": "ascend", "arch": "dav-3510"})
     pto = Target({"kind": "ascend", "arch": "dav-2201", "keys": ["pto", "ascend"]})
     assert normalize_target_for_execution(a5, "auto").same_as(a5)
-    assert normalize_target_for_execution(pto, "auto").same_as(pto)
+    normalized_pto = normalize_target_for_execution(pto, "auto")
+    assert normalized_pto.attrs["model"] == "A3"
+    assert list(normalized_pto.keys) == list(pto.keys)
     # The earlier shared PTO normalizer wins; this package does not change that
     # registry contract or implement the phase-2 PTO execution path.
     with pytest.raises(ValueError, match="Allowed: cython"):

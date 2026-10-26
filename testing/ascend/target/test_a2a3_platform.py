@@ -143,3 +143,34 @@ def test_soft_resolution_does_not_break_explicit_arch_routing(monkeypatch):
     target = _target()
     assert normalize_a2a3_platform_target(target) is None
     assert create_backend_context(target, "c", "auto").name == "ascend_a2a3"
+
+
+@pytest.mark.parametrize("platform", ["A2", "A3"])
+@pytest.mark.parametrize("execution_backend", ["auto", "cython"])
+def test_pto_context_freezes_platform_and_preserves_dialect(monkeypatch, platform, execution_backend):
+    monkeypatch.setenv("TL_PLATFORM", platform)
+    monkeypatch.setattr(ascend_target, "_get_soc_name", _unexpected_probe)
+    target = _target(keys=["pto", "ascend"], mcpu="dav-2201")
+    context = create_backend_context(target, "c", execution_backend)
+    assert context.name == "pto_a2a3"
+    assert context.execution_backend.name == "cython"
+    assert context.target.attrs["model"] == platform
+    assert list(context.target.keys) == list(target.keys)
+    assert context.target.attrs["mcpu"] == "dav-2201"
+    assert str(target.attrs.get("model", "")) != platform
+    monkeypatch.setenv("TL_PLATFORM", "A3" if platform == "A2" else "A2")
+    # Serialized contexts and later codegen must consume the frozen target,
+    # including when environment changes between cache lookup and compilation.
+    restored = Target(dict(context.target.export()), host=context.target.host)
+    assert resolve_a2a3_platform(context.target) == platform
+    assert resolve_a2a3_platform(restored) == platform
+    assert create_backend_context(restored, "c", "cython").target.attrs["model"] == platform
+
+
+def test_unknown_pto_platform_keeps_routing_but_strict_consumers_reject():
+    target = _target(keys=["pto", "ascend"])
+    context = create_backend_context(target, "c", "auto")
+    assert context.name == "pto_a2a3"
+    assert context.execution_backend.name == "cython"
+    with pytest.raises(ValueError, match="Cannot confirm.*target.model=A2/A3"):
+        resolve_a2a3_platform(context.target)
