@@ -60,6 +60,7 @@ class Profiler:
     def __post_init__(self):
         """Initialize tensor supply after dataclass initialization"""
         self.result_idx = self._legalize_result_idx(self.result_idx)
+        self.workspace_idx = []
         self.supply = get_tensor_supply(self.supply_type)
 
     def _legalize_result_idx(self, result_idx: list[int] | None = None) -> list[int]:
@@ -82,10 +83,17 @@ class Profiler:
         self.adapter = adapter
         return self
 
-    def _get_inputs(self, with_output=False, dynamic_symbolic_constraints: dict[str, int] | None = None):
+    def with_workspace_idx(self, workspace_idx: list[int] | int | None) -> Profiler:
+        """Exclude target-owned automatic workspaces from benchmark inputs."""
+        from tilelang.ascend.a2a3.runtime import normalize_memory_indices
+
+        self.workspace_idx = normalize_memory_indices(workspace_idx, len(self.params), "workspace_idx")
+        return self
+
+    def _get_inputs(self, with_output=False, dynamic_symbolic_constraints: dict[str, int] | None = None, *, with_workspace=False):
         ins = []
         for i in range(len(self.params)):
-            if with_output or i not in self.result_idx:
+            if (with_output or i not in self.result_idx) and (with_workspace or i not in self.workspace_idx):
                 param = self.params[i]
                 if dynamic_symbolic_constraints:
                     param = self._substitute_dynamic_symbols(param, dynamic_symbolic_constraints)
@@ -117,10 +125,10 @@ class Profiler:
                 new_shape.append(dim)
         return KernelParam(dtype=param.dtype, shape=new_shape)
 
-    def _get_params(self, with_output=False):
+    def _get_params(self, with_output=False, *, with_workspace=False):
         params = []
         for i in range(len(self.params)):
-            if with_output or i not in self.result_idx:
+            if (with_output or i not in self.result_idx) and (with_workspace or i not in self.workspace_idx):
                 params.append(self.params[i])
         return params
 

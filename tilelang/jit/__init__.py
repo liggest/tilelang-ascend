@@ -102,6 +102,7 @@ def compile(
     verbose: bool | None = None,
     pass_configs: dict[str, Any] | None = None,
     compile_flags: list[str] | str | None = None,
+    workspace_idx: list[int] | int | None = None,
 ) -> JITKernel[_KP, _T]:
     """
     Compile the given TileLang PrimFunc with TVM and build a JITKernel.
@@ -112,6 +113,10 @@ def compile(
         The TileLang TIR function to compile and wrap.
     out_idx : Union[List[int], int], optional
         Index(es) of the output tensors to return (default: None).
+    workspace_idx : list[int] | int | None
+        Deprecated A2A3 compatibility option: automatically allocate these tensor
+        parameters, supporting negative indices. Prefer language-owned allocation
+        when that replacement is available.
     execution_backend : Literal["auto", "tvm_ffi", "cython", "nvrtc", "torch", "cutedsl", "pto"], optional
         Execution backend to use for kernel execution. If None, reads from
         TILELANG_EXECUTION_BACKEND environment variable (defaults to "auto").
@@ -172,6 +177,7 @@ def compile(
         verbose=verbose,
         pass_configs=pass_configs,
         compile_flags=compile_flags,
+        **({"workspace_idx": workspace_idx} if workspace_idx is not None else {}),
     )
 
 
@@ -186,6 +192,7 @@ def par_compile(
     compile_flags: list[str] | str | None = None,
     num_workers: int | None = None,
     ignore_error: bool = False,
+    workspace_idx: list[int] | int | None = None,
 ) -> list[JITKernel[_KP, _T]]:
     """
     Parallel compile multiple TileLang PrimFunc with TVM and build JITKernels.
@@ -246,6 +253,7 @@ def par_compile(
                 verbose=verbose,
                 pass_configs=pass_configs,
                 compile_flags=compile_flags,
+                **({"workspace_idx": workspace_idx} if workspace_idx is not None else {}),
             )
             future_map[future] = i
             futures.append(future)
@@ -343,6 +351,7 @@ class JITImpl(Generic[_P, _KP, _T, _Ret]):
     """
 
     out_idx: list[int] | int | None
+    workspace_idx: list[int] | int | None = field(default=None, kw_only=True)
     execution_backend: Literal["auto", "tvm_ffi", "cython", "nvrtc", "torch", "cutedsl", "pto"] | None
     target: TargetLike | None
     target_host: TargetLike | None
@@ -461,6 +470,7 @@ class JITImpl(Generic[_P, _KP, _T, _Ret]):
             verbose=self.verbose,
             pass_configs=self.pass_configs,
             compile_flags=self.compile_flags,
+            **({"workspace_idx": self.workspace_idx} if self.workspace_idx is not None else {}),
             num_workers=num_workers,
             ignore_error=ignore_error,
         )
@@ -476,6 +486,7 @@ class JITImpl(Generic[_P, _KP, _T, _Ret]):
             verbose=self.verbose,
             pass_configs=self.pass_configs,
             compile_flags=self.compile_flags,
+            **({"workspace_idx": self.workspace_idx} if self.workspace_idx is not None else {}),
         )
 
         if self.debug_root_path:
@@ -532,6 +543,7 @@ class JITImpl(Generic[_P, _KP, _T, _Ret]):
                 "verbose": self.verbose,
                 "pass_configs": self.pass_configs,
                 "compile_flags": self.compile_flags,
+                **({"workspace_idx": self.workspace_idx} if self.workspace_idx is not None else {}),
             }
             return compile_args
 
@@ -577,6 +589,7 @@ def jit(func: Callable[_KP, _T]) -> JITImpl[_KP, _KP, _T, _T]: ...
 def jit(
     *,
     out_idx: Any = None,
+    workspace_idx: list[int] | int | None = None,
     target: TargetLike | None = None,
     target_host: TargetLike | None = None,
     execution_backend: ExecutionBackend | None = None,
@@ -591,6 +604,7 @@ def jit(
     func: Callable[_P, _T] | PrimFunc | None = None,
     *,  # Indicates subsequent arguments are keyword-only
     out_idx: list[int] | int | None = None,
+    workspace_idx: list[int] | int | None = None,
     target: TargetLike | None = None,
     target_host: TargetLike | None = None,
     execution_backend: ExecutionBackend | None = None,
@@ -632,6 +646,7 @@ def jit(
 
     compile_args = dict(
         out_idx=out_idx,
+        **({"workspace_idx": workspace_idx} if workspace_idx is not None else {}),
         execution_backend=execution_backend,
         target=target,
         target_host=target_host,

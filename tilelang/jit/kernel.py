@@ -75,6 +75,8 @@ class JITKernel(Generic[_P, _T]):
         from_database: bool = False,
         compile_flags: list[str] | None = None,
         backend_context: BackendContext | None = None,
+        workspace_idx: list[int] | int | None = None,
+        compile_config=None,
     ):
         """
         Initializes a TorchFunction instance.
@@ -118,6 +120,30 @@ class JITKernel(Generic[_P, _T]):
         self.target_host = backend_context.target_host
         self.execution_backend_spec = backend_context.execution_backend
         self.execution_backend = self.execution_backend_spec.name
+        self._workspace_idx_spec = workspace_idx
+        self.compile_config = None
+        if self.backend.name == "ascend_a2a3":
+            if "pto" in self.target.keys:
+                raise NotImplementedError("A2/A3 PTO execution is deferred to migration stage 2")
+            import json
+            from tilelang.ascend.a2a3.compiler import CompileConfig, resolve_compile_config
+            from tilelang.ascend.a2a3.execution_backend import COMPILER_CONFIG_ATTR, WORKSPACE_IDX_ATTR
+            from tilelang.ascend.a2a3.pass_config import normalize_a2a3_pass_configs
+
+            self.pass_configs = normalize_a2a3_pass_configs(self.target, pass_configs)
+            attrs = func.attrs if func is not None and func.attrs else {}
+            if workspace_idx is None and WORKSPACE_IDX_ATTR in attrs:
+                self._workspace_idx_spec = [int(value) for value in attrs[WORKSPACE_IDX_ATTR]]
+            if COMPILER_CONFIG_ATTR in attrs:
+                saved = CompileConfig.from_metadata(json.loads(str(attrs[COMPILER_CONFIG_ATTR])))
+                if compile_config is not None and saved.cache_identity != compile_config.cache_identity:
+                    raise ValueError("A2A3 compiler snapshot conflicts with the derived PrimFunc request")
+                compile_config = saved
+            self.compile_config = compile_config or resolve_compile_config(self.target, self.pass_configs, self.compile_flags)
+            if str(self.target.attrs.get("model", "")) != self.compile_config.platform:
+                raise ValueError("A2A3 compiler snapshot requires the same frozen target.model platform")
+        elif workspace_idx is not None or compile_config is not None:
+            raise ValueError("workspace_idx and A2A3 compiler snapshots are supported only by the A2A3 backend")
 
         if self.execution_backend == "cython":
             from tilelang.contrib.cc import get_cplus_compiler
@@ -161,6 +187,10 @@ class JITKernel(Generic[_P, _T]):
         pass_configs: dict[str, Any] | None = None,
         compile_flags: list[str] | None = None,
         backend_context: BackendContext | None = None,
+        workspace_idx: list[int] | int | None = None,
+        auto_gm_idx: list[int] | None = None,
+        compile_config=None,
+        runtime_func: PrimFunc | None = None,
     ):
         """
         Alternative constructor to create a TorchFunction directly from a database.
@@ -175,7 +205,14 @@ class JITKernel(Generic[_P, _T]):
             from_database=True,
             compile_flags=compile_flags,
             backend_context=backend_context,
+            **(
+                {"workspace_idx": workspace_idx, "compile_config": compile_config}
+                if workspace_idx is not None or compile_config is not None
+                else {}
+            ),
         )
+        instance._restore_auto_gm_idx = auto_gm_idx
+        instance._restore_runtime_func = runtime_func
 
         if instance.execution_backend == "tvm_ffi" and isinstance(func, PrimFunc):
             # The cached artifact was compiled with the ABI decision derived
@@ -364,6 +401,9 @@ class JITKernel(Generic[_P, _T]):
                 compile_flags=compile_flags,
             )
         elif execution_backend == "cython":
+            a2a3_options = {}
+            if self.backend.name == "ascend_a2a3":
+                a2a3_options = {"workspace_idx": self._workspace_idx_spec, "compile_config": self.compile_config}
             adapter = create_adapter(
                 CythonKernelAdapter,
                 params=artifact.params,
@@ -376,6 +416,7 @@ class JITKernel(Generic[_P, _T]):
                 verbose=self.verbose,
                 pass_configs=self.pass_configs,
                 compile_flags=compile_flags,
+                **a2a3_options,
             )
         elif execution_backend == "nvrtc":
             from tilelang.jit.adapter import NVRTCKernelAdapter
@@ -474,6 +515,14 @@ class JITKernel(Generic[_P, _T]):
                 compile_flags=compile_flags,
             )
         elif execution_backend == "cython":
+            a2a3_options = {}
+            if self.backend.name == "ascend_a2a3":
+                a2a3_options = {
+                    "workspace_idx": self._workspace_idx_spec,
+                    "auto_gm_idx": getattr(self, "_restore_auto_gm_idx", None),
+                    "compile_config": self.compile_config,
+                    "runtime_func": getattr(self, "_restore_runtime_func", None),
+                }
             adapter = CythonKernelAdapter.from_database(
                 params=params,
                 result_idx=result_idx,
@@ -483,6 +532,7 @@ class JITKernel(Generic[_P, _T]):
                 device_kernel_source=device_kernel_source,
                 kernel_lib_path=kernel_lib_path,
                 pass_configs=pass_configs,
+                **a2a3_options,
             )
         elif execution_backend == "nvrtc":
             from tilelang.jit.adapter import NVRTCKernelAdapter
@@ -563,7 +613,10 @@ class JITKernel(Generic[_P, _T]):
         Profiler
             A Profiler instance for benchmarking the runtime module.
         """
-        return Profiler(self.params, self.out_idx, tensor_supply_type).with_default_adapter(self.adapter)
+        profiler = Profiler(self.params, self.out_idx, tensor_supply_type).with_default_adapter(self.adapter)
+        if getattr(getattr(self, "backend", None), "name", None) == "ascend_a2a3":
+            profiler.with_workspace_idx(self.workspace_idx)
+        return profiler
 
     def get_kernel_source(self, kernel_only: bool = True) -> str:
         """
@@ -738,6 +791,14 @@ class JITKernel(Generic[_P, _T]):
     @property
     def out_idx(self) -> list[int]:
         return self.adapter.result_idx
+
+    @property
+    def workspace_idx(self) -> list[int]:
+        return getattr(self.adapter, "workspace_idx", [])
+
+    @property
+    def auto_gm_idx(self) -> list[int]:
+        return getattr(self.adapter, "auto_gm_idx", [])
 
     @property
     def params(self) -> list[KernelParam]:

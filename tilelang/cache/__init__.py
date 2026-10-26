@@ -68,6 +68,10 @@ def _resolve_cache_dispatch(
             )
     # Dispatch on the resolved backend module rather than on the target kind.
     dispatch_map = _ascend_dispatch_map if context.module.name == "ascend" else _dispatch_map
+    if context.module.name == "ascend_a2a3":
+        from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+
+        dispatch_map = {"cython": A2A3CythonKernelCache()}
     if resolved_backend not in dispatch_map:
         raise ValueError(f'Cannot find support for execution backend "{resolved_backend}"')
     return dispatch_map[resolved_backend], context, verbose
@@ -83,11 +87,14 @@ def cached(
     verbose: bool | None = None,
     pass_configs: dict | None = None,
     compile_flags: list[str] | str | None = None,
+    workspace_idx: list[int] | int | None = None,
 ) -> JITKernel:
     """
     Caches and reuses compiled kernels (using KernelCache class).
     """
     cache, backend_context, verbose = _resolve_cache_dispatch(target, target_host, execution_backend, verbose)
+    if workspace_idx is not None and backend_context.module.name != "ascend_a2a3":
+        raise ValueError("workspace_idx is supported only by the A2A3 backend")
     return cache.cached(
         func,
         out_idx,
@@ -96,4 +103,5 @@ def cached(
         verbose=verbose,
         pass_configs=pass_configs,
         compile_flags=compile_flags,
+        **({"workspace_idx": workspace_idx} if workspace_idx is not None else {}),
     )
