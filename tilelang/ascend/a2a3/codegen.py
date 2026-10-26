@@ -10,6 +10,7 @@ from .platform import resolve_a2a3_platform
 
 
 _ASCENDC_NATIVE = "target.build.tilelang_ascend_a2a3"
+_PTO_NATIVE = "target.build.tilelang_pto_a2a3"
 
 
 def _build_ascendc(mod, target):
@@ -27,6 +28,22 @@ def _preserve_physical_terminals(mod, _target):
     # A2/A3 mask legalization is the final TIR transformation. Its physical
     # terminals must reach the source builder without the shared preparation.
     return mod
+
+
+def _build_pto(mod, target):
+    platform = resolve_a2a3_platform(target)
+    builder = tvm.ffi.get_global_func(_PTO_NATIVE, allow_missing=True)
+    if builder is None:
+        raise RuntimeError(
+            f"A2/A3 PTO source generation requires USE_ASCEND=ON with the complete PTO native components; missing {_PTO_NATIVE}."
+        )
+    return run_codegen_with_instrumentation(_PTO_NATIVE, mod, target, lambda: builder(mod, target, platform), role="device")
+
+
+def _prepare_pto_codegen(mod, _target):
+    # TA engine/lower.py device_codegen performs this extra Simplify for PTO,
+    # without the shared LowerIntrin or HoistBroadcastValues preparation.
+    return tvm.tirx.transform.Simplify()(mod)
 
 
 def _pto_not_implemented(_mod, _target):

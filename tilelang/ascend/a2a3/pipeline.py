@@ -1,4 +1,4 @@
-"""Complete pinned TA AscendC lowering; PTO remains a separate migration."""
+"""Pinned TA lowering for both dialects; PTO activation waits for full closure."""
 
 from __future__ import annotations
 
@@ -158,6 +158,16 @@ def OptimizeForTarget(mod, target, platform):
 def _lower_ascendc(mod, target):
     if not target_is_ascend_a2a3(target):
         raise ValueError("A2/A3 AscendC lowering requires arch=dav-2201 without the PTO dialect key.")
+    return _lower_a2a3(mod, target)
+
+
+def _lower_pto(mod, target):
+    if not target_is_pto_a2a3(target):
+        raise ValueError("A2/A3 PTO lowering requires arch=dav-2201 with the PTO dialect key.")
+    return _lower_a2a3(mod, target)
+
+
+def _lower_a2a3(mod, target):
     platform = resolve_a2a3_platform(target)
     _require_native_components()
     mod = _prepare_source_kernel(mod, platform)
