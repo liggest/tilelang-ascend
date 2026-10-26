@@ -297,6 +297,33 @@ class CompileConfig:
         return (_SCHEMA_VERSION, *(getattr(self, field.name) for field in fields(self)))
 
 
+def with_compile_options(config: CompileConfig, pass_configs=None, compile_flags=None, *, environ: Mapping[str, str]) -> CompileConfig:
+    """Derive candidate flags without resolving the frozen toolchain again.
+
+    Callers supply complete candidate pass configs, original explicit flags,
+    and a captured environment. Paths, platform, dialect, runtime mode and
+    working directory remain frozen. Legacy PTO explicit flags retain their
+    original filtering boundary; mainline configured LLVM pairs stay intact.
+    """
+    config = CompileConfig.from_metadata(config.to_metadata())
+    options = _normalize_options(pass_configs, environ)
+    derived = _flags_from_options(config.dialect, options, None)
+    configured = _configured_flags(pass_configs)
+    explicit = [compile_flags] if isinstance(compile_flags, str) else (compile_flags or ())
+    legacy = tuple(item for flag in explicit for item in flag.split())
+    base = _command_options(
+        config.ascend_home, config.package_root, config.template_path, config.simulator_lib_path, dialect=config.dialect
+    )
+    excluded = (config.compiler_path, "bisheng", *base)
+    if config.dialect == "pto":
+        flags = (*derived, *configured, *(flag for flag in legacy if flag not in excluded))
+    else:
+        flags = tuple(flag for flag in (*derived, *configured, *legacy) if flag not in excluded)
+    metadata = config.to_metadata()
+    metadata.update(flags=list(flags), command_options=[*base, *flags])
+    return CompileConfig.from_metadata(metadata)
+
+
 def resolve_compile_config(target, pass_configs=None, compile_flags=None, *, platform=None, run_mode=None) -> CompileConfig:
     """Freeze platform, toolchain paths, runtime mode and actual compiler flags."""
     from tilelang.ascend import target as ascend_target

@@ -447,3 +447,49 @@ def test_pto_json_restore_keeps_schema_and_frozen_paths_options_and_mode(toolcha
     metadata["arch"] = "dav-2201"
     with pytest.raises(ValueError, match="A2/A3 compilation"):
         compiler.CompileConfig.from_metadata(metadata)
+
+
+@pytest.mark.parametrize("dialect", ["ascendc", "pto"])
+@pytest.mark.parametrize("vs", [False, True])
+@pytest.mark.parametrize("option_env", [{}, {"TL_CCE_OPT_LEVEL": "1", "TL_CCE_AUTO_SYNC": "off", "TL_PTO_DEBUG": "1"}])
+def test_candidate_options_match_initial_resolution(toolchain, monkeypatch, dialect, vs, option_env):
+    target = _target(keys=[dialect, "ascend"])
+    base = compiler.resolve_compile_config(target)
+    pass_configs = {"tl.ascend_auto_sync_vs": vs, "tl.device_compile_flags": ["-mllvm", "configured", '-DNAME="two words"']}
+    explicit = ["-O0", "-mllvm", "legacy", "-std=c++17"]
+    for key, value in option_env.items():
+        monkeypatch.setenv(key, value)
+    expected = compiler.resolve_compile_config(target, pass_configs, explicit)
+    actual = compiler.with_compile_options(base, pass_configs, explicit, environ=option_env)
+    assert actual == expected
+    assert actual.arch == ("dav-c220" if dialect == "pto" else "dav-2201")
+    if dialect == "pto":
+        assert actual.flags.count("-mllvm") == 1
+        assert actual.flags[actual.flags.index("-mllvm") + 1] == "configured"
+        assert "legacy" in actual.flags
+    else:
+        assert actual.flags.count("-mllvm") == 2
+    assert "-DNAME=two words" in actual.flags
+
+
+@pytest.mark.parametrize("dialect", ["ascendc", "pto"])
+def test_candidate_options_are_pure_and_preserve_frozen_identity(toolchain, monkeypatch, dialect):
+    config = compiler.resolve_compile_config(_target(keys=[dialect, "ascend"]))
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("candidate options re-resolved environment, cwd, SDK or platform")
+
+    class NoEnvironment(dict):
+        def get(self, *args):
+            return forbidden()
+
+    monkeypatch.setattr(compiler, "os", SimpleNamespace(environ=NoEnvironment(), getcwd=forbidden, path=os.path))
+    for owner, name in [(compiler.shutil, "which"), (compiler, "_get_tl_root"), (compiler, "_get_ascend_home_path")]:
+        monkeypatch.setattr(owner, name, forbidden)
+    result = compiler.with_compile_options(config, {"tl.ascend_auto_sync_vs": True}, environ={})
+    assert result.flags[0] == "-O3"
+    for key, value in config.to_metadata().items():
+        if key not in {"flags", "command_options"}:
+            assert result.to_metadata()[key] == value
+    with pytest.raises(ValueError, match="Invalid opt_level"):
+        compiler.with_compile_options(config, environ={"TL_CCE_OPT_LEVEL": "invalid"})
