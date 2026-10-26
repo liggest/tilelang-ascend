@@ -44,7 +44,7 @@ class A2A3CythonKernelCache(CythonKernelCache):
                 kwargs.get("target_host"),
                 kwargs.get("execution_backend") or env.get_default_execution_backend(),
             )
-        if context.module.name != "ascend_a2a3" or context.execution_backend.name != "cython":
+        if context.module.name not in {"ascend_a2a3", "pto_a2a3"} or context.execution_backend.name != "cython":
             raise ValueError("A2A3CythonKernelCache requires the A2A3 Cython backend")
         effective = normalize_a2a3_pass_configs(context.target, kwargs.get("pass_configs"))
         # Resolve once, before the inherited memory/disk lookup. A derived

@@ -68,7 +68,7 @@ def _resolve_cache_dispatch(
             )
     # Dispatch on the resolved backend module rather than on the target kind.
     dispatch_map = _ascend_dispatch_map if context.module.name == "ascend" else _dispatch_map
-    if context.module.name == "ascend_a2a3":
+    if context.module.name in {"ascend_a2a3", "pto_a2a3"}:
         from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 
         dispatch_map = {"cython": A2A3CythonKernelCache()}
@@ -93,7 +93,7 @@ def cached(
     Caches and reuses compiled kernels (using KernelCache class).
     """
     cache, backend_context, verbose = _resolve_cache_dispatch(target, target_host, execution_backend, verbose)
-    if workspace_idx is not None and backend_context.module.name != "ascend_a2a3":
+    if workspace_idx is not None and backend_context.module.name not in {"ascend_a2a3", "pto_a2a3"}:
         raise ValueError("workspace_idx is supported only by the A2A3 backend")
     return cache.cached(
         func,

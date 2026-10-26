@@ -122,9 +122,7 @@ class JITKernel(Generic[_P, _T]):
         self.execution_backend = self.execution_backend_spec.name
         self._workspace_idx_spec = workspace_idx
         self.compile_config = None
-        if self.backend.name == "ascend_a2a3":
-            if "pto" in self.target.keys:
-                raise NotImplementedError("A2/A3 PTO execution is deferred to migration stage 2")
+        if self.backend.name in {"ascend_a2a3", "pto_a2a3"}:
             import json
             from tilelang.ascend.a2a3.compiler import CompileConfig, resolve_compile_config
             from tilelang.ascend.a2a3.execution_backend import COMPILER_CONFIG_ATTR, WORKSPACE_IDX_ATTR
@@ -142,6 +140,8 @@ class JITKernel(Generic[_P, _T]):
             self.compile_config = compile_config or resolve_compile_config(self.target, self.pass_configs, self.compile_flags)
             if str(self.target.attrs.get("model", "")) != self.compile_config.platform:
                 raise ValueError("A2A3 compiler snapshot requires the same frozen target.model platform")
+            if self.compile_config.dialect != ("pto" if "pto" in self.target.keys else "ascendc"):
+                raise ValueError("A2A3 compiler snapshot requires the same target dialect keys")
         elif workspace_idx is not None or compile_config is not None:
             raise ValueError("workspace_idx and A2A3 compiler snapshots are supported only by the A2A3 backend")
 
@@ -228,7 +228,7 @@ class JITKernel(Generic[_P, _T]):
             func_or_mod=func,
             params=params,
             result_idx=out_idx,
-            target=target,
+            target=instance.target,
             host_kernel_source=host_kernel_source,
             device_kernel_source=device_kernel_source,
             kernel_lib_path=kernel_lib_path,
@@ -402,7 +402,7 @@ class JITKernel(Generic[_P, _T]):
             )
         elif execution_backend == "cython":
             a2a3_options = {}
-            if self.backend.name == "ascend_a2a3":
+            if self.backend.name in {"ascend_a2a3", "pto_a2a3"}:
                 a2a3_options = {"workspace_idx": self._workspace_idx_spec, "compile_config": self.compile_config}
             adapter = create_adapter(
                 CythonKernelAdapter,
@@ -516,7 +516,7 @@ class JITKernel(Generic[_P, _T]):
             )
         elif execution_backend == "cython":
             a2a3_options = {}
-            if self.backend.name == "ascend_a2a3":
+            if self.backend.name in {"ascend_a2a3", "pto_a2a3"}:
                 a2a3_options = {
                     "workspace_idx": self._workspace_idx_spec,
                     "auto_gm_idx": getattr(self, "_restore_auto_gm_idx", None),
@@ -614,7 +614,7 @@ class JITKernel(Generic[_P, _T]):
             A Profiler instance for benchmarking the runtime module.
         """
         profiler = Profiler(self.params, self.out_idx, tensor_supply_type).with_default_adapter(self.adapter)
-        if getattr(getattr(self, "backend", None), "name", None) == "ascend_a2a3":
+        if getattr(getattr(self, "backend", None), "name", None) in {"ascend_a2a3", "pto_a2a3"}:
             profiler.with_workspace_idx(self.workspace_idx)
         return profiler
 
