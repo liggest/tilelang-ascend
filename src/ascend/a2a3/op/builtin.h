@@ -10,6 +10,7 @@ namespace tvm {
 namespace tl {
 namespace a2a3 {
 
+TVM_DLL const Op &a2a3_const_data();
 TVM_DLL const Op &ascend_scalar_op();
 TVM_DLL const Op &ascend_unary_op();
 TVM_DLL const Op &ascend_binary_op();

@@ -12,6 +12,7 @@ from tilelang.backend.pass_pipeline.pipeline_utils import allow_vectorize
 
 from . import transform as ascend_transform
 from .platform import resolve_a2a3_platform
+from .transform.constant import normalize_constants
 from .target import target_is_ascend_a2a3, target_is_pto_a2a3
 
 
@@ -90,7 +91,7 @@ def _prepare_source_kernel(mod, platform):
     # TA compiles the exported PrimFunc directly, including legal kernels that
     # do not use T.Kernel. Preserve body/params and every existing attribute.
     result = mod.clone()
-    result[symbol] = func.with_attr({"npu_platform": platform, "calling_conv": CallingConv.DEVICE_KERNEL_LAUNCH})
+    result[symbol] = normalize_constants(func).with_attr({"npu_platform": platform, "calling_conv": CallingConv.DEVICE_KERNEL_LAUNCH})
     return result
 
 

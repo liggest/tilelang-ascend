@@ -68,6 +68,8 @@ public:
   void VisitExpr_(const BufferLoadNode *op, std::ostream &os) final;
   void VisitStmt_(const BufferStoreNode *op) final;
   void VisitStmt_(const AllocBufferNode *op) final;
+  void VisitStmt_(const BindNode *op) final;
+  void VisitStmt_(const EvaluateNode *op) final;
   void VisitStmt_(const AttrStmtNode *op) final;
 
   // Override this as a work around for __grid_constant__ parameter
@@ -75,6 +77,12 @@ public:
   void AddFunction(const GlobalVar &gvar, const PrimFunc &f);
 
 private:
+  void EmitConstant(const Call &call, const Optional<Var> &var);
+  std::unordered_map<std::string, std::string> constant_declarations_;
+  std::unordered_map<std::string, std::string> constant_names_;
+  std::unordered_map<Var, std::string, ObjectPtrHash, ObjectPtrEqual>
+      constant_vars_;
+
   std::string PrintBufferOffset(const CallNode *call_arg,
                                 bool has_offset = true);
 

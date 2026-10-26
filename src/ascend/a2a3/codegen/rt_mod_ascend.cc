@@ -1,8 +1,10 @@
 // Copyright (c) Tile-AI Corporation.
 // Licensed under the MIT License.
 
+#include "../op/builtin.h"
 #include "codegen_ascend.h"
 #include "support/check.h"
+#include <tvm/tirx/stmt_functor.h>
 
 #include <tvm/ffi/reflection/registry.h>
 #include <tvm/ir/transform.h>
@@ -21,6 +23,19 @@ ffi::Module BuildTileLangAscend(IRModule mod, Target target,
          "Reduce2D "
          "repeat-zero capabilities; set TL_PLATFORM=A2/A3 or resolve a known "
          "NPU model";
+  if (mod->functions.size() != 1) {
+    for (const auto &entry : mod->functions) {
+      if (const auto *function = entry.second.as<tirx::PrimFuncNode>()) {
+        tirx::PostOrderVisit(function->body, [](const ObjectRef &node) {
+          if (const auto *call = node.as<tirx::CallNode>()) {
+            ICHECK(!call->op.same_as(tl::a2a3::a2a3_const_data()))
+                << "A2/A3 literal constants require a single exported kernel; "
+                   "multi-function direct codegen is unsupported";
+          }
+        });
+      }
+    }
+  }
   CodeGenTileLangAscend cg(std::move(platform));
   cg.SetEmitLineDirectives(
       tvm::transform::PassContext::Current()

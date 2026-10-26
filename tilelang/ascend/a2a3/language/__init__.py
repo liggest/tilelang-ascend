@@ -3,6 +3,7 @@
 from tilelang.language.common import *  # noqa: F401,F403
 from .kernel import *  # noqa: F401,F403
 from .allocate import *  # noqa: F401,F403
+from .constant import allocate_const, decl_buffer  # noqa: F401
 from .warpgroup import *  # noqa: F401,F403
 from ..layout import Layout  # noqa: F401
 from .copy_op import c2d_im2col, npu_copy_v2 as copy  # noqa: F401
