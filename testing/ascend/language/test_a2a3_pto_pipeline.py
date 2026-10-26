@@ -49,9 +49,12 @@ _TA_PASSES = [
 class _Trace:
     def __init__(self):
         self.names = []
+        self.prefix = None
 
-    def run_before_pass(self, _mod, info):
+    def run_before_pass(self, mod, info):
         self.names.append(info.name)
+        if info.name == "tl.A2A3InferAllocScope":
+            self.prefix = mod
 
 
 def _context(platform="A3"):
@@ -90,26 +93,118 @@ def test_source_factories_run_the_complete_pto_pass_sequence(factory, args, conf
     assert "pto" in func.attrs["target"].keys
     assert "address_map" in func.attrs and "size_map" in func.attrs
     assert len(pipeline._extract_parameters(lowered)) == len(func.params)
+    _assert_modes(lowered, [1])
     assert original.attrs.get("npu_platform") is None
     assert "tl.LowerIntrin" not in trace.names
 
 
 @pytest.mark.parametrize("threads", [None, 1, 2])
 @pytest.mark.parametrize("platform", ["A2", "A3"])
-def test_real_launch_forms_and_pto_codegen_tail(threads, platform):
-    @T.prim_func
-    def kernel(A: T.Tensor((4,), "int32"), B: T.Tensor((4,), "int32")):
-        with T.Kernel(1, threads=threads, is_npu=True), T.Scope("C"):
-            B[0] = A[0]
+@pytest.mark.parametrize("discard_vid", [False, True])
+def test_real_launch_forms_and_pto_codegen_tail(threads, platform, discard_vid):
+    if threads is None and discard_vid:
+
+        @T.prim_func
+        def kernel(A: T.Tensor((4,), "int32"), B: T.Tensor((4,), "int32")):
+            with T.Kernel(1, is_npu=True) as (cid, _), T.Scope("C"):
+                B[cid] = A[cid]
+    elif threads is None:
+
+        @T.prim_func
+        def kernel(A: T.Tensor((4,), "int32"), B: T.Tensor((4,), "int32")):
+            with T.Kernel(1, is_npu=True) as (cid, vid), T.Scope("C"):
+                B[vid] = A[cid]
+    elif discard_vid:
+
+        @T.prim_func
+        def kernel(A: T.Tensor((4,), "int32"), B: T.Tensor((4,), "int32")):
+            with T.Kernel(1, threads=threads, is_npu=True) as cid:
+                _ = T.get_thread_binding()
+                with T.Scope("C"):
+                    B[cid] = A[cid]
+    else:
+
+        @T.prim_func
+        def kernel(A: T.Tensor((4,), "int32"), B: T.Tensor((4,), "int32")):
+            with T.Kernel(1, threads=threads, is_npu=True) as cid:
+                vid = T.get_thread_binding()
+                with T.Scope("C"):
+                    B[vid] = A[cid]
 
     context = _context(platform)
     with tvm.transform.PassContext(config=normalize_a2a3_pass_configs(context.target)):
         lowered = pipeline._lower_pto(tvm.IRModule.from_expr(kernel), context.target)
+    _assert_modes(lowered, [1 if threads is None else 0])
     trace = _Trace()
     with tvm.transform.PassContext(instruments=[trace]):
         prepared = codegen._prepare_pto_codegen(lowered, context.target)
     assert trace.names == ["tirx.Simplify"]
     assert pipeline.get_device_kernel(prepared).attrs["npu_platform"] == platform
+
+
+def _assert_modes(mod, expected, tail=True):
+    variants = [mod, codegen._prepare_pto_codegen(mod, None)] if tail else [mod]
+    for variant in variants:
+        for candidate in [variant, tvm.ir.load_json(tvm.ir.save_json(variant))]:
+            func = pipeline.get_device_kernel(candidate)
+            bindings = []
+            tvm.tirx.stmt_functor.post_order_visit(
+                func.body,
+                lambda node, bindings=bindings: (
+                    bindings.append(node.node.var)
+                    if isinstance(node, tvm.tirx.AttrStmt) and node.attr_key == "thread_extent" and node.node.thread_tag == "cthread"
+                    else None
+                ),
+            )
+            modes = func.attrs["a2a3_cthread_modes"]
+            assert len(bindings) == len(expected)
+            assert all(any(key.same_as(var) for key in modes) for var in bindings)
+            assert [int(modes[var]) for var in bindings] == expected
+
+
+@pytest.mark.parametrize("nested", [False, True])
+def test_mixed_real_launches_keep_per_binding_modes_through_complete_chain(nested):
+    @T.prim_func
+    def kernel(A: T.Tensor((4,), "int32"), B: T.Tensor((4,), "int32")):
+        with T.Kernel(1, is_npu=True):
+            with T.Scope("C"):
+                B[0] = A[0]
+            if nested:
+                with T.Kernel(1, threads=1, is_npu=True), T.Scope("C"):
+                    B[1] = A[1]
+        if not nested:
+            with T.Kernel(1, threads=1, is_npu=True), T.Scope("C"):
+                B[1] = A[1]
+
+    context = _context()
+    trace = _Trace()
+    # The pinned TA pass explicitly requires exactly one tilelang_root, so
+    # preserve its multi-launch rejection instead of changing that algorithm.
+    with (
+        tvm.transform.PassContext(config=normalize_a2a3_pass_configs(context.target), instruments=[trace]),
+        pytest.raises(tvm.error.InternalError, match="Expected exactly one tilelang_root block"),
+    ):
+        pipeline._lower_pto(tvm.IRModule.from_expr(kernel), context.target)
+    # The shared prefix leaves the nested launch as thread-binding For nodes;
+    # it never reaches codegen because the original unique-root gate rejects it.
+    _assert_modes(trace.prefix, [1] if nested else [1, 0], tail=False)
+
+
+@pytest.mark.parametrize("inner_for", [False, True])
+def test_raw_outer_binding_never_borrows_the_inner_launch_marker(inner_for):
+    tir = tvm.tirx
+    inner = tir.IterVar(None, tir.Var("_", "int32"), tir.IterVar.ThreadIndex, "cthread")
+    outer = tir.IterVar(None, tir.Var("_", "int32"), tir.IterVar.ThreadIndex, "cthread")
+    block = tir.SBlock([], [], [], "tilelang_root", tir.Evaluate(0), annotations={"tilelang.is_npu_kernel_frame": True})
+    inner_body = tir.SBlockRealize([], True, block)
+    inner_body = (
+        tir.For(inner.var, 0, 2, tir.ForKind.THREAD_BINDING, inner_body, thread_binding=inner)
+        if inner_for
+        else tir.AttrStmt(inner, "thread_extent", 2, inner_body)
+    )
+    body = tir.AttrStmt(outer, "thread_extent", 2, inner_body)
+    func = tir.PrimFunc([], body).with_attr({"global_symbol": "main", "calling_conv": tvm.ir.CallingConv.DEVICE_KERNEL_LAUNCH})
+    _assert_modes(pipeline._record_pto_cthread_modes(tvm.IRModule.from_expr(func)), [0] if inner_for else [1, 0], tail=False)
 
 
 def test_candidate_chain_rejects_the_other_dialect():

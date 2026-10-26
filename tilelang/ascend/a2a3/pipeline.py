@@ -95,6 +95,42 @@ def _prepare_source_kernel(mod, platform):
     return result
 
 
+def _record_pto_cthread_modes(mod):
+    """Keep each launch's old vid spelling policy after SBlock legalization."""
+    result = mod.clone()
+    for symbol, func in mod.functions.items():
+        modes = {}
+
+        def collect(node, modes=modes):
+            if not isinstance(node, tirx.AttrStmt) or node.attr_key != "thread_extent" or node.node.thread_tag != "cthread":
+                return
+            mode = None
+
+            def nearest_marker(child):
+                nonlocal mode
+                if mode is not None:
+                    return False
+                # An inner launch owns its own marker, even if the outer raw
+                # cthread has none. Never borrow a nested launch's policy.
+                if isinstance(child, tirx.AttrStmt) and child.attr_key == "thread_extent" and child.node.thread_tag == "cthread":
+                    return False
+                if isinstance(child, tirx.For) and child.thread_binding is not None and child.thread_binding.thread_tag == "cthread":
+                    return False
+                if isinstance(child, tirx.SBlock):
+                    if "tilelang.is_npu_kernel_frame_dev_mode" in child.annotations:
+                        mode = 0
+                    elif "tilelang.is_npu_kernel_frame" in child.annotations:
+                        mode = 1
+                return mode is None
+
+            tirx.stmt_functor.pre_order_visit(node.body, nearest_marker)
+            modes[node.node.var] = tirx.IntImm("int32", 0 if mode is None else mode)
+
+        tirx.stmt_functor.post_order_visit(func.body, collect)
+        result[symbol] = func.with_attr("a2a3_cthread_modes", modes)
+    return result
+
+
 def LowerAndLegalize(mod, target):
     """Preserve TA 0deb8b93 phase.py LowerAndLegalize order."""
     mod = ascend_transform.AscendInferBufferScope()(mod)
@@ -180,6 +216,8 @@ def _lower_a2a3(mod, target):
         unsupported_annotations=["cluster_dims"],
         launch_dim_tags=["cthread"],
     )(mod)
+    if target_is_pto_a2a3(target):
+        mod = _record_pto_cthread_modes(mod)
     mod = LowerAndLegalize(mod, target)
     return OptimizeForTarget(mod, target, platform)
 
