@@ -7,8 +7,12 @@ from tilelang.ascend import target as ascend_target
 from tilelang.backend import create_backend_context
 from tilelang.backend import target as target_registry
 from tilelang.ascend.a2a3.target import target_is_ascend_a2a3, target_is_pto_a2a3
+from tilelang.ascend.a2a3.pipeline import _REQUIRED_NATIVE_FACTORIES
 from tilelang.backend.target import determine_target
 from tvm.target import Target
+
+_ASCEND_KIND_AVAILABLE = "ascend" in Target.list_kinds()
+_requires_ascend_kind = pytest.mark.skipif(not _ASCEND_KIND_AVAILABLE, reason="TVM was built without the ascend target kind")
 
 
 @pytest.mark.parametrize(
@@ -58,6 +62,7 @@ def test_soc_detection(monkeypatch, soc, expected_arch):
         ({"kind": "ascend", "arch": "dav-2201", "keys": ["pto", "ascend"]}, "pto_a2a3"),
     ],
 )
+@_requires_ascend_kind
 def test_a2a3_target_forms(monkeypatch, target, expected_backend):
     monkeypatch.setenv("TL_PLATFORM", "A3")
     context = create_backend_context(target, "c", "auto")
@@ -66,6 +71,7 @@ def test_a2a3_target_forms(monkeypatch, target, expected_backend):
     assert str(context.target.attrs["arch"]) == "dav-2201"
 
 
+@_requires_ascend_kind
 def test_explicit_alias_selects_a2a3_without_device(monkeypatch):
     monkeypatch.delenv("TL_PLATFORM", raising=False)
     monkeypatch.setattr(ascend_target, "_get_soc_name", lambda: None)
@@ -74,6 +80,7 @@ def test_explicit_alias_selects_a2a3_without_device(monkeypatch):
     assert create_backend_context("pto", "c", "auto").name == "pto"
 
 
+@_requires_ascend_kind
 def test_a5_and_a2a3_predicates_are_disjoint(monkeypatch):
     monkeypatch.setenv("TL_PLATFORM", "A5")
     assert create_backend_context("ascend", "c", "auto").name == "ascend"
@@ -83,6 +90,7 @@ def test_a5_and_a2a3_predicates_are_disjoint(monkeypatch):
 
 @pytest.mark.parametrize("arch", ["dav-2201", "dav-3510"])
 @pytest.mark.parametrize("pto", [False, True])
+@_requires_ascend_kind
 def test_four_backend_predicates_match_exactly_once(arch, pto):
     target = Target({"kind": "ascend", "arch": arch, "keys": ["pto", "ascend"] if pto else ["ascend"]})
     matches = [
@@ -99,6 +107,7 @@ def test_four_backend_predicates_match_exactly_once(arch, pto):
 @pytest.mark.parametrize("arch", ["dav-2201", "dav-3510"])
 @pytest.mark.parametrize("pto", [False, True])
 @pytest.mark.parametrize("as_object", [False, True])
+@_requires_ascend_kind
 def test_explicit_arch_has_priority_over_detection_and_environment(monkeypatch, arch, pto, as_object):
     monkeypatch.setenv("TL_PLATFORM", "A5" if arch == "dav-2201" else "A3")
 
@@ -130,12 +139,15 @@ def test_detected_target_routes(monkeypatch, soc, a2a3, target):
         with pytest.raises(ValueError, match="No registered target detector"):
             create_backend_context(target, "c", "auto")
         return
+    if not _ASCEND_KIND_AVAILABLE:
+        pytest.skip("TVM was built without the ascend target kind")
     expected = "pto" if target == "pto" else "ascend"
     if a2a3 or target == "ascendc":
         expected += "_a2a3"
     assert create_backend_context(target, "c", "auto").name == expected
 
 
+@_requires_ascend_kind
 def test_auto_ascend_detector_selects_a2a3(monkeypatch):
     monkeypatch.setenv("TL_PLATFORM", "A2")
     detected = ascend_target._detect_ascend_target()
@@ -143,6 +155,7 @@ def test_auto_ascend_detector_selects_a2a3(monkeypatch):
     assert create_backend_context(detected, "c", "auto").name == "ascend_a2a3"
 
 
+@_requires_ascend_kind
 def test_pto_execution_backend_is_not_a2a3_pto(monkeypatch):
     monkeypatch.setenv("TL_PLATFORM", "A3")
     with pytest.raises(ValueError, match="Allowed: cython"):
@@ -150,15 +163,30 @@ def test_pto_execution_backend_is_not_a2a3_pto(monkeypatch):
 
 
 @pytest.mark.parametrize("target", ["ascendc", "pto"])
+@_requires_ascend_kind
 def test_a2a3_dialects_share_single_export_contract(monkeypatch, target):
     monkeypatch.setenv("TL_PLATFORM", "A3")
     context = create_backend_context(target, "c", "auto")
     assert context.name == ("ascend_a2a3" if target == "ascendc" else "pto_a2a3")
     assert context.execution_backend.name == "cython"
     assert ("pto" in context.target.keys) == (target == "pto")
-    with pytest.raises(ValueError, match="exactly one exported source"):
-        context.lower(tvm.IRModule({}))
+    native_ready = all(tvm.ffi.get_global_func(name, allow_missing=True) is not None for name in _REQUIRED_NATIVE_FACTORIES)
+    if native_ready:
+        with pytest.raises(ValueError, match="exactly one exported source"):
+            context.lower(tvm.IRModule({}))
+    else:
+        with pytest.raises(RuntimeError, match="USE_ASCEND=ON"):
+            context.lower(tvm.IRModule({}))
+
+
+@pytest.mark.parametrize("target", ["ascendc", "pto"])
+@pytest.mark.parametrize("compile_device", [False, True])
+def test_a2a3_native_source_codegen_uses_selected_dialect(monkeypatch, target, compile_device):
+    native = "target.build.tilelang_ascend_a2a3" if target == "ascendc" else "target.build.tilelang_pto_a2a3"
+    if tvm.ffi.get_global_func(native, allow_missing=True) is None:
+        pytest.skip(f"requires USE_ASCEND=ON with {native}")
+    monkeypatch.setenv("TL_PLATFORM", "A3")
+    context = create_backend_context(target, "c", "auto")
     func = tvm.tirx.PrimFunc([], tvm.tirx.Evaluate(0)).with_attr("global_symbol", "kernel")
-    for compile_device in (False, True):
-        generated = context.codegen_device(tvm.IRModule.from_expr(func), compile_device=compile_device)
-        assert "kernel_kernel" in generated.inspect_source()
+    generated = context.codegen_device(tvm.IRModule.from_expr(func), compile_device=compile_device)
+    assert "kernel_kernel" in generated.inspect_source()
