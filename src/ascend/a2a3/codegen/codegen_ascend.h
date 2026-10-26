@@ -16,6 +16,7 @@
 #include <unordered_map>
 
 #include "backend/common/codegen/codegen_c_base.h"
+#include "constant.h"
 
 namespace tvm {
 namespace tl {
@@ -78,8 +79,7 @@ public:
 
 private:
   void EmitConstant(const Call &call, const Optional<Var> &var);
-  std::unordered_map<std::string, std::string> constant_declarations_;
-  std::unordered_map<std::string, std::string> constant_names_;
+  ConstantDeclarations constants_;
   std::unordered_map<Var, std::string, ObjectPtrHash, ObjectPtrEqual>
       constant_vars_;
 
