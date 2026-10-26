@@ -5,7 +5,7 @@ and performance optimization through configuration search.
 """
 
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import tilelang
 from tilelang import tvm as tvm
@@ -188,6 +188,8 @@ class AutoTuner:
         target_host: TargetLike | None = None,
         verbose: bool | None = None,
         pass_configs: dict[str, Any] | None = None,
+        compile_flags: list[str] | str | None = None,
+        workspace_idx: list[int] | int | None = None,
     ):
         """Set compilation arguments for the auto-tuner.
 
@@ -202,6 +204,8 @@ class AutoTuner:
             verbose: Whether to enable verbose output. If None, reads from
                 TILELANG_VERBOSE environment variable (defaults to False).
             pass_configs: Additional keyword arguments to pass to the Compiler PassContext.
+            compile_flags: Additional compiler options passed to every candidate.
+            workspace_idx: A2A3 compatibility automatic workspace parameter indices.
 
         Environment Variables:
             TILELANG_DEFAULT_TARGET: Default compilation target (e.g., "cuda", "llvm", or a JSON
@@ -231,6 +235,8 @@ class AutoTuner:
             target_host=backend_context.target_host,
             verbose=verbose,
             pass_configs=pass_configs,
+            compile_flags=compile_flags,
+            workspace_idx=workspace_idx,
         )
 
         return self
@@ -402,14 +408,7 @@ class AutoTuner:
             return self.compile_args
         merged = dict(self.compile_args.pass_configs or {})
         merged.update(per_config_pass_configs)
-        return CompileArgs(
-            out_idx=self.compile_args.out_idx,
-            execution_backend=self.compile_args.execution_backend,
-            target=self.compile_args.target,
-            target_host=self.compile_args.target_host,
-            verbose=self.compile_args.verbose,
-            pass_configs=merged,
-        )
+        return replace(self.compile_args, pass_configs=merged)
 
     def _default_compile(
         self,
@@ -893,6 +892,9 @@ class AutoTuner:
             kernel_kwargs = dict(kernel_kwargs)
             self.configs = self.configs(*kernel_args, **kernel_kwargs)
 
+        # Freeze only an actual tuning request. Offline key construction and
+        # module/default CompileArgs creation must not probe targets/toolchains.
+        self.compile_args = self.compile_args.freeze()
         key = self.generate_cache_key(parameters, extra_parameters)
 
         cached_result = None
@@ -1284,6 +1286,8 @@ class AutoTuneImpl(Generic[_P, _T]):
                 target_host=self.jit_impl.target_host,
                 verbose=self.jit_impl.verbose,
                 pass_configs=self.jit_impl.pass_configs,
+                **({"compile_flags": self.jit_impl.compile_flags} if self.jit_impl.compile_flags is not None else {}),
+                **({"workspace_idx": self.jit_impl.workspace_idx} if self.jit_impl.workspace_idx is not None else {}),
             )
         )
         autotuner.run = partial(

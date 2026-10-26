@@ -36,7 +36,7 @@ class A2A3CythonKernelCache(CythonKernelCache):
     host_kernel_path = "host_kernel.asc"
     runtime_metadata_path = "a2a3_runtime.json"
 
-    def cached(self, func=None, out_idx=None, *args, workspace_idx=None, **kwargs):
+    def cached(self, func=None, out_idx=None, *args, workspace_idx=None, compile_config=None, **kwargs):
         context = kwargs.get("backend_context")
         if context is None:
             context = create_backend_context(
@@ -49,7 +49,11 @@ class A2A3CythonKernelCache(CythonKernelCache):
         effective = normalize_a2a3_pass_configs(context.target, kwargs.get("pass_configs"))
         # Resolve once, before the inherited memory/disk lookup. A derived
         # PrimFunc makes this request immutable and avoids singleton cache state.
-        config = resolve_compile_config(context.target, effective, kwargs.get("compile_flags"))
+        config = compile_config or resolve_compile_config(context.target, effective, kwargs.get("compile_flags"))
+        if str(context.target.attrs.get("model", "")) != config.platform:
+            raise ValueError("A2A3 compiler snapshot requires the same frozen target.model platform")
+        if config.dialect != ("pto" if "pto" in context.target.keys else "ascendc"):
+            raise ValueError("A2A3 compiler snapshot requires the same target dialect keys")
         derived = func.with_attr(WORKSPACE_IDX_ATTR, _workspace_request(workspace_idx)).with_attr(
             COMPILER_CONFIG_ATTR, json.dumps(config.to_metadata(), sort_keys=True, separators=(",", ":"))
         )

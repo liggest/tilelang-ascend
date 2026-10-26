@@ -93,6 +93,35 @@ class _CallFormCache:
         self._remember(call_form_key, kernel)
 
 
+def _prepare_compile_arguments(func, out_idx, pass_configs, compile_flags):
+    """Merge frontend request attributes for public compile and autotuning."""
+    assert isinstance(func, PrimFunc), f"target function must be a PrimFunc but got {type(func)}"
+
+    # Merge function-level attrs from PrimFunc
+    func_attrs = func.attrs
+    if func_attrs and "tilelang_out_idx" in func_attrs:
+        func_out_idx = list(func_attrs["tilelang_out_idx"])
+        if out_idx is not None:
+            raise ValueError("Out index conflict: out_idx is specified and prim_func have returned `T.empty` tensors")
+        out_idx = func_out_idx
+    if func_attrs and "tilelang_pass_configs" in func_attrs:
+        func_pc = dict(func_attrs["tilelang_pass_configs"])
+        if pass_configs is not None:
+            # External pass_configs override function-level ones
+            func_pc.update(pass_configs)
+        pass_configs = func_pc
+    if func_attrs and "tilelang_compile_flags" in func_attrs:
+        func_cf = list(func_attrs["tilelang_compile_flags"])
+        if compile_flags is not None:
+            if isinstance(compile_flags, str):
+                func_cf.append(compile_flags)
+            else:
+                func_cf.extend(compile_flags)
+        compile_flags = func_cf
+
+    return out_idx, pass_configs, compile_flags
+
+
 def compile(
     func: PrimFunc[_KP, _T] = None,
     out_idx: list[int] | int | None = None,
@@ -144,29 +173,7 @@ def compile(
         Set to "1", "true", "yes", or "on" to enable verbose compilation by default.
     """
 
-    assert isinstance(func, PrimFunc), f"target function must be a PrimFunc but got {type(func)}"
-
-    # Merge function-level attrs from PrimFunc
-    func_attrs = func.attrs
-    if func_attrs and "tilelang_out_idx" in func_attrs:
-        func_out_idx = list(func_attrs["tilelang_out_idx"])
-        if out_idx is not None:
-            raise ValueError("Out index conflict: out_idx is specified and prim_func have returned `T.empty` tensors")
-        out_idx = func_out_idx
-    if func_attrs and "tilelang_pass_configs" in func_attrs:
-        func_pc = dict(func_attrs["tilelang_pass_configs"])
-        if pass_configs is not None:
-            # External pass_configs override function-level ones
-            func_pc.update(pass_configs)
-        pass_configs = func_pc
-    if func_attrs and "tilelang_compile_flags" in func_attrs:
-        func_cf = list(func_attrs["tilelang_compile_flags"])
-        if compile_flags is not None:
-            if isinstance(compile_flags, str):
-                func_cf.append(compile_flags)
-            else:
-                func_cf.extend(compile_flags)
-        compile_flags = func_cf
+    out_idx, pass_configs, compile_flags = _prepare_compile_arguments(func, out_idx, pass_configs, compile_flags)
 
     return cached(
         func=func,
