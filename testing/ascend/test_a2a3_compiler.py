@@ -1,4 +1,4 @@
-"""AscendC compiler identity, source command ordering and simulator contracts."""
+"""A2/A3 compiler identity, source command ordering and simulator contracts."""
 
 from dataclasses import FrozenInstanceError
 import json
@@ -19,7 +19,7 @@ def toolchain(monkeypatch, tmp_path):
         monkeypatch.delenv(key, raising=False)
     package = tmp_path / "package"
     (package / "tilelang/src").mkdir(parents=True)
-    for directory in ["catlass/include", "shmem/include", "shmem/src/device"]:
+    for directory in ["catlass/include", "shmem/include", "shmem/src/device", "pto-isa/include"]:
         (package / "3rdparty" / directory).mkdir(parents=True)
     monkeypatch.setattr(compiler, "TILELANG_PACKAGE_PATH", package / "tilelang")
     monkeypatch.setattr(compiler, "TILELANG_TEMPLATE_PATH", str(package / "tilelang/src"))
@@ -216,8 +216,9 @@ def test_simulator_discovery_uses_lib_configuration_not_camodel(toolchain):
     assert compiler._get_simulator_lib_path(str(toolchain.sdk), "A3") == str(fallback)
 
 
-def test_sim_load_only_prepends_frozen_library_path_and_deduplicates(toolchain, monkeypatch):
-    config = _config(toolchain, run_mode="sim")
+@pytest.mark.parametrize("dialect", ["ascendc", "pto"])
+def test_sim_load_only_prepends_frozen_library_path_and_deduplicates(toolchain, monkeypatch, dialect):
+    config = compiler.resolve_compile_config(_target(keys=[dialect, "ascend"]), run_mode="sim")
     monkeypatch.setenv("TL_RUN_MODE", "npu")
     monkeypatch.setenv("ASCEND_HOME_PATH", "/changed")
     monkeypatch.setenv("LD_LIBRARY_PATH", "/existing")
@@ -232,7 +233,7 @@ def test_sim_load_only_prepends_frozen_library_path_and_deduplicates(toolchain, 
     assert os.environ["LD_LIBRARY_PATH"] == config.simulator_lib_path + ":/existing"
 
 
-@pytest.mark.parametrize("target", [_target(keys=["pto", "ascend"]), _target(arch="dav-3510")])
+@pytest.mark.parametrize("target", [_target(arch="dav-3510")])
 def test_target_boundaries_are_strict_before_toolchain_resolution(toolchain, target):
     with pytest.raises((ValueError, NotImplementedError), match="A2/A3|PTO"):
         compiler.resolve_compile_config(target)
@@ -335,3 +336,114 @@ def test_explicit_load_path_is_saved_for_mainline_cache_export_protocol(toolchai
     library.remove_lib()
     assert library.libpath is None
     assert not path.exists()
+
+
+@pytest.mark.parametrize("platform", ["A2", "A3"])
+@pytest.mark.parametrize("mode", ["npu", "sim"])
+def test_pto_command_preserves_full_llvm_pairs_relative_include_and_link_order(toolchain, monkeypatch, platform, mode):
+    target = _target(platform, keys=["pto", "ascend"])
+    config = compiler.resolve_compile_config(target, run_mode=mode, compile_flags=["-O0", "-DUSER=1"])
+    assert target.attrs["arch"] == "dav-2201"
+    assert config.arch == "dav-c220"
+    assert config.dialect == "pto"
+    calls = _capture_compile(monkeypatch)
+    library = compiler.LibraryGenerator(config)
+    library.update_lib_code("PTO source")
+    library.compile_lib()
+    [(command, kwargs)] = calls
+    assert command[1:5] == ["--cce-aicore-arch=dav-c220", "-DMEMORY_BASE", "-std=gnu++17", "-xcce"]
+    llvm_options = [
+        "-cce-aicore-stack-size=0x8000",
+        "-cce-aicore-function-stack-size=0x8000",
+        "-cce-aicore-record-overflow=true",
+        "-cce-aicore-addr-transform",
+        "-cce-aicore-dcci-insert-for-scalar=false",
+    ]
+    assert command[5:15] == [token for option in llvm_options for token in ("-mllvm", option)]
+    assert command[15:18] == ["-DL2_CACHE_HINT", "-I../../src/", f"-I{toolchain.package}/3rdparty/pto-isa/include"]
+    assert not any("catlass" in item or "shmem" in item or "REGISTER_BASE" in item for item in command)
+    assert command[command.index("-lstdc++") : command.index("--shared") + 1] == [
+        "-lstdc++",
+        "-lascendcl",
+        "-lm",
+        "-ltiling_api",
+        "-lplatform",
+        "-lc_sec",
+        "-ldl",
+        "-fPIC",
+        "--shared",
+    ]
+    assert command[command.index(library.srcpath) + 1 : -2] == ["-O2", "-O0", "-DUSER=1"]
+    assert kwargs["cwd"] == str(toolchain.work)
+    if mode == "sim":
+        simdir = str(toolchain.sdk / "tools/simulator/Ascend910B1/lib")
+        start = command.index(f"-L{simdir}")
+        assert command[start : start + 4] == [f"-L{simdir}", f"-Wl,-rpath,{simdir}", "-Wl,--disable-new-dtags", f"-L{toolchain.sdk}/lib64"]
+        assert "-lruntime_camodel" in command and "-lruntime" not in command
+    else:
+        assert "-lruntime" in command and "-lruntime_camodel" not in command
+
+
+def test_pto_public_vs_default_and_direct_fallback_are_separate(toolchain):
+    from tilelang.ascend.a2a3.pass_config import normalize_a2a3_pass_configs
+
+    target = _target(keys=["pto", "ascend"])
+    public_configs = normalize_a2a3_pass_configs(target, None)
+    assert public_configs["tl.ascend_auto_sync_vs"] is True
+    assert compiler.resolve_compile_config(target, pass_configs=public_configs).flags == ("-O3",)
+    assert compiler.resolve_compile_config(target).flags == ("-O2",)
+
+
+@pytest.mark.parametrize("debug", ["1", "true"])
+def test_pto_debug_options_only_follow_source_exact_one_rule(toolchain, monkeypatch, debug):
+    monkeypatch.setenv("TL_PTO_DEBUG", debug)
+    config = compiler.resolve_compile_config(_target(keys=["pto", "ascend"]), compile_flags=["-O0"])
+    expected = ("-O2", "-D_DEBUG", "--cce-enable-print", "-O0") if debug == "1" else ("-O2", "-O0")
+    assert config.flags == expected
+
+
+@pytest.mark.parametrize("configured", ["-O1 -mllvm one -mllvm two", ["-O1", "-mllvm one", "-mllvm two"]])
+def test_pto_mainline_configured_pairs_survive_legacy_base_filter(toolchain, monkeypatch, configured):
+    config = compiler.resolve_compile_config(
+        _target(keys=["pto", "ascend"]),
+        pass_configs={"tl.ascend_auto_sync_vs": True, "tl.device_compile_flags": configured},
+        compile_flags=["-O0", "-mllvm", "three", "-mllvm", "four", "-std=gnu++17"],
+    )
+    # The mainline key is new. The legacy explicit filter drops tokens already
+    # present in TA's PTO base, including -mllvm and -std=gnu++17.
+    assert config.flags == ("-O3", "-O1", "-mllvm", "one", "-mllvm", "two", "-O0", "three", "four")
+    calls = _capture_compile(monkeypatch)
+    library = compiler.LibraryGenerator(config)
+    library.update_lib_code("options")
+    library.compile_lib()
+    assert calls[0][0][calls[0][0].index(library.srcpath) + 1 : -2] == list(config.flags)
+
+
+def test_pto_legacy_llvm_filter_failure_explains_complete_pair_entry(toolchain, monkeypatch):
+    config = compiler.resolve_compile_config(_target(keys=["pto", "ascend"]), compile_flags=["-mllvm", "-cce-aicore-stack-size=0x4000"])
+    assert config.flags == ("-O2", "-cce-aicore-stack-size=0x4000")
+    library = compiler.LibraryGenerator(config)
+    library.update_lib_code("source")
+    monkeypatch.setattr(compiler.subprocess, "run", lambda *args, **kwargs: SimpleNamespace(returncode=1))
+    with pytest.raises(RuntimeError, match="legacy compile_flags filter.*tl.device_compile_flags"):
+        library.compile_lib()
+
+
+@pytest.mark.parametrize("mode", ["npu", "sim"])
+def test_pto_json_restore_keeps_schema_and_frozen_paths_options_and_mode(toolchain, monkeypatch, mode):
+    ascendc_metadata = _config(toolchain).to_metadata()
+    config = compiler.resolve_compile_config(_target("A3", keys=["pto", "ascend"]), run_mode=mode)
+    metadata = json.loads(json.dumps(config.to_metadata()))
+    assert metadata.keys() == ascendc_metadata.keys()
+    monkeypatch.setenv("TL_CCE_OPT_LEVEL", "invalid-after-freeze")
+    monkeypatch.setenv("TL_ROOT", "/missing")
+    monkeypatch.setenv("TL_RUN_MODE", "sim" if mode == "npu" else "npu")
+    for name in ["_get_tl_root", "_get_ascend_home_path", "_get_simulator_lib_path", "_normalize_options"]:
+        monkeypatch.setattr(compiler, name, lambda *args, **kwargs: pytest.fail("PTO restore re-resolved identity"))
+    restored = compiler.CompileConfig.from_metadata(metadata)
+    assert restored == config
+    assert restored.cache_identity == config.cache_identity
+    assert compiler.LibraryGenerator(restored).target == "pto"
+    metadata["arch"] = "dav-2201"
+    with pytest.raises(ValueError, match="A2/A3 compilation"):
+        compiler.CompileConfig.from_metadata(metadata)

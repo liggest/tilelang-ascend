@@ -1,6 +1,6 @@
 # Copyright (c) Tile-AI Corporation.
 # Licensed under the MIT License.
-"""AscendC shared-library compilation with a frozen A2/A3 compiler identity."""
+"""Shared-library compilation with a frozen A2/A3 compiler identity."""
 
 from __future__ import annotations
 
@@ -22,6 +22,7 @@ TILELANG_PACKAGE_PATH = env.TILELANG_PACKAGE_PATH
 logger = logging.getLogger(__name__)
 _DEFAULT_COMPILER_OPTIONS = {"cce_auto_sync": True, "opt_level": 2, "pto_debug": False}
 _SCHEMA_VERSION = 1
+_COMPILER_ARCHES = {"ascendc": "dav-2201", "pto": "dav-c220"}
 
 
 def _coerce_opt_level(value) -> int:
@@ -135,7 +136,11 @@ def _get_simulator_lib_path(ascend_home: str, platform: str) -> str:
     )
 
 
-def _command_options(ascend_home: str, package_root: str, template_path: str, simulator_lib_path: str | None) -> tuple[str, ...]:
+def _command_options(
+    ascend_home: str, package_root: str, template_path: str, simulator_lib_path: str | None, *, dialect: str = "ascendc"
+) -> tuple[str, ...]:
+    if dialect == "pto":
+        return _pto_command_options(ascend_home, package_root, template_path, simulator_lib_path)
     # Preserve the complete original AscendC command ordering. No random source
     # or output path belongs in the compiler/cache identity.
     command = [
@@ -180,6 +185,61 @@ def _command_options(ascend_home: str, package_root: str, template_path: str, si
     return tuple(command)
 
 
+def _pto_command_options(ascend_home: str, package_root: str, template_path: str, simulator_lib_path: str | None) -> tuple[str, ...]:
+    # TA 0deb8b93's entire A2/A3 PTO branch. Keep the repeated LLVM option
+    # introducers and relative include in their original positions; the frozen
+    # working_directory retains the latter's meaning. A5 is a separate backend.
+    command = [
+        "--cce-aicore-arch=dav-c220",
+        "-DMEMORY_BASE",
+        "-std=gnu++17",
+        "-xcce",
+        "-mllvm",
+        "-cce-aicore-stack-size=0x8000",
+        "-mllvm",
+        "-cce-aicore-function-stack-size=0x8000",
+        "-mllvm",
+        "-cce-aicore-record-overflow=true",
+        "-mllvm",
+        "-cce-aicore-addr-transform",
+        "-mllvm",
+        "-cce-aicore-dcci-insert-for-scalar=false",
+        "-DL2_CACHE_HINT",
+        "-I../../src/",
+        f"-I{package_root}/3rdparty/pto-isa/include",
+        f"-I{ascend_home}/include",
+        f"-I{ascend_home}/include/experiment/msprof",
+        f"-I{ascend_home}/include/experiment/runtime",
+        "-I/usr/local/Ascend/driver/kernel/inc",
+        f"-I{ascend_home}/pkg_inc",
+        f"-I{ascend_home}/pkg_inc/runtime",
+        f"-I{ascend_home}/pkg_inc/profiling",
+        f"-L{ascend_home}/lib64",
+        "-I" + template_path,
+        "-Wno-macro-redefined",
+        "-Wno-ignored-attributes",
+        "-lruntime",
+        "-lstdc++",
+        "-lascendcl",
+        "-lm",
+        "-ltiling_api",
+        "-lplatform",
+        "-lc_sec",
+        "-ldl",
+        "-fPIC",
+        "--shared",
+    ]
+    if simulator_lib_path is not None:
+        ascend_lib_idx = command.index(f"-L{ascend_home}/lib64")
+        command[ascend_lib_idx:ascend_lib_idx] = [
+            f"-L{simulator_lib_path}",
+            f"-Wl,-rpath,{simulator_lib_path}",
+            "-Wl,--disable-new-dtags",
+        ]
+        command[command.index("-lruntime")] = "-lruntime_camodel"
+    return tuple(command)
+
+
 @dataclass(frozen=True)
 class CompileConfig:
     """Serializable immutable identity, resolved once before any cache lookup."""
@@ -221,11 +281,13 @@ class CompileConfig:
         if values["simulator_lib_path"] is not None and not isinstance(values["simulator_lib_path"], str):
             raise ValueError("Invalid A2/A3 simulator path metadata.")
         config = cls(**values)
-        if config.dialect != "ascendc" or config.platform not in ("A2", "A3") or config.arch != "dav-2201":
-            raise ValueError("Compiler metadata does not describe an A2/A3 AscendC compilation.")
+        if config.dialect not in _COMPILER_ARCHES or config.platform not in ("A2", "A3") or config.arch != _COMPILER_ARCHES[config.dialect]:
+            raise ValueError("Compiler metadata does not describe an A2/A3 compilation.")
         if config.run_mode not in ("npu", "sim") or (config.run_mode == "sim") != (config.simulator_lib_path is not None):
             raise ValueError("Compiler metadata has an inconsistent runtime/simulator identity.")
-        base = _command_options(config.ascend_home, config.package_root, config.template_path, config.simulator_lib_path)
+        base = _command_options(
+            config.ascend_home, config.package_root, config.template_path, config.simulator_lib_path, dialect=config.dialect
+        )
         if config.command_options != (*base, *config.flags):
             raise ValueError("Compiler metadata command options do not match its frozen paths and flags.")
         return config
@@ -242,8 +304,7 @@ def resolve_compile_config(target, pass_configs=None, compile_flags=None, *, pla
 
     if not ascend_target.is_a2a3_target(target):
         raise ValueError("The A2/A3 compiler requires an ascend target with arch=dav-2201.")
-    if "pto" in target.keys:
-        raise NotImplementedError("A2/A3 PTO compilation is deferred to migration stage 2.")
+    dialect = "pto" if "pto" in target.keys else "ascendc"
     known_model = _known_platform(target.attrs.get("model"))
     if platform is not None:
         if platform not in ("A2", "A3"):
@@ -255,12 +316,12 @@ def resolve_compile_config(target, pass_configs=None, compile_flags=None, *, pla
     environ = dict(os.environ)
     working_directory = os.getcwd()
     options = _normalize_options(pass_configs, environ)
-    derived = _flags_from_options("ascendc", options, None)
+    derived = _flags_from_options(dialect, options, None)
     configured = _configured_flags(pass_configs)
     explicit = [compile_flags] if isinstance(compile_flags, str) else (compile_flags or ())
-    # Match the source's whitespace splitting, preserving repeated option/value
-    # pairs. Deduplication against the original command is done at resolution.
-    flags = (*derived, *configured, *(item for flag in explicit for item in flag.split()))
+    # Match the source's legacy whitespace splitting. Filtering against the
+    # original command happens below, before freezing the cache identity.
+    legacy = tuple(item for flag in explicit for item in flag.split())
     runtime = environ.get("TL_RUN_MODE", "npu") if run_mode is None else run_mode
     mode = "sim" if runtime == "sim" else "npu"
     ascend_home = os.path.abspath(_get_ascend_home_path(environ=environ))
@@ -269,16 +330,25 @@ def resolve_compile_config(target, pass_configs=None, compile_flags=None, *, pla
     simulator_lib_path = _get_simulator_lib_path(ascend_home, platform) if mode == "sim" else None
     compiler_path = shutil.which("bisheng", path=environ.get("PATH"))
     if compiler_path is None:
-        raise FileNotFoundError("Cannot find bisheng on PATH for A2/A3 AscendC compilation.")
-    base = _command_options(ascend_home, package_root, template_path, simulator_lib_path)
+        raise FileNotFoundError("Cannot find bisheng on PATH for A2/A3 compilation.")
+    base = _command_options(ascend_home, package_root, template_path, simulator_lib_path, dialect=dialect)
     # Original filtering tests every token against the base command, not against
-    # previously appended tokens. This retains repeated caller -mllvm pairs.
-    flags = tuple(flag for flag in flags if flag not in (compiler_path, "bisheng", *base))
+    # previously appended tokens. PTO already has -mllvm in its base command.
+    excluded = (compiler_path, "bisheng", *base)
+    if dialect == "pto":
+        # TL_DEVICE_COMPILE_FLAGS is a mainline entry absent from TA. Its
+        # normalized option/value pairs must stay intact, including -mllvm.
+        # Legacy explicit flags retain TA's filter against the base command;
+        # in PTO that old filter can discard the LLVM option introducer.
+        flags = (*derived, *configured, *(flag for flag in legacy if flag not in excluded))
+    else:
+        # Preserve the already accepted AscendC identity/command byte order.
+        flags = tuple(flag for flag in (*derived, *configured, *legacy) if flag not in excluded)
     return CompileConfig(
-        "ascendc",
+        dialect,
         platform,
         mode,
-        "dav-2201",
+        _COMPILER_ARCHES[dialect],
         os.path.abspath(compiler_path),
         ascend_home,
         package_root,
@@ -364,7 +434,16 @@ class LibraryGenerator:
         finally:
             src.close()
         if ret.returncode != 0:
-            raise RuntimeError(f"Compilation Failed! {command}")
+            hint = ""
+            if self.config.dialect == "pto" and any(
+                flag.startswith("-cce-") and (index == 0 or self.config.flags[index - 1] != "-mllvm")
+                for index, flag in enumerate(self.config.flags)
+            ):
+                hint = (
+                    " PTO LLVM options require a preceding -mllvm; TA's legacy compile_flags filter can remove it. "
+                    "Use tl.device_compile_flags for complete option/value pairs."
+                )
+            raise RuntimeError(f"Compilation Failed! {command}{hint}")
         self.srcpath = src.name
         self.libpath = libpath
 
