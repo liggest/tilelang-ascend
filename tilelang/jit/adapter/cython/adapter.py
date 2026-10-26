@@ -251,12 +251,12 @@ class CythonKernelAdapter(BaseKernelAdapter):
                 raise ValueError("workspace_idx and auto_gm_idx are supported only by the A2A3 Cython backend")
             self._automatic_indices = set(self.result_idx)
             return
-        if "pto" in self.target.keys:
-            raise NotImplementedError("A2/A3 PTO execution is deferred to migration stage 2")
         from tilelang.ascend.a2a3.runtime import normalize_memory_indices
 
         if self.compile_config is not None and str(self.target.attrs.get("model", "")) != self.compile_config.platform:
             raise ValueError("A2A3 compiler snapshot requires the same frozen target.model platform")
+        if self.compile_config is not None and self.compile_config.dialect != ("pto" if "pto" in self.target.keys else "ascendc"):
+            raise ValueError("A2A3 compiler snapshot requires the same target dialect keys")
         if len(self.params) != len(self.prim_func.params):
             raise ValueError("A2A3 runtime parameters must describe the final device kernel, including compiler-derived GM workspaces")
         self.workspace_idx = normalize_memory_indices(workspace_idx, len(self.params), "workspace_idx")
@@ -324,6 +324,10 @@ class CythonKernelAdapter(BaseKernelAdapter):
         if self._a2a3_runtime:
             # TA's self-contained host launcher appends shape symbols only;
             # its codegen does not append independent stride symbols.
+            if "pto" in self.target.keys:
+                from tilelang.ascend.a2a3.runtime import order_pto_shape_symbols
+
+                return order_pto_shape_symbols(func, dynamic_symbolic_map)
             return dynamic_symbolic_map
         for i in ordered:
             param = params[i]

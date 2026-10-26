@@ -84,6 +84,43 @@ def configure_void_call(library) -> None:
     library.call.restype = None
 
 
+def order_pto_shape_symbols(func: tirx.PrimFunc, direct_sources: dict) -> dict:
+    """Match PTO's recursive native shape ABI using direct tensor carriers only.
+
+    TA's PTO codegen visits params, then shape dimensions, then expression
+    children in order and deduplicates Var identities. A composite dimension
+    supplies the order, never the runtime value of its constituent symbols.
+    """
+    symbols = []
+    seen = set()
+
+    def collect(node):
+        if isinstance(node, tirx.Var) and node not in seen:
+            seen.add(node)
+            symbols.append(node)
+
+    for param in func.params:
+        if param in func.buffer_map:
+            for dimension in func.buffer_map[param].shape:
+                tirx.stmt_functor.post_order_visit(dimension, collect)
+    ordered = {}
+    names = set()
+    for symbol in symbols:
+        if symbol in func.params:
+            raise ValueError(
+                f"PTO shape symbol {symbol} overlaps an explicit parameter; the TA native signature cannot represent this overlap."
+            )
+        if str(symbol) in names:
+            raise ValueError(f"PTO shape symbol name {symbol} is ambiguous; distinct symbols must have distinct names.")
+        names.add(str(symbol))
+        if symbol not in direct_sources:
+            raise ValueError(
+                f"PTO shape symbol {symbol} requires a direct Var dimension on an input tensor; composite shape inversion is unsupported."
+            )
+        ordered[symbol] = direct_sources[symbol]
+    return ordered
+
+
 def dump_runtime_signature(func: tirx.PrimFunc) -> str:
     """Persist the final parameter/buffer contract without compiler-only IR nodes."""
     symbol = func.attrs.get("global_symbol") if func.attrs else None

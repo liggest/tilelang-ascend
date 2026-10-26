@@ -134,6 +134,24 @@ def test_final_parameter_count_is_required_before_library_loading(tmp_path):
         )
 
 
+def test_frozen_ascendc_snapshot_cannot_be_used_with_pto_target(monkeypatch, tmp_path):
+    snapshot = _snapshot(monkeypatch, tmp_path)
+    final = _signature()
+    target = tvm.target.Target({**_TARGET, "keys": ["pto", "ascend"]})
+    with pytest.raises(ValueError, match="same target dialect keys"):
+        CythonKernelAdapter.from_database(
+            params=extrac_params(final),
+            result_idx=2,
+            target=target,
+            func_or_mod=final,
+            runtime_func=final,
+            host_kernel_source=CachedTextSource(text=""),
+            device_kernel_source=CachedTextSource(text=""),
+            kernel_lib_path=str(tmp_path / "missing.so"),
+            compile_config=snapshot,
+        )
+
+
 def test_a2a3_runtime_does_not_append_independent_stride_symbols():
     n, stride = tir.Var("N", "int32"), tir.Var("stride", "int32")
     buffer = tir.decl_buffer((n,), "float32", name="input", strides=(stride,))
@@ -144,6 +162,7 @@ def test_a2a3_runtime_does_not_append_independent_stride_symbols():
     adapter.result_idx = []
     adapter._a2a3_runtime = True
     adapter._automatic_indices = set()
+    adapter.target = tvm.target.Target(_TARGET)
     assert list(adapter._process_dynamic_symbolic()) == [n]
     adapter._a2a3_runtime = False
     assert list(adapter._process_dynamic_symbolic()) == [n, stride]
