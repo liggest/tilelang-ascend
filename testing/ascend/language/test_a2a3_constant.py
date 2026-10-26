@@ -370,3 +370,36 @@ def test_frontend_normalization_preserves_the_literal_binding_source_span():
     normalized = normalize_constants(func)
     span = get_stmt_span(_declarations(normalized)[0])
     assert span.source_name.name == "constant_input.py" and span.line == 9
+
+
+def test_inline_macro_constant_uses_live_parent_builder_bindings():
+    @T.macro
+    def inline_table():
+        pointer = T.allocate_const([7, 11, 23, 37], "int32", [4])
+        table = T.decl_buffer((4,), "int32", data=pointer)  # noqa: F841 - raw source name
+        with T.Scope("C"):
+            T._src_code("Output.SetValue(0, table[Input.GetValue(0) & 3]);", pointer)
+
+    @T.prim_func
+    def kernel(Input: T.Tensor((1,), "int32"), Output: T.Tensor((1,), "int32")):
+        inline_table()
+
+    assert "table[4]" in _lower(kernel).kernel_source
+
+
+def test_eager_macro_return_does_not_hide_a_live_constant_from_decl_buffer():
+    @T.macro
+    def make_table():
+        pointer = T.allocate_const([7, 11, 23, 37], "int32", [4])
+        return pointer
+
+    @T.prim_func
+    def kernel(Input: T.Tensor((1,), "int32"), Output: T.Tensor((1,), "int32")):
+        pointer = make_table()
+        table = T.decl_buffer((4,), "int32", data=pointer)  # noqa: F841 - raw source name
+        with T.Scope("C"):
+            T._src_code("Output.SetValue(0, table[Input.GetValue(0) & 3]);", pointer)
+
+    # Eager value-returning macros are newer than TA's statement-only macros.
+    # This checks builder scope handling, not a claim of legacy producer support.
+    assert "table[4]" in _lower(kernel).kernel_source
