@@ -52,3 +52,18 @@ candidates do not imply that the remaining examples/tests have been ported.
 The raw-source tests restore the prior process cache-enabled state after each
 case. MMA cache clearing stays within its per-case temporary directory and
 isolated memory dictionary; it does not delete a caller's default cache.
+
+The positional examples under `pos_embedding/` include their six original CI
+companion tests. The 17 original cases cover RMSNorm, fused RMSNorm/RoPE,
+mask-based RoPE, and forward/backward RoPE for float16, bfloat16, float32,
+interleaved/half rotation and TND/BSND layouts:
+
+```bash
+python -m pytest examples/ascend_a2a3/pos_embedding/
+```
+
+These device tests use a confirmed A2/A3 NPU and a separate temporary cache for
+each case. Original shapes, in-place behavior, references and tolerances are
+retained. Importing the source modules performs no cache clearing, CLI parsing,
+NPU initialization or kernel work. The broader original CI active inventory and
+all pending statuses remain separate from this completed subset.

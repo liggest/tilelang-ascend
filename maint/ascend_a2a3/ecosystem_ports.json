@@ -3,7 +3,7 @@
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
   "validated_main_native_checkpoint": "03d12088987a47256c58afb745a764344541985a",
   "validation_date_utc": "2026-10-26",
-  "scope": "Six original assets only; 266 blocked candidates and the remaining ecology are not completed ports.",
+  "scope": "Eighteen reviewed original assets: six first-batch assets and six original CI-active positional source/test pairs. Remaining blocked candidates are not completed ports.",
   "entries": [
     {
       "source_path": "examples/gemm/example_gemm.py",
@@ -160,6 +160,351 @@
       },
       "state": "reviewed_first_batch",
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/pos_embedding/rms_norm.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/rms_norm.py",
+      "source_sha256": "5d660735b5fdda705a6dc23065e95d79b021bbcf66559abf661cdb59b21c276e",
+      "source_git_blob": "5a412b4d87cad5bf752f7168c78a923d24fe5938",
+      "classification_draft": "A2A3",
+      "destination_sha256": "16e1a03ed27297366a7af2164ba37b51d89e3ec424d81e5d0545f8e482f7c5c6",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 positional kernel and complete host helpers; only import/cache/CLI/device-bootstrap host adaptation.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Move standalone CLI into main() with explicit torch_npu import; top-level cache clearing moves there and uses the actual A2A3 cache singleton."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.01,
+        "atol": 0.01,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rms_norm.py",
+      "paired_test_path": "examples/pos_embedding/test_rms_norm_pos_embedding.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/rms_rope_fused.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/rms_rope_fused.py",
+      "source_sha256": "b9911171b726efeaf1c00baf7ab70b03bb9908e87b5982fbcf0d1078de8fc7b4",
+      "source_git_blob": "98c385266e9dde1ad7fd0a143ba8dcf575bf06a7",
+      "classification_draft": "A2A3",
+      "destination_sha256": "5c91d8f31cbd12ff31cc860e4f778a85aebed2f52eb28db15c7b0ffbcb9ffbea",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 positional kernel and complete host helpers; only import/cache/CLI/device-bootstrap host adaptation.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Move standalone CLI into main() with explicit torch_npu import; top-level cache clearing moves there and uses the actual A2A3 cache singleton."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.01,
+        "atol": 0.01,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rms_rope_fused.py",
+      "paired_test_path": "examples/pos_embedding/test_rms_rope_fused.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/rms_rope_fused_mask.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/rms_rope_fused_mask.py",
+      "source_sha256": "c5d650d2cdbe9e9718b6d4a20f7ca8ea3c0f0e33d5a4c4ade255df32181f2155",
+      "source_git_blob": "936899d0a59d65bc17556e4b065745099066d707",
+      "classification_draft": "A2A3",
+      "destination_sha256": "eb80dc2eaa64cfed8c130266a28225cca932593dd4d8c719db50ca47bdf23deb",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 positional kernel and complete host helpers; only import/cache/CLI/device-bootstrap host adaptation.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Move standalone CLI into main() with explicit torch_npu import; top-level cache clearing moves there and uses the actual A2A3 cache singleton."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.01,
+        "atol": 0.01,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rms_rope_fused_mask.py",
+      "paired_test_path": "examples/pos_embedding/test_rms_rope_fused_mask.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/rope.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/rope.py",
+      "source_sha256": "1b21c1d3d66d5b954f5d4787fcf81c7d99fe1b9b05ac48adac9510021195294a",
+      "source_git_blob": "716f86ceff6e0aba1bc764880cac1e203286724a",
+      "classification_draft": "A2A3",
+      "destination_sha256": "a696ddaf3cc6852598941718e3cd70791f9db3327e15d84a097bde4e3d28a4cf",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 positional kernel and complete host helpers; only import/cache/CLI/device-bootstrap host adaptation.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Move standalone CLI into main() with explicit torch_npu import; top-level cache clearing moves there and uses the actual A2A3 cache singleton.",
+        "Use the equivalent npu device string for Tensor.to and torch factory device arguments, preserving device field while avoiding import-time torch_npu registration."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.001,
+        "atol": 0.001,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rope.py",
+      "paired_test_path": "examples/pos_embedding/test_rope.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/rope_mask.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/rope_mask.py",
+      "source_sha256": "8c53619f88bc27724833bdfa4199cedccd8cd7e928e9e6c0ade695e02fdd0d9e",
+      "source_git_blob": "f7749ef0e8494d840bb89f41e54b2797820a37b2",
+      "classification_draft": "A2A3",
+      "destination_sha256": "9a302e207b1638ad496879152afdd898ec8b7ceceee2f47f374f7ffc39c5f639",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 positional kernel and complete host helpers; only import/cache/CLI/device-bootstrap host adaptation.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Move standalone CLI into main() with explicit torch_npu import; top-level cache clearing moves there and uses the actual A2A3 cache singleton.",
+        "Use the equivalent npu device string for Tensor.to and torch factory device arguments, preserving device field while avoiding import-time torch_npu registration."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.001,
+        "atol": 0.001,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rope_mask.py",
+      "paired_test_path": "examples/pos_embedding/test_rope_mask.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/rope_mask_bwd.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/rope_mask_bwd.py",
+      "source_sha256": "3c1386420d959a85032a35cf5cd462ec703d2a49e1035bce386f1a9cbb3227ad",
+      "source_git_blob": "fbdb47371a396d77fe65ee0da5ca6382b2395362",
+      "classification_draft": "A2A3",
+      "destination_sha256": "b3ccaace5e78cd6c6457586cbbf9a2fa9f09dfdeea7fde93f7a9ae0892791e35",
+      "review_decision": "a2a3",
+      "review_reason": "Original A2/A3 positional kernel and complete host helpers; only import/cache/CLI/device-bootstrap host adaptation.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Move standalone CLI into main() with explicit torch_npu import; top-level cache clearing moves there and uses the actual A2A3 cache singleton.",
+        "Use the equivalent npu device string for Tensor.to and torch factory device arguments, preserving device field while avoiding import-time torch_npu registration."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 12,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.001,
+        "atol": 0.001,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 12
+      },
+      "paired_source_path": "examples/pos_embedding/rope_mask_bwd.py",
+      "paired_test_path": "examples/pos_embedding/test_rope_mask_bwd.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/test_rms_norm_pos_embedding.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/test_rms_norm_pos_embedding.py",
+      "source_sha256": "a1a3cbcf607686bb95a0e352b79d2c50e95d534da35bf652955d096defdc4050",
+      "source_git_blob": "90e00e97eabc4c470a6b8ea0e85455767f6ea9b3",
+      "classification_draft": "uncertain",
+      "destination_sha256": "302132edf5aeddd6d227bd55e2aec6af015c511244bc722bd50beed5d8e9fc68",
+      "review_decision": "a2a3",
+      "review_reason": "Original CI active wrapper loads the paired A2/A3 example with original numerical cases.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Original CI active companion wrapper/case parameters/precision checks retained; device mark and per-case cache fixture only.",
+        "Namespace fixture restores original underlying cache state after every case, including calls to the source disable_cache API."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.01,
+        "atol": 0.01,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rms_norm.py",
+      "paired_test_path": "examples/pos_embedding/test_rms_norm_pos_embedding.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/test_rms_rope_fused.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/test_rms_rope_fused.py",
+      "source_sha256": "4ea5009573a317a70e6759f2b52219bd9b9ea8e2ac876a7695bcc3824b451960",
+      "source_git_blob": "df6300c9a86b9e0c254092060cc01e0403f80fe1",
+      "classification_draft": "uncertain",
+      "destination_sha256": "240fe3e7a12bd3a58a13e0a5d854fe600521bd5253dab768e3a01943ef4d8554",
+      "review_decision": "a2a3",
+      "review_reason": "Original CI active wrapper loads the paired A2/A3 example with original numerical cases.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Original CI active companion wrapper/case parameters/precision checks retained; device mark and per-case cache fixture only.",
+        "Namespace fixture restores original underlying cache state after every case, including calls to the source disable_cache API."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.01,
+        "atol": 0.01,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rms_rope_fused.py",
+      "paired_test_path": "examples/pos_embedding/test_rms_rope_fused.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/test_rms_rope_fused_mask.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/test_rms_rope_fused_mask.py",
+      "source_sha256": "557e709110fcd3868ee3c616bc974c0beed699c95597a99c492568f74ca74bf4",
+      "source_git_blob": "23349f7a05728e7264cb0803a1610a267d093a96",
+      "classification_draft": "uncertain",
+      "destination_sha256": "9f86e43efaed42dfe618f29aaae5b9bfcf5dc585416b3f0d86691f7890c76b2d",
+      "review_decision": "a2a3",
+      "review_reason": "Original CI active wrapper loads the paired A2/A3 example with original numerical cases.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Original CI active companion wrapper/case parameters/precision checks retained; device mark and per-case cache fixture only.",
+        "Namespace fixture restores original underlying cache state after every case, including calls to the source disable_cache API."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.01,
+        "atol": 0.01,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rms_rope_fused_mask.py",
+      "paired_test_path": "examples/pos_embedding/test_rms_rope_fused_mask.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/test_rope.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/test_rope.py",
+      "source_sha256": "1ac83064cfef64998010d458f22deffdd784d6b68f846e709e5a3d7e40595425",
+      "source_git_blob": "d79426fcaabfbb9cf9a5a627f4e52587766187c6",
+      "classification_draft": "uncertain",
+      "destination_sha256": "5437fbbbfa78e35238c8944dc176eea28f50551a9fc5cd886d5c8dd8aad9b117",
+      "review_decision": "a2a3",
+      "review_reason": "Original CI active wrapper loads the paired A2/A3 example with original numerical cases.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Original CI active companion wrapper/case parameters/precision checks retained; device mark and per-case cache fixture only.",
+        "Namespace fixture restores original underlying cache state after every case, including calls to the source disable_cache API."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.001,
+        "atol": 0.001,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rope.py",
+      "paired_test_path": "examples/pos_embedding/test_rope.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/test_rope_mask.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/test_rope_mask.py",
+      "source_sha256": "41e4452f4dbf050bb078e15f6fa408e26d6d82eb11d0d8a8f060de6681ecab25",
+      "source_git_blob": "e775b888c22072658ba1a37afeed516687147f68",
+      "classification_draft": "uncertain",
+      "destination_sha256": "8aee1340af42aeebb06f99776590750360f6379e26f8f93827c28cbbe7a534a4",
+      "review_decision": "a2a3",
+      "review_reason": "Original CI active wrapper loads the paired A2/A3 example with original numerical cases.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Original CI active companion wrapper/case parameters/precision checks retained; device mark and per-case cache fixture only.",
+        "Namespace fixture restores original underlying cache state after every case, including calls to the source disable_cache API."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 1,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.001,
+        "atol": 0.001,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 1
+      },
+      "paired_source_path": "examples/pos_embedding/rope_mask.py",
+      "paired_test_path": "examples/pos_embedding/test_rope_mask.py"
+    },
+    {
+      "source_path": "examples/pos_embedding/test_rope_mask_bwd.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/test_rope_mask_bwd.py",
+      "source_sha256": "106bc6ba5512ef6c1fa2a534071450a2e5019898877f4251602046ac249b7f2e",
+      "source_git_blob": "ec66cc254cbd4fa3edf7b6088e1bb8291a60e513",
+      "classification_draft": "uncertain",
+      "destination_sha256": "df1e41be98ab54220272cdbd799496a0e8769f84bcabe3c467325993cf29642a",
+      "review_decision": "a2a3",
+      "review_reason": "Original CI active wrapper loads the paired A2/A3 example with original numerical cases.",
+      "state": "reviewed_active_ci_pair",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit A2A3 dialect imports; all original functions/classes and kernel/helper AST preserved.",
+        "Original CI active companion wrapper/case parameters/precision checks retained; device mark and per-case cache fixture only.",
+        "Namespace fixture restores original underlying cache state after every case, including calls to the source disable_cache API."
+      ],
+      "validation": {
+        "original_CI_active_test_cases": 12,
+        "actual_A3_passed": true,
+        "actual_SOC": "Ascend910_9392",
+        "source_and_test_function_class_AST_equal": true,
+        "no_performance_claim": true,
+        "rtol": 0.001,
+        "atol": 0.001,
+        "paired_factory_TA_main_full_source_SDK_schema_groups": 12
+      },
+      "paired_source_path": "examples/pos_embedding/rope_mask_bwd.py",
+      "paired_test_path": "examples/pos_embedding/test_rope_mask_bwd.py"
     }
   ],
   "test_isolation_validation": {
@@ -171,5 +516,22 @@
     ],
     "host_checks_passed": 27,
     "NPU_or_SDK_rerun": false
+  },
+  "active_operator_progress": {
+    "original_active_entries": 24,
+    "reviewed_and_actual_A3_validated_entries": 6,
+    "expanded_original_cases": 17,
+    "pending_original_entries": 18,
+    "original_manifest_statuses_changed": false
+  },
+  "example_namespace_scope_validation": {
+    "prior_cache_states": [
+      "enabled",
+      "disabled"
+    ],
+    "host_scope_checks_passed": 6,
+    "caller_memory_and_disk_sentinels_preserved": true,
+    "outside_namespace_fixture_free_audit_passed": true,
+    "actual_OFF_collection_cases_skipped": 17
   }
 }
