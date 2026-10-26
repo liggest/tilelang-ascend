@@ -153,6 +153,9 @@ include = [
     # default file selector; withdraw the vendor Git paths from this include.
     "!3rdparty/pto-isa/.git",
     "!3rdparty/pto-isa/.git/**",
+    # Full TVM includes its nested submodules; withdraw their Git metadata too.
+    "!3rdparty/tvm/**/.git",
+    "!3rdparty/tvm/**/.git/**",
     "3rdparty/shmem/include",
     "3rdparty/shmem/src/device",
     "3rdparty/shmem/LICENSE",
@@ -171,6 +174,8 @@ exclude = [
     # directory or an absorbed submodule's Git indirection file.
     "3rdparty/pto-isa/.git",
     "3rdparty/pto-isa/.git/**",
+    "3rdparty/tvm/**/.git",
+    "3rdparty/tvm/**/.git/**",
     "**/.github",
     "3rdparty/**",
     "build",
