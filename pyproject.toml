@@ -146,6 +146,13 @@ include = [
     # A2/A3 AscendC JIT headers, pinned to the migrated TA dependencies.
     "3rdparty/catlass/include",
     "3rdparty/catlass/LICENSE",
+    # Keep the complete pinned PTO-ISA vendor source in sdists. Its runtime
+    # header tree is packaged below without pruning conditional architectures.
+    "3rdparty/pto-isa",
+    # Explicit includes take precedence over excludes in scikit-build-core's
+    # default file selector; withdraw the vendor Git paths from this include.
+    "!3rdparty/pto-isa/.git",
+    "!3rdparty/pto-isa/.git/**",
     "3rdparty/shmem/include",
     "3rdparty/shmem/src/device",
     "3rdparty/shmem/LICENSE",
@@ -160,6 +167,10 @@ exclude = [
     ".git",
     ".github",
     "**/.git",
+    # A full PTO-ISA source include must never re-include its standalone Git
+    # directory or an absorbed submodule's Git indirection file.
+    "3rdparty/pto-isa/.git",
+    "3rdparty/pto-isa/.git/**",
     "**/.github",
     "3rdparty/**",
     "build",
@@ -182,6 +193,10 @@ tilelang = "tilelang"
 # A2/A3 AscendC JIT headers (not native CMake build dependencies).
 "tilelang/3rdparty/catlass/include" = "3rdparty/catlass/include"
 "tilelang/3rdparty/catlass/LICENSE" = "3rdparty/catlass/LICENSE"
+"tilelang/3rdparty/pto-isa/include" = "3rdparty/pto-isa/include"
+"tilelang/3rdparty/pto-isa/LICENSE" = "3rdparty/pto-isa/LICENSE"
+"tilelang/3rdparty/pto-isa/Third_Party_Open_Source_Software_Notice" = "3rdparty/pto-isa/Third_Party_Open_Source_Software_Notice"
+"tilelang/3rdparty/pto-isa/Third_Party_Open_Source_Software_List.yaml" = "3rdparty/pto-isa/Third_Party_Open_Source_Software_List.yaml"
 "tilelang/3rdparty/shmem/include" = "3rdparty/shmem/include"
 "tilelang/3rdparty/shmem/src/device" = "3rdparty/shmem/src/device"
 "tilelang/3rdparty/shmem/LICENSE" = "3rdparty/shmem/LICENSE"
