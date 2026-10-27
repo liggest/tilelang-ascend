@@ -118,7 +118,7 @@ dimension dim.
 - `tmp` follows the generic arena contract above. Omit it unless the required
   capacity is known for the selected target path.
 
-<a id="static-fp32-row-reductions"></a>
+(a2a3-static-fp32-row-reductions)=
 
 ### Static FP32 row reductions
 

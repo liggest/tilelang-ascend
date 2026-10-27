@@ -25,7 +25,7 @@ def reduce_sum(
 |--------|----------|------|------|----------|
 | buffer | 输入 | 被归约的源数据 | 张量（tensor） | 必填 |
 | out | 输出 | 存放归约结果 | 张量（tensor） | 必填 |
-| dim | 输入 | 归约轴，取值范围与 buffer 维度相关，详见 [2.3.3 dim 说明](#233-dim-说明) | 整数 | 可选（默认 `-1`） |
+| dim | 输入 | 归约轴，取值范围与 buffer 维度相关，详见 [2.3.3 dim 说明](#a2a3-reduce-sum-dim) | 整数 | 可选（默认 `-1`） |
 | clear | 输入 | 是否在归约前初始化 out。True：归约前将 out 置零；False：在 out 已有值上累加 | 布尔 | 可选（默认 `True`） |
 | real_shape | 输入 | 切片 UB tile 的逻辑 2D shape，用于处理 buffer 物理 shape 与逻辑 shape 不一致的场景 | 整数列表（长度 2）/ None | 可选（默认 `None`） |
 
@@ -44,6 +44,8 @@ def reduce_sum(
 
 - 支持 1D、2D（3D 暂不支持，精度异常）
 
+(a2a3-reduce-sum-dim)=
+
 #### 2.3.3 dim 说明
 
 dim 的合法取值取决于 buffer 的维度（rank）：
@@ -60,7 +62,7 @@ dim 的合法取值取决于 buffer 的维度（rank）：
 3. 仅支持单轴归约（dim 为单个整数），不支持多维同时归约
 4. real_shape 若提供，长度必须为 2，且每个元素 ≤ 对应 buffer extent
 5. buffer 地址需 32 字节对齐（硬件约束）
-6. AscendC A2/A3 静态 float32 末轴归约的输出对齐和填充要求见[统一规范](../language_ref/tilelibrary.md#static-fp32-row-reductions)；其余路径的 out 起始地址需 2 字节对齐（float16）/ 4 字节对齐（float32）
+6. AscendC A2/A3 静态 float32 末轴归约的输出对齐和填充要求见{ref}`统一规范 <a2a3-static-fp32-row-reductions>`；其余路径的 out 起始地址需 2 字节对齐（float16）/ 4 字节对齐（float32）
 7. A2/A3 平台 ReduceSum 在 tensor 前 n 个数据接口采用顺序累加方式，高维切分接口采用二叉树累加方式（硬件约束）
 8. BufferRegion 切片输入（`buffer[:, a:b]`）仅在 ascendc 后端支持，pto 后端不支持
 9. float16 的列归约（dim=0/dim=-2）仅在 pto 后端支持，ascendc 后端不支持

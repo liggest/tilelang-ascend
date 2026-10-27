@@ -1,6 +1,6 @@
 # A2/A3 安装与开发构建
 
-A2/A3当前采用现代主线CMake/PEP517与TIRX，不使用旧TA页面中的CUDA镜像、旧TVM config或旧patch。先读[完整迁移指南](../migration.md#构建与环境)和主线安装文档；本页原通用GPU安装全文在非活动source档案保留。
+A2/A3当前采用现代主线CMake/PEP517与TIRX，不使用旧TA页面中的CUDA镜像、旧TVM config或旧patch。先读{ref}`完整迁移指南 <a2a3-build-environment>`和主线安装文档；本页原通用GPU安装全文在非活动source档案保留。
 
 1. 准备与当前设备/CANN匹配的Torch和TorchNPU；从已装metadata记录精确版本（含local suffix）。安装开发依赖时使用该pair的pip constraints，解析不满足就报错，不自动升级或换栈。
 2. 按主线build技能准备构建依赖。开启USE_ASCEND，CUDA/ROCm/Metal按实际需要配置；仅A2/A3开发可明确关闭其它GPU后端。当前原生构建产物及Cython由同一个构建生成，不能拿TA旧二进制替代。

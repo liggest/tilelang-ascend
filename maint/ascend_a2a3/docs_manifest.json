@@ -2851,9 +2851,14 @@
       "source_blob": "dac570a6a6c2fade1e7126315bfd3bb48ce08ea9",
       "source_sha256": "0545459ff38acca6914cf4df94aa056c6bae10e9e09ac2eb832084527d88ae1d",
       "status": "a2a3-documentation-adapted-static-review",
-      "adaptations": [],
+      "adaptations": [
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
+        }
+      ],
       "source_mode": "100644",
-      "destination_sha256": "0545459ff38acca6914cf4df94aa056c6bae10e9e09ac2eb832084527d88ae1d",
+      "destination_sha256": "513e35c0791a35d6b6f5332bf4029b139e202a9120ee057ea2b0c0c326195a16",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/api_docs/T.reduce_max.md",
       "destination_mode": "100644"
     },
@@ -2863,9 +2868,14 @@
       "source_blob": "18490a30a649cb8c2e02410fad0d902daae30cc9",
       "source_sha256": "6dcd9094fb58a983c0475d0a209bd0a1aa713eca303147de56e3f816d5909b5d",
       "status": "a2a3-documentation-adapted-static-review",
-      "adaptations": [],
+      "adaptations": [
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
+        }
+      ],
       "source_mode": "100644",
-      "destination_sha256": "6dcd9094fb58a983c0475d0a209bd0a1aa713eca303147de56e3f816d5909b5d",
+      "destination_sha256": "e32b50354e3f401f79e98e83d9f85e5f7762d2c31e3f1597d68586e910f4d87d",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/api_docs/T.reduce_min.md",
       "destination_mode": "100644"
     },
@@ -2875,9 +2885,14 @@
       "source_blob": "8c5cedeee9fbc4aae0f445dca568c5912f77958b",
       "source_sha256": "a1fc90698f2e656f4fc8ebefc21bff6a151df086c3e93ed07a5aa8dc93dc6893",
       "status": "a2a3-documentation-adapted-static-review",
-      "adaptations": [],
+      "adaptations": [
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
+        }
+      ],
       "source_mode": "100644",
-      "destination_sha256": "a1fc90698f2e656f4fc8ebefc21bff6a151df086c3e93ed07a5aa8dc93dc6893",
+      "destination_sha256": "f5fd239928cf144236bcdfe6c018612fb6e326f83bacf6475280cce998f61109",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/api_docs/T.reduce_sum.md",
       "destination_mode": "100644"
     },
@@ -2935,9 +2950,14 @@
       "source_blob": "74fb234c2932d4ff7cfdd0b30d1e962d1f7f5b55",
       "source_sha256": "e81c93fd95e2f97e32edaaa376af034f2670520f836d7c280f2374adc2f92606",
       "status": "a2a3-documentation-adapted-static-review",
-      "adaptations": [],
+      "adaptations": [
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
+        }
+      ],
       "source_mode": "100644",
-      "destination_sha256": "b4e909ed362f0b6b9e5a4510b79b37e93f758cd1b983e7d6d193880af443bb7e",
+      "destination_sha256": "eb3e4996e09f6a4168bef4d6b97d76d65884ca2b0f86757ec3012f177252b265",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/api_docs/T.tile.compare.md",
       "destination_mode": "100644"
     },
@@ -3007,9 +3027,14 @@
       "source_blob": "d50a70723f7a690f866e2be07683b3e877144404",
       "source_sha256": "597656c25c0d2480ce8fa4afd7242c7d074f41d854b9304087c38e0589d40aa7",
       "status": "a2a3-documentation-adapted-static-review",
-      "adaptations": [],
+      "adaptations": [
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
+        }
+      ],
       "source_mode": "100644",
-      "destination_sha256": "2f5647d384a9317d9abc3661f30d57a270b0087fc5b2f44d96d3a27f63d89afe",
+      "destination_sha256": "0d8ea1fb79dccc17147f5399005ae0cc25ea14b334c7df4992ca10dc907825c2",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/api_docs/T.tile.select.md",
       "destination_mode": "100644"
     },
@@ -3077,10 +3102,14 @@
           "kind": "path",
           "source": "testing/python/",
           "target": "testing/ascend_a2a3/python/"
+        },
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "c501f2634f63aceca0e7d3a0b1f3c78f486bb639a4f96e81f6696937734a6584",
+      "destination_sha256": "6c4ac4366ed1e9ab8d3e5c561d6676a2723329396b6d2a9a7517112b5231cf75",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/ascend/compiler_managed_vector_mask.md",
       "destination_mode": "100644"
     },
@@ -3095,10 +3124,14 @@
           "kind": "path",
           "source": "src/tl_templates/ascend/",
           "target": "src/ascend/a2a3/tl_templates/ascend/"
+        },
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "79883a5482cd1a6d61ecde688f925abad3624bb6a9eb76a4bd9ac4df3372b474",
+      "destination_sha256": "c37a41d775f74e64a1786f1c67e7dfd3fbed338f8030ac4783319dd0122a9356",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/ascend/row_reduce.md",
       "destination_mode": "100644"
     },
@@ -3302,10 +3335,14 @@
         {
           "kind": "manual-current-user-guide",
           "note": "Complete original source is archived; active entry follows current backend/build/runtime contract"
+        },
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "866779a1da4d31a2d6382f7d6d2683dc850653ab714171982c77e84d3a742d39",
+      "destination_sha256": "3cd0a706caf545759842ddb172a5c01c8da0b30a1fd965c45f20057d75669f66",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/get_started/Installation.md",
       "destination_mode": "100644",
       "original_archive": "docs/ascend_a2a3/_source_config/archives/source-46ded177436df1fdda9a14818f7a495e0bfa203f266a3e38af8ed1c37df7acc1.gz",
@@ -3321,10 +3358,14 @@
         {
           "kind": "scope",
           "note": "Preserve original GPU/CPU/pseudo-IR dialect; do not relabel its code as A2A3"
+        },
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "2370ff499415b62e67fa6271ef1f9d31c5b479da18927fd919c4435105d87d59",
+      "destination_sha256": "394e0cc09f2df553730e04338d582fc36625c515260862c5ccc3b44ffb695957",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/get_started/overview.md",
       "destination_mode": "100644"
     },
@@ -3634,9 +3675,14 @@
       "source_blob": "98dc0d423272dff1707ec5b7dc0d8f595ee6cb55",
       "source_sha256": "5092598f2bfb0a2113bbaa3ca896619288a622c6cc337dfcf3cc0dbfe35e9e96",
       "status": "a2a3-documentation-adapted-static-review",
-      "adaptations": [],
+      "adaptations": [
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
+        }
+      ],
       "source_mode": "100644",
-      "destination_sha256": "5092598f2bfb0a2113bbaa3ca896619288a622c6cc337dfcf3cc0dbfe35e9e96",
+      "destination_sha256": "6769b611166fb856aa62f6e6d670925ddf666454321d72dc29f6387fc9483e01",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/language_ref/primitives.md",
       "destination_mode": "100644"
     },
@@ -3650,10 +3696,14 @@
         {
           "kind": "scope",
           "note": "Preserve original GPU/CPU/pseudo-IR dialect; do not relabel its code as A2A3"
+        },
+        {
+          "kind": "sphinx-reference",
+          "note": "Backend-unique explicit labels/cross references; preserve content and exact source/archive provenance."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "7acb438a914553b0a4fbb2b4a12683d45057254d568cdd6c25b25bc9e4ee870d",
+      "destination_sha256": "0c37423b4027c28f55860a6d0a7a837daa492d2aeea97fc0e00e1d35262741c2",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/language_ref/tilelibrary.md",
       "destination_mode": "100644"
     },
@@ -4349,5 +4399,11 @@
       "status": "absent-in-source-pin",
       "resolution": "Explicit missing source figure note; no fabricated image/performance data"
     }
-  ]
+  ],
+  "sphinx_followup": {
+    "scope": "A2A3-only labels, explicit anchors, navigation and actual skill downloads; main conf/skills/protected docs unchanged.",
+    "source_inventory_unchanged": 225,
+    "source_archives_unchanged": 34,
+    "new_reference_index": "docs/ascend_a2a3/reference.md"
+  }
 }

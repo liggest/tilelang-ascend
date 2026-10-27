@@ -24,7 +24,7 @@ def compare(
 | dst | 输出 | 存放比较结果（bit-packed，uint8） | 张量（tensor） | 必填 |
 | src0 | 输入 | 第一个源操作数 | 张量（tensor） | 必填 |
 | src1 | 输入 | 第二个源操作数，支持 tensor 或 scalar | 张量（tensor）/ 标量（scalar） | 必填 |
-| mode | 输入 | 比较模式，决定比较运算符 | 字符串，取值见 [2.3.3 mode 说明](#233-mode-说明) | 必填 |
+| mode | 输入 | 比较模式，决定比较运算符 | 字符串，取值见 [2.3.3 mode 说明](#a2a3-tile-compare-mode) | 必填 |
 
 > **类型说明**：
 > - **tensor**：通过 `T.alloc_ub`、`T.alloc_shared` 等分配的缓冲区（Buffer），或其切片（BufferRegion）
@@ -44,6 +44,8 @@ def compare(
 #### 2.3.2 Shape 支持
 
 - 支持 1D 和 2D
+
+(a2a3-tile-compare-mode)=
 
 #### 2.3.3 mode 说明
 

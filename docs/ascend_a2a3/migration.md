@@ -29,11 +29,13 @@ with T.Kernel(core_count, threads=2, is_npu=True) as cid:
 
 NPU grid 只有一个维度；显式 `threads` 接受 1 或 2，并不是 CUDA 的 block threads。内部原 `vid` 使用 `cthread` 表示；默认 launch 与显式 developer launch 的标记不同，不可据变量名 `_` 猜测是否分配 subcore。A5 的 `MixedKernel`/`SimdVF` 不是这些写法的替代品。
 
+(a2a3-build-environment)=
+
 ## 构建与环境
 
 先准备与设备 CANN 匹配的现有 Torch/TorchNPU 配对。不要为了满足 Python 依赖随意把已安装配对升级或换成另一套 SDK；包版本号相同也不能代替 CANN/driver 兼容核对。
 
-源码构建沿主线的 [安装说明](../get_started/Installation.md) 和 [build 技能](../../.agents/skills/tilelang-build/SKILL.md)。A2/A3 需要启用 `USE_ASCEND`；硬件调度不由开启 CUDA/ROCm 决定。可在仓库根目录进行开发构建：
+源码构建沿主线的 [安装说明](../get_started/Installation.md) 和 {download}`build 技能 <../../.agents/skills/tilelang-build/SKILL.md>`。A2/A3 需要启用 `USE_ASCEND`；硬件调度不由开启 CUDA/ROCm 决定。可在仓库根目录进行开发构建：
 
 ```bash
 A2A3_SDK_CONSTRAINTS=$(mktemp)
@@ -96,7 +98,7 @@ TILELANG_CACHE_DIR=/tmp/tilelang-a2a3-doc-gemm \
 
 公开 Python pass 名称保留，由本地 wrapper 访问隔离 native FFI；不要把旧 TA 注册覆盖主线 A5/共享入口。pass/build 逐项表见 [FFI 来源映射](../../maint/ascend_a2a3/ffi_map.json)。设备 build FFI 为 `target.build.tilelang_ascend_a2a3` 和 `target.build.tilelang_pto_a2a3`，native 第三个参数显式传入平台；公共 codegen wrapper 负责解析平台及 instrumentation。原 `tl.Scope` 在新本地 native 入口为 `tl.A2A3Scope`。
 
-新 TVM IR 使用 `tvm.tirx`、`SBlock`/`SBlockRealize`、`Bind` 与 `AllocBuffer`。旧 `LetStmt`、`Allocate`、`CustomizedCodeNode` 不是把名字全局替换就能构造的新 API。修改 pass 前读主线 [IR 技能](../../.agents/skills/tilelang-tvm-ir/SKILL.md)。原 `_src_code` 公开调用已通过本地语言入口承接，不能因此宣称为被删除的通用旧节点创建了全局等价别名。
+新 TVM IR 使用 `tvm.tirx`、`SBlock`/`SBlockRealize`、`Bind` 与 `AllocBuffer`。旧 `LetStmt`、`Allocate`、`CustomizedCodeNode` 不是把名字全局替换就能构造的新 API。修改 pass 前读主线 {download}`IR 技能 <../../.agents/skills/tilelang-tvm-ir/SKILL.md>`。原 `_src_code` 公开调用已通过本地语言入口承接，不能因此宣称为被删除的通用旧节点创建了全局等价别名。
 
 Python 手动 `T.set_flag(src, dst, event_id)`/`wait_flag` 保留原 TA 语言写法；内部共享 native 入口按 hard-event 组合串适配，不能再传旧三参数 native ABI。`pipe_barrier` 规范化 `PIPE_` 前缀，但 TA 向量 barrier 的源语义仍保留。自动 flag 原有两参数入口不要误改。
 
@@ -117,3 +119,10 @@ Python 手动 `T.set_flag(src, dst, event_id)`/`wait_flag` 保留原 TA 语言�
 现有 main backend/build/IR/A5 技能保持原内容；TA 独有技能逐项适配并记录来源，不把旧全局 `AGENTS` 或自动 push/pull/装环境的操作当成本次迁移授权。新 `AGENTS` 合并候选在专审通过前不激活。
 
 非活动原文档案使用确定性gzip保存原始字节，避免当前格式工具改写历史资料。查看方式为`gzip -dc <archive.gz>`；清单同时记录archive hash、解压后source hash和Git blob。压缩只是来源保存，不是API或设备通过证据；活动用户文档、实际SKILL和法律LICENSE/NOTICE不压缩。
+
+```{toctree}
+:maxdepth: 1
+:caption: 完整来源参考
+
+reference
+```

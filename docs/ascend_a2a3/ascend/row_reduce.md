@@ -6,7 +6,7 @@ These operations produce one result per row; they do not reduce the row count
 to produce one result per column. A5, PTO, FP16, and other reduction axes retain
 their existing implementations.
 
-The [language reference](../language_ref/tilelibrary.md#static-fp32-row-reductions)
+The {ref}`language reference <a2a3-static-fp32-row-reductions>`
 defines the public shape, layout, and temporary-storage requirements. This page
 describes the compiler integration and implementation design.
 

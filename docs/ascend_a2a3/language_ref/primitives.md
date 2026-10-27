@@ -1,6 +1,8 @@
 Tile Language: Primitives
 =========================
 
+(a2a3-compilation-options-and-cv-scopes)=
+
 ## Ascend compilation options and C/V scopes
 
 Ascend kernels contain work for Cube and Vector execution units. By default, the

@@ -102,7 +102,7 @@ selected operation away from the setter or invalidate its typed mask parameters.
 
 Before mask lowering, Vector operations must belong to a V region in the IR,
 assigned automatically or through a handwritten scope. The
-[public scope contract](../language_ref/primitives.md#ascend-compilation-options-and-cv-scopes)
+{ref}`public scope contract <a2a3-compilation-options-and-cv-scopes>`
 defines automatic placement, configuration defaults, and explicit scopes:
 
 - `CombineCV` classifies resource-specific operations and creates C/V scopes where needed.

@@ -28,7 +28,7 @@ def select(
 | selMask | 输入 | 选择掩码；每个比特控制一个元素的数据来源（bit=1 选 src0，bit=0 选 src1） | 张量（bit-packed，dtype uint8） | 必填 |
 | src0 | 输入 | bit=1 时选择的源 | 张量（tensor） | 必填 |
 | src1 | 输入 | bit=0 时选择的源；支持张量、BufferLoad 或标量 | 张量（tensor）/ 标量（scalar） | 必填 |
-| selMode | 输入 | 选择模式，决定 selMask 的解释方式及 src1 的类型 | 字符串，见 [2.3.3 selMode](#233-selmode) | 必填 |
+| selMode | 输入 | 选择模式，决定 selMask 的解释方式及 src1 的类型 | 字符串，见 [2.3.3 selMode](#a2a3-tile-select-mode) | 必填 |
 | tmp | 输入 | 可选 UB 临时存储空间；其标量 dtype 由 lowering 重解释，无语义含义 | 张量（tensor）/ None | 可选（默认 `None`） |
 
 > **类型说明**：
@@ -50,6 +50,8 @@ def select(
 
 - 支持 1D 和 2D
 - 高维缓冲区需通过切片转为 1D/2D BufferRegion 传入
+
+(a2a3-tile-select-mode)=
 
 #### 2.3.3 selMode
 
