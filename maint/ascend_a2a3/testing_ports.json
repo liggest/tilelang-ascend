@@ -462,6 +462,82 @@
         "device_execution": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel.py",
+      "source_git_blob": "813ad09554e374ebd4f4d6068fa0b31f0bf83eb4",
+      "source_sha256": "cffc8e1c912522c5f0235838f689fea324eda648848280a6e0e2eac3b971ef4e",
+      "destination_sha256": "801d9d0a52ebcfec4cfb6999d26842acee8f48613477f34f47552d5ffd2c0d4e",
+      "adaptations": [
+        "Explicit backend-local language import; preserve complete original module AST except imports/cache fixture/new requirements.",
+        "Scoped actual A2A3 cache-clear fixture replaces retired global cache API without disabling caching.",
+        "Preserve every original numerical test, JIT/operator callback, shape, seed, reference, tolerance and optional marker; native source capture stops at the first JIT request before NPU input allocation."
+      ],
+      "validation": {
+        "original_device_cases_across_package": 67,
+        "ON_original_request_complete_source_cases_across_package": 67,
+        "numerical_device_execution": false,
+        "AST_preservation": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel_complex.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel_complex.py",
+      "source_git_blob": "7d18e17480aae4ac39c3fd3082d0e6e5d2e16236",
+      "source_sha256": "6da59ab8458f9a3e90d82d605823b2ad3c782aae63d4182315c4a49b6d4a44f4",
+      "destination_sha256": "836c17013049bdc331a5cd38799917b2e8b660ae03186469a506229dc51c51c4",
+      "adaptations": [
+        "Explicit backend-local language import; preserve complete original module AST except imports/cache fixture/new requirements.",
+        "Scoped actual A2A3 cache-clear fixture replaces retired global cache API without disabling caching.",
+        "Preserve every original numerical test, JIT/operator callback, shape, seed, reference, tolerance and optional marker; native source capture stops at the first JIT request before NPU input allocation."
+      ],
+      "validation": {
+        "original_device_cases_across_package": 67,
+        "ON_original_request_complete_source_cases_across_package": 67,
+        "numerical_device_execution": false,
+        "AST_preservation": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel_auto_copy.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel_auto_copy.py",
+      "source_git_blob": "cf99e78b52515d6498fb4a20cbfa929ceb1d49b2",
+      "source_sha256": "a06b327367a124f8c209b60f2fe773ce23ac14972206d311d327e4656d2aeb52",
+      "destination_sha256": "0ec4a19961437713ddb08906272aed1c0cb57593f8ddfc655b89a310b3238767",
+      "adaptations": [
+        "Explicit backend-local language import; preserve complete original module AST except imports/cache fixture/new requirements.",
+        "Scoped actual A2A3 cache-clear fixture replaces retired global cache API without disabling caching.",
+        "Preserve every original numerical test, JIT/operator callback, shape, seed, reference, tolerance and optional marker; native source capture stops at the first JIT request before NPU input allocation."
+      ],
+      "validation": {
+        "original_device_cases_across_package": 67,
+        "ON_original_request_complete_source_cases_across_package": 67,
+        "numerical_device_execution": false,
+        "AST_preservation": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel_discrete.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel_discrete.py",
+      "source_git_blob": "43c5cf8c3f8d68b9562a67d5d4d05447541f4459",
+      "source_sha256": "eff7a9e40403e9ea7edef9522deff2ae6d95ca4f70c5d6e7d9b820590d8819da",
+      "destination_sha256": "cffb491df43f1949b5b10a9328929c02817197084414f6d02fb22b97dbf5b703",
+      "adaptations": [
+        "Explicit backend-local language import; preserve complete original module AST except imports/cache fixture/new requirements.",
+        "Scoped actual A2A3 cache-clear fixture replaces retired global cache API without disabling caching.",
+        "Preserve every original numerical test, JIT/operator callback, shape, seed, reference, tolerance and optional marker; native source capture stops at the first JIT request before NPU input allocation."
+      ],
+      "validation": {
+        "original_device_cases_across_package": 67,
+        "ON_original_request_complete_source_cases_across_package": 67,
+        "numerical_device_execution": false,
+        "AST_preservation": true
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
