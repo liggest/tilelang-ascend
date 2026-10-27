@@ -238,6 +238,230 @@
         "actual_OFF_independent_parser_cases_passed": 5
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_scalar_index.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_scalar_index.py",
+      "source_git_blob": "8845ca798949a3c521d5b6f5d82fedf1b53a0798",
+      "source_sha256": "929f38c2f026740936d9e52882e75420a341cf60f0a5b68a3e21931e8e5b7173",
+      "destination_sha256": "a430da805a0fba707afec290c33f81d253e68cd3b23f9551eaae2e0692b8755f",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original factories, constants, precision, reference, seeds, shapes and target cases retained.",
+        "Replace retired global tilelang.cache.clear_cache calls with the actual A2A3CythonKernelCache clear_cache inside the existing isolated_a2a3_cache fixture; preserve cache enabled state.",
+        "Mark original numerical cases a2a3_device without import-time device detection; source-only checks are separate unmarked-by-device cases."
+      ],
+      "validation": {
+        "all_non_fixture_functions_AST_equal_after_cache_call_relocation": true,
+        "complete_source_factory_matrix_cases_across_package": 30,
+        "numerical_device_execution": false,
+        "original_numerical_cases_collected_across_package": 34,
+        "actual_OFF_native_and_device_skips_across_package": 64
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_integer_minmax_index.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_integer_minmax_index.py",
+      "source_git_blob": "0718144a1cadfdec6b4456da6884eb5c8668f363",
+      "source_sha256": "c663d13464c9e4ae4a3b417b8f6849cd698117ea64098dd16bf2dc63233444a0",
+      "destination_sha256": "94fc1173686f1f4c4d14996e608cbc90b892348edcba4aec7b1d1aaabcc8f5f8",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original factories, constants, precision, reference, seeds, shapes and target cases retained.",
+        "Replace retired global tilelang.cache.clear_cache calls with the actual A2A3CythonKernelCache clear_cache inside the existing isolated_a2a3_cache fixture; preserve cache enabled state.",
+        "Mark original numerical cases a2a3_device without import-time device detection; source-only checks are separate unmarked-by-device cases."
+      ],
+      "validation": {
+        "all_non_fixture_functions_AST_equal_after_cache_call_relocation": true,
+        "complete_source_factory_matrix_cases_across_package": 30,
+        "numerical_device_execution": false,
+        "original_numerical_cases_collected_across_package": 34,
+        "actual_OFF_native_and_device_skips_across_package": 64
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_narrow_reduce.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_narrow_reduce.py",
+      "source_git_blob": "6205b743e817f5cad03ccc8524d4d10924a7a806",
+      "source_sha256": "105af60313903919db498a581d7e7272a7554741f673291a38d84ba6062d59e0",
+      "destination_sha256": "32fbba8a7b060a60338a87d474cb81be6281ba886fc34db07f63ff3f290aa6a0",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original factories, constants, precision, reference, seeds, shapes and target cases retained.",
+        "Replace retired global tilelang.cache.clear_cache calls with the actual A2A3CythonKernelCache clear_cache inside the existing isolated_a2a3_cache fixture; preserve cache enabled state.",
+        "Mark original numerical cases a2a3_device without import-time device detection; source-only checks are separate unmarked-by-device cases."
+      ],
+      "validation": {
+        "all_non_fixture_functions_AST_equal_after_cache_call_relocation": true,
+        "complete_source_factory_matrix_cases_across_package": 30,
+        "numerical_device_execution": false,
+        "original_numerical_cases_collected_across_package": 34,
+        "actual_OFF_native_and_device_skips_across_package": 64
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_dynamic_fill.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_dynamic_fill.py",
+      "source_git_blob": "db092c1d77554efe58a9715b241782d6f0ee20b1",
+      "source_sha256": "ba9b344c2c675ef82e3d9098a7550d2b2341552ad0e351d3b0b739902d388aa6",
+      "destination_sha256": "fa2e1e616afadf0ba519adc596f2a28fe4733b0b6c0d0ded13f7a9a7f1a5510f",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original factories, constants, precision, reference, seeds, shapes and target cases retained.",
+        "Replace retired global tilelang.cache.clear_cache calls with the actual A2A3CythonKernelCache clear_cache inside the existing isolated_a2a3_cache fixture; preserve cache enabled state.",
+        "Mark original numerical cases a2a3_device without import-time device detection; source-only checks are separate unmarked-by-device cases."
+      ],
+      "validation": {
+        "all_non_fixture_functions_AST_equal_after_cache_call_relocation": true,
+        "complete_source_factory_matrix_cases_across_package": 30,
+        "numerical_device_execution": false,
+        "original_numerical_cases_collected_across_package": 34,
+        "actual_OFF_native_and_device_skips_across_package": 64
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_kernel_driven_mma.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_kernel_driven_mma.py",
+      "source_git_blob": "b21452d0fd365bba1d686b56e71801cc4ea4a308",
+      "source_sha256": "8ed2d014d5ededefdd45e0c5258f12fcc57567e388f4cd346ed2a32f77dab6a7",
+      "destination_sha256": "fb379ca80eb4ef9a7f21075bc81a1405b1ac2ad264f83a3355f793c6e5f586e3",
+      "adaptations": [
+        "Explicit A2A3 dialect import; original factories, constants, precision, reference, seeds, shapes and target cases retained.",
+        "Replace retired global tilelang.cache.clear_cache calls with the actual A2A3CythonKernelCache clear_cache inside the existing isolated_a2a3_cache fixture; preserve cache enabled state.",
+        "Mark original numerical cases a2a3_device without import-time device detection; source-only checks are separate unmarked-by-device cases."
+      ],
+      "validation": {
+        "all_non_fixture_functions_AST_equal_after_cache_call_relocation": true,
+        "complete_source_factory_matrix_cases_across_package": 30,
+        "numerical_device_execution": false,
+        "original_numerical_cases_collected_across_package": 34,
+        "actual_OFF_native_and_device_skips_across_package": 64
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel_negative.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel_negative.py",
+      "source_git_blob": "863b1c6ecbc46e5c61b50976f9b24a90981f537c",
+      "source_sha256": "f6cf003c07486c12181926ace58f1309d312e273b74ea50ba0bfe25e427440bf",
+      "destination_sha256": "4deea66076ad714b7109a7fa9b947078279ca9e8fb3c7c839fb4a89977b6507c",
+      "adaptations": [
+        "Explicit A2A3 dialect and native requirement; original full factory/reference/source assertion bodies retained.",
+        "Use a confirmed representative A3 source context without NPU execution; preserve actual public compile/get_kernel_source for both original PTO padding cases.",
+        "Isolate cache state; SDK discovery skips only missing required toolchain configuration.",
+        "3D negative case additionally checks the actual unsupported-dimension diagnostic and forbids SDK compilation; the two source positives guard NPU current_device/current_stream/synchronize."
+      ],
+      "validation": {
+        "ON_original_host_cases": 3,
+        "PTO_positive_public_compile_and_load": 2,
+        "negative_case_SDK_invocation_forbidden": true,
+        "OFF_native_cases_skipped": 3,
+        "device_execution": false,
+        "source_factory_and_positive_function_AST_equal": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_copy_pad_value.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_copy_pad_value.py",
+      "source_git_blob": "13058ee710156e84626ff32adb15538d994a4ad3",
+      "source_sha256": "2274f8d5e1432fba404b2d8e6f5d60f6b76c9b254d5ad23f55f0170f3a1d44b3",
+      "destination_sha256": "7d8248dbbede29ade3b113e4c79580e8b4420d9781520d57f159a1b3d0cafb7e",
+      "adaptations": [
+        "Explicit A2A3 dialect and native requirement; original full factory/reference/source assertion bodies retained.",
+        "Use a confirmed representative A3 source context without NPU execution; preserve actual public compile/get_kernel_source for both original PTO padding cases.",
+        "Isolate cache state; SDK discovery skips only missing required toolchain configuration.",
+        "3D negative case additionally checks the actual unsupported-dimension diagnostic and forbids SDK compilation; the two source positives guard NPU current_device/current_stream/synchronize."
+      ],
+      "validation": {
+        "ON_original_host_cases": 3,
+        "PTO_positive_public_compile_and_load": 2,
+        "negative_case_SDK_invocation_forbidden": true,
+        "OFF_native_cases_skipped": 3,
+        "device_execution": false,
+        "source_factory_and_positive_function_AST_equal": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel_1d.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel_1d.py",
+      "source_git_blob": "d4420b12115d9604ab0ef23a61642a51efcb2cbf",
+      "source_sha256": "5306f09766a020104701401547a5ea5c58791470d3cd86eddb24efbdbe220327",
+      "destination_sha256": "92cd04a28e2478c62a9698a2115fad8cf8f466328334bed50d7e16da2a8df969",
+      "adaptations": [
+        "Explicit A2A3 language import, preserve every original JIT decorator, kernel, numerical test/reference, callback, shape, precision and seed.",
+        "Retired cache-clear fixture uses the actual A2A3 singleton with isolated per-case cache; cache enablement remains unchanged.",
+        "All original numerical cases retain device requirements; independent host source cases reuse the exact original callback values from pytest parameterizations."
+      ],
+      "validation": {
+        "all_non_fixture_function_and_decorator_AST_equal": true,
+        "ON_complete_source_factory_cases_across_package": 27,
+        "OFF_original_device_cases_skipped_across_package": 27,
+        "OFF_native_source_cases_skipped_across_package": 27,
+        "device_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel_copy.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel_copy.py",
+      "source_git_blob": "55fafa8c94d256b326c9550d43f090048861dd5e",
+      "source_sha256": "d676b5052729330f299b1f6569ea43ea8801a10cc8e76c62da6857e647ac72c8",
+      "destination_sha256": "cbe1a70bf3d1366177dbe61fae97adcd1fb61621b983722c3fd1d020b7d24cf4",
+      "adaptations": [
+        "Explicit A2A3 language import, preserve every original JIT decorator, kernel, numerical test/reference, callback, shape, precision and seed.",
+        "Retired cache-clear fixture uses the actual A2A3 singleton with isolated per-case cache; cache enablement remains unchanged.",
+        "All original numerical cases retain device requirements; independent host source cases reuse the exact original callback values from pytest parameterizations."
+      ],
+      "validation": {
+        "all_non_fixture_function_and_decorator_AST_equal": true,
+        "ON_complete_source_factory_cases_across_package": 27,
+        "OFF_original_device_cases_skipped_across_package": 27,
+        "OFF_native_source_cases_skipped_across_package": 27,
+        "device_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel_mixed.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel_mixed.py",
+      "source_git_blob": "f158aba8cfbdb6fc48634c35d3e947ea7ea17afa",
+      "source_sha256": "7ee996c7f35e4594bce5463e779dbefd4b69f678f4b91cf5d81fde64291b3268",
+      "destination_sha256": "4366fbecc6fd24d3daf467e57c20dd72a7aa803c18c31d7b43c34d8170a66652",
+      "adaptations": [
+        "Explicit A2A3 language import, preserve every original JIT decorator, kernel, numerical test/reference, callback, shape, precision and seed.",
+        "Retired cache-clear fixture uses the actual A2A3 singleton with isolated per-case cache; cache enablement remains unchanged.",
+        "All original numerical cases retain device requirements; independent host source cases reuse the exact original callback values from pytest parameterizations."
+      ],
+      "validation": {
+        "all_non_fixture_function_and_decorator_AST_equal": true,
+        "ON_complete_source_factory_cases_across_package": 27,
+        "OFF_original_device_cases_skipped_across_package": 27,
+        "OFF_native_source_cases_skipped_across_package": 27,
+        "device_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/parallel/test_tilelang_ascend_language_parallel_ub_stride.py",
+      "destination_path": "testing/ascend_a2a3/python/language/parallel/test_tilelang_ascend_language_parallel_ub_stride.py",
+      "source_git_blob": "ce536ff3bd600f270df7847bc771ef79961afcb6",
+      "source_sha256": "082fe6292910a12cad7ff2cdb4fc7f82e2ae9c7fe638bd36b1a5226ee93852bc",
+      "destination_sha256": "74b696c42d3ada3d819ae0ed4df4c910fbabd2953938126f81020455602e8636",
+      "adaptations": [
+        "Explicit A2A3 language import, preserve every original JIT decorator, kernel, numerical test/reference, callback, shape, precision and seed.",
+        "Retired cache-clear fixture uses the actual A2A3 singleton with isolated per-case cache; cache enablement remains unchanged.",
+        "All original numerical cases retain device requirements; independent host source cases reuse the exact original callback values from pytest parameterizations."
+      ],
+      "validation": {
+        "all_non_fixture_function_and_decorator_AST_equal": true,
+        "ON_complete_source_factory_cases_across_package": 27,
+        "OFF_original_device_cases_skipped_across_package": 27,
+        "OFF_native_source_cases_skipped_across_package": 27,
+        "device_execution": false
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
