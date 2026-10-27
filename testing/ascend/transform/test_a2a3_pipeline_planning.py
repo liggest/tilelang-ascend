@@ -174,3 +174,42 @@ def test_real_language_pipelined_producer():
     assert isinstance(before.annotations["num_stages"], tir.IntImm)
     loop = _loops(_run(func))[0]
     assert list(loop.annotations["software_pipeline_stage"]) == [0, 1]
+
+
+@pytest.mark.parametrize("empty_kind", ["evaluate", "pure_bind"])
+def test_flat_pure_bind_counterpart_keeps_ir_and_only_disables_scheduling(empty_kind):
+    loop_var = tir.Var("t", "int32")
+    scalar = tir.Var("col0", "int32")
+    statement = tir.Bind(scalar, loop_var * 128) if empty_kind == "pure_bind" else tir.Evaluate(0)
+    body = tir.SBlockRealize([], True, tir.SBlock([], [], [], "stage", statement))
+    loop = tir.For(loop_var, 0, 12, tir.ForKind.SERIAL, body, annotations={"num_stages": 2, "user_marker": 7})
+    func = tir.PrimFunc([], loop)
+    result = _loops(_run(func))[0]
+    assert result.body.same_as(body)
+    assert dict(result.annotations) == {"user_marker": 7}
+    if empty_kind == "pure_bind":
+        assert result.body.block.body.var.same_as(scalar)
+        tvm.ir.assert_structural_equal(result.body.block.body.value, loop_var * 128)
+
+
+@pytest.mark.parametrize("kind", ["read_state", "volatile", "opaque", "update_state", "store"])
+def test_nonpure_or_volatile_stage_is_not_an_empty_counterpart(kind):
+    source = tir.decl_buffer((16,), "int32", name="source")
+    scalar = tir.Var("scalar", "int32")
+    if kind == "opaque":
+        statement = tir.Bind(scalar, tir.call_extern("int32", "side_effect"))
+    elif kind == "update_state":
+        statement = tir.Bind(scalar, tir.call_intrin("int32", "tirx.tvm_struct_set", source.data, 0, 0, 1))
+    elif kind == "store":
+        statement = tir.BufferStore(source, tir.const(1), [0])
+    else:
+        statement = tir.Bind(scalar, tir.BufferLoad(source, [0]))
+        if kind == "volatile":
+            statement = tir.AttrStmt(source.data, "volatile_scope", 1, statement)
+    body = tir.SBlockRealize([], True, tir.SBlock([], [], [], "stage", statement))
+    loop = tir.For(tir.Var("t", "int32"), 0, 4, tir.ForKind.SERIAL, body, annotations={"num_stages": 2})
+    func = tir.PrimFunc([source.data], loop, buffer_map={source.data: source})
+    # Keep the existing unsupported single-stage-container diagnostic. Merely
+    # having a Bind must not silently disable an actual read/update stage.
+    with pytest.raises(Exception, match="SeqStmt|Can't handle"):
+        _run(func)

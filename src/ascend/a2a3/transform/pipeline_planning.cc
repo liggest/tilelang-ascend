@@ -337,6 +337,13 @@ private:
     if (is_no_op(stmt)) {
       return true;
     }
+    if (const auto *bind = stmt.as<BindNode>()) {
+      // TIRX retains flat pure binds after the opposite-side hardware stages
+      // disappear. They are not scheduling stages; retain their execution and
+      // lexical context just like the existing empty-counterpart path. Reads
+      // and effectful/opaque values are deliberately not considered empty.
+      return SideEffect(bind->value) <= CallEffectKind::kPure;
+    }
     if (const auto *seq = stmt.as<SeqStmtNode>()) {
       for (const Stmt &child : seq->seq) {
         if (!HasOnlyEmptyStageBodies(child)) {
