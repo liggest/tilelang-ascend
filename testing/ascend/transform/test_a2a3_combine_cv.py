@@ -233,3 +233,102 @@ def test_cross_sync_integer_annotation_representations_match(interval):
     right = _nodes(primitive.body, tir.IfThenElse)
     assert len(left) == len(right)
     assert all(tvm.ir.structural_equal(a.condition, b.condition, map_free_vars=True) for a, b in zip(left, right))
+
+
+@pytest.mark.parametrize("chain", [False, True])
+def test_split_removes_dead_foreign_read_and_dependent_empty_control(chain):
+    ub = tir.decl_buffer((16,), "int32", name="ub", scope="shared.ub")
+    scalar, derived, unused = (tir.Var(name, "int32") for name in ("scalar", "derived", "unused"))
+    body = _seq(
+        tir.Bind(scalar, tir.BufferLoad(ub, [0])),
+        tir.Bind(derived, scalar + 1),
+        tir.IfThenElse(derived > 0, tir.Bind(unused, derived * 2), None),
+        tir.BufferStore(ub, tir.const(1), [0]),
+    )
+    if not chain:
+        body = _seq(
+            tir.Bind(scalar, tir.BufferLoad(ub, [0])),
+            tir.IfThenElse(scalar > 0, tir.Evaluate(0), None),
+            tir.BufferStore(ub, tir.const(1), [0]),
+        )
+    result = _apply(_root(body, [ub]))
+    assert not _nodes(_parts(result)[0], tir.BufferLoad)
+    assert _stores(_parts(result)[1]) == ["ub"]
+    _apply(result, verify=True)
+
+
+def test_live_cube_consumer_of_ub_bind_remains_invalid():
+    ub = tir.decl_buffer((16,), "float32", scope="shared.ub")
+    cube = tir.decl_buffer((16,), "float32", scope="shared.l1")
+    scalar = tir.Var("scalar", "float32")
+    read = tir.Bind(scalar, tir.BufferLoad(ub, [0]))
+    result = _apply(_root(_seq(read, tir.BufferStore(cube, scalar, [0])), [ub, cube]))
+    assert _nodes(_parts(result)[0], tir.Bind)[0].var.same_as(scalar)
+    with pytest.raises(tvm.error.InternalError, match="Vector operation.*Scope"):
+        _apply(result, verify=True)
+    with pytest.raises(tvm.error.InternalError, match="Vector operation.*Scope"):
+        _apply(_root(_scope(0, read), [ub]))
+
+
+def test_foreign_read_cleanup_preserves_shared_gm_scalar_consumed_by_both_sides():
+    gm = tir.decl_buffer((16,), "float32", name="gm")
+    ub = tir.decl_buffer((16,), "float32", name="ub", scope="shared.ub")
+    cube = tir.decl_buffer((16,), "float32", name="cube", scope="shared.l1")
+    common, dead = (tir.Var("same_hint", "float32") for _ in range(2))
+    result = _apply(
+        _root(
+            _seq(
+                tir.Bind(common, tir.BufferLoad(gm, [0])),
+                tir.Bind(dead, tir.BufferLoad(ub, [0])),
+                tir.BufferStore(cube, common, [0]),
+                tir.BufferStore(ub, common, [0]),
+            ),
+            [ub, cube],
+            params=[gm],
+        )
+    )
+    for part in _parts(result):
+        assert any(bind.var.same_as(common) for bind in _nodes(part, tir.Bind))
+    _apply(result, verify=True)
+
+
+def test_foreign_read_cleanup_keeps_effectful_binding():
+    ub = tir.decl_buffer((16,), "int32", scope="shared.ub")
+    from tilelang.ascend.a2a3.language.constant import allocate_const
+
+    effect, dead = (tir.Var(name, "int32") for name in ("effect", "dead"))
+    literal = tir.Var("literal", "handle")
+    result = _apply(
+        _root(
+            _seq(
+                _scope(0, tir.Bind(effect, tir.call_extern("int32", "side_effect"))),
+                tir.Bind(literal, allocate_const([7, 11], "int32", [2])),
+                tir.Bind(dead, tir.BufferLoad(ub, [0])),
+            ),
+            [ub],
+        )
+    )
+    calls = _nodes(_parts(result)[0], tir.Call)
+    assert any(call.op.name == "tirx.call_extern" and call.args[0].value == "side_effect" for call in calls)
+    assert any(call.op.name == "tl.a2a3_const_data" for call in calls)
+    assert not _nodes(_parts(result)[0], tir.BufferLoad)
+
+
+@pytest.mark.parametrize("volatile", [False, True])
+def test_raw_nested_consumer_or_volatile_read_blocks_visible_ancestor_cleanup(volatile):
+    ub = tir.decl_buffer((16,), "int32", scope="shared.ub")
+    gm = tir.decl_buffer((16,), "int32", name="gm")
+    named, dead = (tir.Var(name, "int32") for name in ("named", "dead"))
+    tail = (
+        tir.AttrStmt(ub.data, "volatile_scope", 1, tir.Evaluate(0))
+        if volatile
+        else _scope(0, tir.IfThenElse(tir.BufferLoad(gm, [1]) > 0, _call("tl.ascend_src_code", "consume(named);"), None))
+    )
+    result = _apply(_root(_seq(tir.Bind(named, tir.BufferLoad(gm, [0])), tir.Bind(dead, tir.BufferLoad(ub, [0])), tail), [ub], params=[gm]))
+    binds = _nodes(_parts(result)[0], tir.Bind)
+    assert any(bind.var.same_as(named) for bind in binds)
+    assert any(bind.var.same_as(dead) for bind in binds)
+    # Conservative barriers preserve the original invalid read for the checker;
+    # raw C++ names must never be inferred from an absent explicit Var use.
+    with pytest.raises(tvm.error.InternalError, match="Vector operation.*Scope"):
+        _apply(result, verify=True)

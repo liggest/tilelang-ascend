@@ -21,7 +21,9 @@
 #include "arith/ir_mutator_with_analyzer.h"
 #include "tirx/analysis/var_use_def_analysis.h"
 #include "tirx/transform/ir_utils.h"
+#include "tirx/transform/remove_no_op.h"
 
+#include <tvm/ffi/reflection/accessor.h>
 #include <tvm/ffi/reflection/registry.h>
 #include <tvm/tirx/builtin.h>
 #include <tvm/tirx/op.h>
@@ -1241,6 +1243,173 @@ private:
   int scope_{-1};
 };
 
+// TIR LetStmt carried a lexical tail that RemoveNoOp could discard after CV
+// splitting.  TIRX Bind is flat, and TVM RemoveNoOp deliberately leaves unused
+// binds intact.  Repair only split regions with a leftover foreign-resource
+// read; neutral shared scalar programs otherwise retain their original form.
+class SplitRegionBindPruner : public StmtMutator {
+public:
+  static Stmt Apply(Stmt body, bool is_aiv) {
+    bool foreign_read = false;
+    bool opaque_names = false;
+    bool volatile_read = false;
+    PostOrderVisit(body, [&](const ObjectRef &node) {
+      if (const auto *load = node.as<BufferLoadNode>()) {
+        AscendResource resource = ResourceForStorageScope(load->buffer.scope());
+        foreign_read |= (resource == AscendResource::kCube && is_aiv) ||
+                        (resource == AscendResource::kVector && !is_aiv);
+      } else if (const auto *call = node.as<CallNode>()) {
+        opaque_names |= call->op.same_as(ascend_src_code());
+      } else if (const auto *attr = node.as<AttrStmtNode>()) {
+        volatile_read |= attr->attr_key == "volatile_scope";
+      } else if (const auto *alloc = node.as<AllocBufferNode>()) {
+        volatile_read |= alloc->annotations.count(tirx::attr::kVolatile) != 0;
+      }
+    });
+    // A raw string can consume any visible ancestor binding without a Var use
+    // in the IR.  Do not prune any binding in that entire emitted region.
+    if (!foreign_read || opaque_names || volatile_read) {
+      return body;
+    }
+    bool removed;
+    do {
+      // Normalize first: an empty conditional may be the only remaining use
+      // of a binding.  Every continuing iteration removes at least one Bind.
+      arith::Analyzer analyzer;
+      body = tirx::RemoveNoOp(body, &analyzer);
+      SplitRegionBindPruner pruner;
+      body = pruner(body);
+      removed = pruner.removed_;
+    } while (removed);
+    return body;
+  }
+
+private:
+  using VarSet = std::unordered_set<Var, ObjectPtrHash, ObjectPtrEqual>;
+
+  class Uses : public StmtExprVisitor {
+  public:
+    explicit Uses(VarSet *vars) : vars_(vars) {}
+
+  private:
+    void VisitExpr_(const VarNode *op) final { vars_->insert(GetRef<Var>(op)); }
+    void VisitBufferUse(const Buffer &buffer) final {
+      vars_->insert(buffer->data);
+      // A descriptor can carry a scalar shape/stride use without a nearby
+      // DeclBuffer.  Counting it conservatively cannot discard a needed bind.
+      VisitBufferDef(buffer, false);
+    }
+    void VisitExpr_(const BufferLoadNode *op) final {
+      StmtExprVisitor::VisitExpr_(op);
+      if (op->predicate.defined()) {
+        VisitExpr(op->predicate.value());
+      }
+    }
+    void VisitStmt_(const BufferStoreNode *op) final {
+      StmtExprVisitor::VisitStmt_(op);
+      if (op->predicate.defined()) {
+        VisitExpr(op->predicate.value());
+      }
+    }
+    void VisitStmt_(const ForNode *op) final {
+      StmtExprVisitor::VisitStmt_(op);
+      VisitMetadata(op->annotations);
+    }
+    void VisitStmt_(const SBlockNode *op) final {
+      StmtExprVisitor::VisitStmt_(op);
+      VisitMetadata(op->annotations);
+    }
+    void VisitStmt_(const AttrStmtNode *op) final {
+      StmtExprVisitor::VisitStmt_(op);
+      VisitMetadata(op->node);
+    }
+    void VisitExpr_(const CallNode *op) final {
+      StmtExprVisitor::VisitExpr_(op);
+      VisitMetadata(op->annotations);
+    }
+    void VisitMetadata(const Any &value) {
+      auto object = value.as<ObjectRef>();
+      if (!object || !object->defined() || !metadata_.insert(*object).second) {
+        return;
+      }
+      if (auto expr = object->as<PrimExpr>()) {
+        VisitExpr(expr.value());
+      } else if (auto array = object->as<ArrayObj>()) {
+        for (const Any &item : *array) {
+          VisitMetadata(item);
+        }
+      } else if (auto map = object->as<MapObj>()) {
+        for (const auto &item : *map) {
+          VisitMetadata(item.first);
+          VisitMetadata(item.second);
+        }
+      } else {
+        reflection::ForEachFieldInfo(
+            TVMFFIGetTypeInfo((*object)->type_index()),
+            [&](const TVMFFIFieldInfo *field) {
+              VisitMetadata(reflection::FieldGetter(field)(*object));
+            });
+      }
+    }
+    VarSet *vars_;
+    std::unordered_set<ObjectRef, ObjectPtrHash, ObjectPtrEqual> metadata_;
+  };
+
+  Stmt VisitStmt(const Stmt &stmt) final {
+    VarSet live_out = live_;
+    // Branches and nested scopes may consume an ancestor bind.  Seed their
+    // complete use set before mutating children, then recompute after empty
+    // controls disappear on the next fixed-point iteration.
+    if (!stmt.as<SeqStmtNode>() && !stmt.as<BindNode>()) {
+      Uses{&live_}(stmt);
+    }
+    Stmt result = StmtMutator::VisitStmt(stmt);
+    if (!stmt.as<BindNode>()) {
+      live_ = std::move(live_out);
+      Uses{&live_}(result);
+    }
+    return result;
+  }
+
+  Stmt VisitStmt_(const SeqStmtNode *op) final {
+    Array<Stmt> reversed;
+    for (auto it = op->seq.rbegin(); it != op->seq.rend(); ++it) {
+      reversed.push_back(VisitStmt(*it));
+    }
+    Array<Stmt> statements;
+    for (auto it = reversed.rbegin(); it != reversed.rend(); ++it) {
+      statements.push_back(*it);
+    }
+    return SeqStmt::Flatten(statements);
+  }
+
+  static bool CanDiscard(const PrimExpr &value) {
+    bool discard = SideEffect(value) <= CallEffectKind::kReadState;
+    PostOrderVisit(value, [&](const ObjectRef &node) {
+      if (const auto *load = node.as<BufferLoadNode>();
+          load && load->predicate.defined()) {
+        discard &= CanDiscard(load->predicate.value());
+      }
+    });
+    return discard;
+  }
+
+  Stmt VisitStmt_(const BindNode *op) final {
+    // Match original TA RemoveNoOp::HasSideEffect: pure and ordinary reads
+    // may disappear; update/opaque calls (including const_data) may not.
+    if (!live_.count(op->var) && CanDiscard(op->value)) {
+      removed_ = true;
+      return Evaluate(0);
+    }
+    live_.erase(op->var);
+    Uses{&live_}(op->value);
+    return GetRef<Stmt>(op);
+  }
+
+  VarSet live_;
+  bool removed_{false};
+};
+
 class CVCombineEmitter : public StmtMutator {
 public:
   explicit CVCombineEmitter(bool is_aiv) : is_aiv_(is_aiv) {}
@@ -1343,8 +1512,9 @@ private:
       CVCombineEmitter cubeStmt(false);
       CVCombineEmitter vecStmt(true);
 
-      Stmt cube_code = cubeStmt(block->body);
-      Stmt vec_code = vecStmt(block->body);
+      Stmt cube_code =
+          SplitRegionBindPruner::Apply(cubeStmt(block->body), false);
+      Stmt vec_code = SplitRegionBindPruner::Apply(vecStmt(block->body), true);
 
       if (is_auto_cross_core_sync_) {
         AutoInsertCrossCoreSync::AutoInsert(cube_code, vec_code);
