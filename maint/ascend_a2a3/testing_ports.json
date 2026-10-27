@@ -559,6 +559,34 @@
         "SDK_compilation": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_persistent.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_persistent.py",
+      "source_git_blob": "695f276e2a1d5ec4e0c58af3dea2860414651308",
+      "source_sha256": "53bdd1ab6f7636f03eeb8d5d3f7f13c12faa76d7862e675af3aefa05a2601dd6",
+      "destination_sha256": "0832ae5361f438b9b474a035cf2fa00dc350d1ab5d0d4946994befa47dd5c847",
+      "status": "reviewed_original_host_source_and_SDK",
+      "adaptations": [
+        "Backend-private dialect/tirx imports; original complete kernel, all parametrized tests, negative arguments and exact guard expectations retained.",
+        "Only structural readers distinguish neutral launch For thread bindings and read actual cid Var identity.",
+        "Private native producer restores source validation/formula/guard; coordinate Binds are scoped inside guarded wave body for TIRX lexical correctness."
+      ],
+      "validation": {
+        "isolated_native_TU_compile_passed": true,
+        "fresh_native_FFI_tests_pending": false,
+        "original_cases": 15,
+        "additional_contract_cases": 22,
+        "actual_OFF_boundary_passed": 1,
+        "actual_OFF_original_native_cases_skipped": 15,
+        "all_original_guard_assertions_retained": true,
+        "device_execution": false,
+        "root_normal_USE_ASCEND_build_passed": true,
+        "root_original_and_additional_cases_passed": 38,
+        "root_launch_neighbour_cases_passed": 25,
+        "actual_Bisheng_source_cases": 4
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [

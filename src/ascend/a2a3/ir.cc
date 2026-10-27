@@ -10,6 +10,9 @@
  */
 
 #include "../../ir.h"
+#include "../../op/builtin.h"
+
+#include <tvm/arith/analyzer.h>
 
 #include <tvm/ffi/reflection/registry.h>
 #include <tvm/script/ir_builder/base.h>
@@ -86,6 +89,116 @@ KernelLaunchFrame KernelLaunch(const Array<PrimExpr> &grid_size,
   return KernelLaunchFrame(n);
 }
 
+// Complete TA PersistentFor from 0deb8b93, with scoped TIRX coordinate Binds.
+ForFrame Persistent(const Array<PrimExpr> &domain, const PrimExpr &wave_size,
+                    const PrimExpr &index, PrimExpr group_size) {
+  using namespace tvm::tirx;
+  ICHECK(!domain.empty());
+  arith::Analyzer validation_analyzer;
+  for (const auto &extent : domain) {
+    ICHECK(!validation_analyzer.CanProveLess(extent, 1))
+        << "T.Persistent domain extents must be positive, but got " << extent;
+  }
+  ICHECK(!validation_analyzer.CanProveLess(wave_size, 1))
+      << "T.Persistent wave_size must be positive, but got " << wave_size;
+  ICHECK(!validation_analyzer.CanProveLess(index, 0) &&
+         !validation_analyzer.CanProveGreaterEqual(index - wave_size, 0))
+      << "T.Persistent index must satisfy 0 <= index < wave_size, but got "
+      << "index=" << index << " and wave_size=" << wave_size;
+  ICHECK(!validation_analyzer.CanProveLess(group_size, 1))
+      << "T.Persistent group_size must be positive, but got " << group_size;
+  PrimExpr last_extent = domain[domain.size() - 1];
+  PrimExpr effective_group_size = min(group_size, last_extent);
+  PrimExpr group_remainder =
+      validation_analyzer.Simplify(truncmod(last_extent, effective_group_size));
+  if (const auto *remainder = group_remainder.as<IntImmNode>()) {
+    ICHECK_EQ(remainder->value, 0)
+        << "T.Persistent last domain extent must be divisible by "
+        << "min(group_size, domain[-1]), but got domain[-1]=" << last_extent
+        << " and group_size=" << group_size;
+  }
+  ObjectPtr<ForFrameNode> n = make_object<ForFrameNode>();
+  n->vars.reserve(domain.size());
+  n->doms.reserve(domain.size());
+  PrimExpr domain_size = domain[0];
+  for (int i = 1; i < domain.size(); i++) {
+    domain_size *= domain[i];
+  }
+
+  auto waves = ceildiv(domain_size, wave_size);
+  auto loop_var = Var("w", waves.dtype());
+  group_size = min(group_size, domain[domain.size() - 1]);
+  Array<Var> coord_vars;
+
+  for (int i = 0; i < domain.size(); ++i) {
+    DataType dtype = domain[i].dtype();
+    Var coord("v" + std::to_string(i), dtype);
+    coord_vars.push_back(coord);
+    n->vars.push_back(coord);
+    n->doms.push_back(Range(make_const(dtype, 0), domain[i]));
+  }
+
+  Array<PrimExpr> grouped_domain;
+  grouped_domain.push_back(truncdiv(domain[domain.size() - 1], group_size));
+  for (int i = 0; i < domain.size() - 1; ++i) {
+    grouped_domain.push_back(domain[i]);
+  }
+  grouped_domain.push_back(group_size);
+
+  n->f_make_for_loop = [=](const Array<Var> &vars, const Array<Range> &doms,
+                           const Array<Optional<PrimExpr>> &,
+                           Stmt body) -> Stmt {
+    ICHECK_EQ(vars.size(), doms.size());
+    Map<String, Any> anno;
+    Array<PrimExpr> idxs(grouped_domain.size(), PrimExpr());
+    PrimExpr global_index = loop_var * wave_size + index;
+    PrimExpr rem = global_index;
+
+    for (int i = grouped_domain.size() - 1; i >= 1; --i) {
+      idxs.Set(i, truncmod(rem, grouped_domain[i]));
+      rem = truncdiv(rem, grouped_domain[i]);
+    }
+    idxs.Set(0, rem);
+
+    auto out_if = tvm::tirx::IfThenElse(
+        domain_size <= global_index,
+        tvm::tirx::Evaluate(
+            tvm::tirx::Call(DataType::Handle(), tvm::tl::loop_break(), {})),
+        std::nullopt);
+
+    // Legacy Let values referred forward to w and were inlined by old TIR.
+    // TIRX Binds must instead be dominated by the wave For. Keep the original
+    // coordinate Var identities and wrapping order inside the guarded tile.
+    Array<Stmt> coordinate_body;
+    coordinate_body.push_back(
+        tvm::tirx::Bind(vars.back(), idxs[0] * group_size + idxs[vars.size()]));
+    for (int i = static_cast<int>(vars.size()) - 2; i >= 0; --i) {
+      coordinate_body.push_back(tvm::tirx::Bind(vars[i], idxs[i + 1]));
+    }
+    coordinate_body.push_back(body);
+    Stmt tile_body = SeqStmt::Flatten(coordinate_body);
+
+    arith::Analyzer analyzer;
+    Stmt new_body = tile_body;
+    if (analyzer.CanProveGreaterEqual(waves, 2)) {
+      new_body = SeqStmt({out_if, tile_body});
+    } else if (!analyzer.CanProveEqual(domain_size, wave_size)) {
+      // A unit loop can be removed during lowering, so a loop_break guard
+      // would become an invalid top-level C++ break. Predicate the tile body
+      // for partial first waves and symbolic wave counts instead. Under
+      // Persistent's 0 <= index < wave_size contract, no guard is needed when
+      // the domain is provably exactly one full wave.
+      new_body = tvm::tirx::IfThenElse(global_index < domain_size, tile_body,
+                                       std::nullopt);
+    }
+    Stmt outer =
+        For(loop_var, 0, waves, ForKind::kSerial, new_body, std::nullopt, anno);
+    return outer;
+  };
+
+  return ForFrame(n);
+}
+
 class ScopeFrameNode : public TIRFrameNode {
 public:
   Array<TIRFrame> frames;
@@ -132,7 +245,8 @@ TVM_FFI_STATIC_INIT_BLOCK() {
   ScopeFrameNode::RegisterReflection();
   reflection::GlobalDef()
       .def("tl.A2A3KernelLaunch", KernelLaunch)
-      .def("tl.A2A3Scope", Scope);
+      .def("tl.A2A3Scope", Scope)
+      .def("tl.A2A3Persistent", Persistent);
 }
 
 } // namespace a2a3

@@ -28,3 +28,4 @@ from . import pto as pto  # noqa: F401
 
 from .pipeline import Pipelined  # noqa: F401
 from .swizzle import npu_use_swizzle, use_swizzle  # noqa: F401
+from .persistent import Persistent  # noqa: F401
