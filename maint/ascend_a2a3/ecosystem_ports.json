@@ -3,7 +3,7 @@
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
   "validated_main_native_checkpoint": "03d12088987a47256c58afb745a764344541985a",
   "validation_date_utc": "2026-10-27",
-  "scope": "Thirty reviewed original assets: initial six, six positional CI source/test pairs, and twelve xllm/MoE/quant source/test/helper assets. Remaining candidates are not completed ports.",
+  "scope": "Thirty device-validated owner assets plus sixteen B2-C source/SDK-verified assets pending real device validation; pending candidates are not completed ports.",
   "entries": [
     {
       "source_path": "examples/gemm/example_gemm.py",
@@ -798,6 +798,551 @@
         "pure_host_utility_contracts_passed": true,
         "used_by_real_original_PR_device_cases": true
       }
+    },
+    {
+      "source_path": "examples/batch_gemm/batch_gemm.py",
+      "destination_path": "examples/ascend_a2a3/batch_gemm/batch_gemm.py",
+      "source_git_blob": "7fc7c0de5813fe620054e99718095b787a6e1d06",
+      "source_sha256": "969609ff44ae23316b6199ee2b7942658543336137d4c66249c897c6686e511a",
+      "destination_sha256": "261e06ec0c1b90c740866eadf4ea05c00a226ab2ee6753dce3ec23ace5216081",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context.",
+        "Normalize CRLF line endings to LF to match the Git text blob; original TA source bytes/hash remain unchanged."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/batch_gemm/test_batch_gemm.py",
+      "destination_path": "examples/ascend_a2a3/batch_gemm/test_batch_gemm.py",
+      "source_git_blob": "db22f2e5e1579bf1f31647239f64ee8e2a5b4975",
+      "source_sha256": "1b7aa167123289f95d2358c15459171e8273b06d3e4b92e05dfc8fa72968f393",
+      "destination_sha256": "9cb1ae321e91d5e2cf67a315700c6cbb299ab964b59c2e00fcdbf8cfe8b9f62b",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/cann-bench/situ_glu_grad/example_situ_glu_grad.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/situ_glu_grad/example_situ_glu_grad.py",
+      "source_git_blob": "4efa1b0332a54d8538208d4d2f51d604c7d884f0",
+      "source_sha256": "3b2fbd78d3444a19591584bde9e78fe7a5789e5ff8d48cb6739931bb68cae693",
+      "destination_sha256": "89c3d1725ed42c89b0ce647530e45e01ce4e75c30a9f8fdf0d38d27d8dd51386",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/cann-bench/situ_glu_grad/test_example_situ_glu_grad.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/situ_glu_grad/test_example_situ_glu_grad.py",
+      "source_git_blob": "bffee4a34edf2afaebd9a53b2eeb4cfd145fe2a1",
+      "source_sha256": "3e04e86ee87eaa621362c1006f49f551df8e199b0982e90c72af8673e75761ee",
+      "destination_sha256": "b2ac0e4296c3c61dd92ce1f21ddccfa60b83f51d38f1af193f4c5f7ea3543758",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/deepseek_v4/act_quant.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/act_quant.py",
+      "source_git_blob": "4ace0139225c15cdeef12cd72daa8ad0d2609f6d",
+      "source_sha256": "424376377200e47995d14042a84aac992f0e21959b68ac11e9a61823d2fefa6f",
+      "destination_sha256": "981a562f3ae98381c42428696d38d8e444e04b0b3b10fcbf6f521e647895b823",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/deepseek_v4/test_act_quant.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/test_act_quant.py",
+      "source_git_blob": "2b1106e9acfc9ea125edbc8d0ce629e2919692f6",
+      "source_sha256": "67a9628b764e95cfa65ee1a65b7bc08817bf8a340e91abfe37272afdcaf1cc43",
+      "destination_sha256": "93078716bd580bc96b463de74df4045fcd3474dc63671178b5401725e76ee153",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/deepseek_v4/hc_split_sinkhorn.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/hc_split_sinkhorn.py",
+      "source_git_blob": "f3ed5121ea6f050973fafbee595759af6d037f2b",
+      "source_sha256": "73b90d4279be959b5436941072bd6428bdc0ccc9e9f22989c874081a250d5400",
+      "destination_sha256": "dc6dc44c42567bc23617013938d78b932316f6684174127a13c4a9e0aff6c289",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/deepseek_v4/test_hc_split_sinkhorn.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/test_hc_split_sinkhorn.py",
+      "source_git_blob": "0f9a29c046cb172312e5849788b1662110b72d9c",
+      "source_sha256": "48ae379534c48424f2aee018c8fae031f1acc26cfd4a7055bb09b418b8907240",
+      "destination_sha256": "24560ab4832d2e8f790423b3adff2105a0d7fb6bb71fe21288ab02c0c0a60164",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/deepseek_v4/int8_gemm.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/int8_gemm.py",
+      "source_git_blob": "11e0c92bd5f5c034246f066b0da62ee98fc720dd",
+      "source_sha256": "b8aed13e08354d9f506ed1edc2aea686a877e33c5b7d0badf06cef8263079132",
+      "destination_sha256": "90ebaa693057dcffe89ad40fa2795e23182dd3924fdbea3010160cec07a36298",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/deepseek_v4/test_int8_gemm.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/test_int8_gemm.py",
+      "source_git_blob": "0041b1373e8f6ab06d85e2c37888cd141124ca87",
+      "source_sha256": "c3783178b6fd239e9d35c1ae46a2b0618c60fcb2ec9ff59fd2d786e7455b553d",
+      "destination_sha256": "e1129101b662e3093c2ae865dbf8902d7e6037cdeeb9823cd3ec0af83f41a309",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/deepseek_v4/sparse_attention.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/sparse_attention.py",
+      "source_git_blob": "7f8bb30fb1e3c32b51451560a7e0b3b541cfd6f4",
+      "source_sha256": "0a7e2c54593a53511b2d26ca9f47e9e1eecb00fdfb8690e2acea8b330f4a2f76",
+      "destination_sha256": "ef44b36f0eb93c501c585b0781979bc6298be76287648c2417962d53218e2d7c",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/deepseek_v4/test_sparse_attention.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/test_sparse_attention.py",
+      "source_git_blob": "6b81938db77aefd111018eaa44806b6cd135a85b",
+      "source_sha256": "fafc01fbd244e0edeae88b93f37e3a2f0838f8feb9521a29e45421eaaf659c75",
+      "destination_sha256": "6321cbf75a3b63777b526ca65fe24cfa13e601b3a90411ba34c2232e407339c6",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/flash_attention/flash_attn_bhsd.py",
+      "destination_path": "examples/ascend_a2a3/flash_attention/flash_attn_bhsd.py",
+      "source_git_blob": "f2299ad7c2aba6a8ff30a78b268ff07fd4ea8cd7",
+      "source_sha256": "fc1bdc68b6d8f834093187e2bfc1d051e0e7228e80873f42d4b48e127a92c1c8",
+      "destination_sha256": "fbed1d9e096a20b4b8b4e81a93802af247967cf6d03d0b1165554d9e5b575ae3",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/flash_attention/test_flash_attn_bhsd.py",
+      "destination_path": "examples/ascend_a2a3/flash_attention/test_flash_attn_bhsd.py",
+      "source_git_blob": "824aa3f7dddc109e03e7c254f92900e67fe3fc2e",
+      "source_sha256": "27efa1e838643f8a69c11aa69132a1c60b99336525ae0c3e30641d40cee4b2d4",
+      "destination_sha256": "acb07bf8c280afdcc0cdecc7afb98bc9f066be38925a920505e2ebbe7595abda",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/gqa_fwd_varlen/gqa_fwd_varlen.py",
+      "destination_path": "examples/ascend_a2a3/gqa_fwd_varlen/gqa_fwd_varlen.py",
+      "source_git_blob": "57fbee79e20cbc5a34a7775769b5bb1d1b8e9e56",
+      "source_sha256": "7526fee0eede2cf1301c1c78b7d3637e5b188c11e92859f6af2069d12d299856",
+      "destination_sha256": "6839b821b7edda364c11f6ffb13fdaa87046ff09e1be153643f7900a7d3a4632",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
+    },
+    {
+      "source_path": "examples/gqa_fwd_varlen/test_gqa_fwd_varlen.py",
+      "destination_path": "examples/ascend_a2a3/gqa_fwd_varlen/test_gqa_fwd_varlen.py",
+      "source_git_blob": "0cf1202066f35ba3cfbbbe5711d1e171778828fc",
+      "source_sha256": "85caef1e67fea6e28238374be0d9831b7f688d12d6d870c676485d621432efe6",
+      "destination_sha256": "52ab2e846a91fc52d6dfa7df70732d11fb5a2270245e89a154f81b6e402ab83f",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
+      "state": "source_SDK_verified_device_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
+        "Move import-time CLI/cache/default-device/seed/logging effects into original CLI main; tests use scoped original effects.",
+        "Use exact file-local module imports where original wrappers changed sys.path; isolate per-case disk/memory cache and restore cache/default-device context."
+      ],
+      "validation": {
+        "original_top_functions_classes_AST_unchanged": true,
+        "full_pipeline_source_gate_root": "d7577555",
+        "source_schemas_batch_total": 46,
+        "actual_TA_main_unique_SDK_each": 35,
+        "SDK_final_snapshot": "Exact source + complete CompileConfig + ABI identity reuse from prior actual successful Bisheng; no additional compilation claimed.",
+        "native_dependencies": [
+          "6b0b03b5",
+          "a4d7a034"
+        ],
+        "language_dependencies": [
+          "90b07e63",
+          "d7577555"
+        ],
+        "actual_device_validation": "pending root freeze/window",
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+      }
     }
   ],
   "test_isolation_validation": {
@@ -818,7 +1363,8 @@
     "xllm_moe_quant_original_full_cases": 380,
     "pending_original_entries": 13,
     "original_manifest_statuses_changed": false,
-    "full_nightly_290_cases_preserved_for_final_regression": true
+    "full_nightly_290_cases_preserved_for_final_regression": true,
+    "source_SDK_verified_device_pending_entries": 8
   },
   "example_namespace_scope_validation": {
     "prior_cache_states": [

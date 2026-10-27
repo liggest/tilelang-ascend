@@ -92,3 +92,24 @@ platform; target validation still requires a confirmed A2/A3 platform. MoE
 backward requires the A2A3 flat-Bind/CV cleanup that preserves live resource
 consumers while removing the dead vector reads from the automatically split C
 branch.
+
+The next source/SDK-reviewed group covers batch GEMM, SiTU GLU gradient,
+DeepSeek v4 quantization/HC split/int8 GEMM/sparse attention, BHSD flash
+attention and variable-length GQA. Its 16 source/test assets retain the original
+matrix, references and tolerances. All 46 original factory inputs have complete
+TA/main source and SDK evidence; actual device validation is still pending.
+
+```bash
+python -m pytest examples/ascend_a2a3/batch_gemm/ \
+  examples/ascend_a2a3/cann-bench/situ_glu_grad/ \
+  examples/ascend_a2a3/deepseek_v4/ \
+  examples/ascend_a2a3/flash_attention/ \
+  examples/ascend_a2a3/gqa_fwd_varlen/ -s
+```
+
+GQA L0/L1 originally return a boolean and print `PRECISION_PASS/FAIL` without
+asserting that boolean. L2/boundary originally print non-blocking warnings.
+A successful pytest exit alone therefore does not establish GQA precision;
+inspect those original results separately. The migration retains this contract.
+DeepSeek companions restore the caller's default device context after each
+case, preserving their original unqualified NPU allocations within the test.

@@ -71,3 +71,29 @@ def _restore_example_cache_state():
             CacheState.enable()
         else:
             CacheState.disable()
+
+
+@pytest.fixture
+def isolated_npu_default_device(_require_a2a3):
+    """Preserve the original example's default NPU allocations within one case."""
+    import torch
+
+    # The dependency performs native/device gating and registers torch_npu
+    # before this device context is constructed. No process-global default is
+    # set: the caller's CPU, NPU, or absent context is restored on exit.
+    with torch.device("npu"):
+        yield
+
+
+@pytest.fixture
+def disable_a2a3_cache():
+    """Keep original compile-every-call examples local to their test case."""
+    was_enabled = CacheState.is_enabled()
+    CacheState.disable()
+    try:
+        yield
+    finally:
+        if was_enabled:
+            CacheState.enable()
+        else:
+            CacheState.disable()
