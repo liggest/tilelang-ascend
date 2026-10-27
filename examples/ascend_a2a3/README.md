@@ -97,7 +97,11 @@ The next source/SDK-reviewed group covers batch GEMM, SiTU GLU gradient,
 DeepSeek v4 quantization/HC split/int8 GEMM/sparse attention, BHSD flash
 attention and variable-length GQA. Its 16 source/test assets retain the original
 matrix, references and tolerances. All 46 original factory inputs have complete
-TA/main source and SDK evidence; actual device validation is still pending.
+TA/main source and SDK evidence. The 14 original pytest items passed on A3:
+six individual example assertions, 23 SiTU precision checks, 12 GQA gate checks
+and four GQA boundary checks passed. The large-input GQA boundary produces the
+exact same original non-blocking warning in TA and main; it is not counted as
+a numerical pass.
 
 ```bash
 python -m pytest examples/ascend_a2a3/batch_gemm/ \

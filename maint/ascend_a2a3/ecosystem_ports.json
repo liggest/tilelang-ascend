@@ -3,7 +3,7 @@
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
   "validated_main_native_checkpoint": "03d12088987a47256c58afb745a764344541985a",
   "validation_date_utc": "2026-10-27",
-  "scope": "Thirty device-validated owner assets plus sixteen B2-C source/SDK-verified assets pending real device validation; pending candidates are not completed ports.",
+  "scope": "Forty-six reviewed owner assets including B2-C original source/SDK/device observations. GQA retains one exact source-known nonblocking boundary numerical warning; that input is not counted as a precision pass. Remaining candidates are not completed ports.",
   "entries": [
     {
       "source_path": "examples/gemm/example_gemm.py",
@@ -808,7 +808,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -830,7 +830,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -843,7 +850,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -864,7 +871,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -877,7 +891,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -898,7 +912,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -911,7 +932,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -932,7 +953,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -945,7 +973,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -966,7 +994,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -979,7 +1014,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1000,7 +1035,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1013,7 +1055,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1034,7 +1076,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1047,7 +1096,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1068,7 +1117,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1081,7 +1137,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1102,7 +1158,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1115,7 +1178,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1136,7 +1199,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1149,7 +1219,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1170,7 +1240,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1183,7 +1260,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1204,7 +1281,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1217,7 +1301,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1238,7 +1322,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1251,7 +1342,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1272,7 +1363,14 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
         "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
       }
     },
@@ -1285,7 +1383,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix_with_inherited_boundary_warning",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1306,8 +1404,26 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
-        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md",
+        "original_GQA_precision": {
+          "TA_main_12_gate_tuples_exact_equal_and_passed": true,
+          "L0_L1_original_function_returns": [
+            true,
+            true
+          ],
+          "boundary_pass_count": 4,
+          "inherited_boundary_warning_count": 1,
+          "large_input_numerical_pass": false,
+          "original_nonblocking_warning_semantics_preserved": true
+        }
       }
     },
     {
@@ -1319,7 +1435,7 @@
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original NPU source or exact companion in original active operator CI; complete original matrix retained.",
-      "state": "source_SDK_verified_device_pending",
+      "state": "reviewed_original_device_matrix_with_inherited_boundary_warning",
       "all_original_cases_retained": true,
       "adaptations": [
         "Explicit private A2A3 language/layout imports; original kernel/decorator/precision/reference AST retained.",
@@ -1340,8 +1456,26 @@
           "90b07e63",
           "d7577555"
         ],
-        "actual_device_validation": "pending root freeze/window",
-        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md"
+        "actual_device_validation": {
+          "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+          "actual_soc": "Ascend910_9392",
+          "original_main_pytest_items_passed_batch_total": 14,
+          "original_shapes_references_tolerances_preserved": true,
+          "source_known_nonblocking_numerical_warning": "GQA large_input; exact same original TA/main warning, not counted numerical pass",
+          "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+        },
+        "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_source_gate.md",
+        "original_GQA_precision": {
+          "TA_main_12_gate_tuples_exact_equal_and_passed": true,
+          "L0_L1_original_function_returns": [
+            true,
+            true
+          ],
+          "boundary_pass_count": 4,
+          "inherited_boundary_warning_count": 1,
+          "large_input_numerical_pass": false,
+          "original_nonblocking_warning_semantics_preserved": true
+        }
       }
     }
   ],
@@ -1357,14 +1491,14 @@
   },
   "active_operator_progress": {
     "original_active_entries": 24,
-    "reviewed_and_actual_A3_PR_validated_entries": 11,
+    "reviewed_and_actual_A3_PR_validated_entries": 19,
     "positional_original_cases": 17,
     "xllm_moe_quant_original_PR_cases": 90,
     "xllm_moe_quant_original_full_cases": 380,
-    "pending_original_entries": 13,
+    "pending_original_entries": 5,
     "original_manifest_statuses_changed": false,
     "full_nightly_290_cases_preserved_for_final_regression": true,
-    "source_SDK_verified_device_pending_entries": 8
+    "source_SDK_verified_device_pending_entries": 0
   },
   "example_namespace_scope_validation": {
     "prior_cache_states": [
@@ -1399,5 +1533,25 @@
       "root_library_sha256": "5d2cd215dcc954c1a468df835d8a3ecc55998ee2abf1b87e338c529e9c999b5b",
       "root_integrated_commit": "6b0b03b5"
     }
+  },
+  "batch_B2_C_validation": {
+    "root_ready_commit": "1eeb43abc151943bedd336118d9b596d17e1e096",
+    "original_main_pytest_items_passed": 14,
+    "actual_source_factory_inputs_executed": 46,
+    "six_individual_original_example_assertions_passed": true,
+    "SiTU_original_precision_checks_passed": 23,
+    "GQA_original_gate_precision_checks_passed": 12,
+    "GQA_original_boundary_checks_passed": 4,
+    "GQA_original_inherited_boundary_numerical_warnings": 1,
+    "GQA_large_input_numerical_pass": false,
+    "actual_TA_GQA_compiles": 9,
+    "actual_main_compiles": 36,
+    "all_45_Bisheng_calls_returncode_zero": true,
+    "TA_main_GQA_gate_tuples_statuses_warning_text_exact": true,
+    "HEAD_source_native_Cython_pre_post_hashes_identical": true,
+    "actual_default_device_fixture_preserves_None_CPU_NPU_contexts": true,
+    "caller_cache_state_preserved_before_runner_cleanup": true,
+    "device_window_released": true,
+    "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
   }
 }
