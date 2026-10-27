@@ -25,3 +25,6 @@ from .reduce_ascend import *  # noqa: F401,F403
 from . import ascend_tile as tile  # noqa: F401
 
 from . import pto as pto  # noqa: F401
+
+from .pipeline import Pipelined  # noqa: F401
+from .swizzle import npu_use_swizzle, use_swizzle  # noqa: F401
