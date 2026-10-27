@@ -538,6 +538,27 @@
         "AST_preservation": true
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
+      "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
+      "source_sha256": "3146ee0e4788fa690e0f584e56030e549f7e1dccd4d51092861f190efd70f1b8",
+      "destination_sha256": "69ffa72e009e873d8cb924c43a1222a1cbe9e2dfef5cd42571434d835b3061a0",
+      "adaptations": [
+        "Explicit backend-private dialect import; retain all complete kernels, parameters, five parametrized codegen tests and exact original source assertions.",
+        "Use existing scoped real A2A3 cache clearing and explicit A3 source-test environment without hardware guessing.",
+        "Original source-only mocked loader None becomes Mock with current void call.restype protocol; compilation remains mocked as in the source, with no SDK or device execution."
+      ],
+      "validation": {
+        "ON_original_source_codegen_tests": 10,
+        "both_original_dialects": true,
+        "full_source_functions_preserved": true,
+        "AST_preservation_excluding_loader_fixture": true,
+        "device_execution": false,
+        "SDK_compilation": false
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
