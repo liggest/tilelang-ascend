@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import errno
 import json
 import os
 from pathlib import Path
@@ -16,6 +17,27 @@ from .compiler import CompileConfig, resolve_compile_config
 from .execution_backend import COMPILER_CONFIG_ATTR, WORKSPACE_IDX_ATTR
 from .pass_config import normalize_a2a3_pass_configs
 from .runtime import dump_runtime_signature, load_runtime_signature, normalize_memory_indices
+
+
+def _is_missing_own_library(error: OSError, library_path: str | Path) -> bool:
+    """Recognize removal of this requested SO without hiding other load errors."""
+    requested = os.fspath(library_path)
+    if isinstance(error, PermissionError):
+        return False
+    if error.errno == errno.ENOENT:
+        if error.filename is None or os.fspath(error.filename) != requested:
+            return False
+    elif error.errno is None:
+        # ctypes reports the failed object, which can instead be a dependency.
+        if str(error) != f"{requested}: cannot open shared object file: No such file or directory":
+            return False
+    else:
+        return False
+    try:
+        os.stat(requested)
+    except OSError as stat_error:
+        return stat_error.errno == errno.ENOENT
+    return False
 
 
 def _workspace_request(indices):

@@ -506,7 +506,7 @@ class AutotuneResult:
 
         if host_kernel_source and device_kernel_source and kernel_params:
             if backend_context.module.name in {"ascend_a2a3", "pto_a2a3"}:
-                from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache, stamp_runtime_request
+                from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache, _is_missing_own_library, stamp_runtime_request
 
                 if compile_args is None:
                     raise ValueError("A2A3 tuning restore requires the frozen compile request")
@@ -514,17 +514,23 @@ class AutotuneResult:
                     compile_args = compile_args.freeze(backend_context)
                 requested_out, effective, flags, config = compile_args._prepare_a2a3_program(func)
                 derived = stamp_runtime_request(func, compile_args.workspace_idx, config)
-                return A2A3CythonKernelCache()._build_kernel(
-                    derived,
-                    CachedTextSource(text=host_kernel_source),
-                    CachedTextSource(text=device_kernel_source),
-                    kernel_lib_path,
-                    kernel_params,
-                    backend_context,
-                    requested_out,
-                    effective,
-                    flags,
-                )
+                try:
+                    return A2A3CythonKernelCache()._build_kernel(
+                        derived,
+                        CachedTextSource(text=host_kernel_source),
+                        CachedTextSource(text=device_kernel_source),
+                        kernel_lib_path,
+                        kernel_params,
+                        backend_context,
+                        requested_out,
+                        effective,
+                        flags,
+                    )
+                except OSError as error:
+                    if not _is_missing_own_library(error, kernel_lib_path):
+                        raise
+                    logger.warning("A2A3 tuning kernel library disappeared during cache restore: %s", kernel_lib_path)
+                    return None
             return JITKernel.from_database(
                 func=func,
                 host_kernel_source=CachedTextSource(text=host_kernel_source),
