@@ -24,6 +24,220 @@
         "body_AST_comparison": true
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/.gitkeep",
+      "destination_path": "testing/ascend_a2a3/.gitkeep",
+      "source_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "adaptations": [],
+      "validation": {
+        "source_AST_or_byte_comparison": true,
+        "actual_OFF_pure_host_checks": 7,
+        "actual_OFF_native_trace_cases_skipped": 4,
+        "actual_ON_host_and_native_trace_checks": 11,
+        "scoped_disable_fixture_external_state_audit": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/cpp/.gitkeep",
+      "destination_path": "testing/ascend_a2a3/cpp/.gitkeep",
+      "source_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "adaptations": [],
+      "validation": {
+        "source_AST_or_byte_comparison": true,
+        "actual_OFF_pure_host_checks": 7,
+        "actual_OFF_native_trace_cases_skipped": 4,
+        "actual_ON_host_and_native_trace_checks": 11,
+        "scoped_disable_fixture_external_state_audit": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/.gitkeep",
+      "destination_path": "testing/ascend_a2a3/python/.gitkeep",
+      "source_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "adaptations": [],
+      "validation": {
+        "source_AST_or_byte_comparison": true,
+        "actual_OFF_pure_host_checks": 7,
+        "actual_OFF_native_trace_cases_skipped": 4,
+        "actual_ON_host_and_native_trace_checks": 11,
+        "scoped_disable_fixture_external_state_audit": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/base/__init__.py",
+      "destination_path": "testing/ascend_a2a3/python/base/__init__.py",
+      "source_git_blob": "9107297339f3deec49e68e947fdf006507dc6701",
+      "source_sha256": "a0965e49af1d49215ab789d70da2aea5b12b71138e075fad1cb414f17f49c53e",
+      "destination_sha256": "455fbe34e0a71f346d709db41f864f52903179c9d67359092dce3c3df05e2b18",
+      "adaptations": [
+        "Explicit A2A3 dialect imports and relative internal test-helper imports; all non-import AST including precision, shapes, kernels, generated classes and test bodies unchanged."
+      ],
+      "validation": {
+        "source_AST_or_byte_comparison": true,
+        "actual_OFF_pure_host_checks": 7,
+        "actual_OFF_native_trace_cases_skipped": 4,
+        "actual_ON_host_and_native_trace_checks": 11,
+        "scoped_disable_fixture_external_state_audit": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/base/binary_op.py",
+      "destination_path": "testing/ascend_a2a3/python/base/binary_op.py",
+      "source_git_blob": "d34167adfd0ee4fd71dab48be1cbb5603f2086b1",
+      "source_sha256": "a6bd98a51b5f3ebcf56672652f88ad61265ae1d51ba0e46fa641d69285de8d6f",
+      "destination_sha256": "f82a9365022ca285e3183017c6fbb4f09a95b63a4d4d2867d4a49a457231e23d",
+      "adaptations": [
+        "Explicit A2A3 dialect imports and relative internal test-helper imports; all non-import AST including precision, shapes, kernels, generated classes and test bodies unchanged."
+      ],
+      "validation": {
+        "source_AST_or_byte_comparison": true,
+        "actual_OFF_pure_host_checks": 7,
+        "actual_OFF_native_trace_cases_skipped": 4,
+        "actual_ON_host_and_native_trace_checks": 11,
+        "scoped_disable_fixture_external_state_audit": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/base/common.py",
+      "destination_path": "testing/ascend_a2a3/python/base/common.py",
+      "source_git_blob": "e39ac7903aa2af61a29a15f694bf44f6c673f318",
+      "source_sha256": "1f44516f158103d3973bc05675fd5139294123c133ba9ba35b6bfe0b89f6544b",
+      "destination_sha256": "1f44516f158103d3973bc05675fd5139294123c133ba9ba35b6bfe0b89f6544b",
+      "adaptations": [
+        "Explicit A2A3 dialect imports and relative internal test-helper imports; all non-import AST including precision, shapes, kernels, generated classes and test bodies unchanged."
+      ],
+      "validation": {
+        "source_AST_or_byte_comparison": true,
+        "actual_OFF_pure_host_checks": 7,
+        "actual_OFF_native_trace_cases_skipped": 4,
+        "actual_ON_host_and_native_trace_checks": 11,
+        "scoped_disable_fixture_external_state_audit": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/base/unary_op.py",
+      "destination_path": "testing/ascend_a2a3/python/base/unary_op.py",
+      "source_git_blob": "268b7af665b26a30383bf273d157447fc6ec99c4",
+      "source_sha256": "0873dcc7cb806c6a4fa9a2d8d57e3c6cc6002d7fe84195af92aa466ca89cf1a7",
+      "destination_sha256": "8a0869d17a3ec7e8d399c345ed173c41060111ba933479e2e04657ab84b42a99",
+      "adaptations": [
+        "Explicit A2A3 dialect imports and relative internal test-helper imports; all non-import AST including precision, shapes, kernels, generated classes and test bodies unchanged."
+      ],
+      "validation": {
+        "source_AST_or_byte_comparison": true,
+        "actual_OFF_pure_host_checks": 7,
+        "actual_OFF_native_trace_cases_skipped": 4,
+        "actual_ON_host_and_native_trace_checks": 11,
+        "scoped_disable_fixture_external_state_audit": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/conftest.py",
+      "destination_path": "testing/ascend_a2a3/python/language/conftest.py",
+      "source_git_blob": "c971b331f2e3f3e917f21aadb454961276965fe8",
+      "source_sha256": "8145972dc24ac8b2623ebefa9c01388799022f273e38d73526c3b4ebe0886726",
+      "destination_sha256": "e3e0f920562dc1e27265ae62efa62c0253b17d9c6d5fe387b919d20115f5fc5e",
+      "adaptations": [
+        "Scope disable_tilelang_cache to the requesting case with raw CacheState restoration; preserve original random_seed and dtype/low_priority collector hook exactly."
+      ],
+      "validation": {
+        "source_AST_or_byte_comparison": true,
+        "actual_OFF_pure_host_checks": 7,
+        "actual_OFF_native_trace_cases_skipped": 4,
+        "actual_ON_host_and_native_trace_checks": 11,
+        "scoped_disable_fixture_external_state_audit": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_auto_platform.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_auto_platform.py",
+      "source_git_blob": "e416f169d82b5523f39c97a11a6973989d17b556",
+      "source_sha256": "544c448678ad0a7b1e4d3fe2ba168a2d9d7beea4295e641272714f61e294ec1e",
+      "destination_sha256": "3fb37c1b4c99f9b8256a7cf0e69d8977dcd5cadc0dc2c7df7624fec2ecca01c4",
+      "adaptations": [
+        "Preserve all nine original input/mock scenarios; use the actual strict backend resolver and shared backend context rather than restoring retired determine_platform.",
+        "A5 remains the existing backend; unknown/unavailable A2A3 platforms now assert the previously approved explicit diagnostic instead of source fallback-to-A3.",
+        "Skip only when the actual Ascend target kind is absent; all assertions use real Target/context behavior without NPU probes."
+      ],
+      "scenario_contracts": [
+        {
+          "source_test": "test_determine_platform_explicit",
+          "source_expected": "A2/A3/A5",
+          "migrated_expected": "A2/A3; explicit A5 remains existing ascend backend and is rejected by the A2A3-only resolver",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        },
+        {
+          "source_test": "test_determine_platform_env",
+          "source_expected": "A2/A5",
+          "migrated_expected": "A2; env A5 keeps existing ascend backend and is rejected for an explicit dav-2201 target",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        },
+        {
+          "source_test": "test_determine_platform_auto_910B",
+          "source_expected": "A2",
+          "migrated_expected": "A2",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        },
+        {
+          "source_test": "test_determine_platform_auto_910C",
+          "source_expected": "A3",
+          "migrated_expected": "A3",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        },
+        {
+          "source_test": "test_determine_platform_auto_950D",
+          "source_expected": "A5",
+          "migrated_expected": "existing A5 backend; strict A2A3 resolver rejects",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        },
+        {
+          "source_test": "test_determine_platform_auto_unknown_device",
+          "source_expected": "A3 fallback",
+          "migrated_expected": "ValueError: cannot confirm A2/A3",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        },
+        {
+          "source_test": "test_determine_platform_auto_910B_torch_fallback",
+          "source_expected": "A2",
+          "migrated_expected": "A2",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        },
+        {
+          "source_test": "test_determine_platform_auto_950D_torch_fallback",
+          "source_expected": "A5",
+          "migrated_expected": "existing A5 backend; strict A2A3 resolver rejects",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        },
+        {
+          "source_test": "test_determine_platform_auto_fallback",
+          "source_expected": "A3 fallback",
+          "migrated_expected": "ValueError: cannot confirm A2/A3",
+          "basis": "Approved explicit-arch precedence, A5 backend separation and strict confirmed A2/A3 platform contract."
+        }
+      ],
+      "validation": {
+        "ON_host_cases": 9,
+        "original_scenario_names_preserved": true,
+        "device_execution": false,
+        "actual_OFF_target_dependent_cases_skipped": 9,
+        "actual_OFF_independent_parser_cases_passed": 5
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
