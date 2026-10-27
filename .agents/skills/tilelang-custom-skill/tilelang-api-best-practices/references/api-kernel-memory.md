@@ -445,7 +445,7 @@ T.gemm_v0(A_L1, B_L1, C_L0, ...)
 
 ## 5. 完整示例
 
-来自 `docs/TileLang-Ascend Programming Guide.md` §2.2：
+来自 `docs/ascend_a2a3/TileLang-Ascend Programming Guide.md` §2.2：
 
 ```python
 import tilelang

@@ -43,17 +43,10 @@ description: TileLang-Ascend 错误诊断、调试与修复技能。融合了 GD
      ```
 
 2. **C++ 编译报错 (Build Error)**:
-   - 读取 `/tmp/tmp*.cpp` (获取最新的生成的失败代码) 定位语法或底层 API 错误。
+   - 读取本次编译异常/driver记录的实际source路径、完整argv和stderr定位语法或底层API；不要按 `/tmp` 最新文件猜测或读取其它任务的产物。
 
 3. **逻辑/精度异常 (IR Dump)**:
-   - 追踪 Pass 阶段性变换。在 `tilelang/engine/lower.py` 中的 `lower()` 函数内，添加 `print(mod)` 以查看最终 IR 图：
-     ```python
-     def lower(...):
-         ...
-         mod = OptimizeForTarget(mod, target)
-         print(mod) # <--- 在此处打印 IR，排查 Pass 优化后的结果
-         codegen_mod = device_codegen(mod, target)
-     ```
+   - 从已解析的 BackendContext/PassPipeline 追踪 `tilelang/ascend/a2a3/pipeline.py` 的真实 producer/consumer。复用 `tilelang/instrumentation/` 的 pass instrumentation 或当前 PassContext instruments 保存前后 IR；不要在共享 engine.lower 恢复旧 target dispatch 或复制已不存在的 shared OptimizeForTarget 调用。
 
 4. **目标代码分析 (Target Dump)**:
    - 通过 `@tilelang.jit(debug_root_path=...)` 或 `.get_kernel_source()` 抓取最终生成的 C++ 核函数。
@@ -76,20 +69,19 @@ description: TileLang-Ascend 错误诊断、调试与修复技能。融合了 GD
 
 **方案 B：AOT counterfactual**
 
-- 复用 `examples/ascend_a2a3/gemm_aot` 的 `engine.lower` → `LibraryGenerator` → ctypes 流程；不要维护
-  手写 Bisheng include/flag 命令。
+- 固定 TA `examples/gemm_aot` 是后续待迁的 source-only 参考；当前缺失的 `examples/ascend_a2a3/gemm_aot` 不是可执行现代流程。使用实际公开 compile/JIT 的目标代码及当前共享 LibraryGenerator/冻结 compiler config 合同设计隔离实验，不直接套旧 ctypes wrapper，也不手写另一套 Bisheng include/flags。
 - 对生成 source 的实验性修改只能放在 disposable 副本中。实验通过只能定位问题层，最终
   修复仍应落到产生该 source 的 frontend/pass/codegen，并用原始重现验证。
 
 ### 步骤 5：执行修复与 C++ 重新编译
-1. 展示修复方案（C++ 代码 Diff），等待用户确认。
-2. 备份涉及的原始 C++ 文件。
-3. **强制执行编译命令**：修改 C++ Pass 后，必须在 `build` 目录下执行 `make -j$(nproc)`。
+1. 展示可审 C++ Diff；按会话已有授权实施，不为重复批准停工。超出既有范围的外部动作另行处理。
+2. 在隔离工作树保留原始失败、源码版本和本次补丁，保护其它改动。
+3. 修改 native 后按 build 技能对实际配置的目录执行 `cmake --build <build-dir> --parallel <jobs>`，兼容 Ninja/Make；确认新的库路径/hash后再验结果，不拿旧 `.so` 通过当修复生效。
 
 ### 步骤 6：修复验证与回滚
 1. 重新执行用户的重现脚本。
 2. 对比修复前后的 IR 图（`diff before.tir after.tir`）或目标代码，确认修改符合预期。
-3. **失败处理**：如果编译失败或运行不通过，恢复备份代码，清理 `/tmp` 缓存，重新进入步骤 3。
+3. **失败处理**：保留失败日志/IR/source，调整本次自有补丁后继续定位；不得自动回滚他人改动或清空 `/tmp`、用户默认 cache。必要回退仅针对本次隔离变更。
 
 ---
 
@@ -103,14 +95,14 @@ description: TileLang-Ascend 错误诊断、调试与修复技能。融合了 GD
 ### 基本信息
 - **触发报错模块**：[如：Segmentation Fault / CombineCV Pass]
 - **涉及算子/脚本**：`example_flash_attention.py`
-- **获取的调试信息**：[如：GDB Backtrace 指向 `src/ascend/a2a3/transform/combine_cv.cc:145` / `lower.py` 打印的 IR 图]
+- **获取的调试信息**：[如：GDB Backtrace 指向 `src/ascend/a2a3/transform/ascend_combinecv.cc` / `lower.py` 打印的 IR 图]
 
 ### 错误原因分析
 - **错误分类**：[如：空指针解引用 / 循环迭代不匹配]
 - **详细分析**：通过 GDB 堆栈发现，在处理 `T.Pipelined` 节点时，试图访问不存在的 `extent` 属性，导致 Core Dump。
 - **定位代码**：`src/ascend/a2a3/transform/cross_core_pipeline.cc: 89行`
 
-### 修复方案建议 (需用户确认)
+### 修复方案建议（按已有授权范围）
 **建议直接修复 Pass C++ 源码**
 1. 修改 `src/ascend/a2a3/transform/cross_core_pipeline.cc`，在访问节点前增加类型检查...
 2. 代码 Diff:
@@ -123,9 +115,9 @@ description: TileLang-Ascend 错误诊断、调试与修复技能。融合了 GD
        // ...
    }
    ```
-3. 修复后将自动执行 `make -j8`。
+3. 修复后在实际配置目录执行 `cmake --build <build-dir> --parallel <jobs>` 并核验装载来源。
 
-*(生成逻辑错误可参考 `examples/ascend_a2a3/gemm_aot` 做隔离 AOT 实验；不得把生成 source 当作长期修复。)*
+*(原 TA gemm_aot 为待迁来源参考；当前现代隔离实验须沿实际 compile/compiler 合同，不得把生成 source 当作长期修复。)*
 
 ### 执行与验证结果
 - 编译状态：✅ 成功

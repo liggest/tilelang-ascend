@@ -17,7 +17,7 @@ description: TileLang-Ascend 新增 Ascend 专属 T.tile.xxx 小 API 的端到�
 
 开始实现前，先读清楚当前仓库形态，再决定方案：
 
-1. 阅读 `AGENTS.md`。
+1. 阅读已激活的 `AGENTS.md`（若存在）；文档中的候选不自动成为当前策略。
 2. 阅读 `.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/SKILL.md`。
 3. 阅读 `.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-compute.md`。
 4. 如果涉及编程模式或 `pass_configs`，阅读 `.agents/skills/tilelang-custom-skill/tilelang-programming-model-guide/SKILL.md`。
@@ -63,7 +63,7 @@ description: TileLang-Ascend 新增 Ascend 专属 T.tile.xxx 小 API 的端到�
 
 - 在 `src/ascend/a2a3/op/ascend.h` 中声明。
 - 在 `src/ascend/a2a3/op/ascend.cc` 中实现参数解析和 lowering。
-- 当它需要 tile-op lowering 时，用 `TIR_REGISTER_TL_OP` 注册。
+- 参照当前 `ascend.cc` 的 `TIR_REGISTER_A2A3_TILE_OP` 注册 TileOperatorNode；若复用 stateful Operator，则走 `op/operator.h` 的唯一 `RegisterOperatorParser`，不混用旧全局 builder。纯 builtin 参照当前 `TIR_DEFINE_TL_BUILTIN` 及 effect metadata/codegen 分支。
 - 保留 region 信息，直到 lowering 可以计算访问指针、extent、stride、mask 或合法 shape。
 - 即使 Python 已经做过校验，C++ 侧也要重新检查关键约束。
 
@@ -94,13 +94,13 @@ lowering 结果应变成后端可识别的 `call_extern` 或已有 codegen patte
   - `src/ascend/a2a3/transform/cross_core_pipeline.cc`
 - pipeline 分析中，应把带副作用的 GM 写回当作写操作处理。
 
-默认不要添加 PTO 支持。只有当任务明确要求，或已有 PTO 路径能以很小、低风险的改动接入时，才考虑补充。
+按用户范围明确 AscendC/PTO 支持域；保留已有 PTO 分支。新 AscendC-only API 必须对 PTO 给明确拒绝边界，不能因为后端已有 PTO 就宣称新 API 自动可用。
 
 ## 测试放置
 
 不要自动创建新的独立测试文件。先选择和 API 行为最匹配、范围最窄的现有测试文件。
 
-测试位置建议：
+测试位置建议（以下主题路径是迁移目标；缺失时以 `testing_ports.json` 标为待迁，先选实际已迁的同主题测试，不能把计划路径当现有已跑文件）：
 
 - 纯 elementwise `T.tile.xxx` 数学 API：优先放在 `testing/ascend_a2a3/python/language/test_tilelang_ascend_language_elementwise.py`。
 - compare/select API：优先放在已有 compare/select 主题测试文件中。
@@ -108,7 +108,7 @@ lowering 结果应变成后端可识别的 `call_extern` 或已有 codegen patte
 - parallel lowering 行为：只有当 API 主要测试 `T.Parallel` 或 auto-copy 行为时，才放入 parallel 相关测试文件。
 - 新的带副作用写回、新的 memory pipeline 类别，或没有合适主题归属的 API：创建聚焦的独立测试文件。
 
-独立测试文件是允许的，但应该少用，并且要能清楚说明原因。记住 `examples/ascend_a2a3/bench_test.sh` 会运行 `testing/ascend_a2a3/python/`，所以每个新文件都会进入 CI 范围。
+独立测试文件是允许的，但应该少用，并且要能清楚说明原因。TA adoption 保留的管理入口是 `examples/bench_test.sh`（当前主线尚未接入该候选），不是 namespaced bench 文件。候选由 `scripts/ci/path_layout.py` 选择 `testing/ascend_a2a3`；完整迁移/collector/marker 分流决定实际执行，不是新增文件就已进 CI。
 
 ## CI 测试风格
 
@@ -137,13 +137,13 @@ PASS_CONFIGS = {
 
 公开契约只维护一份，其余层次通过链接分工：
 
-- `docs/language_ref/tilelibrary.md`：唯一的 user-facing API contract，记录签名、语义、
+- `docs/ascend_a2a3/language_ref/tilelibrary.md`：唯一的 user-facing API contract，记录签名、语义、
   支持范围和拒绝条件。
-- `docs/TileLang-Ascend Programming Guide.md`：只有需要概念解释或完整教程时才更新；链接
+- `docs/ascend_a2a3/TileLang-Ascend Programming Guide.md`：只有需要概念解释或完整教程时才更新；链接
   language reference，不复制参数表。
-- `tilelang-api-best-practices/references/api-compute.md`：只写会改变 Agent 选择或验证方式的
+- `.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-compute.md`：只写会改变 Agent 选择或验证方式的
   门禁，并链接 language reference，不维护第二份 API 手册。
-- `tilelang-programming-model-guide/SKILL.md`：仅当 Developer/Hybrid/Expert 的选择建议变化时更新。
+- `.agents/skills/tilelang-custom-skill/tilelang-programming-model-guide/SKILL.md`：仅当 Developer/Hybrid/Expert 的选择建议变化时更新。
 
 若 API 暴露 `tmp`，先区分通用 byte arena 与会改变 operand layout 的专用 contract；
 `row_expand_*_experiment` 属于后者，不能从相邻 API 推断。内部 helper 不更新宽泛文档。
@@ -153,19 +153,19 @@ Review 纠错应原地替换、合并或删除；净增长必须对应新增的�
 
 ## 验证清单
 
-运行本地能支持的最强验证：
+先按当前 `.pre-commit-config.yaml` 选择 canonical 工具，不假定存在名为 tilelang_dev 的 conda 环境。用当前环境运行 `bash format.sh --files <changed-files>`；以下命令也须匹配其版本：
 
 ```bash
 python -m py_compile <changed-python-files>
-conda run -n tilelang_dev ruff check <changed-python-files>
-conda run -n tilelang_dev ruff format --check <changed-python-files>
+ruff check <changed-python-files>
+ruff format --check <changed-python-files>
 git diff --check
 ```
 
 如果修改了 C++ 文件，也运行：
 
 ```bash
-conda run -n tilelang_dev clang-format --dry-run --Werror <changed-cpp-files>
+clang-format --dry-run --Werror <changed-cpp-files>
 ```
 
 如果当前环境可运行，执行目标 pytest：

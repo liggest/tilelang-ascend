@@ -360,11 +360,15 @@
           "kind": "path",
           "source": "examples/",
           "target": "examples/ascend_a2a3/"
+        },
+        {
+          "kind": "active-skill-contract",
+          "note": "Correct actual backend registry/build/CI/doc paths and explicitly label not-yet-ported source references; no source algorithm/test/permission expansion."
         }
       ],
       "source_mode": "100644",
       "review": "scope-and-source-references-reviewed; execution not implied",
-      "destination_sha256": "7fcd9afc75ff566037a99ed1b04e7270f204519ccc30785af525bb0f7f0b887c",
+      "destination_sha256": "7eedb3ee90a250fa469dcf6eadcd05f16bd0e5456f8bf901f5fddc01db0d4410",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-ascend-tile-api/SKILL.md",
       "destination_mode": "100644"
     },
@@ -457,10 +461,14 @@
           "kind": "path",
           "source": "examples/",
           "target": "examples/ascend_a2a3/"
+        },
+        {
+          "kind": "active-skill-contract",
+          "note": "Correct actual backend registry/build/CI/doc paths and explicitly label not-yet-ported source references; no source algorithm/test/permission expansion."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "79d94e14f5e1e35955b4b196588319a1c33393d3d0b10e126aa67d8e3f877452",
+      "destination_sha256": "8a26c56b0388988e84dcad4118fb7168975a61574c9d79de99e2e5070a8a20ab",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-compute.md",
       "destination_mode": "100644"
     },
@@ -485,10 +493,14 @@
           "kind": "python-api",
           "source": "tilelang.language",
           "target": "tilelang.ascend.a2a3.language"
+        },
+        {
+          "kind": "active-skill-contract",
+          "note": "Correct actual backend registry/build/CI/doc paths and explicitly label not-yet-ported source references; no source algorithm/test/permission expansion."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "cef25ee523200167d6c9060f2d28448b4a4e8f8e9165357e2a72ca36459140d2",
+      "destination_sha256": "382959d2f19e32cd62e5377d417fb4e6680242ccb5ddd2c20af700ff25a1bfea",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md",
       "destination_mode": "100644"
     },
@@ -680,11 +692,15 @@
           "kind": "path",
           "source": "examples/",
           "target": "examples/ascend_a2a3/"
+        },
+        {
+          "kind": "active-skill-contract",
+          "note": "Correct actual backend registry/build/CI/doc paths and explicitly label not-yet-ported source references; no source algorithm/test/permission expansion."
         }
       ],
       "source_mode": "100644",
       "review": "scope-and-source-references-reviewed; execution not implied",
-      "destination_sha256": "be02fdb3d707b51cc334cac76e020cd30e07bc3313479e230597435eeb4f4294",
+      "destination_sha256": "ea73b89f13606aac99fd166f579b93778af13c7cb7095414f3086cf1d1ff9240",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-custom-skill/tilelang-error-fixer/SKILL.md",
       "destination_mode": "100644"
     },
@@ -742,11 +758,15 @@
           "kind": "path",
           "source": "examples/",
           "target": "examples/ascend_a2a3/"
+        },
+        {
+          "kind": "active-skill-contract",
+          "note": "Correct actual backend registry/build/CI/doc paths and explicitly label not-yet-ported source references; no source algorithm/test/permission expansion."
         }
       ],
       "source_mode": "100644",
       "review": "scope-and-source-references-reviewed; execution not implied",
-      "destination_sha256": "79532d5a684cd6c91a9b8ff80288b1b714f2a9135439eefabe695ffe8030723d",
+      "destination_sha256": "28d7dc8d335f2608677cf24d10659ee882112f2e3933421f787638c23ff8e90f",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-custom-skill/tilelang-programming-model-guide/SKILL.md",
       "destination_mode": "100644"
     },
@@ -940,11 +960,15 @@
           "kind": "path",
           "source": "examples/",
           "target": "examples/ascend_a2a3/"
+        },
+        {
+          "kind": "active-skill-contract",
+          "note": "Correct actual backend registry/build/CI/doc paths and explicitly label not-yet-ported source references; no source algorithm/test/permission expansion."
         }
       ],
       "source_mode": "100644",
       "review": "scope-and-source-references-reviewed; execution not implied",
-      "destination_sha256": "35645e49f99cc37d51cd3f3379aca549cad813eb6fbc409ea55512cc45c5cf0f",
+      "destination_sha256": "5b13d599209de74e3364b6eaff9003de863874e1b01203e95d724b99be8c45bf",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-op-design/SKILL.md",
       "destination_mode": "100644"
     },
@@ -1045,10 +1069,14 @@
           "kind": "path",
           "source": "examples/",
           "target": "examples/ascend_a2a3/"
+        },
+        {
+          "kind": "active-skill-contract",
+          "note": "Correct actual backend registry/build/CI/doc paths and explicitly label not-yet-ported source references; no source algorithm/test/permission expansion."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "7cf97c48f6f97ba64ea88179340e4fda8cef063033118bee2f6223dbe7694011",
+      "destination_sha256": "aafb8416504077e1cc528bc5f4252dff7279fcb3852a54fb2f4226dc0b6ff4f7",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-op-design/references/info-sources.md",
       "destination_mode": "100644"
     },
@@ -1081,11 +1109,15 @@
           "kind": "path",
           "source": "examples/",
           "target": "examples/ascend_a2a3/"
+        },
+        {
+          "kind": "active-skill-contract",
+          "note": "Correct actual backend registry/build/CI/doc paths and explicitly label not-yet-ported source references; no source algorithm/test/permission expansion."
         }
       ],
       "source_mode": "100644",
       "review": "scope-and-source-references-reviewed; execution not implied",
-      "destination_sha256": "12337fb0d273dfee760c92213619b384a6a9b89d227f559060bb6b53edf37981",
+      "destination_sha256": "1ce26876721ddb70adcef0e479f81175164c0e5c0f7376fe78a813d2be8424bf",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-op-develop/SKILL.md",
       "destination_mode": "100644"
     },
@@ -4405,5 +4437,11 @@
     "source_inventory_unchanged": 225,
     "source_archives_unchanged": 34,
     "new_reference_index": "docs/ascend_a2a3/reference.md"
+  },
+  "active_skill_contract_review": {
+    "skills": 21,
+    "opencode_assets": 5,
+    "scope": "Inline code paths, commands, macro ownership and source-only vs executable references; not external agent evaluation.",
+    "original_archives_unchanged": 34
   }
 }

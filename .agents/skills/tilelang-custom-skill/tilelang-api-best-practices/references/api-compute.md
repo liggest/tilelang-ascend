@@ -152,7 +152,7 @@ T.reduce_max(in_shared, out_shared, dim=-1, real_shape=[4, 4])
 普通 kernel 优先省略 `tmp`，由编译器管理。只有 Expert 模式需要把某次调用纳入显式 UB
 地址规划时才提供 arena；当前没有公开 size-query，不能凭经验猜测非零容量。通用 arena 的
 支持 API、结构和对齐契约以
-[`docs/language_ref/tilelibrary.md`](../../../../../docs/ascend_a2a3/language_ref/tilelibrary.md#temporary-workspace-arenas)
+[`docs/ascend_a2a3/language_ref/tilelibrary.md`](../../../../../docs/ascend_a2a3/language_ref/tilelibrary.md#temporary-workspace-arenas)
 为准。`workspace_idx` 是 runtime GM workspace，不是这里的 UB scratch。
 
 `row_expand_*_experiment` 的 `tmp` 会改变 `src1` 布局，不能套用通用 byte-arena 规则；

@@ -46,8 +46,8 @@ grep "T.Scope\|T.barrier" examples/ascend_a2a3/{同类实现}  # 同步方式
 
 | 优先级 | 信息源 | 用途 | 说明 |
 |--------|--------|------|------|
-| **0** | **本项目 `examples/ascend_a2a3/` 同类实现** | **主要参考：API、编程模式、Kernel 结构** | **最权威**，直接可用 |
-| 1 | `docs/TileLang-Ascend Programming Guide.md` | API 完整说明 | 补充细节 |
+| **0** | **本项目 `examples/ascend_a2a3/` 同类实现** | **主要参考：API、编程模式、Kernel 结构** | 以 ports 清单及实际验证为准；待迁 source 不直接执行 |
+| 1 | `docs/ascend_a2a3/TileLang-Ascend Programming Guide.md` | API 完整说明 | 补充细节 |
 | 2 | `.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/SKILL.md` | API 速查 | 快速确认 |
 | 3 | `testing/ascend_a2a3/python/language/` | 边界用法和测试模式参考 | 测试参考 |
 | 4 | **外部参考实现** | **仅用于理解数学逻辑** | **不可直接使用 API** |
