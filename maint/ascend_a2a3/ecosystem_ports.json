@@ -2,8 +2,8 @@
   "schema_version": 1,
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
   "validated_main_native_checkpoint": "03d12088987a47256c58afb745a764344541985a",
-  "validation_date_utc": "2026-10-26",
-  "scope": "Eighteen reviewed original assets: six first-batch assets and six original CI-active positional source/test pairs. Remaining blocked candidates are not completed ports.",
+  "validation_date_utc": "2026-10-27",
+  "scope": "Thirty reviewed original assets: initial six, six positional CI source/test pairs, and twelve xllm/MoE/quant source/test/helper assets. Remaining candidates are not completed ports.",
   "entries": [
     {
       "source_path": "examples/gemm/example_gemm.py",
@@ -505,6 +505,299 @@
       },
       "paired_source_path": "examples/pos_embedding/rope_mask_bwd.py",
       "paired_test_path": "examples/pos_embedding/test_rope_mask_bwd.py"
+    },
+    {
+      "source_path": "examples/xllm_kernels/fused_gdn_gating.py",
+      "destination_path": "examples/ascend_a2a3/xllm_kernels/fused_gdn_gating.py",
+      "source_git_blob": "571ee2697b83ab73f362ebd9e89f36543eed1843",
+      "source_sha256": "c05b81a205eaa3aed29205c93851afd0402b03558b43861a07fd7e0e5d8bfadf",
+      "classification_draft": "A2A3",
+      "destination_sha256": "e1cdf5f98949cd5e1c1b874d17c86f950205c22e637cca3dc992c5bf6dc77a51",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Use the explicit A2A3 language dialect; no kernel/ref function AST changes.",
+        "Restrict explicit torch_npu import to the existing CLI script guard; preserve the original main() function AST.",
+        "Set executable mode for the original shebang as required by repository formatting checks."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 20,
+        "actual_factory_schemas_source_and_SDK_verified": 20,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 0
+      }
+    },
+    {
+      "source_path": "examples/xllm_kernels/rope.py",
+      "destination_path": "examples/ascend_a2a3/xllm_kernels/rope.py",
+      "source_git_blob": "d21c48f7a71d59dc93a44fc3baf12b4de8e117c1",
+      "source_sha256": "472134c2c2eccc741b738772d8a8e4e1b25ac38343748c3fd7860215efdb2b14",
+      "classification_draft": "A2A3",
+      "destination_sha256": "47fc838c67a463dcfb74d73e4b0beb1d212b1577249c16f7e3a536fed6d3c53e",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Use the explicit A2A3 language dialect; no kernel/ref function AST changes.",
+        "Restrict explicit torch_npu import to the existing CLI script guard; preserve the original main() function AST.",
+        "Set executable mode for the original shebang as required by repository formatting checks."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 22,
+        "actual_factory_schemas_source_and_SDK_verified": 2,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 0
+      }
+    },
+    {
+      "source_path": "examples/xllm_kernels/split_qkv_rmsnorm_mrope.py",
+      "destination_path": "examples/ascend_a2a3/xllm_kernels/split_qkv_rmsnorm_mrope.py",
+      "source_git_blob": "f952ab1781cdf77a1739451f5083d4e18e67c356",
+      "source_sha256": "1f09dd2feb891073ea2fb90aaa4864a33b8a342e5b94b5c294100229b9c19d34",
+      "classification_draft": "A2A3",
+      "destination_sha256": "4ff0ab812fa7d9ed069f298057a7717ed547d90a96d10594a7596791a8a91b40",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Use the explicit A2A3 language dialect; no kernel/ref function AST changes.",
+        "Restrict explicit torch_npu import to the existing CLI script guard; preserve the original main() function AST.",
+        "Set executable mode for the original shebang as required by repository formatting checks.",
+        "Correct one Redeclare comment spelling for codespell; function/kernel AST unchanged."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 26,
+        "actual_factory_schemas_source_and_SDK_verified": 24,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 0
+      }
+    },
+    {
+      "source_path": "examples/xllm_kernels/utils.py",
+      "destination_path": "examples/ascend_a2a3/xllm_kernels/utils.py",
+      "source_git_blob": "8e9d30ae892857dc38214bba86e8d52915e6512a",
+      "source_sha256": "01afb20dd8ad6b440f76b9b20b3943adc7875917fa7061a2a2aa41712a26582f",
+      "classification_draft": "A2A3",
+      "destination_sha256": "5079b6e8cc0cd26ba7ba79a8f2844e17d063bdb113a5ab8cf9ac348b74f83205",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Retain the pinned helper implementation unchanged; preserve original core-count or scale-factor configuration contracts."
+      ],
+      "validation": {
+        "unchanged_helper_AST": true,
+        "pure_host_utility_contracts_passed": true,
+        "used_by_real_original_PR_device_cases": true
+      }
+    },
+    {
+      "source_path": "examples/xllm_kernels/test_fused_gdn_gating.py",
+      "destination_path": "examples/ascend_a2a3/xllm_kernels/test_fused_gdn_gating.py",
+      "source_git_blob": "1baceba6ae89bf86c4522fb1e06a3c090b68de44",
+      "source_sha256": "b21a014c59289b2ddfeef33956892531c1a85e5b3daa2a1f79f594388ef35888",
+      "classification_draft": "uncertain",
+      "destination_sha256": "f6dcc28d341a0f938abd2bdd74825a31b10ba2e5ff39ececfd1205561e0dda1e",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Mark original device cases for confirmed A2/A3 native/device gating; each case uses an independent disk/memory cache.",
+        "Retain original low_priority marks and all full/nightly cases.",
+        "Use the adopted path depth and temporarily isolate/restore the top-level local utils module along with sys.argv/path."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 20,
+        "actual_factory_schemas_source_and_SDK_verified": 20,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 0
+      }
+    },
+    {
+      "source_path": "examples/xllm_kernels/test_rope_xllm_kernels.py",
+      "destination_path": "examples/ascend_a2a3/xllm_kernels/test_rope_xllm_kernels.py",
+      "source_git_blob": "e912e8832b32b29d94e28282daed79e4ed471183",
+      "source_sha256": "3395309d694a2e100ff12d709f9b6cd963eac681f99c17b7ec7bfd67725390fe",
+      "classification_draft": "uncertain",
+      "destination_sha256": "9934074652c482dd032194efab3048feb98e289b12f44524a3c0b03f8f42f42c",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Mark original device cases for confirmed A2/A3 native/device gating; each case uses an independent disk/memory cache.",
+        "Retain original low_priority marks and all full/nightly cases.",
+        "Use the adopted path depth and temporarily isolate/restore the top-level local utils module along with sys.argv/path."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 22,
+        "actual_factory_schemas_source_and_SDK_verified": 2,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 0
+      }
+    },
+    {
+      "source_path": "examples/xllm_kernels/test_split_qkv_rmsnorm_mrope.py",
+      "destination_path": "examples/ascend_a2a3/xllm_kernels/test_split_qkv_rmsnorm_mrope.py",
+      "source_git_blob": "a6397c2a6027562aecf5ba1cc17b8ad84dfc5a5a",
+      "source_sha256": "90c0bb9b35c49ab710523abcfcdf360ff91fc906f203f660bf2685eb5a86d2ea",
+      "classification_draft": "uncertain",
+      "destination_sha256": "3b19a14d5ed2fb6b1ce5d2d1c213ac8067eb00f6a14910651b6c83cdeac8c2db",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Mark original device cases for confirmed A2/A3 native/device gating; each case uses an independent disk/memory cache.",
+        "Retain original low_priority marks and all full/nightly cases.",
+        "Use the adopted path depth and temporarily isolate/restore the top-level local utils module along with sys.argv/path."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 26,
+        "actual_factory_schemas_source_and_SDK_verified": 24,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 0
+      }
+    },
+    {
+      "source_path": "examples/tile_kernels/moe/moe_topk_sum_and_topk_group_idx.py",
+      "destination_path": "examples/ascend_a2a3/tile_kernels/moe/moe_topk_sum_and_topk_group_idx.py",
+      "source_git_blob": "0533ba7e337ce483623b85c396197e4a2504be94",
+      "source_sha256": "804bdb1ab41b98370b23e927bfac603695fc9536e8fa07cf4a4fb781056e2cfc",
+      "classification_draft": "A2A3",
+      "destination_sha256": "ee1451761b9695bacf94bcead3bb234131382ee4f13540905402b7c947dcb645",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Use the explicit A2A3 language dialect; no kernel/ref function AST changes.",
+        "Move top-level cache clearing into main(), using the actual A2A3 cache singleton within an explicitly selected namespace; no global API alias.",
+        "Import torch_npu in the CLI entry point; keep the original top-level CLI execution order."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 10,
+        "actual_factory_schemas_source_and_SDK_verified": 10,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 134
+      }
+    },
+    {
+      "source_path": "examples/tile_kernels/moe/test_moe_topk_sum_and_topk_group_idx.py",
+      "destination_path": "examples/ascend_a2a3/tile_kernels/moe/test_moe_topk_sum_and_topk_group_idx.py",
+      "source_git_blob": "7ee62619de30689d90c5330c2027610e04c5aa60",
+      "source_sha256": "44b3e56df6c1ec464ada805df045a0671335077bf67fc5615dc9d17ebfb78316",
+      "classification_draft": "A2A3",
+      "destination_sha256": "43f1463a207f17430a3e433f0a7c41617f8e694e2ec47b5c1dbd8104b146f85f",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Mark original device cases for confirmed A2/A3 native/device gating; each case uses an independent disk/memory cache.",
+        "Retain original low_priority marks and all full/nightly cases.",
+        "Replace removed global cache-directory API fixture with delegation to the existing isolated namespace fixture."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 10,
+        "actual_factory_schemas_source_and_SDK_verified": 10,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 134
+      }
+    },
+    {
+      "source_path": "examples/tile_kernels/quant/per_block_cast_lossless_kernel.py",
+      "destination_path": "examples/ascend_a2a3/tile_kernels/quant/per_block_cast_lossless_kernel.py",
+      "source_git_blob": "5b762cb1661f528b483473131fbb3fc7ab428de0",
+      "source_sha256": "3b08143a6855a11f9dfc71c90be45547dadbb0e079b46b302ff8c7033d730821",
+      "classification_draft": "A2A3",
+      "destination_sha256": "44f9f785d9627ea5a0a648400de508bba6c21ce358148115f2c9ea39716650cb",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Use the explicit A2A3 language dialect; no kernel/ref function AST changes.",
+        "Move top-level cache clearing into main(), using the actual A2A3 cache singleton within an explicitly selected namespace; no global API alias.",
+        "Import torch_npu in the CLI entry point; keep the original top-level CLI execution order.",
+        "Move the environment default to CLI main() instead of mutating the importing process."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 12,
+        "actual_factory_schemas_source_and_SDK_verified": 12,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 156
+      }
+    },
+    {
+      "source_path": "examples/tile_kernels/quant/test_per_block_cast_lossless_kernel.py",
+      "destination_path": "examples/ascend_a2a3/tile_kernels/quant/test_per_block_cast_lossless_kernel.py",
+      "source_git_blob": "44a9a6597ea9691d110c25409e49ffbe2b03cc73",
+      "source_sha256": "bd95b0264e21060114477eb1a99d4e015afbf17aac3cc4cb23a5eba5cbecd31a",
+      "classification_draft": "A2A3",
+      "destination_sha256": "7ad964b6f148d619abe5ad1a1b4daff5858a23249a73051bf0304523153d0150",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Preserve the full original implementation, original numerical tests/references, case matrix, decorator configurations and precision thresholds.",
+        "Mark original device cases for confirmed A2/A3 native/device gating; each case uses an independent disk/memory cache.",
+        "Retain original low_priority marks and all full/nightly cases.",
+        "Remove temporary local utils module state even when the caller had no original utils binding.",
+        "Replace removed global cache-directory API fixture with delegation to the existing isolated namespace fixture."
+      ],
+      "validation": {
+        "original_PR_cases_actual_A3_passed": 12,
+        "actual_factory_schemas_source_and_SDK_verified": 12,
+        "all_original_full_cases_collected": true,
+        "native_dependency": "A2A3 local flat-Bind/CV cleanup da62d728; test followups eb19972f and 78fd52b0",
+        "nightly_cases_not_executed_in_this_batch": 156
+      }
+    },
+    {
+      "source_path": "examples/tile_kernels/quant/utils.py",
+      "destination_path": "examples/ascend_a2a3/tile_kernels/quant/utils.py",
+      "source_git_blob": "776910ac4b7895fbb7c6a9ec8a0fc4531aa916ed",
+      "source_sha256": "f693d1148f2d0563548771b4f6e0a91305259d1c8ecedf25e1d4ae08563fa127",
+      "classification_draft": "uncertain",
+      "destination_sha256": "f693d1148f2d0563548771b4f6e0a91305259d1c8ecedf25e1d4ae08563fa127",
+      "review_decision": "a2a3",
+      "review_reason": "Pinned original A2/A3 NPU source or exact companion/helper; explicit private dialect and real original PR device cases reviewed.",
+      "state": "reviewed_and_PR_device_validated",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Retain the pinned helper implementation unchanged; preserve original core-count or scale-factor configuration contracts."
+      ],
+      "validation": {
+        "unchanged_helper_AST": true,
+        "pure_host_utility_contracts_passed": true,
+        "used_by_real_original_PR_device_cases": true
+      }
     }
   ],
   "test_isolation_validation": {
@@ -519,10 +812,13 @@
   },
   "active_operator_progress": {
     "original_active_entries": 24,
-    "reviewed_and_actual_A3_validated_entries": 6,
-    "expanded_original_cases": 17,
-    "pending_original_entries": 18,
-    "original_manifest_statuses_changed": false
+    "reviewed_and_actual_A3_PR_validated_entries": 11,
+    "positional_original_cases": 17,
+    "xllm_moe_quant_original_PR_cases": 90,
+    "xllm_moe_quant_original_full_cases": 380,
+    "pending_original_entries": 13,
+    "original_manifest_statuses_changed": false,
+    "full_nightly_290_cases_preserved_for_final_regression": true
   },
   "example_namespace_scope_validation": {
     "prior_cache_states": [
@@ -533,5 +829,29 @@
     "caller_memory_and_disk_sentinels_preserved": true,
     "outside_namespace_fixture_free_audit_passed": true,
     "actual_OFF_collection_cases_skipped": 17
+  },
+  "batch_B2_B_validation": {
+    "actual_soc": "Ascend910_9392",
+    "original_PR_cases_passed": 90,
+    "original_nightly_cases_deselected": 290,
+    "actual_Bisheng_device_compiles": 90,
+    "source_schema_count": 68,
+    "TA_main_unique_exact_SDK_compile_identities_each": 67,
+    "source_ABI_and_effect_evidence": "refactor_main/reports/p3_ecosystem_b2b/original_pr_source_manifest.json",
+    "corrections": "Original GDN compile_max_batch equals num_batches; original single-head RoPE576/64 input is sliced and invokes a64/64 factory. Extra-capacity/general schemas are retained separately and excluded from original PR validation counts.",
+    "actual_OFF_original_cases_collected_and_skipped": 380,
+    "device_and_compile_flags_or_thresholds_changed": false,
+    "kernel_AST_changed": false,
+    "native_source_checkpoint": {
+      "root_base": "8d2b3ba67a23b11d5a25796d5c04f5097b01225d",
+      "dependency_commits": [
+        "da62d728",
+        "eb19972f",
+        "78fd52b0"
+      ],
+      "root_native_source_sha256": "a1745b8ee906086f0d858ac10d109920d24f5076c0e7ea065dac2380efd66b28",
+      "root_library_sha256": "5d2cd215dcc954c1a468df835d8a3ecc55998ee2abf1b87e338c529e9c999b5b",
+      "root_integrated_commit": "6b0b03b5"
+    }
   }
 }

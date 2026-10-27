@@ -67,3 +67,28 @@ each case. Original shapes, in-place behavior, references and tolerances are
 retained. Importing the source modules performs no cache clearing, CLI parsing,
 NPU initialization or kernel work. The broader original CI active inventory and
 all pending statuses remain separate from this completed subset.
+
+The `xllm_kernels/` and `tile_kernels/{moe,quant}/` companions retain their full
+380-case source matrix. Run the original 90-case PR subset separately from the
+290 full/nightly cases:
+
+```bash
+python -m pytest examples/ascend_a2a3/xllm_kernels/ \
+  examples/ascend_a2a3/tile_kernels/ -m 'not low_priority and not ci_skip'
+python -m pytest examples/ascend_a2a3/tile_kernels/ -m low_priority
+```
+
+The PR subset covers GDN gating, sliced/in-place RoPE, split QKV/RMSNorm/mRoPE,
+MoE forward/backward, and plain/packed scale-factor quantization. All 90 original
+PR cases passed on A3 without changing shapes, references or tolerances. The
+290 retained nightly cases have not been executed as part of this batch.
+Imports leave the caller's cache, CLI arguments and local `utils` module binding
+unchanged; each test uses an independent temporary disk/memory cache. Builds
+without the A2/A3 native components collect these device cases and skip them.
+
+The xllm core-count helper retains its original default of 48 when device
+properties do not provide a count. That utility default does not identify the
+platform; target validation still requires a confirmed A2/A3 platform. MoE
+backward requires the A2A3 flat-Bind/CV cleanup that preserves live resource
+consumers while removing the dead vector reads from the automatically split C
+branch.

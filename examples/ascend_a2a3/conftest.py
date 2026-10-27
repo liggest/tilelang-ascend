@@ -8,6 +8,8 @@ from tilelang.env import CacheState
 
 
 def pytest_configure(config):
+    config.addinivalue_line("markers", "low_priority: original TA full/nightly cases")
+    config.addinivalue_line("markers", "ci_skip: original TA explicitly excluded CI cases")
     config.addinivalue_line("markers", "a2a3_native: requires the A2/A3 pipeline and native source builders")
     config.addinivalue_line("markers", "a2a3_device: requires an actual supported Ascend A2/A3 NPU")
 
