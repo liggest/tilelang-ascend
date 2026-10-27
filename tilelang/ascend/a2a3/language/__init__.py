@@ -3,6 +3,7 @@
 from tilelang.language.common import *  # noqa: F401,F403
 from .kernel import *  # noqa: F401,F403
 from .allocate import *  # noqa: F401,F403
+from .annotations import annotate_address  # noqa: F401
 from .constant import allocate_const, decl_buffer  # noqa: F401
 from .warpgroup import *  # noqa: F401,F403
 from ..layout import Layout  # noqa: F401
