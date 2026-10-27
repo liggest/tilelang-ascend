@@ -10,6 +10,13 @@ low-level optimizations necessary for state-of-the-art performance.
 
 :::{toctree}
 :maxdepth: 2
+:caption: ASCEND A2/A3
+
+ascend_a2a3/index
+:::
+
+:::{toctree}
+:maxdepth: 2
 :caption: GET STARTED
 
 get_started/Installation
