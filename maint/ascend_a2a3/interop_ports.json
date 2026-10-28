@@ -601,6 +601,102 @@
         "NPU_runtime_numerical_or_graph_run": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/setup.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/setup.py",
+      "source_git_blob": "a79caf162cd88d3c0e7beb0e936b864fa52a8d0a",
+      "source_sha256": "f88ce8b12a6ff105b4d6c70108a95b5b9e208d422f99a61911ae4acb7e35acda",
+      "destination_sha256": "24532891b8609f20202cc5550c33cd2f12245cd93c2d1a2cbc9f059acaa60f76",
+      "adaptations": [
+        "Retain original Torch extension package/registration, seven data-pointer plus stream raw call, workspace/output construction and valid fixed NPU algorithm. Add only approved early BHSD [4,16,4096,128], float16, contiguous, same-NPU validation before allocation/stream/call.",
+        "Replace original invalid Meta-to-NPU wrapper mapping with a clear unsupported diagnostic before any allocation or NPU API; no fake Meta output or torch.compile support claim.",
+        "Move original kernel generation/TorchNPU-dependent CppExtension setup behind actual standard build commands; module import and metadata/help use static setuptools metadata without Torch/NPU/SDK work, preserving operator generation before build_py copies package_data."
+      ],
+      "validation": {
+        "original_valid_wrapper_and_raw_ABI_token_equal_except_approved_guards": true,
+        "two_package_init_assets_byte_equal": true,
+        "real_Bisheng_plus_GCC_extension_build_and_link": true,
+        "owned_native_wheel_build_and_no_deps_target_install": true,
+        "ON_host_and_real_Meta_diagnostic_tests_passed": 16,
+        "actual_OFF_host_and_real_Meta_diagnostic_tests_passed": 16,
+        "actual_CPU_error_branches_per_side": 8,
+        "actual_metadata_CLI_no_heavy_imports": 3,
+        "NPU_device_numerical_or_torch_compile_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/src/_inner.cpp",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/src/_inner.cpp",
+      "source_git_blob": "ab32626b4b69f8fed8382725fc7d315faf29b298",
+      "source_sha256": "8ecb1683aebe838e54139c1174da0d975cb9e947b41600bfee6addf0884c5a72",
+      "destination_sha256": "ec69e74ea268071b5f402d3764c36cb2d22c609cfa7e2d3664342b84f9f4ae45",
+      "adaptations": [
+        "Retain original Torch extension package/registration, seven data-pointer plus stream raw call, workspace/output construction and valid fixed NPU algorithm. Add only approved early BHSD [4,16,4096,128], float16, contiguous, same-NPU validation before allocation/stream/call.",
+        "Replace original invalid Meta-to-NPU wrapper mapping with a clear unsupported diagnostic before any allocation or NPU API; no fake Meta output or torch.compile support claim.",
+        "Move original kernel generation/TorchNPU-dependent CppExtension setup behind actual standard build commands; module import and metadata/help use static setuptools metadata without Torch/NPU/SDK work, preserving operator generation before build_py copies package_data."
+      ],
+      "validation": {
+        "original_valid_wrapper_and_raw_ABI_token_equal_except_approved_guards": true,
+        "two_package_init_assets_byte_equal": true,
+        "real_Bisheng_plus_GCC_extension_build_and_link": true,
+        "owned_native_wheel_build_and_no_deps_target_install": true,
+        "ON_host_and_real_Meta_diagnostic_tests_passed": 16,
+        "actual_OFF_host_and_real_Meta_diagnostic_tests_passed": 16,
+        "actual_CPU_error_branches_per_side": 8,
+        "actual_metadata_CLI_no_heavy_imports": 3,
+        "NPU_device_numerical_or_torch_compile_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/src/torch_tl_ascend/__init__.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/src/torch_tl_ascend/__init__.py",
+      "source_git_blob": "0cd2a358ff394e82fda236b9a3f2136f79859820",
+      "source_sha256": "69a00db0d3347aa8e84b1a5da1296b3f3890e8f9a13db696906b5fd8c5ca4255",
+      "destination_sha256": "69a00db0d3347aa8e84b1a5da1296b3f3890e8f9a13db696906b5fd8c5ca4255",
+      "adaptations": [
+        "Retain original Torch extension package/registration, seven data-pointer plus stream raw call, workspace/output construction and valid fixed NPU algorithm. Add only approved early BHSD [4,16,4096,128], float16, contiguous, same-NPU validation before allocation/stream/call.",
+        "Replace original invalid Meta-to-NPU wrapper mapping with a clear unsupported diagnostic before any allocation or NPU API; no fake Meta output or torch.compile support claim.",
+        "Move original kernel generation/TorchNPU-dependent CppExtension setup behind actual standard build commands; module import and metadata/help use static setuptools metadata without Torch/NPU/SDK work, preserving operator generation before build_py copies package_data."
+      ],
+      "validation": {
+        "original_valid_wrapper_and_raw_ABI_token_equal_except_approved_guards": true,
+        "two_package_init_assets_byte_equal": true,
+        "real_Bisheng_plus_GCC_extension_build_and_link": true,
+        "owned_native_wheel_build_and_no_deps_target_install": true,
+        "ON_host_and_real_Meta_diagnostic_tests_passed": 16,
+        "actual_OFF_host_and_real_Meta_diagnostic_tests_passed": 16,
+        "actual_CPU_error_branches_per_side": 8,
+        "actual_metadata_CLI_no_heavy_imports": 3,
+        "NPU_device_numerical_or_torch_compile_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/src/torch_tl_ascend/op_source/__init__.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/src/torch_tl_ascend/op_source/__init__.py",
+      "source_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "adaptations": [
+        "Retain original Torch extension package/registration, seven data-pointer plus stream raw call, workspace/output construction and valid fixed NPU algorithm. Add only approved early BHSD [4,16,4096,128], float16, contiguous, same-NPU validation before allocation/stream/call.",
+        "Replace original invalid Meta-to-NPU wrapper mapping with a clear unsupported diagnostic before any allocation or NPU API; no fake Meta output or torch.compile support claim.",
+        "Move original kernel generation/TorchNPU-dependent CppExtension setup behind actual standard build commands; module import and metadata/help use static setuptools metadata without Torch/NPU/SDK work, preserving operator generation before build_py copies package_data."
+      ],
+      "validation": {
+        "original_valid_wrapper_and_raw_ABI_token_equal_except_approved_guards": true,
+        "two_package_init_assets_byte_equal": true,
+        "real_Bisheng_plus_GCC_extension_build_and_link": true,
+        "owned_native_wheel_build_and_no_deps_target_install": true,
+        "ON_host_and_real_Meta_diagnostic_tests_passed": 16,
+        "actual_OFF_host_and_real_Meta_diagnostic_tests_passed": 16,
+        "actual_CPU_error_branches_per_side": 8,
+        "actual_metadata_CLI_no_heavy_imports": 3,
+        "NPU_device_numerical_or_torch_compile_execution": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
