@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
-  "owner_scope": "all six complete standard leaves + standard full composition + all six complete optimized leaves; optimized composition pending",
+  "owner_scope": "complete standard and optimized GDN source families; all original device CLIs/numerical gates remain separately pending",
   "entries": [
     {
       "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_cumsum.py",
@@ -752,6 +752,58 @@
         "complete original CLI moved into task-owned cache and print-state restoring main, one original cache clear via backend singleton",
         "only source CRLF/tab formatting normalized, no original definitions or matrix removed"
       ]
+    },
+    {
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn_full.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/opt_gdn_full.py",
+      "component": "G6",
+      "source_sha256": "970940e446222225a7ad6c8ba53358e8ac9cafa94da9c8e655bd0e27997774e7",
+      "source_git_blob": "259812d229393a7d8cb94bcc35de0962c3f9c709",
+      "destination_sha256": "efd760551ab7f779ecce1e4b43967ac7bcb446dd30bcfe6318957d1e74355b72",
+      "state": "complete_composition_source_actual_SDK_verified_device_pending",
+      "original_definition_AST_sha256": {
+        "ref_seq_gdn": "c7f34ecd2726bbcfd232602b2ed44db14f440669219db8be8fa079fedd32d871"
+      },
+      "original_CLI_AST_sha256": "d32d09b271463ae1eb1a3dc2a9ca84b3eba14c0e4b977698be1d1b9bda4d5191",
+      "original_test_configs": [
+        [
+          1,
+          2,
+          1024,
+          128,
+          128,
+          128,
+          128,
+          128
+        ]
+      ],
+      "original_runtime_calls": 6,
+      "original_golden_assertions": 1,
+      "original_golden_tolerances": {
+        "rtol": 0.001,
+        "atol": 0.001
+      },
+      "original_seed": 0,
+      "original_clear_cache_calls": 1,
+      "original_printoptions": {
+        "threshold": "inf",
+        "sci_mode": true
+      },
+      "original_success_marker": "Kernel Output Match!",
+      "original_leaf_dependencies": [
+        "opt_gdn.opt_gdn_chunk_cumsum",
+        "opt_gdn.opt_gdn_chunk_h",
+        "opt_gdn.opt_gdn_chunk_o",
+        "opt_gdn.opt_gdn_chunk_scaled_dot_kkt",
+        "opt_gdn.opt_gdn_solve_tril",
+        "opt_gdn.opt_gdn_wy_fast"
+      ],
+      "device_not_run": true,
+      "adaptations": [
+        "exact sibling file imports under private nonregistered module names; no fallback to foreign gdn, no sys.path/sys.modules mutation",
+        "complete original top-level CLI moved into inert state-restoring main with original single clear adapted to task-owned backend singleton",
+        "source CRLF/tab formatting normalized without definition or CLI AST changes"
+      ]
     }
   ],
   "factory_requests": [
@@ -1070,6 +1122,109 @@
       "kwargs": {},
       "component": "G5",
       "evidence_scope": "additional_positive_source_only_API_nonCLI"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_chunk_cumsum",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_cumsum.py",
+      "factory": "cumsum_ker",
+      "args": [
+        1,
+        2,
+        1024,
+        128
+      ],
+      "kwargs": {},
+      "component": "G6",
+      "origin_composition": "examples/linear_attention_and_rnn/opt_gdn_full.py",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_chunk_scaled_dot_kkt",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_scaled_dot_kkt.py",
+      "factory": "kkt_ker",
+      "args": [
+        1,
+        2,
+        1024,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "component": "G6",
+      "origin_composition": "examples/linear_attention_and_rnn/opt_gdn_full.py",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_wy_fast",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_wy_fast.py",
+      "factory": "wy_fast_ker",
+      "args": [
+        1,
+        2,
+        1024,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "component": "G6",
+      "origin_composition": "examples/linear_attention_and_rnn/opt_gdn_full.py",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_chunk_h",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_h.py",
+      "factory": "chunk_h_ker",
+      "args": [
+        1,
+        2,
+        1024,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "component": "G6",
+      "origin_composition": "examples/linear_attention_and_rnn/opt_gdn_full.py",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_chunk_o",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_o.py",
+      "factory": "chunk_o_ker",
+      "args": [
+        1,
+        2,
+        1024,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "component": "G6",
+      "origin_composition": "examples/linear_attention_and_rnn/opt_gdn_full.py",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_solve_tril",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_solve_tril.py",
+      "factory": "solve_tril_128_ker",
+      "args": [
+        1,
+        2,
+        1024
+      ],
+      "kwargs": {},
+      "component": "G6",
+      "origin_composition": "examples/linear_attention_and_rnn/opt_gdn_full.py",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix"
     }
   ],
   "validation": {
@@ -1211,7 +1366,44 @@
       "combined_G1_through_G5_actual_OFF_native_only_skipped": 20,
       "all_thirteen_CLIs_state_restore_checked": true,
       "source_SDK_repeated_during_host_followup": false
-    }
+    },
+    "G6": {
+      "original_complete_composition_definitions": 1,
+      "original_leaf_dependencies": 6,
+      "original_default_matrix": [
+        1,
+        2,
+        1024,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "original_runtime_calls": 6,
+      "original_golden_assertions": 1,
+      "source_SDK_pending": false,
+      "device_not_run": true,
+      "original_C32_C64_C128_dispatch_branches_preserved": true,
+      "TA_complete_source": 6,
+      "main_complete_source": 6,
+      "TA_actual_SDK": 6,
+      "main_actual_SDK": 6,
+      "actual_properties_context_or_NPU_tensor_or_launch": false,
+      "actual_driver_availability": true,
+      "actual_driver_count": 16,
+      "existing_TA_native_not_fresh": true,
+      "combined_G1_through_G6_host_ON_passed": 140,
+      "combined_G1_through_G6_actual_OFF_passed": 114,
+      "combined_G1_through_G6_actual_OFF_native_only_skipped": 26,
+      "all_fourteen_original_CLIs_state_restore_checked": true,
+      "exact_sibling_imports_and_foreign_opt_gdn_sentinel_checked": true,
+      "actual_full_import_frontends_equal_archived_SDK_frontends": true,
+      "source_SDK_repeated_during_host_followup": false
+    },
+    "all_sixteen_GDN_source_assets_complete_candidate": true,
+    "composed_standard_and_opt_GDN_pending_scope": "device/numerical validation only as of G6; all source assets and default source/SDK migrations are represented",
+    "all_original_GDN_device_validation_pending": true
   },
   "source_contracts": [
     {
@@ -9773,6 +9965,3299 @@
           ],
           "elements": 8192,
           "bytes": 16384
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    }
+  ],
+  "source_contracts_G6": [
+    {
+      "id": "opt_gdn_full_opt_gdn_chunk_cumsum",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/ta/opt_gdn_full_opt_gdn_chunk_cumsum/kernel.cc",
+        "sha256": "bba846a228fb5393d590bbaf8baa9b92777d0c9fa51fff1f53267aecbc266bee",
+        "size": 2626
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/main/opt_gdn_full_opt_gdn_chunk_cumsum/kernel.cc",
+        "sha256": "a6c02247ce6f2c88566ece1b7f94ea760fc64602c2a72527c50a271c5b2e8b0a",
+        "size": 2666
+      },
+      "launch_grid": 1,
+      "host_ABI": "uint8_t* G_handle, uint8_t* S_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "ofs",
+          "expression": "(ii * 128)",
+          "minimum": 0,
+          "maximum": 896,
+          "logical_cid": [
+            0,
+            0
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true,
+          "ii": [
+            0,
+            7
+          ]
+        }
+      ],
+      "review_only_identifier_correspondence": [
+        [
+          "cid",
+          "bz"
+        ],
+        [
+          "vid",
+          "by"
+        ]
+      ],
+      "named_views": {
+        "ta": [
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          }
+        ],
+        "main": [
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_ub": {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          }
+        },
+        "main": {
+          "ascend_ub": {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": null,
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "1",
+            "2",
+            "1024"
+          ],
+          "elements": 2048,
+          "bytes": 8192
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float32",
+          "shape": [
+            "1",
+            "2",
+            "1024"
+          ],
+          "elements": 2048,
+          "bytes": 8192
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_chunk_scaled_dot_kkt",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/ta/opt_gdn_full_opt_gdn_chunk_scaled_dot_kkt/kernel.cc",
+        "sha256": "531b315cfb1d535f1bc28cd36fb30e2efaed49517c625620d3efe9dfb987cd68",
+        "size": 6818
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/main/opt_gdn_full_opt_gdn_chunk_scaled_dot_kkt/kernel.cc",
+        "sha256": "5a6dd0d0a665002ede590750b88c2c1ce48fa98c0d47bfd44f4807fe2ede81d7",
+        "size": 6987
+      },
+      "launch_grid": 16,
+      "host_ABI": "uint8_t* K_handle, uint8_t* Beta_handle, uint8_t* G_handle, uint8_t* Msk_handle, uint8_t* workspace_handle, uint8_t* A_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 8)",
+          "minimum": 0,
+          "maximum": 7,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "(cid / 8)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 8)",
+          "minimum": 0,
+          "maximum": 7,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "(cid / 8)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [],
+      "named_views": {
+        "ta": [
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "a_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 0,
+            "end_bytes": 512
+          },
+          {
+            "name": "beta_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 64,
+            "offset_bytes": 512,
+            "end_bytes": 640
+          },
+          {
+            "name": "beta_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 640,
+            "end_bytes": 896
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 896,
+            "end_bytes": 1152
+          },
+          {
+            "name": "a_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 1152,
+            "end_bytes": 33920
+          },
+          {
+            "name": "g_r_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 33920,
+            "end_bytes": 34176
+          },
+          {
+            "name": "g_c_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 34176,
+            "end_bytes": 34688
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 34688,
+            "end_bytes": 67456
+          },
+          {
+            "name": "g_r_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 67456,
+            "end_bytes": 100224
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 256,
+            "offset_bytes": 100224,
+            "end_bytes": 100480
+          },
+          {
+            "name": "g_c_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 100480,
+            "end_bytes": 133248
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 133248,
+            "end_bytes": 166016
+          },
+          {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 166016,
+            "end_bytes": 182400
+          }
+        ],
+        "main": [
+          {
+            "name": "a_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 0,
+            "end_bytes": 512
+          },
+          {
+            "name": "beta_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 64,
+            "offset_bytes": 512,
+            "end_bytes": 640
+          },
+          {
+            "name": "beta_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 640,
+            "end_bytes": 896
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 896,
+            "end_bytes": 1152
+          },
+          {
+            "name": "a_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 1152,
+            "end_bytes": 33920
+          },
+          {
+            "name": "g_r_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 33920,
+            "end_bytes": 34176
+          },
+          {
+            "name": "g_c_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 34176,
+            "end_bytes": 34688
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 34688,
+            "end_bytes": 67456
+          },
+          {
+            "name": "g_r_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 67712,
+            "end_bytes": 100480
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 256,
+            "offset_bytes": 67456,
+            "end_bytes": 67712
+          },
+          {
+            "name": "g_c_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 100480,
+            "end_bytes": 133248
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 133248,
+            "end_bytes": 166016
+          },
+          {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 166016,
+            "end_bytes": 182400
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l1": {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          "ascend_ub": {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 166016,
+            "end_bytes": 182400
+          },
+          "ascend_l0c": {
+            "name": "a_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          }
+        },
+        "main": {
+          "ascend_l1": {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          "ascend_ub": {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 166016,
+            "end_bytes": 182400
+          },
+          "ascend_l0c": {
+            "name": "a_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": {
+        "disjoint_UB_pair_union": [
+          67456,
+          100480
+        ],
+        "pair_intervals": {
+          "ta": [
+            [
+              67456,
+              100224
+            ],
+            [
+              100224,
+              100480
+            ]
+          ],
+          "main": [
+            [
+              67456,
+              67712
+            ],
+            [
+              67712,
+              100480
+            ]
+          ]
+        },
+        "independent_L0C_L1_declaration_swap": true,
+        "last_descriptors_unchanged": true
+      },
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "Beta_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024"
+          ],
+          "elements": 2048,
+          "bytes": 4096
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "1",
+            "2",
+            "1024"
+          ],
+          "elements": 2048,
+          "bytes": 8192
+        },
+        {
+          "name": "Msk_handle",
+          "dtype": "float32",
+          "shape": [
+            "128",
+            "128"
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        },
+        {
+          "name": "workspace_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_wy_fast",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/ta/opt_gdn_full_opt_gdn_wy_fast/kernel.cc",
+        "sha256": "dff038ab23d8bc4c28ff562bc7a8d19e37f3b61863fb2f3d7b033de359b72383",
+        "size": 7604
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/main/opt_gdn_full_opt_gdn_wy_fast/kernel.cc",
+        "sha256": "ff250e72760a415aa48c66fdd40abca2eee3242b34a09242b094dad939c781aa",
+        "size": 7774
+      },
+      "launch_grid": 16,
+      "host_ABI": "uint8_t* K_handle, uint8_t* V_handle, uint8_t* Beta_handle, uint8_t* G_handle, uint8_t* A_handle, uint8_t* workspace_a1_handle, uint8_t* workspace_a2_handle, uint8_t* W_handle, uint8_t* U_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 8)",
+          "minimum": 0,
+          "maximum": 7,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "(cid / 8)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 8)",
+          "minimum": 0,
+          "maximum": 7,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "(cid / 8)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [],
+      "named_views": {
+        "ta": [
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "a2_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "u_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "a1_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "w_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "beta_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 128,
+            "offset_bytes": 0,
+            "end_bytes": 256
+          },
+          {
+            "name": "a1_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 256,
+            "end_bytes": 16640
+          },
+          {
+            "name": "beta_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 16640,
+            "end_bytes": 17152
+          },
+          {
+            "name": "beta_r_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 17152,
+            "end_bytes": 17664
+          },
+          {
+            "name": "beta_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 17664,
+            "end_bytes": 50432
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 32,
+            "offset_bytes": 50432,
+            "end_bytes": 50464
+          },
+          {
+            "name": "a1_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 50464,
+            "end_bytes": 83232
+          },
+          {
+            "name": "a2_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 83232,
+            "end_bytes": 116000
+          },
+          {
+            "name": "a2_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 116000,
+            "end_bytes": 132384
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 132384,
+            "end_bytes": 132896
+          },
+          {
+            "name": "g_r_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 132896,
+            "end_bytes": 133408
+          },
+          {
+            "name": "g_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 133408,
+            "end_bytes": 166176
+          }
+        ],
+        "main": [
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "a2_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "u_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "a1_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "w_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "beta_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 128,
+            "offset_bytes": 0,
+            "end_bytes": 256
+          },
+          {
+            "name": "a1_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 256,
+            "end_bytes": 16640
+          },
+          {
+            "name": "beta_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 16640,
+            "end_bytes": 17152
+          },
+          {
+            "name": "beta_r_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 17152,
+            "end_bytes": 17664
+          },
+          {
+            "name": "beta_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 17664,
+            "end_bytes": 50432
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 32,
+            "offset_bytes": 50432,
+            "end_bytes": 50464
+          },
+          {
+            "name": "a1_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 50464,
+            "end_bytes": 83232
+          },
+          {
+            "name": "a2_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 83232,
+            "end_bytes": 116000
+          },
+          {
+            "name": "a2_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 116000,
+            "end_bytes": 132384
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 132384,
+            "end_bytes": 132896
+          },
+          {
+            "name": "g_r_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 132896,
+            "end_bytes": 133408
+          },
+          {
+            "name": "g_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 133408,
+            "end_bytes": 166176
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l1": {
+            "name": "a1_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          "ascend_ub": {
+            "name": "g_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 133408,
+            "end_bytes": 166176
+          },
+          "ascend_l0c": {
+            "name": "w_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          }
+        },
+        "main": {
+          "ascend_l1": {
+            "name": "a1_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          "ascend_ub": {
+            "name": "g_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 133408,
+            "end_bytes": 166176
+          },
+          "ascend_l0c": {
+            "name": "w_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": null,
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "Beta_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024"
+          ],
+          "elements": 2048,
+          "bytes": 4096
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "1",
+            "2",
+            "1024"
+          ],
+          "elements": 2048,
+          "bytes": 8192
+        },
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "workspace_a1_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "workspace_a2_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "W_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "U_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_chunk_h",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/ta/opt_gdn_full_opt_gdn_chunk_h/kernel.cc",
+        "sha256": "b5d2280c18c124adaae9a0af2fa7222bf03e24b4049b3975fae5ea8ff5276c13",
+        "size": 11975
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/main/opt_gdn_full_opt_gdn_chunk_h/kernel.cc",
+        "sha256": "5b01efbd36c0aaf424de987df00eb8cb8b021f57fa672ec46f571668a792a12c",
+        "size": 12135
+      },
+      "launch_grid": 2,
+      "host_ABI": "uint8_t* K_handle, uint8_t* W_handle, uint8_t* U_handle, uint8_t* G_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* workspace_3_handle, uint8_t* workspace_4_handle, uint8_t* S_handle, uint8_t* V_handle, uint8_t* FS_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "by",
+          "expression": "cid",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            1
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            1
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "cid",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            1
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            1
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [
+        [
+          "i",
+          "chunk_i"
+        ],
+        [
+          "i_1",
+          "chunk_i_1"
+        ],
+        [
+          "i_2",
+          "i"
+        ]
+      ],
+      "named_views": {
+        "ta": [
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "w_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "ws_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 0,
+            "end_bytes": 256
+          },
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 256,
+            "end_bytes": 33024
+          },
+          {
+            "name": "k_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 33024,
+            "end_bytes": 49408
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 49408,
+            "end_bytes": 49920
+          },
+          {
+            "name": "s_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 165120,
+            "end_bytes": 181504
+          },
+          {
+            "name": "u_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 66304
+          },
+          {
+            "name": "k_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 66304,
+            "end_bytes": 99072
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 99072,
+            "end_bytes": 99328
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 99328,
+            "end_bytes": 99584
+          },
+          {
+            "name": "u_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 99584,
+            "end_bytes": 132352
+          },
+          {
+            "name": "ws_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 132352,
+            "end_bytes": 165120
+          },
+          {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 82688
+          }
+        ],
+        "main": [
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "w_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "ws_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 0,
+            "end_bytes": 256
+          },
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 256,
+            "end_bytes": 33024
+          },
+          {
+            "name": "k_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 33024,
+            "end_bytes": 49408
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 49408,
+            "end_bytes": 49920
+          },
+          {
+            "name": "s_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 165120,
+            "end_bytes": 181504
+          },
+          {
+            "name": "u_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 66304
+          },
+          {
+            "name": "k_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 66304,
+            "end_bytes": 99072
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 99072,
+            "end_bytes": 99328
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 99328,
+            "end_bytes": 99584
+          },
+          {
+            "name": "u_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 99584,
+            "end_bytes": 132352
+          },
+          {
+            "name": "ws_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 132352,
+            "end_bytes": 165120
+          },
+          {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 82688
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [
+          {
+            "names": [
+              "k_ub",
+              "kv_ub"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              66304,
+              82688
+            ]
+          },
+          {
+            "names": [
+              "kv_ub",
+              "u_ub_half"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              49920,
+              66304
+            ]
+          }
+        ],
+        "main": [
+          {
+            "names": [
+              "k_ub",
+              "kv_ub"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              66304,
+              82688
+            ]
+          },
+          {
+            "names": [
+              "kv_ub",
+              "u_ub_half"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              49920,
+              66304
+            ]
+          }
+        ]
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l1": {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          "ascend_ub": {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 82688
+          },
+          "ascend_l0c": {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          }
+        },
+        "main": {
+          "ascend_l1": {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          "ascend_ub": {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 82688
+          },
+          "ascend_l0c": {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": null,
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "W_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "U_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "1",
+            "2",
+            "1024"
+          ],
+          "elements": 2048,
+          "bytes": 8192
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "128",
+            "128"
+          ],
+          "elements": 32768,
+          "bytes": 65536
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "128",
+            "128"
+          ],
+          "elements": 32768,
+          "bytes": 65536
+        },
+        {
+          "name": "workspace_3_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "128",
+            "128"
+          ],
+          "elements": 32768,
+          "bytes": 65536
+        },
+        {
+          "name": "workspace_4_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "128",
+            "128"
+          ],
+          "elements": 32768,
+          "bytes": 65536
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "8",
+            "128",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "FS_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "128",
+            "128"
+          ],
+          "elements": 32768,
+          "bytes": 65536
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_chunk_o",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/ta/opt_gdn_full_opt_gdn_chunk_o/kernel.cc",
+        "sha256": "680e66849ed6e6f98d20c616ed0ea608bccedc7d3262ff91c256bd1d491cf388",
+        "size": 11583
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/main/opt_gdn_full_opt_gdn_chunk_o/kernel.cc",
+        "sha256": "49958b999b3525e35e014ce9cd34776a0c63da345f7b9fedfda12db15c7e81ae",
+        "size": 11753
+      },
+      "launch_grid": 16,
+      "host_ABI": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* S_handle, uint8_t* G_handle, uint8_t* Msk_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* workspace_3_handle, uint8_t* O_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 8)",
+          "minimum": 0,
+          "maximum": 7,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "(cid / 8)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 8)",
+          "minimum": 0,
+          "maximum": 7,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "(cid / 8)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [],
+      "named_views": {
+        "ta": [
+          {
+            "name": "q_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "qk_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "qs_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "qk_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 131072,
+            "end_bytes": 163840
+          },
+          {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 0,
+            "end_bytes": 512
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          },
+          {
+            "name": "qk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 33280,
+            "end_bytes": 66048
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 66048,
+            "end_bytes": 66304
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 66304,
+            "end_bytes": 99072
+          },
+          {
+            "name": "qk_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 99072,
+            "end_bytes": 115456
+          },
+          {
+            "name": "qs_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 115456,
+            "end_bytes": 131840
+          },
+          {
+            "name": "qs_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 131840,
+            "end_bytes": 164608
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 164608,
+            "end_bytes": 180992
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          }
+        ],
+        "main": [
+          {
+            "name": "q_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "qk_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "qs_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "qk_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 131072,
+            "end_bytes": 163840
+          },
+          {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 0,
+            "end_bytes": 512
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          },
+          {
+            "name": "qk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 33280,
+            "end_bytes": 66048
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 66048,
+            "end_bytes": 66304
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 66304,
+            "end_bytes": 99072
+          },
+          {
+            "name": "qk_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 99072,
+            "end_bytes": 115456
+          },
+          {
+            "name": "qs_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 115456,
+            "end_bytes": 131840
+          },
+          {
+            "name": "qs_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 131840,
+            "end_bytes": 164608
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 164608,
+            "end_bytes": 180992
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [
+          {
+            "names": [
+              "msk_ub",
+              "o_ub"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              512,
+              33280
+            ]
+          },
+          {
+            "names": [
+              "qk_l0",
+              "qkv_l0"
+            ],
+            "pool": "ascend_l0c",
+            "intersection": [
+              0,
+              65536
+            ]
+          }
+        ],
+        "main": [
+          {
+            "names": [
+              "msk_ub",
+              "o_ub"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              512,
+              33280
+            ]
+          },
+          {
+            "names": [
+              "qk_l0",
+              "qkv_l0"
+            ],
+            "pool": "ascend_l0c",
+            "intersection": [
+              0,
+              65536
+            ]
+          }
+        ]
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l1": {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 131072,
+            "end_bytes": 163840
+          },
+          "ascend_ub": {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          },
+          "ascend_l0c": {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          }
+        },
+        "main": {
+          "ascend_l1": {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 131072,
+            "end_bytes": 163840
+          },
+          "ascend_ub": {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          },
+          "ascend_l0c": {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": {
+        "declaration_order_only": true,
+        "all_named_addresses_and_copied_sizes_unchanged": true,
+        "all_last_per_pool_descriptors_unchanged": true,
+        "original_alias_maps_and_all_lifetime_payload_sync_preserved": true
+      },
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "8",
+            "128",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "1",
+            "2",
+            "1024"
+          ],
+          "elements": 2048,
+          "bytes": 8192
+        },
+        {
+          "name": "Msk_handle",
+          "dtype": "float32",
+          "shape": [
+            "128",
+            "128"
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "16",
+            "128",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "16",
+            "128",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "workspace_3_handle",
+          "dtype": "float16",
+          "shape": [
+            "16",
+            "128",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_full_opt_gdn_solve_tril",
+      "evidence_scope": "original_optimized_full_default_CLI_matrix",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/ta/opt_gdn_full_opt_gdn_solve_tril/kernel.cc",
+        "sha256": "a881a89cb9ab5c70d8cba3b28d7134ff5ede347dbadee9060f29288db1c77180",
+        "size": 10479
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G6/main/opt_gdn_full_opt_gdn_solve_tril/kernel.cc",
+        "sha256": "76ac1e66cf3309cf3c0bb3efc6e3e5a9c4f148a517fb0a64f80c132ea1e56da4",
+        "size": 10651
+      },
+      "launch_grid": 16,
+      "host_ABI": "uint8_t* A_handle, uint8_t* I_handle, uint8_t* O_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 8)",
+          "minimum": 0,
+          "maximum": 7,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "(cid / 8)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 8)",
+          "minimum": 0,
+          "maximum": 7,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "(cid / 8)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            15
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [],
+      "named_views": {
+        "ta": [
+          {
+            "name": "a21_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 0,
+            "end_bytes": 8192
+          },
+          {
+            "name": "a21_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 8192,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o11_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 12288
+          },
+          {
+            "name": "mult_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "o22_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 12288,
+            "end_bytes": 14336
+          },
+          {
+            "name": "mult_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 14336,
+            "end_bytes": 16384
+          },
+          {
+            "name": "final_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "o11_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 16384,
+            "end_bytes": 24576
+          },
+          {
+            "name": "mult_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 8192,
+            "end_bytes": 24576
+          },
+          {
+            "name": "o22_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 32768
+          },
+          {
+            "name": "mult_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 32768,
+            "end_bytes": 40960
+          },
+          {
+            "name": "final_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 40960
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "fat_o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 8192
+          },
+          {
+            "name": "fat_zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 8192,
+            "end_bytes": 12288
+          },
+          {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 12288,
+            "end_bytes": 16384
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 16384,
+            "end_bytes": 20480
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 20480,
+            "end_bytes": 24576
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 24576,
+            "end_bytes": 28672
+          },
+          {
+            "name": "o_row_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 28672,
+            "end_bytes": 28800
+          },
+          {
+            "name": "o_row_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 28800,
+            "end_bytes": 32896
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 32896,
+            "end_bytes": 34944
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 34944,
+            "end_bytes": 35072
+          }
+        ],
+        "main": [
+          {
+            "name": "a21_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 0,
+            "end_bytes": 8192
+          },
+          {
+            "name": "a21_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 8192,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o11_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 10240,
+            "end_bytes": 18432
+          },
+          {
+            "name": "mult_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 0,
+            "end_bytes": 16384
+          },
+          {
+            "name": "o22_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 18432,
+            "end_bytes": 26624
+          },
+          {
+            "name": "mult_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 26624,
+            "end_bytes": 34816
+          },
+          {
+            "name": "final_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 16384,
+            "end_bytes": 32768
+          },
+          {
+            "name": "o11_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 34816,
+            "end_bytes": 36864
+          },
+          {
+            "name": "mult_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 32768,
+            "end_bytes": 36864
+          },
+          {
+            "name": "o22_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 36864,
+            "end_bytes": 38912
+          },
+          {
+            "name": "mult_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 38912,
+            "end_bytes": 40960
+          },
+          {
+            "name": "final_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 36864,
+            "end_bytes": 40960
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "fat_o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 8192
+          },
+          {
+            "name": "fat_zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 8192,
+            "end_bytes": 12288
+          },
+          {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 12288,
+            "end_bytes": 16384
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 16384,
+            "end_bytes": 20480
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 20480,
+            "end_bytes": 24576
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 24576,
+            "end_bytes": 28672
+          },
+          {
+            "name": "o_row_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 28672,
+            "end_bytes": 28800
+          },
+          {
+            "name": "o_row_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 28800,
+            "end_bytes": 32896
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 32896,
+            "end_bytes": 34944
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 34944,
+            "end_bytes": 35072
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l1": {
+            "name": "mult_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 32768,
+            "end_bytes": 40960
+          },
+          "ascend_ub": {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 34944,
+            "end_bytes": 35072
+          },
+          "ascend_l0c": {
+            "name": "final_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 40960
+          }
+        },
+        "main": {
+          "ascend_l1": {
+            "name": "mult_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 38912,
+            "end_bytes": 40960
+          },
+          "ascend_ub": {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 34944,
+            "end_bytes": 35072
+          },
+          "ascend_l0c": {
+            "name": "final_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 36864,
+            "end_bytes": 40960
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": {
+        "disjoint_full_pool_unions": {
+          "ascend_l1": [
+            0,
+            40960
+          ],
+          "ascend_l0c": [
+            0,
+            40960
+          ]
+        },
+        "old_new_intervals": {
+          "ascend_l1": {
+            "ta": [
+              [
+                0,
+                8192
+              ],
+              [
+                8192,
+                10240
+              ],
+              [
+                10240,
+                12288
+              ],
+              [
+                12288,
+                14336
+              ],
+              [
+                14336,
+                16384
+              ],
+              [
+                16384,
+                24576
+              ],
+              [
+                24576,
+                32768
+              ],
+              [
+                32768,
+                40960
+              ]
+            ],
+            "main": [
+              [
+                0,
+                8192
+              ],
+              [
+                8192,
+                10240
+              ],
+              [
+                10240,
+                18432
+              ],
+              [
+                18432,
+                26624
+              ],
+              [
+                26624,
+                34816
+              ],
+              [
+                34816,
+                36864
+              ],
+              [
+                36864,
+                38912
+              ],
+              [
+                38912,
+                40960
+              ]
+            ]
+          },
+          "ascend_l0c": {
+            "ta": [
+              [
+                0,
+                4096
+              ],
+              [
+                4096,
+                8192
+              ],
+              [
+                8192,
+                24576
+              ],
+              [
+                24576,
+                40960
+              ]
+            ],
+            "main": [
+              [
+                0,
+                16384
+              ],
+              [
+                16384,
+                32768
+              ],
+              [
+                32768,
+                36864
+              ],
+              [
+                36864,
+                40960
+              ]
+            ]
+          }
+        },
+        "final_shared_TBuf_dataLen_bytes": {
+          "ta": {
+            "ascend_l1": 8192,
+            "ascend_ub": 128,
+            "ascend_l0c": 16384
+          },
+          "main": {
+            "ascend_l1": 2048,
+            "ascend_ub": 128,
+            "ascend_l0c": 4096
+          }
+        },
+        "shared_metadata_not_equal": true,
+        "per_LocalTensor_count_dtype_preserved": true,
+        "raw_pool_references_after_final_view": {
+          "ascend_l1": {
+            "ta": 0,
+            "main": 0
+          },
+          "ascend_l0c": {
+            "ta": 0,
+            "main": 0
+          }
+        },
+        "claim_scope": "only actual default source/SDK, copied named descriptors and identical remaining consumers; no universal metadata/instruction/device claim"
+      },
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "I_handle",
+          "dtype": "float32",
+          "shape": [
+            "128",
+            "128"
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "1024",
+            "128"
+          ],
+          "elements": 262144,
+          "bytes": 524288
         }
       ],
       "numerical_result": "pending; extra API requests are not original CLI cases"
