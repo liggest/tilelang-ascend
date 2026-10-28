@@ -182,6 +182,10 @@ def test_full_original_factory_lowers_without_device(case, monkeypatch):
         prim = factory.get_tir(*args, **case["kwargs"])
     config = normalize_a2a3_pass_configs(target, factory.pass_configs)
     with tvm.transform.PassContext(opt_level=3, config=config):
+        if case.get("expected_codegen_error"):
+            with pytest.raises(tvm.error.InternalError, match=case["expected_codegen_error"]):
+                tilelang.lower(prim, target=target)
+            return
         artifact = tilelang.lower(prim, target=target)
     assert 'extern "C" void call(' in artifact.kernel_source
 
@@ -289,3 +293,62 @@ def test_mla_persistent_original_host_metadata_negatives_without_tensor(wrong_dt
     metadata = [SimpleNamespace(shape=shape, ndim=len(shape), dtype=dtype, device=SimpleNamespace(type="npu")) for shape in shapes]
     with pytest.raises(AssertionError, match=message):
         module.run_mla_decode(*metadata, 64, 64, 20)
+
+
+@pytest.mark.parametrize(
+    "entry", [e for e in ENTRIES if e["batch"] == "E5a" and "/test_" in e["source_path"]], ids=lambda e: e["source_path"]
+)
+def test_nsa_decode_layered_uses_exact_private_sibling(entry):
+    module = _load(entry)
+    assert Path(module._nsa_module.__file__).resolve() == (ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]).resolve()
+    assert module.nsa_decode is module._nsa_module.nsa_decode
+    assert module.run_kernel is module._nsa_module.run_kernel
+
+
+@pytest.mark.parametrize(
+    "entry", [e for e in ENTRIES if e["batch"] == "E5b" and "/test_" in e["source_path"]], ids=lambda e: e["source_path"]
+)
+def test_nsa_fwd_layered_uses_exact_private_sibling(entry):
+    module = _load(entry)
+    assert Path(module._nsa_module.__file__).resolve() == (ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]).resolve()
+    assert module.native_sparse_attention is module._nsa_module.native_sparse_attention
+
+
+def test_nsa_fwd_original_short_sequence_host_assert_before_allocation(monkeypatch):
+    import torch
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E5b" and "/test_" in e["source_path"])
+    module = _load(entry)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("invalid short sequence reached allocation")
+
+    monkeypatch.setattr(torch, "zeros", forbidden)
+    q = SimpleNamespace(shape=(2, 16, 16, 32))
+    kv = SimpleNamespace(shape=(2, 16, 1, 32))
+    with pytest.raises(AssertionError, match=r"seq_len \(16\) must be >= block_size \(32\)"):
+        module.prepare_inputs(q, kv, kv, None, None, 32, 1, bs_pad=64)
+
+
+@pytest.mark.parametrize(
+    "entry", [e for e in ENTRIES if e["batch"] == "E5c" and "/test_" in e["source_path"]], ids=lambda e: e["source_path"]
+)
+def test_nsa_varlen_layered_uses_exact_private_sibling(entry):
+    module = _load(entry)
+    assert Path(module._nsa_module.__file__).resolve() == (ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]).resolve()
+    assert module.native_sparse_attention_varlen is module._nsa_module.native_sparse_attention_varlen
+
+
+def test_nsa_varlen_original_odd_group_assert_before_seed_or_allocation(monkeypatch):
+    import torch
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E5c" and "/test_" in e["source_path"])
+    module = _load(entry)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("invalid original group reached seed or allocation")
+
+    monkeypatch.setattr(torch, "manual_seed", forbidden)
+    monkeypatch.setattr(torch, "zeros", forbidden)
+    with pytest.raises(AssertionError, match=r"groups G=HQ/H \(15\) must be even"):
+        module.make_test_data(2, 64, 1, 15, 64, 1, 32, torch.float16)

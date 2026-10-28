@@ -597,6 +597,215 @@
         "core_num": 24,
         "origin": "Actual physical2/visible0 masked Torch property captured read-only by owner; property-source SHA fixed in core24 evidence. Actual product core query/fallback20 unchanged."
       }
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "source_git_blob": "606e0f159041a77ddbab981cca39812126a80459",
+      "source_sha256": "607281dd1c7ee84c503d5cb048ec3330ba85b1c98bdf073fa6c5bcdf4405c901",
+      "destination_sha256": "2b21078db609670537df27e2dc0443c8384d92b3be5f8c4210b296ff9c412bda",
+      "batch": "E5a",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language and exact sibling loader without sys.path mutation; explicit registration and runtime cache restoration. Full original factory/host helpers/test/marks/seed/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5a/"
+      },
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "29 original rows ->11 full source/SDK requests per side+2 original constructor assertions;runtime float32 error and all numerical/boundary/performance device-pending."
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/test_example_tilelang_nsa_decode.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_decode/test_example_tilelang_nsa_decode.py",
+      "source_git_blob": "af41cf31b20502926a34db92e61b51f7fc417e42",
+      "source_sha256": "e799fca1c844325c56cec545d234b87e9b418de6c747f1a98761854f48081423",
+      "destination_sha256": "d05129169f38239deb936daf0ffa67d3c4e48f2dbf9bba8891b0cba4b9820f25",
+      "batch": "E5a",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language and exact sibling loader without sys.path mutation; explicit registration and runtime cache restoration. Full original factory/host helpers/test/marks/seed/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5a/"
+      },
+      "source_request_owner": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "29 original rows ->11 full source/SDK requests per side+2 original constructor assertions;runtime float32 error and all numerical/boundary/performance device-pending."
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "source_git_blob": "4fb516738391d4fd1ba7f673b0be5a0ddf2ff0ea",
+      "source_sha256": "fbdfd27205be065a074d83c5905beef4eb18679684c4304352045d73ee4ad12f",
+      "destination_sha256": "8d0b932216ca41a194882d064e846e60f402c3a2ade36f814ec4616be7e0bec6",
+      "batch": "E5b",
+      "state": "source_SDK_verified_original_oracle_defect_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language and exact sibling loader without sys.path mutation; explicit registration and runtime cache restoration. Full original factory/host helpers/test/marks/seed/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "original_odd_G_oracle_setup_defect_fixed": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5b/"
+      },
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "28 original rows;16 complete positive source/SDK requests each side+1 same original odd17 native codegen rejection before SDK. Core24 sampled explicitly, original query and kwargs retained. Original -c setup oracle defect/runtimes/numerical/boundary/performance pending.",
+      "source_sampling_core_override": {
+        "value": 24,
+        "actual_property_provenance": "refactor_main/reports/p3_experiment_rest/E4c24/hardware_property_provenance.json",
+        "original_core_num_None_query_AST_unchanged": true
+      }
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/test_example_tilelang_nsa_fwd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd/test_example_tilelang_nsa_fwd.py",
+      "source_git_blob": "47f3233d7e349a9737e8aafe35e93c8786a5ee97",
+      "source_sha256": "f001502f4e049fdbc347ef7cfb6215b0cbe730de67de3a707561072092300555",
+      "destination_sha256": "0c2ffa91de000fae05bce0a2a83b97f7696d84e6e082ea08f3aa023f8e4ced89",
+      "batch": "E5b",
+      "state": "source_SDK_verified_original_oracle_defect_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language and exact sibling loader without sys.path mutation; explicit registration and runtime cache restoration. Full original factory/host helpers/test/marks/seed/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "original_odd_G_oracle_setup_defect_fixed": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5b/"
+      },
+      "source_request_owner": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "28 original rows;16 complete positive source/SDK requests each side+1 same original odd17 native codegen rejection before SDK. Core24 sampled explicitly, original query and kwargs retained. Original -c setup oracle defect/runtimes/numerical/boundary/performance pending.",
+      "source_sampling_core_override": {
+        "value": 24,
+        "actual_property_provenance": "refactor_main/reports/p3_experiment_rest/E4c24/hardware_property_provenance.json",
+        "original_core_num_None_query_AST_unchanged": true
+      }
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "source_git_blob": "bbda7c48bc9d7c594505cb1aad5bdb00368a503d",
+      "source_sha256": "604aadcb4d679af9a31f7704ded2dafea2c200ffee77653839b590e7985aae65",
+      "destination_sha256": "70f88bc530c02c338913385d3287728c5fb2409f48080e882f2a3693f5687d74",
+      "batch": "E5c",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randperm"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language and exact sibling loader without sys.path mutation; explicit registration and runtime cache restoration. Full original factory/host helpers/test/marks/seed/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5c/"
+      },
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "22 complete original smoke/L0/L1/L2/Boundary rows;12 positive complete source/SDK pairs plus same float64 constructor rejection;original odd-group host assertion before seed/allocation. Full original CPU metadata, C20/V40 readers/guards/int-control ranges, raw readonly effects and complete allocation/alias graph checked. Extra reads/waits remain; runtime/numerical/deadlock/performance pending.",
+      "native_dependency": {
+        "root_commit": "9b6cbf7a",
+        "candidate_commit": "f228bea134d44d6411057ace83af60704497fc80",
+        "component": "backend-private MemoryPlanning iterative flat Bind/Assert lexical-tail traversal",
+        "original_failure": "case8 default8MiB native stack exhaustion; retained unchanged original shape/pass sequence",
+        "validation": "root normal ON build,77 neighbours,and exact planned IR default8MiB versus diagnostic64MiB byte equality; no increased production stack"
+      }
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/test_example_tilelang_nsa_fwd_varlen.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd_varlen/test_example_tilelang_nsa_fwd_varlen.py",
+      "source_git_blob": "deea854ceca1910e8b5a26922782eb7240a03f10",
+      "source_sha256": "e2b247402d16e3dc80906be4773452948947bc4207afdf66034546d6e6d9f337",
+      "destination_sha256": "55fe3f1d188d5ee335bc916221e5c7f46b7389431c0c869afe05a7fcdf878e72",
+      "batch": "E5c",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randperm"
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language and exact sibling loader without sys.path mutation; explicit registration and runtime cache restoration. Full original factory/host helpers/test/marks/seed/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5c/"
+      },
+      "source_request_owner": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "22 complete original smoke/L0/L1/L2/Boundary rows;12 positive complete source/SDK pairs plus same float64 constructor rejection;original odd-group host assertion before seed/allocation. Full original CPU metadata, C20/V40 readers/guards/int-control ranges, raw readonly effects and complete allocation/alias graph checked. Extra reads/waits remain; runtime/numerical/deadlock/performance pending.",
+      "native_dependency": {
+        "root_commit": "9b6cbf7a",
+        "candidate_commit": "f228bea134d44d6411057ace83af60704497fc80",
+        "component": "backend-private MemoryPlanning iterative flat Bind/Assert lexical-tail traversal",
+        "original_failure": "case8 default8MiB native stack exhaustion; retained unchanged original shape/pass sequence",
+        "validation": "root normal ON build,77 neighbours,and exact planned IR default8MiB versus diagnostic64MiB byte equality; no increased production stack"
+      }
     }
   ],
   "factory_requests": [
@@ -2337,6 +2546,773 @@
       ],
       "kwargs": {},
       "id": "experiment_e4c24_10"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        2,
+        64,
+        16,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_0"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        1,
+        64,
+        16,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_1"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        4,
+        128,
+        16,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_2"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        1,
+        32,
+        16,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_3"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        2,
+        33,
+        16,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_4"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        2,
+        48,
+        16,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_5"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        2,
+        97,
+        16,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_6"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        2,
+        64,
+        16,
+        1,
+        16,
+        2,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_7"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        2,
+        128,
+        16,
+        1,
+        16,
+        4,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_8"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        1,
+        1024,
+        16,
+        1,
+        128,
+        16,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_9"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        1,
+        512,
+        16,
+        1,
+        128,
+        8,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e5a_10"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        1,
+        64,
+        8,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e5a_11"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "factory": "nsa_decode",
+      "args": [
+        1,
+        64,
+        17,
+        1,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e5a_12"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_0"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.2,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_1"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 65,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_2"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 80,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_3"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 67,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_4"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "seq_len": 32,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_5"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 2,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_6"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "seq_len": 512,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 64,
+        "selected_blocks": 4,
+        "block_size": 64,
+        "bs_pad": 64,
+        "scale": 0.125,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_7"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "seq_len": 512,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 64,
+        "selected_blocks": 2,
+        "block_size": 64,
+        "bs_pad": 64,
+        "scale": 0.125,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_8"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 64,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_9"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": false,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_10"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 128,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_11"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 64,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_12"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 32,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_13"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_14"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 17,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_15",
+      "expected_codegen_error": "CompareScalar alignment error: size=544, element_bytes=4, total_bytes=2176"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "factory": "native_sparse_attention",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": null,
+        "is_causal": true,
+        "core_num": 24
+      },
+      "id": "experiment_e5b_16"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "c_seq_len": 64,
+        "heads": 16,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_0"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "c_seq_len": 65,
+        "heads": 16,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_1"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 3,
+        "c_seq_len": 96,
+        "heads": 16,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_2"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 3,
+        "c_seq_len": 97,
+        "heads": 16,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_3"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "c_seq_len": 32,
+        "heads": 16,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_4"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "c_seq_len": 64,
+        "heads": 16,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "bfloat16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_5"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "c_seq_len": 64,
+        "heads": 16,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float32",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_6"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "c_seq_len": 64,
+        "heads": 16,
+        "dim": 32,
+        "is_causal": true,
+        "scale": 0.1767766952966369,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_7"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "c_seq_len": 2048,
+        "heads": 64,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_8"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 4,
+        "c_seq_len": 1024,
+        "heads": 64,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_9"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "c_seq_len": 4096,
+        "heads": 64,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_10"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "c_seq_len": 1024,
+        "heads": 64,
+        "dim": 128,
+        "is_causal": true,
+        "scale": 0.08838834764831845,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float16",
+        "core_num": 20
+      },
+      "id": "experiment_e5c_11"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "factory": "native_sparse_attention_varlen",
+      "args": [],
+      "kwargs": {
+        "batch": 2,
+        "c_seq_len": 64,
+        "heads": 16,
+        "dim": 64,
+        "is_causal": true,
+        "scale": 0.125,
+        "block_size": 32,
+        "groups": 16,
+        "selected_blocks": 1,
+        "dtype": "float64",
+        "core_num": 20
+      },
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e5c_12"
     }
   ],
   "E1_original_runtime_cases": [
@@ -7899,6 +8875,1461 @@
         }
       ],
       "nonblocking_original": true
+    }
+  ],
+  "E5a_original_entry_matrix": [
+    {
+      "kind": "original_kernel_smoke",
+      "name": "smoke",
+      "request_index": 0,
+      "original_seed": 0
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_smoke",
+      "request_index": 1,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {}
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_standard",
+      "request_index": 0,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {}
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_perf_target",
+      "request_index": 0,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {}
+    },
+    {
+      "kind": "original_l1",
+      "name": "aligned",
+      "request_index": 2,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_idx": 1
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "edge",
+      "request_index": 3,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_idx": 0
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "tail1",
+      "request_index": 4,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_idx": 0
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "tailmid",
+      "request_index": 5,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_idx": 0
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "prime",
+      "request_index": 6,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_idx": 0
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "valrange_s",
+      "request_index": 0,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "gen_fn": {
+          "closure_values": {
+            "high": 1,
+            "low": -1
+          },
+          "original_function_AST": "def _gen_uniform(low, high):\n\n    def fn(shape):\n        return (torch.rand(shape, dtype=torch.float32) * (high - low) + low).to(torch.float16)\n    return fn"
+        }
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "valrange_m",
+      "request_index": 0,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "gen_fn": {
+          "closure_values": {
+            "high": 10,
+            "low": -10
+          },
+          "original_function_AST": "def _gen_uniform(low, high):\n\n    def fn(shape):\n        return (torch.rand(shape, dtype=torch.float32) * (high - low) + low).to(torch.float16)\n    return fn"
+        }
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "valrange_l",
+      "request_index": 0,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "gen_fn": {
+          "closure_values": {
+            "high": 50,
+            "low": -50
+          },
+          "original_function_AST": "def _gen_uniform(low, high):\n\n    def fn(shape):\n        return (torch.rand(shape, dtype=torch.float32) * (high - low) + low).to(torch.float16)\n    return fn"
+        }
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "valrange_asym",
+      "request_index": 0,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "gen_fn": {
+          "closure_values": {
+            "high": 10,
+            "low": -5
+          },
+          "original_function_AST": "def _gen_uniform(low, high):\n\n    def fn(shape):\n        return (torch.rand(shape, dtype=torch.float32) * (high - low) + low).to(torch.float16)\n    return fn"
+        }
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "bc0",
+      "request_index": 0,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_idx": 64,
+        "block_counts": 0
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "bc_pad",
+      "request_index": 1,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_idx": 64,
+        "block_counts": 0
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "tail_bc0",
+      "request_index": 5,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_idx": 48,
+        "block_counts": 0
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "s2_full",
+      "request_index": 7,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_counts": 2,
+        "block_indices_list": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "s2_partial",
+      "request_index": 7,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_counts": 1,
+        "block_indices_list": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "s4_full",
+      "request_index": 8,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_counts": 4,
+        "block_indices_list": [
+          0,
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "typical_d128_s16",
+      "request_index": 9,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_counts": 16,
+        "block_indices_list": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ]
+      }
+    },
+    {
+      "kind": "original_l1",
+      "name": "typical_d128_s8",
+      "request_index": 10,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_runtime_kwargs": {
+        "block_counts": 8,
+        "block_indices_list": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "kind": "original_l2",
+      "name": "_test_fp32_input",
+      "request_index": 1,
+      "original_runtime_input_rejection_pending": true
+    },
+    {
+      "kind": "original_l2",
+      "name": "_test_hq8",
+      "request_index": 11,
+      "original_runtime_input_rejection_pending": false
+    },
+    {
+      "kind": "original_l2",
+      "name": "_test_hq17",
+      "request_index": 12,
+      "original_runtime_input_rejection_pending": false
+    },
+    {
+      "kind": "original_boundary",
+      "name": "all_zero",
+      "request_index": 1,
+      "nonblocking_original": true,
+      "original_callback_AST": "_run_boundary('all_zero', dtype, lambda: _boundary_run(dtype, 0, lambda q, k, v: (torch.zeros_like(q), torch.zeros_like(k), torch.zeros_like(v))))"
+    },
+    {
+      "kind": "original_boundary",
+      "name": "with_inf",
+      "request_index": 1,
+      "nonblocking_original": true,
+      "original_callback_AST": "_run_boundary('with_inf', dtype, lambda: _boundary_run(dtype, 1, lambda q, k, v: (q, k.clone().fill_(float('inf')), v)))"
+    },
+    {
+      "kind": "original_boundary",
+      "name": "with_nan",
+      "request_index": 1,
+      "nonblocking_original": true,
+      "original_callback_AST": "_run_boundary('with_nan', dtype, lambda: _boundary_run(dtype, 2, lambda q, k, v: (q, k.clone().fill_(float('nan')), v)))"
+    },
+    {
+      "kind": "original_boundary",
+      "name": "dtype_bound",
+      "request_index": 1,
+      "nonblocking_original": true,
+      "original_callback_AST": "_run_boundary('dtype_bound', dtype, lambda: _boundary_run(dtype, 3, lambda q, k, v: (q, k.clone().fill_(65504.0), v)))"
+    },
+    {
+      "kind": "original_boundary",
+      "name": "bc0_zero",
+      "request_index": 1,
+      "nonblocking_original": true,
+      "original_callback_AST": "_run_boundary('bc0_zero', dtype, _bc0_run)"
+    }
+  ],
+  "E5b_original_entry_matrix": [
+    {
+      "kind": "original_kernel_smoke",
+      "name": "smoke",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 0,
+      "smoke_shape_finite_only_no_golden": true
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_nsa_basic",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 0,
+      "original_dtype": "float16",
+      "original_value_range": null
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_nsa_scale_02",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.2,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 1,
+      "original_seed": 1,
+      "original_dtype": "float16",
+      "original_value_range": null
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_aligned",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 10,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_tail1",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 65,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 2,
+      "original_seed": 11,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_tail_mid",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 80,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 3,
+      "original_seed": 12,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_prime",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 67,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 4,
+      "original_seed": 13,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_edge",
+      "original_constructor_kwargs": {
+        "batch": 1,
+        "seq_len": 32,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 5,
+      "original_seed": 14,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_s2",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 2,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 6,
+      "original_seed": 15,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_scale_02",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.2,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 1,
+      "original_seed": 16,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_valrange_m",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 17,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -10,
+        10
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_valrange_l",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 18,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -50,
+        50
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_valrange_aym",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 19,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -5,
+        10
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "typical_d64_s4",
+      "original_constructor_kwargs": {
+        "batch": 1,
+        "seq_len": 512,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 64,
+        "selected_blocks": 4,
+        "block_size": 64,
+        "bs_pad": 64,
+        "scale": 0.125,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 7,
+      "original_seed": 30,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "typical_d64_s2",
+      "original_constructor_kwargs": {
+        "batch": 1,
+        "seq_len": 512,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 64,
+        "selected_blocks": 2,
+        "block_size": 64,
+        "bs_pad": 64,
+        "scale": 0.125,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 8,
+      "original_seed": 31,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_block_size_64",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 64,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 9,
+      "original_seed": 20,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_no_causal",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": false
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 10,
+      "original_seed": 21,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_bs_pad_128",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 128,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 11,
+      "original_seed": 22,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_dim_64",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 64,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 12,
+      "original_seed": 23,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_groups_32",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 32,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 13,
+      "original_seed": 24,
+      "original_dtype": "float16",
+      "original_value_range": [
+        -1,
+        1
+      ]
+    },
+    {
+      "kind": "original_l2",
+      "name": "fp32_input_unsupported",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 14,
+      "original_runtime_input_rejection_pending": true,
+      "original_seed": 0
+    },
+    {
+      "kind": "original_l2",
+      "name": "short_seq_no_block",
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/test_example_tilelang_nsa_fwd.py",
+      "request_index": null,
+      "original_prepare_inputs_shape": [
+        2,
+        16,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "original_host_assertion_before_native_constructor": true,
+      "full_original_NPU_oracle_pending": true
+    },
+    {
+      "kind": "original_l2_intended_subprocess_constructor",
+      "name": "odd_gqa_runtime_error",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 17,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 15,
+      "inherited_original_python_c_setup_NameError": true,
+      "actual_runtime_rejection_not_validated": true,
+      "known_runtime_unsafe_never_launched": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "all_zero",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 0,
+      "original_callback_AST": "_run_boundary('all_zero', dtype, lambda: _boundary_run(dtype, 0, lambda q, k, v: (torch.zeros_like(q), torch.zeros_like(k), torch.zeros_like(v))))",
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "with_inf",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 1,
+      "original_callback_AST": "_run_boundary('with_inf', dtype, lambda: _boundary_run(dtype, 1, lambda q, k, v: (q, k.clone().fill_(float('inf')), v)))",
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "with_nan",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 2,
+      "original_callback_AST": "_run_boundary('with_nan', dtype, lambda: _boundary_run(dtype, 2, lambda q, k, v: (q, k.clone().fill_(float('nan')), v)))",
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "dtype_bound",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": 0.1,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 0,
+      "original_seed": 3,
+      "original_callback_AST": "_run_boundary('dtype_bound', dtype, lambda: _boundary_run(dtype, 3, lambda q, k, v: (q, k.clone().fill_(65504.0), v)))",
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "scale_none_default",
+      "original_constructor_kwargs": {
+        "batch": 2,
+        "seq_len": 64,
+        "head_kv": 1,
+        "heads": 16,
+        "dim": 32,
+        "selected_blocks": 1,
+        "block_size": 32,
+        "bs_pad": 64,
+        "scale": null,
+        "is_causal": true
+      },
+      "source_only_measured_core_override": 24,
+      "request_index": 16,
+      "original_seed": 30,
+      "original_callback_AST": "_run_boundary('scale_none_default', dtype, _boundary_scale_none)",
+      "nonblocking_original": true
+    }
+  ],
+  "E5c_original_entry_matrix": [
+    {
+      "kind": "original_kernel_smoke",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "seed": 42,
+      "smoke_no_golden": true,
+      "index": 0,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
+    },
+    {
+      "kind": "original_l0",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [],
+      "seed": 42,
+      "index": 1,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-SHAPE-ALIGNED"
+      ],
+      "seed": 42,
+      "index": 2,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        1,
+        65,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-SHAPE-TAIL-1"
+      ],
+      "seed": 42,
+      "index": 3,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 1
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        3,
+        96,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-SHAPE-TAIL-MID"
+      ],
+      "seed": 42,
+      "index": 4,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 2
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        3,
+        97,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-SHAPE-PRIME"
+      ],
+      "seed": 42,
+      "index": 5,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 3
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-SHAPE-EDGE"
+      ],
+      "seed": 42,
+      "index": 6,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 4
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -50,
+        50
+      ],
+      "tags": [
+        "D-VALRANGE-L"
+      ],
+      "seed": 42,
+      "index": 7,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -5,
+        10
+      ],
+      "tags": [
+        "D-VALRANGE-ASYM"
+      ],
+      "seed": 42,
+      "index": 8,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -10,
+        10
+      ],
+      "tags": [
+        "D-VALRANGE-M"
+      ],
+      "seed": 42,
+      "index": 9,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "bfloat16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-DTYPE-bf16"
+      ],
+      "seed": 42,
+      "index": 10,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 5
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float32",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-DTYPE-fp32"
+      ],
+      "seed": 42,
+      "index": 11,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 6
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-SPECIAL-DBOUND"
+      ],
+      "seed": 42,
+      "index": 12,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 7
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        2048,
+        4,
+        64,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-TYPICAL-SEQ2K"
+      ],
+      "seed": 42,
+      "index": 13,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 8
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        4,
+        1024,
+        4,
+        64,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-TYPICAL-BATCH4"
+      ],
+      "seed": 42,
+      "index": 14,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 9
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        1,
+        4096,
+        4,
+        64,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-TYPICAL-SEQ4K"
+      ],
+      "seed": 42,
+      "index": 15,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 10
+    },
+    {
+      "kind": "original_l1",
+      "shape": [
+        2,
+        1024,
+        4,
+        64,
+        128,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "vrange": [
+        -1,
+        1
+      ],
+      "tags": [
+        "D-TYPICAL-D128"
+      ],
+      "seed": 42,
+      "index": 16,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 11
+    },
+    {
+      "kind": "original_l2",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float64",
+      "seed": 42,
+      "expected_frontend_error": "AssertionError",
+      "runtime_rejection_pending": true,
+      "index": 17,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 12
+    },
+    {
+      "kind": "original_l2_early_host",
+      "shape": [
+        2,
+        64,
+        1,
+        15,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "no_native_constructor": true,
+      "index": 18,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": null
+    },
+    {
+      "kind": "original_boundary",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "name": "zero",
+      "seed": 0,
+      "injection_AST": "lambda q: None",
+      "nonblocking_original": true,
+      "index": 19,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
+    },
+    {
+      "kind": "original_boundary",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "name": "inf",
+      "seed": 0,
+      "injection_AST": "lambda q: q.__setitem__((0, 0, 0, 0), float('inf'))",
+      "nonblocking_original": true,
+      "index": 20,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
+    },
+    {
+      "kind": "original_boundary",
+      "shape": [
+        2,
+        64,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "dtype": "float16",
+      "name": "nan",
+      "seed": 0,
+      "injection_AST": "lambda q: q.__setitem__((0, 0, 0, 0), float('nan'))",
+      "nonblocking_original": true,
+      "index": 21,
+      "TA_and_main_complete_CPU_preparation_equal": true,
+      "request_index": 0
     }
   ]
 }

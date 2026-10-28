@@ -216,3 +216,100 @@ original wait anchors and remaining payload/non-`PIPE_ALL` synchronization are
 checked in the source control domain. Raw SDK inputs are unchanged. Device
 numerical verdicts, actual execution under the measured default, deadlock and
 performance remain pending.
+
+## E5a: NSA decode and complete layered suite
+
+Both original files preserve the entire factory and host row-index expansion,
+complete-block validation, mask/zero-block-count algorithm, five-workspace
+contract, references, precision rules and CLI exits. The smoke, three L0,
+seventeen L1, three blocking L2 and five nonblocking Boundary rows remain.
+This includes the original typical D=128/S=16 and S=8 cases and all padding,
+zero-count, special-value and runtime dtype errors. The 29 original rows map
+to eleven positive constructors and two original assertions (HQ=8 and HQ=17).
+The float32 runtime rejection remains separate and device-pending.
+
+Complete dispatch tracing records constructor parameters and original metadata
+options without executing any tensor generator, golden or comparison. Its
+recorder cannot convert to a Boolean verdict, so the trace cannot report an
+original test pass. Imports use the private language and exact sibling module;
+registration and cache disabling run only in main, with caller cache restoration.
+
+All eleven full source pairs passed actual SDK compilation. Remaining payload,
+operands and synchronization match after only core-identifier, unused integer
+binding and allocation-declaration order normalization. Physical allocation
+changes are limited to the order of the block-count matrix and scratch buffer
+inside one exclusive UB byte interval; both slots remain mutually disjoint and
+outside all other buffers, preserving the entire original alias graph. There
+are no added scalar reads or waits. The same AIV row-index scalar read remains
+after its original DMA and barrier. Bounds for the new unused arithmetic apply
+to the original complete-block or padded-zero row indices. Numerical, runtime
+negative, boundary and performance validation remain pending.
+
+## E5b: NSA forward and complete layered suite
+
+The complete original kernel and suite preserve host pre-gathering, all
+factories, helpers, flags, precision rules, matrices and exits. Twenty-eight
+original rows include the smoke, two L0, seventeen L1, three L2 and five Boundary
+entries. The smoke remains a shape/finite check, distinct from the layered
+golden. The original `core_num=None` hardware query is unchanged; source
+sampling passes the independently measured core24 separately from original
+kwargs. The original divisor/single-core selection and explicit `threads=1`
+produce the actual `MIX_AIC_1_1` grid, rather than assuming two AIV per C.
+
+Sixteen positive source pairs passed actual SDK compilation. One intended
+odd17 request is rejected by both original and current native codegen with the
+same CompareScalar 544-element/2176-byte alignment error, before SDK or launch.
+The original odd-G `python -c` oracle also has an inherited missing-`__file__`
+setup error and treats arbitrary nonzero as rejection. Its complete script is
+preserved pending a separate reviewed oracle correction; neither setup failure
+nor native source rejection is claimed as a runtime hardware test. The original
+float32 runtime negative and short-sequence helper assertion remain distinct.
+
+Generated source retains extra C-side read-only `BlockStarts` loads and actual
+`PIPE_ALL` waits. Complete original CPU metadata generation and each actual
+selected-grid C/AIV reader are checked, with explicit one-to-one task ratio,
+all pipeline iterations, full table values and scalar results. New C address
+sets equal the original AIV sets; old C had no such reads. Inputs are independent
+read-only metadata, with external aliases/mutation outside these witnesses.
+Remaining payload and non-`PIPE_ALL` synchronization match, and original wait
+anchors remain. Physical changes only reorder two mutually exclusive UB slots
+inside the same exclusive interval, with the original complete alias graph and
+capacities preserved. Extra effects stay in the SDK source; device numerical,
+oracle runtime, deadlock and performance acceptance remain pending.
+
+## E5c: complete NSA variable-length forward pair
+
+The kernel and layered test retain all original factories, helpers, decorators,
+configurations, seeds, precision rules, exits and twenty-two original rows:
+one smoke, one L0, fifteen L1, two L2 and three Boundary entries. The original
+literal `core_num=20` is unchanged. The runtime wrapper registers TorchNPU and
+restores the caller's cache mode; the original smoke's global Torch binding is
+retained when its CLI body is moved into `main`.
+
+Complete original CPU preparation, before any native constructor, preserves
+all three metadata tables and RNG transitions. `BosPerToken` is `[C]`;
+`IsSafe` and `BlockCounts` are `[C,Hkv]`, with `IsSafe` storing actual block
+start offsets. Thirteen unique native requests include twelve positive source
+pairs and one matching original float64 constructor rejection; all twenty-four
+positive generated sources passed actual SDK compilation. The odd-group host
+assertion still occurs before seeding or allocation. These are compiler and
+CPU-control checks, distinct from the original runtime/golden verdicts.
+
+The original large varlen request exposed native stack exhaustion in the
+backend's flat Bind/Assert lexical-tail memory-planning traversal. Its private
+iterative adaptation preserves the pre-fix TIRX planned IR byte for byte,
+compared with an isolated diagnostic process using a larger stack. The
+request, pass sequence and normal production stack limit are unchanged. This
+native fix is a prerequisite; the original failure records remain separate.
+
+Raw source retains additional read-only metadata loads and `PIPE_ALL` waits.
+For the three large requests, each new source contains 3284 additional unused
+metadata-read declarations and 3312 static `PIPE_ALL` calls versus the
+original twenty. Actual C20/V40 readers, active guards, complete original CPU
+metadata, integer-control ranges, allocation capacities and alias graphs are
+checked separately. Remaining payload and non-`PIPE_ALL` synchronization match
+after report-only separation of those real extra effects and pure bindings.
+Only two disjoint UB slots exchange positions inside the same exclusive byte
+interval. No SDK source removes the reads or waits. Device numerical,
+concurrent-mutation/alias, deadlock and performance acceptance remain pending;
+extra operations are not claimed harmless for arbitrary inputs or timing.
