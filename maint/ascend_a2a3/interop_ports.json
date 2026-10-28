@@ -797,6 +797,102 @@
         "NPU_default_numerical_install_shell_or_notebook_execution": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/demo_libtorch/CMakeLists.txt",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/demo_libtorch/CMakeLists.txt",
+      "source_git_blob": "dd9f0407afcd3c26e5ed7f83cf49d3d3afb2f410",
+      "source_sha256": "9b6331e8fdf937f954424aa5a2c27166eb0c8f00b1372dab2d3c7b7ade2af5ba",
+      "destination_sha256": "c17974ed07c77267a56a2e7588e4b56da50526b86cc23e697b1bc3b3484aae63",
+      "adaptations": [
+        "Preserve complete original DynamicLib/OpLib lookup/lifetime, void seven-pointer+stream type, valid fixed NPU allocation/stream/call body, default seed/input/reference/golden/finalize/exit. Relocate original rank checks and add approved exact BHSD/fp16/contiguous/same-NPU guards before the original cold lazy dlopen; no new execution mode.",
+        "Preserve the actual standalone Torch/Torch_npu CMake dependencies and source-root requirement. Replace placeholder shell paths with explicit real development prefix/source inputs, keep help/import safe, and validate CMake dependencies before SDK preparation instead of inventing Python-wheel compatibility.",
+        "Defer original LIB.mkdir/update_so behind explicit prepare main/help and matching task-owned cache; delegate the real T5A public helper without caller sys.path mutation. Add only the standard direct utility include for original std::exchange."
+      ],
+      "validation": {
+        "whole_original_classes_reference_main_and_valid_body_token_comparison": true,
+        "ON_host_and_actual_SDK_prepare_passed": 8,
+        "actual_OFF_host_passed": 7,
+        "actual_OFF_native_prepare_skipped": 1,
+        "actual_prepare_public_fixed_kernel_SDK_ELF": true,
+        "standalone_TA_and_main_same_real_missing_public_header": true,
+        "standalone_real_CMake_missing_Torch_npu_package": true,
+        "standalone_CPP_build_load_numerical_pending_real_development_dependencies": true,
+        "NPU_numerical_or_standalone_install_claim": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/demo_libtorch/build.sh",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/demo_libtorch/build.sh",
+      "source_git_blob": "5cb8e0cdb45a9dfa7c9ce02daa8502243ccdc7ef",
+      "source_sha256": "83e38de84849699924a566d0a31a02b051cb3dfa1c46fef8df74f819af94417f",
+      "destination_sha256": "117da27220d4217e373fb3572d752bef578deda2f456ca5cc889a97473287bbb",
+      "adaptations": [
+        "Preserve complete original DynamicLib/OpLib lookup/lifetime, void seven-pointer+stream type, valid fixed NPU allocation/stream/call body, default seed/input/reference/golden/finalize/exit. Relocate original rank checks and add approved exact BHSD/fp16/contiguous/same-NPU guards before the original cold lazy dlopen; no new execution mode.",
+        "Preserve the actual standalone Torch/Torch_npu CMake dependencies and source-root requirement. Replace placeholder shell paths with explicit real development prefix/source inputs, keep help/import safe, and validate CMake dependencies before SDK preparation instead of inventing Python-wheel compatibility.",
+        "Defer original LIB.mkdir/update_so behind explicit prepare main/help and matching task-owned cache; delegate the real T5A public helper without caller sys.path mutation. Add only the standard direct utility include for original std::exchange."
+      ],
+      "validation": {
+        "whole_original_classes_reference_main_and_valid_body_token_comparison": true,
+        "ON_host_and_actual_SDK_prepare_passed": 8,
+        "actual_OFF_host_passed": 7,
+        "actual_OFF_native_prepare_skipped": 1,
+        "actual_prepare_public_fixed_kernel_SDK_ELF": true,
+        "standalone_TA_and_main_same_real_missing_public_header": true,
+        "standalone_real_CMake_missing_Torch_npu_package": true,
+        "standalone_CPP_build_load_numerical_pending_real_development_dependencies": true,
+        "NPU_numerical_or_standalone_install_claim": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/demo_libtorch/prepare.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/demo_libtorch/prepare.py",
+      "source_git_blob": "5c6fc9f16cf2e9518dc62bacc40fb9cebf863c9e",
+      "source_sha256": "d033efe0ffdfa4286bfbc97c1c7a94d7375ec2e613a42e437c05c08e550d2f9a",
+      "destination_sha256": "363691c0107cb5b23edc2a055fa00db697c1bbe2c50fd247d156a4e38b109272",
+      "adaptations": [
+        "Preserve complete original DynamicLib/OpLib lookup/lifetime, void seven-pointer+stream type, valid fixed NPU allocation/stream/call body, default seed/input/reference/golden/finalize/exit. Relocate original rank checks and add approved exact BHSD/fp16/contiguous/same-NPU guards before the original cold lazy dlopen; no new execution mode.",
+        "Preserve the actual standalone Torch/Torch_npu CMake dependencies and source-root requirement. Replace placeholder shell paths with explicit real development prefix/source inputs, keep help/import safe, and validate CMake dependencies before SDK preparation instead of inventing Python-wheel compatibility.",
+        "Defer original LIB.mkdir/update_so behind explicit prepare main/help and matching task-owned cache; delegate the real T5A public helper without caller sys.path mutation. Add only the standard direct utility include for original std::exchange."
+      ],
+      "validation": {
+        "whole_original_classes_reference_main_and_valid_body_token_comparison": true,
+        "ON_host_and_actual_SDK_prepare_passed": 8,
+        "actual_OFF_host_passed": 7,
+        "actual_OFF_native_prepare_skipped": 1,
+        "actual_prepare_public_fixed_kernel_SDK_ELF": true,
+        "standalone_TA_and_main_same_real_missing_public_header": true,
+        "standalone_real_CMake_missing_Torch_npu_package": true,
+        "standalone_CPP_build_load_numerical_pending_real_development_dependencies": true,
+        "NPU_numerical_or_standalone_install_claim": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/demo_libtorch/flash_attention.cpp",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/demo_libtorch/flash_attention.cpp",
+      "source_git_blob": "a99860f73509489bf9d4aa25f71fa880a8788036",
+      "source_sha256": "f4627660a1b0eb4c79e698acc80130ff444f3152cba69f3daae79851876044ce",
+      "destination_sha256": "c5eedcff86de4efa9113fb380b88a2514fc0edbf3a816de52a77d8fc8ffb72ce",
+      "adaptations": [
+        "Preserve complete original DynamicLib/OpLib lookup/lifetime, void seven-pointer+stream type, valid fixed NPU allocation/stream/call body, default seed/input/reference/golden/finalize/exit. Relocate original rank checks and add approved exact BHSD/fp16/contiguous/same-NPU guards before the original cold lazy dlopen; no new execution mode.",
+        "Preserve the actual standalone Torch/Torch_npu CMake dependencies and source-root requirement. Replace placeholder shell paths with explicit real development prefix/source inputs, keep help/import safe, and validate CMake dependencies before SDK preparation instead of inventing Python-wheel compatibility.",
+        "Defer original LIB.mkdir/update_so behind explicit prepare main/help and matching task-owned cache; delegate the real T5A public helper without caller sys.path mutation. Add only the standard direct utility include for original std::exchange."
+      ],
+      "validation": {
+        "whole_original_classes_reference_main_and_valid_body_token_comparison": true,
+        "ON_host_and_actual_SDK_prepare_passed": 8,
+        "actual_OFF_host_passed": 7,
+        "actual_OFF_native_prepare_skipped": 1,
+        "actual_prepare_public_fixed_kernel_SDK_ELF": true,
+        "standalone_TA_and_main_same_real_missing_public_header": true,
+        "standalone_real_CMake_missing_Torch_npu_package": true,
+        "standalone_CPP_build_load_numerical_pending_real_development_dependencies": true,
+        "NPU_numerical_or_standalone_install_claim": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
