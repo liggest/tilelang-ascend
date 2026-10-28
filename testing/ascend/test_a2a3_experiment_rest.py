@@ -352,3 +352,31 @@ def test_nsa_varlen_original_odd_group_assert_before_seed_or_allocation(monkeypa
     monkeypatch.setattr(torch, "zeros", forbidden)
     with pytest.raises(AssertionError, match=r"groups G=HQ/H \(15\) must be even"):
         module.make_test_data(2, 64, 1, 15, 64, 1, 32, torch.float16)
+
+
+@pytest.mark.parametrize(
+    "entry", [e for e in ENTRIES if e["batch"] == "E5d" and "/test_" in e["source_path"]], ids=lambda e: e["source_path"]
+)
+def test_nsa_bwd_layered_uses_exact_private_sibling(entry):
+    module = _load(entry)
+    assert Path(module._nsa_module.__file__).resolve() == (ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]).resolve()
+    for name in ["_compute_block_mask_cpu", "_generate_test_data", "_run_bwd_pipeline", "_run_nsa_pipeline"]:
+        assert getattr(module, name) is getattr(module._nsa_module, name)
+
+
+@pytest.mark.parametrize("zero_sequence", [False, True])
+def test_nsa_bwd_original_host_checks_precede_mask_allocation(zero_sequence, monkeypatch):
+    entry = next(e for e in ENTRIES if e["batch"] == "E5d" and "/test_" not in e["source_path"])
+    module = _load(entry)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("invalid original shape reached mask allocation or factory")
+
+    monkeypatch.setattr(module, "_compute_block_mask_cpu", forbidden)
+    monkeypatch.setattr(module, "nsa_fwd", forbidden)
+    length = 0 if zero_sequence else 32
+    q = SimpleNamespace(shape=(1, length, 16, 32 if zero_sequence else 48))
+    kv = SimpleNamespace(shape=(1, length, 1, 32))
+    message = "seq_len \\(T\\) must be >= 1" if zero_sequence else "Q shape"
+    with pytest.raises(AssertionError, match=message):
+        module._run_nsa_pipeline(q, kv, kv, q, None, None, 1, length, 1, 16, 32, 1, 32)

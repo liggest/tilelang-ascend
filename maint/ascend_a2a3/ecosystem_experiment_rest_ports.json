@@ -822,6 +822,68 @@
         "original_failure": "case8 default8MiB native stack exhaustion; retained unchanged original shape/pass sequence",
         "validation": "root normal ON build,77 neighbours,and exact planned IR default8MiB versus diagnostic64MiB byte equality; no increased production stack"
       }
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "source_git_blob": "d7f118fb280545788ebd7f3246b2a2cf2aeb512c",
+      "source_sha256": "7d74b9d53f36fb77d9a341ba71a7721dd74567bbd2d23ad8d92e0c2b6dd9d1de",
+      "destination_sha256": "3227b93b06ccad1da943264a15f7b1953122e577de2c58f94d077082211c8358",
+      "batch": "E5d",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language and exact sibling loader without sys.path mutation; explicit registration and runtime cache restoration. Full original factory/host helpers/test/marks/seed/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5d/"
+      },
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "26 original outer rows;21 positive complete factory source/SDK pairs each side plus same original BS7/6 forward constructor rejections. All original CPU preparation/mask/input bytes/RNG preserved; remaining payload/memory/sync tokens and complete allocation/capacity/alias maps equal after only actual core-name/declaration-order/bounded-pure-int separation. Original dtype runtime/Boundary/numerical/device/deadlock/performance pending."
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/test_tilelang_nsa_bwd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_bwd/test_tilelang_nsa_bwd.py",
+      "source_git_blob": "e4c27424cc5bfc81b5ff1a88af352265d29061e2",
+      "source_sha256": "368f243fb095ae8757e83df145bb4bb387c05e2fd106a39febe1a53f45ae53ee",
+      "destination_sha256": "295f2f8e5b438bbe5d8db3641d475326fcdad9174236ed2c6d86072f88a60aab",
+      "batch": "E5d",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language and exact sibling loader without sys.path mutation; explicit registration and runtime cache restoration. Full original factory/host helpers/test/marks/seed/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5d/"
+      },
+      "source_request_owner": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "runtime_factory": "_run_nsa_pipeline",
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "26 original outer rows;21 positive complete factory source/SDK pairs each side plus same original BS7/6 forward constructor rejections. All original CPU preparation/mask/input bytes/RNG preserved; remaining payload/memory/sync tokens and complete allocation/capacity/alias maps equal after only actual core-name/declaration-order/bounded-pure-int separation. Original dtype runtime/Boundary/numerical/device/deadlock/performance pending."
     }
   ],
   "factory_requests": [
@@ -3329,6 +3391,366 @@
       },
       "expected_frontend_error": "AssertionError",
       "id": "experiment_e5c_12"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        32,
+        16,
+        1,
+        32,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_0"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        32,
+        16,
+        1,
+        32,
+        16,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_1"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        33,
+        16,
+        1,
+        32,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_2"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        33,
+        16,
+        1,
+        32,
+        16,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_3"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        40,
+        16,
+        1,
+        32,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_4"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        40,
+        16,
+        1,
+        32,
+        16,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_5"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        37,
+        16,
+        1,
+        32,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_6"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        37,
+        16,
+        1,
+        32,
+        16,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_7"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        32,
+        16,
+        1,
+        16,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_8"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        32,
+        16,
+        1,
+        16,
+        16,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_9"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        64,
+        16,
+        1,
+        64,
+        16,
+        1,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_10"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        64,
+        16,
+        1,
+        64,
+        16,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_11"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        64,
+        16,
+        1,
+        128,
+        16,
+        1,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_12"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        64,
+        16,
+        1,
+        128,
+        16,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_13"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        32,
+        16,
+        1,
+        64,
+        16,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_14"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        32,
+        16,
+        1,
+        64,
+        16,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_15"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        32,
+        32,
+        1,
+        32,
+        32,
+        1,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_16"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        32,
+        32,
+        1,
+        32,
+        32,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_17"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        16,
+        16,
+        1,
+        32,
+        16,
+        1,
+        16
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_18"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_bwd_single",
+      "args": [
+        1,
+        16,
+        16,
+        1,
+        32,
+        16,
+        16
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_19"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        32,
+        16,
+        1,
+        32,
+        16,
+        2,
+        32
+      ],
+      "kwargs": {},
+      "id": "experiment_e5d_20"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        7,
+        16,
+        1,
+        32,
+        16,
+        1,
+        7
+      ],
+      "kwargs": {},
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e5d_21"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "factory": "nsa_fwd",
+      "args": [
+        1,
+        6,
+        16,
+        1,
+        32,
+        16,
+        1,
+        6
+      ],
+      "kwargs": {},
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e5d_22"
     }
   ],
   "E1_original_runtime_cases": [
@@ -10346,6 +10768,633 @@
       "index": 21,
       "TA_and_main_complete_CPU_preparation_equal": true,
       "request_index": 0
+    }
+  ],
+  "E5d_original_entry_matrix": [
+    {
+      "name": "kernel_CI_smoke",
+      "kind": "original_smoke",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      }
+    },
+    {
+      "name": "layered_L0_four_subcases",
+      "kind": "original_L0",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "original_internal_verdicts": [
+        "l0_e2e",
+        "l0_nsa_fwd_check",
+        "l0_bwd_pipeline",
+        "l0_default"
+      ],
+      "original_actual_native_invocation_multiplicity": {
+        "nsa_fwd": 1,
+        "nsa_bwd_single": 2
+      }
+    },
+    {
+      "name": "l1_aligned_t32",
+      "kind": "original_L1",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-SHAPE-ALIGNED",
+        "D-DTYPE-fp16",
+        "D-VALRANGE-S",
+        "D-DTYPE-fp32",
+        "D-DTYPE-int32",
+        "D-PARAM-is_causal"
+      ]
+    },
+    {
+      "name": "l1_tail1_t33",
+      "kind": "original_L1",
+      "shape": [
+        1,
+        33,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_2",
+        "nsa_bwd_single": "experiment_e5d_3"
+      },
+      "tags": [
+        "D-SHAPE-TAIL-1",
+        "D-VALRANGE-S"
+      ]
+    },
+    {
+      "name": "l1_tailmid_t40",
+      "kind": "original_L1",
+      "shape": [
+        1,
+        40,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_4",
+        "nsa_bwd_single": "experiment_e5d_5"
+      },
+      "tags": [
+        "D-SHAPE-TAIL-MID",
+        "D-VALRANGE-S"
+      ]
+    },
+    {
+      "name": "l1_prime_t37",
+      "kind": "original_L1",
+      "shape": [
+        1,
+        37,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_6",
+        "nsa_bwd_single": "experiment_e5d_7"
+      },
+      "tags": [
+        "D-SHAPE-PRIME",
+        "D-VALRANGE-S"
+      ]
+    },
+    {
+      "name": "l1_edge_min",
+      "kind": "original_L1",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-SHAPE-EDGE",
+        "D-VALRANGE-S"
+      ]
+    },
+    {
+      "name": "l1_param_d16",
+      "kind": "original_L1",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        16,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_8",
+        "nsa_bwd_single": "experiment_e5d_9"
+      },
+      "tags": [
+        "D-PARAM-dim",
+        "D-PARAM-scale"
+      ]
+    },
+    {
+      "name": "typical_d64_s8_bs64",
+      "kind": "original_L1",
+      "shape": [
+        1,
+        64,
+        1,
+        16,
+        64,
+        1,
+        64
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_10",
+        "nsa_bwd_single": "experiment_e5d_11"
+      },
+      "tags": [
+        "D-PARAM-dim",
+        "D-PARAM-scale",
+        "D-PARAM-block_size"
+      ]
+    },
+    {
+      "name": "typical_d128_bs64",
+      "kind": "original_L1",
+      "shape": [
+        1,
+        64,
+        1,
+        16,
+        128,
+        1,
+        64
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_12",
+        "nsa_bwd_single": "experiment_e5d_13"
+      },
+      "tags": [
+        "D-PARAM-dim",
+        "D-PARAM-scale"
+      ]
+    },
+    {
+      "name": "boundary_inf",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-SPECIAL-INF"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_nan",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-SPECIAL-NAN"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_zero",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-SPECIAL-ZERO"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_dbound",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-SPECIAL-DBOUND"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_valrange_m",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -2,
+        2
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-VALRANGE-M"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_valrange_l",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -3,
+        3
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-VALRANGE-L"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_valrange_asym",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -2,
+        4
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_0",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-VALRANGE-ASYM"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_param_d64",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        64,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_14",
+        "nsa_bwd_single": "experiment_e5d_15"
+      },
+      "tags": [
+        "D-PARAM-dim",
+        "D-PARAM-scale"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_param_groups",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        32,
+        32,
+        1,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_16",
+        "nsa_bwd_single": "experiment_e5d_17"
+      },
+      "tags": [
+        "D-PARAM-groups"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_param_bs16",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        16,
+        1,
+        16,
+        32,
+        1,
+        16
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_18",
+        "nsa_bwd_single": "experiment_e5d_19"
+      },
+      "tags": [
+        "D-PARAM-block_size"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "boundary_param_s2",
+      "kind": "original_Boundary",
+      "shape": [
+        1,
+        32,
+        1,
+        16,
+        32,
+        2,
+        32
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_20",
+        "nsa_bwd_single": "experiment_e5d_1"
+      },
+      "tags": [
+        "D-PARAM-selected_blocks"
+      ],
+      "dtype": "float16",
+      "nonblocking_original": true
+    },
+    {
+      "name": "l2_unsupported_dtype",
+      "kind": "original_L2_runtime_or_host",
+      "native_requests_not_new": true,
+      "scope": "retained full original callback; runtime dtype path pending, shape/empty host prefixes tested separately"
+    },
+    {
+      "name": "l2_illegal_shape",
+      "kind": "original_L2_runtime_or_host",
+      "native_requests_not_new": true,
+      "scope": "retained full original callback; runtime dtype path pending, shape/empty host prefixes tested separately"
+    },
+    {
+      "name": "l2_zero_seqlen",
+      "kind": "original_L2_runtime_or_host",
+      "native_requests_not_new": true,
+      "scope": "retained full original callback; runtime dtype path pending, shape/empty host prefixes tested separately"
+    },
+    {
+      "name": "l2_illegal_block_size_odd",
+      "kind": "original_L2_block_alignment",
+      "shape": [
+        1,
+        7,
+        1,
+        16,
+        32,
+        1,
+        7
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_21"
+      }
+    },
+    {
+      "name": "l2_illegal_block_size_even",
+      "kind": "original_L2_block_alignment",
+      "shape": [
+        1,
+        6,
+        1,
+        16,
+        32,
+        1,
+        6
+      ],
+      "vrange": [
+        -1,
+        1
+      ],
+      "scope": "original",
+      "requests": {
+        "nsa_fwd": "experiment_e5d_22"
+      }
     }
   ]
 }

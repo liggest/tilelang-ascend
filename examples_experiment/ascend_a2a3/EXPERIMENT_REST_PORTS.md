@@ -317,3 +317,32 @@ Only two disjoint UB slots exchange positions inside the same exclusive byte
 interval. No SDK source removes the reads or waits. Device numerical,
 concurrent-mutation/alias, deadlock and performance acceptance remain pending;
 extra operations are not claimed harmless for arbitrary inputs or timing.
+
+## E5d: complete NSA forward/backward pipeline pair
+
+The backward example and its layered test preserve both complete original
+factories (`nsa_fwd` and `nsa_bwd_single`), all five hybrid/tail-mask flags,
+helpers, golden, thresholds and exits. Twenty-six original outer rows contain
+one smoke, one L0 with all four verdicts, eight L1, five L2 and eleven
+nonblocking Boundary entries. The L0 still invokes one forward and two
+backward kernels; source-request deduplication does not remove runtime calls.
+
+Twenty-one unique positive factory requests have full old/main source and
+actual SDK compilation evidence on each side. Two original BS7/6 forward
+constructor assertions are checked separately before lowering; they are not
+runtime hardware negatives. Complete original CPU generation, special-value
+injection and host validation/mask preparation match in input bytes and RNG
+transitions for all twenty-one positive outer rows, stopping before H2D and
+reference evaluation. The original host computes and returns `block_mask`,
+but the forward kernel actually consumes `BlockIndices`; the source port does
+not invent a mask consumer or change this original behavior.
+
+All remaining payload, memory reads/writes and synchronization tokens match
+after separating only the actual `GetBlockIdx` local identifier, declaration
+order of identical allocation maps, unused call-free bounded integer bindings
+and whitespace. Every allocation's type, extent, offset, capacity and complete
+overlap graph is unchanged. No additional GM read or `PIPE_ALL` is hidden by
+this comparison. Original host shape/empty-sequence assertions remain before
+mask allocation. The original NS=1 host gate and all Boundary WARN behavior
+remain; dtype runtime checks and every numerical/deadlock/performance verdict
+still require the original device matrix. None is claimed from source/SDK.
