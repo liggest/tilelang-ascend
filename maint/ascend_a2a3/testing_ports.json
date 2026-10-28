@@ -1155,6 +1155,42 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/test_tilelang_ascend_vector_mask.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_vector_mask.py",
+      "source_git_blob": "687d370202d9a0d47b1cbbf1775e7897c2114d61",
+      "source_sha256": "88b2eb861621d39664cc3579f2118712ffc286b0ce91adf12d74e4f648b4ce6c",
+      "destination_sha256": "eec7754c695ee2002ebd63236497940e07c5891a8bbe1c65a9f31ad66ce48037",
+      "adaptations": [
+        "Private dialect/phase/transform/catalog imports and current builtin tirx.* names.",
+        "Manual fixtures use TIRX SBlock and lexical Bind sequences; two selected-buffer-load readers unpack Bind/Evaluate siblings while retaining value/Var-identity assertions.",
+        "Raw phase fixture applies only the required BindTarget/Materialize neutral launch prefix, retaining original raw platform metadata/fallback; explicit public A2 compile/lower requests use model=A2 plus current dialect keys.",
+        "Exactly two old CustomizedCode constructors use existing Evaluate(T._src_code(same literal)); original kind/scope/setter cases remain, but old node-specific coverage is not claimed.",
+        "A module-native FFI gate precedes its five module-level PrimFunc constructions, without NPU availability gating or fake native types; a scoped fixture restores the original per-test cache-disable calls."
+      ],
+      "validation": {
+        "whole_module_AST_exact_except_declared_current_IR_and_fixture_adaptations": true,
+        "all_58_original_functions_and_34_test_functions_retained": true,
+        "original_native_source_and_compile_only_cases_TA_main_each_passed": 60,
+        "paired_raw_native_stage_records": 230,
+        "raw_successful_returns_each": 197,
+        "raw_expected_rejections_each": 33,
+        "direct_full_lower_source_ABI_pairs": 11,
+        "actual_public_compile_Bisheng_ELF_pairs": 7,
+        "actual_compiled_CPP_host_prototypes_equal": true,
+        "two_raw_literal_byte_strings_equal": true,
+        "old_CustomizedCode_node_specific_coverage_claimed": false,
+        "original_three_opaque_kind_labels_retained_two_modern_representations": true,
+        "raw_A5_noop_retains_neutral_launch_protocol_difference": true,
+        "original_per_test_cache_disable_calls_external_True_False_restoration_cases": 2,
+        "actual_OFF_pure_parser_passed": 5,
+        "actual_OFF_native_module_gate_skipped": 1,
+        "actual_OFF_original_native_cases_not_collected_due_module_global_native_IR": 60,
+        "NPU_execution": false,
+        "Tensor_npu_device_stream_sync_and_kernel_call_guards_saw_no_calls": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
