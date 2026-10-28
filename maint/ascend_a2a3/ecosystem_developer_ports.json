@@ -167,6 +167,190 @@
       "original_seed_calls": [
         "torch.manual_seed(0)"
       ]
+    },
+    {
+      "source_path": "examples/pipeline/gemm_v0_pipeline.py",
+      "destination_path": "examples/ascend_a2a3/pipeline/gemm_v0_pipeline.py",
+      "source_git_blob": "f13d25546de04936b9955335b044246d59b20183",
+      "source_sha256": "5902b5f90a3f09317f39648423ebcd0715f4f452d0cec4580f4150f3efa5d10b",
+      "destination_sha256": "1ce7d43a245c5b8894b03c0e5cae2bbd151587cddb7905c6f0bcef7d74828a1f",
+      "batch": "B4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false
+      },
+      "adaptations": [
+        "Private A2A3 language import; whole factory/decorator/config/default CLI/matrix/golden/tolerance retained.",
+        "Move import-time runtime into main with explicit NPU registration.",
+        "Preserve actual clear with explicit dedicated cache env and resolved override conflict guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "containing_component_ON": "46 passed (34host+12source, A4+B4)",
+        "actual_OFF": "34 passed/12 native-source skips, strict OFF maps",
+        "batch_full_original_requests": 7,
+        "batch_TA_actual_Bisheng": 7,
+        "batch_main_actual_Bisheng": 7,
+        "all14_commands_zero": true,
+        "original_TA_real_external_A3_probe": true,
+        "whole_factory_decorator_host_AST_preserved": true,
+        "original_workspace_decorator_retained": false,
+        "original_unused_resident_allocation_preserved": true,
+        "ABI_configs_payload_and_launch_contract_recorded": true,
+        "generated_raw_source_not_claimed_numerical_pass": true
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/pipeline/matmul_add_pipeline.py",
+      "destination_path": "examples/ascend_a2a3/pipeline/matmul_add_pipeline.py",
+      "source_git_blob": "996f893730079abde9d61bf44962391b278c1fc5",
+      "source_sha256": "b654c9e85f62c0910077dac4da921a980fe46bfd210ef63a306ad1e8dfe0923e",
+      "destination_sha256": "ad1498a2f99baadf1682ee24aa949c7d36e5dcb38d2dbd9e681e5284dc5c24c0",
+      "batch": "B4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true,
+        "set_default_device": false
+      },
+      "adaptations": [
+        "Private A2A3 language import; whole factory/decorator/config/default CLI/matrix/golden/tolerance retained.",
+        "Move import-time runtime into main with explicit NPU registration.",
+        "Preserve disable-cache behavior during original runtime and restore caller CacheState on success/failure."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "containing_component_ON": "46 passed (34host+12source, A4+B4)",
+        "actual_OFF": "34 passed/12 native-source skips, strict OFF maps",
+        "batch_full_original_requests": 7,
+        "batch_TA_actual_Bisheng": 7,
+        "batch_main_actual_Bisheng": 7,
+        "all14_commands_zero": true,
+        "original_TA_real_external_A3_probe": true,
+        "whole_factory_decorator_host_AST_preserved": true,
+        "original_workspace_decorator_retained": true,
+        "original_unused_resident_allocation_preserved": false,
+        "ABI_configs_payload_and_launch_contract_recorded": true,
+        "generated_raw_source_not_claimed_numerical_pass": true
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/gemm/example_gemm_infer_scope.py",
+      "destination_path": "examples/ascend_a2a3/gemm/example_gemm_infer_scope.py",
+      "source_git_blob": "4930115d3069cae90bb195ec10a47b3b3c3d0456",
+      "source_sha256": "714852eb6cde7a2c22694cfac1f01427f7bd12f11db87886cc92f8d3a6cd7d5b",
+      "destination_sha256": "faa3306ed50abad916864063a38eddb8175e2ec882ded9dab0edb76a62cbbe77",
+      "batch": "B4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false
+      },
+      "adaptations": [
+        "Private A2A3 language import; whole factory/decorator/config/default CLI/matrix/golden/tolerance retained.",
+        "Move import-time runtime into main with explicit NPU registration.",
+        "Preserve actual clear with explicit dedicated cache env and resolved override conflict guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "containing_component_ON": "46 passed (34host+12source, A4+B4)",
+        "actual_OFF": "34 passed/12 native-source skips, strict OFF maps",
+        "batch_full_original_requests": 7,
+        "batch_TA_actual_Bisheng": 7,
+        "batch_main_actual_Bisheng": 7,
+        "all14_commands_zero": true,
+        "original_TA_real_external_A3_probe": true,
+        "whole_factory_decorator_host_AST_preserved": true,
+        "original_workspace_decorator_retained": false,
+        "original_unused_resident_allocation_preserved": false,
+        "ABI_configs_payload_and_launch_contract_recorded": true,
+        "generated_raw_source_not_claimed_numerical_pass": true
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/gemm/example_gemm_tail_block_developer.py",
+      "destination_path": "examples/ascend_a2a3/gemm/example_gemm_tail_block_developer.py",
+      "source_git_blob": "b61d0320bcbdf48f22358326e4c4d3f8734062b5",
+      "source_sha256": "a4c2e27de344aa779eca8ba02342e881d3c7cea4715fe30407097a973660fac6",
+      "destination_sha256": "b1b9ad4bf0edcacac348cc27c1dc90504e60cd49d5b572aa7e3be7faed6c4552",
+      "batch": "B4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false
+      },
+      "adaptations": [
+        "Private A2A3 language import; whole factory/decorator/config/default CLI/matrix/golden/tolerance retained.",
+        "Move import-time runtime into main with explicit NPU registration.",
+        "Preserve actual clear with explicit dedicated cache env and resolved override conflict guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "containing_component_ON": "46 passed (34host+12source, A4+B4)",
+        "actual_OFF": "34 passed/12 native-source skips, strict OFF maps",
+        "batch_full_original_requests": 7,
+        "batch_TA_actual_Bisheng": 7,
+        "batch_main_actual_Bisheng": 7,
+        "all14_commands_zero": true,
+        "original_TA_real_external_A3_probe": true,
+        "whole_factory_decorator_host_AST_preserved": true,
+        "original_workspace_decorator_retained": false,
+        "original_unused_resident_allocation_preserved": false,
+        "ABI_configs_payload_and_launch_contract_recorded": true,
+        "generated_raw_source_not_claimed_numerical_pass": true
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
     }
   ],
   "factory_requests": [
@@ -262,6 +446,151 @@
       "id": "matmul_add_developer_vec_cast_0",
       "source_path": "examples/developer_mode/matmul_add_developer_vec_cast.py",
       "factory": "matmul_add"
+    },
+    {
+      "args": [
+        8192,
+        1024,
+        8192,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {},
+      "source_CLI_defaults": {
+        "m": 8192,
+        "n": 1024,
+        "k": 8192
+      },
+      "id": "gemm_v0_pipeline_0",
+      "source_path": "examples/pipeline/gemm_v0_pipeline.py",
+      "factory": "matmul"
+    },
+    {
+      "args": [
+        1024,
+        1024,
+        1024,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {},
+      "source_CLI_defaults": {
+        "m": 1024,
+        "n": 1024,
+        "k": 1024
+      },
+      "id": "matmul_add_pipeline_0",
+      "source_path": "examples/pipeline/matmul_add_pipeline.py",
+      "factory": "matmul_add"
+    },
+    {
+      "args": [
+        1024,
+        1024,
+        1024,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {},
+      "source_CLI_defaults": {
+        "m": 1024,
+        "n": 1024,
+        "k": 1024
+      },
+      "id": "example_gemm_infer_scope_0",
+      "source_path": "examples/gemm/example_gemm_infer_scope.py",
+      "factory": "matmul"
+    },
+    {
+      "args": [
+        126,
+        80,
+        159,
+        32,
+        32,
+        32
+      ],
+      "kwargs": {},
+      "source_original_test_config": [
+        126,
+        80,
+        159,
+        32,
+        32,
+        32
+      ],
+      "id": "example_gemm_tail_block_developer_0",
+      "source_path": "examples/gemm/example_gemm_tail_block_developer.py",
+      "factory": "matmul"
+    },
+    {
+      "args": [
+        557,
+        512,
+        539,
+        64,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "source_original_test_config": [
+        557,
+        512,
+        539,
+        64,
+        64,
+        64
+      ],
+      "id": "example_gemm_tail_block_developer_1",
+      "source_path": "examples/gemm/example_gemm_tail_block_developer.py",
+      "factory": "matmul"
+    },
+    {
+      "args": [
+        512,
+        611,
+        512,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "source_original_test_config": [
+        512,
+        611,
+        512,
+        128,
+        128,
+        128
+      ],
+      "id": "example_gemm_tail_block_developer_2",
+      "source_path": "examples/gemm/example_gemm_tail_block_developer.py",
+      "factory": "matmul"
+    },
+    {
+      "args": [
+        1142,
+        1230,
+        1079,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {},
+      "source_original_test_config": [
+        1142,
+        1230,
+        1079,
+        128,
+        256,
+        64
+      ],
+      "id": "example_gemm_tail_block_developer_3",
+      "source_path": "examples/gemm/example_gemm_tail_block_developer.py",
+      "factory": "matmul"
     }
   ],
   "batch_validation": {
@@ -276,6 +605,16 @@
       "OFF": "16 passed/5 native skips",
       "device_numerical": false,
       "other_approved_batches_pending": true
+    },
+    "B4": {
+      "original_full_requests": 7,
+      "AscendC_requests": 7,
+      "TA_actual_SDK_commands": 7,
+      "main_actual_SDK_commands": 7,
+      "all14_actual_SDK_zero": true,
+      "containing_ON": "46 passed",
+      "containing_OFF": "34 passed/12 native skips",
+      "device_numerical": false
     }
   }
 }

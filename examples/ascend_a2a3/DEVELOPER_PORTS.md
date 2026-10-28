@@ -50,3 +50,26 @@ changing passes or source algorithms to obtain identical text.
 A5-only FP8, the separately recorded unsafe h16 input, and the historical
 AOT/LibTorch assets are outside this port ledger. They are not replaced with
 small A2/A3 examples or counted as passed here.
+
+## Pipeline, inferred scope and tail blocks
+
+The next four complete sources retain seven original requests:
+
+| Source | Original source requests |
+|---|---:|
+| `pipeline/gemm_v0_pipeline.py` | CLI default `8192,1024,8192`, block `128,256,64` |
+| `pipeline/matmul_add_pipeline.py` | CLI default `1024,1024,1024`, same block, explicit workspace |
+| `gemm/example_gemm_infer_scope.py` | CLI default `1024,1024,1024`, same block |
+| `gemm/example_gemm_tail_block_developer.py` | All four original partial M/N/K rows |
+
+The workspace decorator, both original software pipeline stage counts, explicit
+C scope, barriers and reference tolerances are retained. The tail-block script
+still prints and re-raises each original failing case. The unused `d` allocation
+in `gemm_v0_pipeline.py` remains in its original position; a local lint comment
+prevents deleting part of the original resident allocation set.
+
+These requests have passed source/SDK checks, with device validation pending.
+The two pipeline sources have a different ordering of the same independent
+C0 tensor lookup declaration. The actual generated source is retained; no
+emitted payload is removed or reordered by this port. The difference is
+recorded, not optimized away in the compiler.
