@@ -697,6 +697,56 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/test_ascend_sync_insert_zero_trip.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_ascend_sync_insert_zero_trip.py",
+      "source_git_blob": "fc9ce7196dd9e4fa792f8d4cc603cfc43a83a9f4",
+      "source_sha256": "b8ae170fa52c4fe3b8cdbcbe819751fa8f28954470e69858fee6a78ee7ddde9f",
+      "destination_sha256": "2933d63b086509df8fb16ebd0ec8e68286c5fc3397266040ba9571007f8626be",
+      "adaptations": [
+        "Private A2A3 dialect and per-case native/device gates; complete original kernels, numerical inputs, tolerances, flags, explicit False values and low_priority selections preserved.",
+        "Scoped raw CacheState restoration replaces global disable/enable; source host requests use explicit A3 and effective per-dialect public pass defaults.",
+        "Optional-loop explicit source platform=A3 is represented by the canonical Target model=A3, keys=ascendc, arch=dav-2201; no removed public platform argument is restored."
+      ],
+      "validation": {
+        "AST_exact_excluding_documented_outer_fixture": true,
+        "original_TA_negative_cases_batch": 2,
+        "main_original_negative_cases_batch": 2,
+        "TA_complete_source_requests_batch": 12,
+        "main_complete_source_requests_batch": 12,
+        "optional_loop_real_SDK_each_side": 1,
+        "actual_OFF_host_passed": 5,
+        "actual_OFF_native_device_source_skipped_batch": 28,
+        "original_numerical_cases_batch": 14,
+        "numerical_device_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_arith_progression_dtype_coverage.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_arith_progression_dtype_coverage.py",
+      "source_git_blob": "e23803c880c2a9efa433d0a691cfaf2e80a8770b",
+      "source_sha256": "99d073dc6ac32f6d21112e45836ae3967b9b9599cd35d9fdff7fa96fd11cedc4",
+      "destination_sha256": "d4916eb062256acc11b5c3458de53600c4da3ac02f706b56e8a8d051f968764b",
+      "adaptations": [
+        "Private A2A3 dialect and per-case native/device gates; complete original kernels, numerical inputs, tolerances, flags, explicit False values and low_priority selections preserved.",
+        "Scoped raw CacheState restoration replaces global disable/enable; source host requests use explicit A3 and effective per-dialect public pass defaults.",
+        "Optional-loop explicit source platform=A3 is represented by the canonical Target model=A3, keys=ascendc, arch=dav-2201; no removed public platform argument is restored."
+      ],
+      "validation": {
+        "AST_exact_excluding_documented_outer_fixture": true,
+        "original_TA_negative_cases_batch": 2,
+        "main_original_negative_cases_batch": 2,
+        "TA_complete_source_requests_batch": 12,
+        "main_complete_source_requests_batch": 12,
+        "optional_loop_real_SDK_each_side": 1,
+        "actual_OFF_host_passed": 5,
+        "actual_OFF_native_device_source_skipped_batch": 28,
+        "original_numerical_cases_batch": 14,
+        "numerical_device_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
