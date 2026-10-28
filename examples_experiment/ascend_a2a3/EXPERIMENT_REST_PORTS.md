@@ -374,3 +374,9 @@ The complete `example_gqa_sink_bwd_varlen/` pair retains both native factories, 
 The 51 original controls include one determinism skip. Fifty runnable controls deduplicate to 44 positive source factory requests; all 88 TA/main SDK compiles pass. The 129/131/empty-length assertions occur in the original host prefix; the original L2 label192 is divisible by64 and is retained as a positive source configuration. Positive constructor results do not prove float64 runtime rejection or any original boundary/precision/determinism result. Actual CPU Cu int32 tables and RNG match, without running original random inputs or references.
 
 Complete source comparisons preserve all nine scalar reads and twelve `PIPE_ALL` calls. Forward `row_pos` aliases retain the exact float32 cast at their scalar compare uses; main also retains an additional unused pure cast, reported with its original metadata/integer bounds. Actual configured C/AIV Cu reader addresses/values, float32 exactness domains and complete capacity/alias graphs are checked. Nine two-slot UB permutations retain the same exclusive byte union. These are source/metadata proofs, not physical core measurements, numerical/deadlock/performance or arbitrary external metadata guarantees.
+
+### MHA sink backward（E6c）
+
+完整 backward 模块与原分层测试保留4个 backward factory、原 Autograd 五核调用链、20个 standalone/L0/L1/L2/Boundary 入口控制、4次原数值重试和原退出合同。forward 复用已迁 regular 私有依赖；固定 TA 不含的 optional perf 模块继续原 WARN-return 边界。61个阳性 full-source 请求及122次实际 SDK 编译通过；3个原未对齐 K1 构造断言两侧一致。此处不代表数值、Autograd、workspace零化或性能已通过。
+
+原导入时全局 `torch.empty` monkeypatch 改为仅原 K1 `_zeroed_npu_workspace` 作用域内的 entry allocator 委托，保原 NPU 分配后 `zero_()` 顺序和线程局部条件；K2/K3/K4/K5 与 golden 不置标志。组件 RLock 支持同组件嵌套/异常/并发，不提供不同模块实例或外部 Torch 替换的全局协调保证；退出只按身份恢复，不覆盖外部新替换。CPU 协议测试不使用 fake kernel/golden 输出。真实 NPU K1 workspace 与完整数值仍待独立设备验收。

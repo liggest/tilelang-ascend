@@ -149,6 +149,8 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
         assert len(modes_before) == len(modes_after)
         assert all(a is b for a, b in zip(modes_before, modes_after))
         expected = ["registration"]
+        if entry["source_runtime"].get("additional_registration_before_disable"):
+            expected.append("registration")
         if entry["source_runtime"]["disable_cache"]:
             expected.append("disable")
         elif entry["source_runtime"]["clear_cache"]:
@@ -565,3 +567,33 @@ def test_gqa_sink_direct_layered_helper_restores_cache_and_device_on_failure(ena
         assert all(a is b for a, b in zip(modes_before, modes_after))
     finally:
         CacheState.enable() if before else CacheState.disable()
+
+
+def test_mha_backward_private_forward_dependency_and_no_import_allocator_mutation():
+    import torch
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E6c" and "/test_" not in e["source_path"])
+    original = torch.empty
+    module = _load(entry)
+    assert torch.empty is original
+    assert module._FWD_DIR.resolve() == ROOT / "examples/ascend_a2a3/mha_sink_fwd_bhsd"
+    assert module.flashattn_fwd_kernel is module._fwd_kernel.flashattn
+    assert module.ref_program is module._fwd_test.ref_program
+    test = _load(next(e for e in ENTRIES if e["batch"] == "E6c" and "/test_" in e["source_path"]))
+    assert test.attention == test._mha_bwd_module.attention
+    assert test.ref_program is test._mha_bwd_module.ref_program
+    assert torch.empty is original
+
+
+def test_mha_backward_missing_original_optional_perf_is_warning_return(monkeypatch, capsys):
+    module = _load(next(e for e in ENTRIES if e["batch"] == "E6c" and "/test_" in e["source_path"]))
+    original_import = builtins.__import__
+
+    def missing(name, *args, **kwargs):
+        if name == "perf_mha_sink_bwd_bhsd":
+            raise ImportError("fixed TA has no optional perf module")
+        return original_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", missing)
+    assert module.run_perf_benchmark() is None
+    assert "[WARN] perf_mha_sink_bwd_bhsd not found, skipping performance benchmark" in capsys.readouterr().out

@@ -1159,6 +1159,76 @@
         "device": false
       },
       "validation_scope": "51original controls including1determinism skip/7x3repeats;44TA/main fullsource pairs/88actualSDK,3raw host guards;all original precision/determinism/runtime-negative/exit numerical results pending."
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "source_git_blob": "15c6815bc32d35abfabfbae59a62a8969f7eda5d",
+      "source_sha256": "a362b5887278d71b4b31ce72363dfc40dd9fc215503be7d4f603becac91f7fc2",
+      "destination_sha256": "46ac9db308a5f9fff778333453f04639e62ea903b88ffadd132f5774ba984f5d",
+      "batch": "E6c",
+      "source_domain": "original_experiments",
+      "state": "source_SDK_verified_device_pending",
+      "adaptations": [
+        "Complete source with private language/exact forward+sibling loading and scoped runtime registration/cache/default device.",
+        "Original K1 allocation then zero_ condition/order preserved by entry allocator delegate only inside original K1 scope; no import-time global monkeypatch. Component lock is not global Torch coordination."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "runtime_factory": "attention",
+      "source_request_owner": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "original_main_renamed": false,
+      "evidence": "refactor_main/reports/p3_experiment_rest/E6c",
+      "original_functions_AST_contract": "Complete original factories/Autograd class/helpers/reference/retry/matrices/precision/exit exact; only approved scoped allocator body and bounded import/runtime scaffolding differ.",
+      "source_SDK_scope": "61positive full original five-kernel requests/122actualSDK;3original K1 frontend rejects. Includes existing regular forward dependency requests without recounting those2already mapped regular assets."
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/test_mha_sink_bwd_bhsd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/mha_sink_bwd_bhsd/test_mha_sink_bwd_bhsd.py",
+      "source_git_blob": "523c3a020a7987f99c6d2187734d89b6d69d7c9f",
+      "source_sha256": "b48aaf36b6c0b8679b3b34274bf567e5e804d00410e92e00b6cc9b85caf867ee",
+      "destination_sha256": "68088a9487bfe15d82f0805db19efc4a3d12618cc7522a77c757699077b0df34",
+      "batch": "E6c",
+      "source_domain": "original_experiments",
+      "state": "source_SDK_verified_device_pending",
+      "adaptations": [
+        "Complete source with private language/exact forward+sibling loading and scoped runtime registration/cache/default device.",
+        "Original K1 allocation then zero_ condition/order preserved by entry allocator delegate only inside original K1 scope; no import-time global monkeypatch. Component lock is not global Torch coordination."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "randn",
+        "additional_registration_before_disable": true,
+        "additional_registration_after_disable": true
+      },
+      "runtime_factory": "attention",
+      "source_request_owner": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "original_main_renamed": true,
+      "evidence": "refactor_main/reports/p3_experiment_rest/E6c",
+      "original_functions_AST_contract": "Complete original factories/Autograd class/helpers/reference/retry/matrices/precision/exit exact; only approved scoped allocator body and bounded import/runtime scaffolding differ.",
+      "source_SDK_scope": "61positive full original five-kernel requests/122actualSDK;3original K1 frontend rejects. Includes existing regular forward dependency requests without recounting those2already mapped regular assets."
     }
   ],
   "factory_requests": [
@@ -7229,6 +7299,913 @@
       ],
       "kwargs": {},
       "id": "experiment_e6b_43"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 128,
+        "real_seq_kv": 128
+      },
+      "id": "experiment_e6c_0"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_1"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_2"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_3"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        1,
+        4,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_4"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        1,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 128,
+        "real_seq_kv": 128
+      },
+      "id": "experiment_e6c_5"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        1,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_6"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        1,
+        1,
+        128,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_7"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        1,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_8"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        1,
+        1,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_9"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 256,
+        "real_seq_kv": 256
+      },
+      "id": "experiment_e6c_10"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        4,
+        256,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_11"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        1,
+        4,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_12"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        4,
+        256,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_13"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        1,
+        4,
+        256
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_14"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        2,
+        8,
+        512,
+        512,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 512,
+        "real_seq_kv": 512
+      },
+      "id": "experiment_e6c_15"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        2,
+        8,
+        512,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_16"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        2,
+        8,
+        512,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_17"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        2,
+        8,
+        512,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_18"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        2,
+        8,
+        512
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_19"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        64,
+        4096,
+        4096,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 4096,
+        "real_seq_kv": 4096
+      },
+      "id": "experiment_e6c_20"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        64,
+        4096,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_21"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        1,
+        64,
+        4096,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_22"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        64,
+        4096,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_23"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        1,
+        64,
+        4096
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_24"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": true,
+        "real_seq_q": 256,
+        "real_seq_kv": 256
+      },
+      "id": "experiment_e6c_25"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        2,
+        32,
+        2048,
+        2048,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 2048,
+        "real_seq_kv": 2048
+      },
+      "id": "experiment_e6c_26"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        2,
+        32,
+        2048,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_27"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        2,
+        32,
+        2048,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_28"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        2,
+        32,
+        2048,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_29"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        2,
+        32,
+        2048
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_30"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        3,
+        8,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 256,
+        "real_seq_kv": 256
+      },
+      "id": "experiment_e6c_31"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        3,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_32"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        3,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_33"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        3,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_34"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        3,
+        8,
+        256
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_35"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        32,
+        512,
+        512,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 512,
+        "real_seq_kv": 512
+      },
+      "id": "experiment_e6c_36"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        32,
+        512,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_37"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        1,
+        32,
+        512,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_38"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        32,
+        512,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_39"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        1,
+        32,
+        512
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_40"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        4,
+        16,
+        384,
+        384,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 384,
+        "real_seq_kv": 384
+      },
+      "id": "experiment_e6c_41"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        4,
+        16,
+        384,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_42"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        4,
+        16,
+        384,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_43"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        4,
+        16,
+        384,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_44"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        4,
+        16,
+        384
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_45"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        2,
+        8,
+        1024,
+        1024,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 1024,
+        "real_seq_kv": 1024
+      },
+      "id": "experiment_e6c_46"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        2,
+        8,
+        1024,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_47"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        2,
+        8,
+        1024,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_48"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        2,
+        8,
+        1024,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_49"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        2,
+        8,
+        1024
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_50"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        8,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": true,
+        "real_seq_q": 256,
+        "real_seq_kv": 256
+      },
+      "id": "experiment_e6c_51"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_52"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        1,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_53"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_54"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        1,
+        8,
+        256
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_55"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        5,
+        16,
+        768,
+        768,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 768,
+        "real_seq_kv": 768
+      },
+      "id": "experiment_e6c_56"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        5,
+        16,
+        768,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_57"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_main",
+      "args": [
+        5,
+        16,
+        768,
+        128
+      ],
+      "kwargs": {
+        "block_M": 64,
+        "block_N": 64
+      },
+      "id": "experiment_e6c_58"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        5,
+        16,
+        768,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_59"
+    },
+    {
+      "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "factory": "flashattn_bwd_dsink",
+      "args": [
+        5,
+        16,
+        768
+      ],
+      "kwargs": {},
+      "id": "experiment_e6c_60"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        130,
+        130,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 130,
+        "real_seq_kv": 130
+      },
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e6c_61"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        200,
+        200,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 200,
+        "real_seq_kv": 200
+      },
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e6c_62"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        300,
+        300,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 300,
+        "real_seq_kv": 300
+      },
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e6c_63"
     }
   ],
   "E1_original_runtime_cases": [
@@ -18955,6 +19932,476 @@
       "requests": [
         "experiment_e6b_0",
         "experiment_e6b_1"
+      ]
+    }
+  ],
+  "E6c_original_entry_matrix": [
+    {
+      "name": "standalone_smoke",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        null
+      ],
+      "level": "standalone",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_0",
+        "experiment_e6c_1",
+        "experiment_e6c_2",
+        "experiment_e6c_3",
+        "experiment_e6c_4"
+      ]
+    },
+    {
+      "name": "l0_min_causal",
+      "args": [
+        1,
+        1,
+        128,
+        128,
+        null
+      ],
+      "level": "l0",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_5",
+        "experiment_e6c_6",
+        "experiment_e6c_7",
+        "experiment_e6c_8",
+        "experiment_e6c_9"
+      ]
+    },
+    {
+      "name": "l0_small_causal",
+      "args": [
+        1,
+        4,
+        256,
+        128,
+        null
+      ],
+      "level": "l0",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_10",
+        "experiment_e6c_11",
+        "experiment_e6c_12",
+        "experiment_e6c_13",
+        "experiment_e6c_14"
+      ]
+    },
+    {
+      "name": "l0_multi_batch",
+      "args": [
+        2,
+        8,
+        512,
+        128,
+        null
+      ],
+      "level": "l0",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_15",
+        "experiment_e6c_16",
+        "experiment_e6c_17",
+        "experiment_e6c_18",
+        "experiment_e6c_19"
+      ]
+    },
+    {
+      "name": "l0_default",
+      "args": [
+        1,
+        64,
+        4096,
+        128,
+        null
+      ],
+      "level": "l0",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_20",
+        "experiment_e6c_21",
+        "experiment_e6c_22",
+        "experiment_e6c_23",
+        "experiment_e6c_24"
+      ]
+    },
+    {
+      "name": "l0_window",
+      "args": [
+        1,
+        4,
+        256,
+        128,
+        128
+      ],
+      "level": "l0",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_25",
+        "experiment_e6c_11",
+        "experiment_e6c_12",
+        "experiment_e6c_13",
+        "experiment_e6c_14"
+      ]
+    },
+    {
+      "name": "l0_large",
+      "args": [
+        2,
+        32,
+        2048,
+        128,
+        null
+      ],
+      "level": "l0",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_26",
+        "experiment_e6c_27",
+        "experiment_e6c_28",
+        "experiment_e6c_29",
+        "experiment_e6c_30"
+      ]
+    },
+    {
+      "name": "l1_b3_h8_s256",
+      "args": [
+        3,
+        8,
+        256,
+        128,
+        null
+      ],
+      "level": "l1",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_31",
+        "experiment_e6c_32",
+        "experiment_e6c_33",
+        "experiment_e6c_34",
+        "experiment_e6c_35"
+      ]
+    },
+    {
+      "name": "l1_b1_h32_s512",
+      "args": [
+        1,
+        32,
+        512,
+        128,
+        null
+      ],
+      "level": "l1",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_36",
+        "experiment_e6c_37",
+        "experiment_e6c_38",
+        "experiment_e6c_39",
+        "experiment_e6c_40"
+      ]
+    },
+    {
+      "name": "l1_b4_h16_s384",
+      "args": [
+        4,
+        16,
+        384,
+        128,
+        null
+      ],
+      "level": "l1",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_41",
+        "experiment_e6c_42",
+        "experiment_e6c_43",
+        "experiment_e6c_44",
+        "experiment_e6c_45"
+      ]
+    },
+    {
+      "name": "l1_b2_h8_s1024",
+      "args": [
+        2,
+        8,
+        1024,
+        128,
+        null
+      ],
+      "level": "l1",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_46",
+        "experiment_e6c_47",
+        "experiment_e6c_48",
+        "experiment_e6c_49",
+        "experiment_e6c_50"
+      ]
+    },
+    {
+      "name": "l1_window_s256_w128",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128
+      ],
+      "level": "l1",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_51",
+        "experiment_e6c_52",
+        "experiment_e6c_53",
+        "experiment_e6c_54",
+        "experiment_e6c_55"
+      ]
+    },
+    {
+      "name": "l1_b5_h16_s768",
+      "args": [
+        5,
+        16,
+        768,
+        128,
+        null
+      ],
+      "level": "l1",
+      "input_type": "normal",
+      "original_max_attempts": 4,
+      "original_retry_seed": "attempt*1000",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": false,
+      "requests": [
+        "experiment_e6c_56",
+        "experiment_e6c_57",
+        "experiment_e6c_58",
+        "experiment_e6c_59",
+        "experiment_e6c_60"
+      ]
+    },
+    {
+      "name": "l2_seq130",
+      "args": [
+        1,
+        4,
+        130,
+        128,
+        null
+      ],
+      "level": "l2",
+      "input_type": "normal",
+      "original_max_attempts": 1,
+      "original_retry_seed": "0",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": true,
+      "requests": [
+        "experiment_e6c_61"
+      ]
+    },
+    {
+      "name": "l2_seq200",
+      "args": [
+        1,
+        4,
+        200,
+        128,
+        null
+      ],
+      "level": "l2",
+      "input_type": "normal",
+      "original_max_attempts": 1,
+      "original_retry_seed": "0",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": true,
+      "requests": [
+        "experiment_e6c_62"
+      ]
+    },
+    {
+      "name": "l2_seq300",
+      "args": [
+        1,
+        4,
+        300,
+        128,
+        null
+      ],
+      "level": "l2",
+      "input_type": "normal",
+      "original_max_attempts": 1,
+      "original_retry_seed": "0",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": true,
+      "requests": [
+        "experiment_e6c_63"
+      ]
+    },
+    {
+      "name": "boundary_zero",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        null
+      ],
+      "level": "boundary",
+      "input_type": "zero",
+      "original_max_attempts": 1,
+      "original_retry_seed": "0",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": true,
+      "requests": [
+        "experiment_e6c_0",
+        "experiment_e6c_1",
+        "experiment_e6c_2",
+        "experiment_e6c_3",
+        "experiment_e6c_4"
+      ]
+    },
+    {
+      "name": "boundary_large",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        null
+      ],
+      "level": "boundary",
+      "input_type": "large",
+      "original_max_attempts": 1,
+      "original_retry_seed": "0",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": true,
+      "requests": [
+        "experiment_e6c_0",
+        "experiment_e6c_1",
+        "experiment_e6c_2",
+        "experiment_e6c_3",
+        "experiment_e6c_4"
+      ]
+    },
+    {
+      "name": "boundary_inf_q",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        null
+      ],
+      "level": "boundary",
+      "input_type": "inf",
+      "original_max_attempts": 1,
+      "original_retry_seed": "0",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": true,
+      "requests": [
+        "experiment_e6c_0",
+        "experiment_e6c_1",
+        "experiment_e6c_2",
+        "experiment_e6c_3",
+        "experiment_e6c_4"
+      ]
+    },
+    {
+      "name": "boundary_nan_k",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        null
+      ],
+      "level": "boundary",
+      "input_type": "nan",
+      "original_max_attempts": 1,
+      "original_retry_seed": "0",
+      "original_atol": 0.01,
+      "original_rtol": 0.01,
+      "original_nonblocking": true,
+      "requests": [
+        "experiment_e6c_0",
+        "experiment_e6c_1",
+        "experiment_e6c_2",
+        "experiment_e6c_3",
+        "experiment_e6c_4"
       ]
     }
   ]
