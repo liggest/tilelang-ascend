@@ -329,3 +329,53 @@ def test_broadcast_axis_inference(axis):
     call = T.tile.broadcast(b["dst"], src, axis=axis)
     assert call.op.name == "tl.ascend_broadcast"
     assert call.args[0].value == f"Broadcast<float, 2, {1 if axis == 1 else 0}, false>"
+
+
+@pytest.mark.parametrize(
+    "format_string,string_argument",
+    [
+        ("line1\nline2\n", None),
+        ("one\ttwo\n", None),
+        (r"C:\tmp\file\n", None),
+        ("s=%s\n", "hello\tworld\\tail"),
+        ('quote="\n', None),
+        ("é🙂\n", None),
+    ],
+)
+def test_printf_passes_raw_strings_to_modern_c_printer(format_string, string_argument):
+    arguments = [] if string_argument is None else [string_argument]
+    call = T.printf(format_string, *arguments)
+    assert call.op.name == "tl.ascend_printf"
+    assert call.args[0].value == format_string
+    if string_argument is not None:
+        assert call.args[1].value == string_argument
+
+
+def test_printf_preserves_pointer_format_and_buffer_access():
+    buffer = _buffer("printf_pointer", scope="global")
+    call = T.printf("p=%p\n", buffer)
+    assert call.args[0].value == "p=0x%x\n"
+    assert call.args[1].op.name == "tirx.tvm_access_ptr"
+    assert call.args[1].args[1].same_as(buffer.data)
+
+
+@pytest.mark.parametrize("dialect,prefix", [("ascendc", "AscendC::PRINTF"), ("pto", "cce::printf")])
+@pytest.mark.parametrize(
+    "format_string,c_literal",
+    [("one\ttwo\\tail\n", r'"one\ttwo\\tail\n"'), ('quote="\n', r'"quote=\"\n"'), ("é🙂\n", '"é🙂\\n"')],
+)
+def test_printf_full_pipeline_uses_modern_string_literals(dialect, prefix, format_string, c_literal):
+    import tilelang
+
+    @T.prim_func
+    def main(A: T.Tensor((32,), "int32"), B: T.Tensor((32,), "int32")):
+        with T.Kernel(1, is_npu=True) as (cid, vid):
+            ub = T.alloc_ub((32,), "int32")
+            with T.Scope("V"):
+                T.printf(format_string)
+                T.copy(A, ub)
+                T.copy(ub, B)
+
+    target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect, "ascend"]})
+    source = tilelang.lower(main, target=target).kernel_source
+    assert prefix + "(" + c_literal + ");" in source
