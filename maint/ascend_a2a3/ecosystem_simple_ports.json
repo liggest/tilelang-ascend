@@ -9,7 +9,7 @@
       "source_git_blob": "133e13c236fbcaf5b13b449282ec4d334787a55c",
       "source_sha256": "3f8189281cc65d9c0a60f8d5f48790653fb38b52e6fe750a6d13b19d5ead9d95",
       "destination_sha256": "edf07506cab02622cb795bddc9b820585519052a0b4b288a633b39dc755f10a7",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -21,7 +21,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 3,
@@ -31,9 +31,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 3,
+          "original_assertions_passed": 3,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 3
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -54,7 +61,7 @@
       "source_git_blob": "40a27ff35a8be6bdeadb0f5ee0e6ea9cad68ce73",
       "source_sha256": "4cf78224e906c7f344d8954196b1bded0207446a77737883b77a5a8180290391",
       "destination_sha256": "12cc36146f21d6a79da5a06b34177e396df5c37414f7a61668322cd7d7ff7ce6",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -66,7 +73,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -76,9 +83,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": false
+        "forced_cache_directory_mismatch_rejected": false,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 1,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": false,
@@ -99,7 +113,7 @@
       "source_git_blob": "3cc358ef9ef805c90379d296a75503602e6e7ea2",
       "source_sha256": "0cde8de653f64c01bd38b6059dd6157bd3eeee2f20f5be9621a4c98b0b4b98a9",
       "destination_sha256": "fd44ffb454f556f6498ef777b1eb242639b88f33af2c480aae1dd2caadd53935",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -111,7 +125,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -121,9 +135,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": false
+        "forced_cache_directory_mismatch_rejected": false,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 1,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": false,
@@ -144,7 +165,7 @@
       "source_git_blob": "20d375c6cc6bb6fb269de2ae5c3d7e78debc12f7",
       "source_sha256": "7692b2f8dfba45135875434c7ce9bc181a6c0409205dc1249cac9eb966b320fe",
       "destination_sha256": "3e39d1a537817ce06696fabdf793f888be4b3f6c9a8d9c7b2b7fa6efb022598c",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -156,7 +177,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 3,
@@ -166,9 +187,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 3,
+          "original_assertions_passed": 3,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 3
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -189,7 +217,7 @@
       "source_git_blob": "51068181dc0ecb469af34c0b12a827c504771e98",
       "source_sha256": "70bdb2f4403c1d69122834725131a24584482beb93a3aaa822b3d0127e4047e1",
       "destination_sha256": "de8ac815c0da5ba6dd6a99e137250bfdb4de69ee6ad6a454644b845c2b95f805",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -201,7 +229,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 3,
@@ -211,9 +239,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 3,
+          "original_assertions_passed": 3,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 3
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -234,7 +269,7 @@
       "source_git_blob": "d776a2577f9098dd2edaa64937a9501e15135008",
       "source_sha256": "4b99ee87287c55531e40a77715b8fb467ac49fc19130c68bfc1e37e880284582",
       "destination_sha256": "dc134d5f5bb8b1c099b80ca27cc4a25afb78bb01e7096db99e75ffef3da49c54",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -246,7 +281,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -256,9 +291,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 1,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -279,7 +321,7 @@
       "source_git_blob": "cc3e1771505fca145ca07303051396f0f9455e6e",
       "source_sha256": "8ced2c672a3e09fb75203f31b1284b4b70d0e6531e7f2eb549b52c91269da809",
       "destination_sha256": "96fd6c4d75d45abce2dcd498e677c830058aef62c35e9f6dc04fc1bcb8fd1d7d",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -291,7 +333,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -301,9 +343,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 1,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -324,7 +373,7 @@
       "source_git_blob": "4c7250ae037fa09b97af9758f5556becc61df607",
       "source_sha256": "ecf3095fb3fb171a3ea63e73565b393a1f46f75c1f679e9230f8f7d06b85a3fa",
       "destination_sha256": "2025e08b81026e56272cb2f37e49adca90adffc5a156562a996922ab16840aed",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_print_only_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -337,7 +386,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -347,9 +396,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 0,
+          "precision_classification": "print_only_no_original_golden",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -370,7 +426,7 @@
       "source_git_blob": "884b2d1d1f1a471f3495d10cdf5ac468dfd5aa02",
       "source_sha256": "64c7899d6c7bf1667e7b2313149a53d8159bc82b1a7d1a0ed8f8094bc964a1a9",
       "destination_sha256": "3f7859748e2e0e008e5915d332a1a450bd5c048f5086fd54fc70f638bed8899b",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -382,7 +438,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 6,
@@ -392,9 +448,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 6,
+          "original_assertions_passed": 6,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 6
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -415,7 +478,7 @@
       "source_git_blob": "89f9148650f79f59f5208950e4a3932ccf4d8905",
       "source_sha256": "3c7829e3942e93623f01813324516af8621d0c672c67d5ea60b6dd0ebd08b714",
       "destination_sha256": "19ea0e112dca779825b32c829423acdb4e9e8d591d61da7669f0fd2eb737d02f",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -427,7 +490,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 12,
@@ -437,9 +500,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 12,
+          "original_assertions_passed": 12,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 12
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -462,7 +532,7 @@
       "source_git_blob": "3dd11c08592ef9c17e4cc85dfc1920fad4679450",
       "source_sha256": "ddb9f0581a512c5e35ae79eb678c6ef133bdccededc45609c6d10b8256b8b164",
       "destination_sha256": "9e630eba4ccb77d28185846a0a2b041c02a8bb80cd8732e0a77be345c6154063",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -474,7 +544,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -484,9 +554,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": false
+        "forced_cache_directory_mismatch_rejected": false,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 1,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": false,
@@ -507,7 +584,7 @@
       "source_git_blob": "31c48f420bbcfb37aabe9bb926839bf07fa6cdfd",
       "source_sha256": "ca5a4c898f95fea9aea9b6e47fc62d1e7070c76be65e6ea9e969863a65f8483c",
       "destination_sha256": "152c7c10feacca5dcddbfb0d9a5330b07f90cb1f8939609ade38c9ad7d9767e8",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -519,7 +596,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -529,9 +606,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 1,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -552,7 +636,7 @@
       "source_git_blob": "c8a90603694a6f9fcd1b3b1065f5293b331812ce",
       "source_sha256": "45df2c71fdf2b7833c53029cd03508ac9778f1c7d57e62da5a1d68454ae8acb0",
       "destination_sha256": "aff80ea6822374e4f627551ce5012a91cca2c84470133fa02c4053bc267ab08c",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -564,7 +648,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -574,9 +658,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": true
+        "forced_cache_directory_mismatch_rejected": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 1,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": true,
@@ -597,7 +688,7 @@
       "source_git_blob": "6916d4563f18a9a026bdd4246c647535efd024ed",
       "source_sha256": "df9dab757ccb73be95b6f31116ed9b970dc89130e8f333a9201af48335fa58c5",
       "destination_sha256": "05f54968441c2c34aebeb81e0bdce2cba5982b351b7c88e56435aafc351929aa",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "adaptations": [
         "Backend-specific language import; full original factories/decorators/host goldens and cases preserved.",
@@ -609,7 +700,7 @@
         "import_safety": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "fixed_OFF_host_checks": true,
         "fixed_OFF_native_requests_skipped": true,
         "original_factory_requests": 1,
@@ -619,9 +710,16 @@
         "ON_component_tests": "90 passed (54 host +36 source; real Torch tensor allocations forbidden)",
         "OFF_component_tests": "54 passed/36 native requests skipped",
         "compiler_import_prefix_byteexact_to_source_SDK": true,
-        "no_actual_CLI_or_NPU_numerical_execution": true,
+        "no_actual_CLI_or_NPU_numerical_execution": false,
         "explicit_NPU_registration_checked": true,
-        "forced_cache_directory_mismatch_rejected": false
+        "forced_cache_directory_mismatch_rejected": false,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 1,
+          "original_assertions_passed": 1,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 1
+        }
       },
       "source_runtime": {
         "clear_cache": false,
@@ -637,7 +735,7 @@
       }
     }
   ],
-  "scope": "14 original complete simple Python assets, original36 requests. Source/SDK verified; original CLI/device/numerical/performance remain pending.",
+  "scope": "14 complete original simple Python assets; all36 original CLI requests completed on A3,35 original numerical assertions passed and setvalue retained its original print-only contract. Performance and adopted bench/pytest CI remain separate.",
   "factory_requests": [
     {
       "id": "sigmoid_sigmoid_0",
@@ -1297,7 +1395,7 @@
     "source_requests": 36,
     "TA_real_SDK_commands": 36,
     "main_real_SDK_commands": 36,
-    "device_requests_run": 0,
+    "device_requests_run": 36,
     "performance_samples": 0,
     "source_ABI_and_decorators_and_effective_configs_match": true,
     "raw_cpp_equal_after_only_include_relocation": 4,
@@ -1308,6 +1406,31 @@
     "source_differences_not_deleted_from_compiled_inputs": true,
     "ON_host_source_tests": 90,
     "OFF_host_tests": 54,
-    "OFF_skipped_native_requests": 36
+    "OFF_skipped_native_requests": 36,
+    "original_CLI_programs_run": 14,
+    "original_numerical_assertions_passed": 35,
+    "original_print_only_programs_completed": 1,
+    "actual_device_run_SDK_commands": 36
+  },
+  "device_validation": {
+    "ready_sha": "2e2eeb56036dbae7f80d7e439c0d6ba4b2f2567c",
+    "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+    "actual_soc": "Ascend910_9392",
+    "original_CLI_argv": "No arguments; complete original main loops.",
+    "original_CLI_programs": 14,
+    "original_runtime_requests": 36,
+    "original_assertions_passed": 35,
+    "actual_Bisheng_commands": 36,
+    "independent_child_process_cache_and_CWD": true,
+    "actual_Cython_sha256": "90a357b27c56452b3632c054dfce88bdf761eadab2956b50b52841aabc798aeb",
+    "all_native_source_and_Cython_pre_post_hashes_identical": true,
+    "pre_post_sync_and_NPU_health_passed": true,
+    "physical_NPU0_window_released": true,
+    "initial_runner_observer_only_failure_retained": "The first observer incorrectly required AscendC before the original PTO tanh compiled; zero tanh SDK/runtime in that attempt. Four successful CLI/eight assertions inherited only after verifying1000 frozen files. The corrected observer matches each original decorator target.",
+    "combined_audit": "refactor_main/reports/p3_S19_combined_device_audit.json",
+    "independent_root_review": "refactor_main/reports/p3_S19_combined_device_root_review.json",
+    "report": "refactor_main/reports/p3_S19_device_completion.md",
+    "actual_bench_collector_or_pytest_CI_claim": false,
+    "performance_claim": false
   }
 }

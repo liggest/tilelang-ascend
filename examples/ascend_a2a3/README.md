@@ -117,3 +117,15 @@ A successful pytest exit alone therefore does not establish GQA precision;
 inspect those original results separately. The migration retains this contract.
 DeepSeek companions restore the caller's default device context after each
 case, preserving their original unqualified NPU allocations within the test.
+
+The 14 simple activation/elementwise/normalization/reduction CLIs and five
+additional activation CLIs have run their complete original no-argument main
+loops on A3: all 62 original runtime requests completed, with 61 original
+numerical assertions passed. `elementwise/setvalue_example.py` retains its
+original print-only check and is not counted as a golden precision result.
+Original maximum shapes, dtype lists, seeds and tolerances are retained.
+Each CLI ran in a separate process with its own explicit cache and working
+directory. This verifies the original CLI entry points; adopted-install
+`bench_test.sh`/collector/pytest execution and performance remain separate.
+The two result ledgers are `maint/ascend_a2a3/ecosystem_simple_ports.json` and
+`maint/ascend_a2a3/ecosystem_activation_ports.json`.

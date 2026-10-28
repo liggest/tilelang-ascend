@@ -2,7 +2,7 @@
   "schema_version": 1,
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
   "main_base": "a818c64ef5a666541f3e1d83625d2e10f3119a51",
-  "scope": "Five complete original activation Python assets; independent owner ledger. Device validation pending.",
+  "scope": "Five complete original activation Python assets; all26 original CLI/runtime requests and original numerical assertions passed on A3. Performance and adopted bench/pytest CI remain separate.",
   "entries": [
     {
       "source_path": "examples/activation/gelu_grad.py",
@@ -10,7 +10,7 @@
       "source_git_blob": "4ecd7c52bc85f4024f3a6a0cbab7497407a91717",
       "source_sha256": "47a101ec75a533452e4a054a37f20d9781c02e3cff59e9459a25f6294f2eacf9",
       "destination_sha256": "76e8dd1c8f8a1265b35c5eb0b5a8f205db9ccc9c8a7d0d90d8159abdb8c07405",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "all_original_cases_retained": true,
       "adaptations": [
@@ -27,7 +27,7 @@
         "host_import_cache_and_default_device_isolation": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "ON_component_tests": "54 passed (28 host +26 source; real Torch tensor allocation forbidden)",
         "OFF_component_tests": "28 passed/26 native source requests skipped; strict OFF native maps",
         "real_TA_external_availability_probe": true,
@@ -39,7 +39,14 @@
         "AIV_call_order_and_control_headers_equal": true,
         "AIV_parameter_spelling_difference": "Only gelu_grad last case rows condition; three transfers checked over actual350cid×2vid domain",
         "extra_main_AIC_loop_local_barriers_retained": false,
-        "no_source_equals_or_numerical_pass_claim": true
+        "source_stage_no_source_equals_or_numerical_pass_claim": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 6,
+          "original_assertions_passed": 6,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 6
+        }
       },
       "original_factory_requests": 6,
       "original_definitions_AST_sha256": {
@@ -58,7 +65,7 @@
       "source_git_blob": "60da617651d7b38ce1fc68d03479dc9bb38eb84f",
       "source_sha256": "8f849826acc5c9ac64a03636ce7977e0eccb3ad9b1240242593d8800e5ec31c0",
       "destination_sha256": "5c269a4e094da26aa8d7f3a61d842083a02e4da699241481bb276378620852ba",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "all_original_cases_retained": true,
       "adaptations": [
@@ -75,7 +82,7 @@
         "host_import_cache_and_default_device_isolation": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "ON_component_tests": "54 passed (28 host +26 source; real Torch tensor allocation forbidden)",
         "OFF_component_tests": "28 passed/26 native source requests skipped; strict OFF native maps",
         "real_TA_external_availability_probe": true,
@@ -87,7 +94,14 @@
         "AIV_call_order_and_control_headers_equal": true,
         "AIV_parameter_spelling_difference": null,
         "extra_main_AIC_loop_local_barriers_retained": false,
-        "no_source_equals_or_numerical_pass_claim": true
+        "source_stage_no_source_equals_or_numerical_pass_claim": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 2,
+          "original_assertions_passed": 2,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 2
+        }
       },
       "original_factory_requests": 2,
       "original_definitions_AST_sha256": {
@@ -106,7 +120,7 @@
       "source_git_blob": "0e07111dcb38881f2d80b05e4e2d28b67d8a5492",
       "source_sha256": "f44dafacbab686e9a7ab991259a6413eca49279fb239e64411650618c720e53f",
       "destination_sha256": "12c9b2c007bc8ed70814f10bf1601be68a5ad31f7e5f1c110abb187195bea83b",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "all_original_cases_retained": true,
       "adaptations": [
@@ -123,7 +137,7 @@
         "host_import_cache_and_default_device_isolation": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "ON_component_tests": "54 passed (28 host +26 source; real Torch tensor allocation forbidden)",
         "OFF_component_tests": "28 passed/26 native source requests skipped; strict OFF native maps",
         "real_TA_external_availability_probe": true,
@@ -135,7 +149,14 @@
         "AIV_call_order_and_control_headers_equal": true,
         "AIV_parameter_spelling_difference": null,
         "extra_main_AIC_loop_local_barriers_retained": false,
-        "no_source_equals_or_numerical_pass_claim": true
+        "source_stage_no_source_equals_or_numerical_pass_claim": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 4,
+          "original_assertions_passed": 4,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 4
+        }
       },
       "original_factory_requests": 4,
       "original_definitions_AST_sha256": {
@@ -154,7 +175,7 @@
       "source_git_blob": "2ecb12f2dfbdb6d32af49690930de404a9e63965",
       "source_sha256": "bffff7fa2b90b31b9a61420d92200fa124ccba6a5be74256019a0fa5aeffe9aa",
       "destination_sha256": "0b8192480744a7d23e386d54d1f3abd5100da159d369e83a2fb861f418b49c50",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "all_original_cases_retained": true,
       "adaptations": [
@@ -172,7 +193,7 @@
         "host_import_cache_and_default_device_isolation": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "ON_component_tests": "54 passed (28 host +26 source; real Torch tensor allocation forbidden)",
         "OFF_component_tests": "28 passed/26 native source requests skipped; strict OFF native maps",
         "real_TA_external_availability_probe": true,
@@ -184,7 +205,14 @@
         "AIV_call_order_and_control_headers_equal": true,
         "AIV_parameter_spelling_difference": null,
         "extra_main_AIC_loop_local_barriers_retained": true,
-        "no_source_equals_or_numerical_pass_claim": true
+        "source_stage_no_source_equals_or_numerical_pass_claim": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 7,
+          "original_assertions_passed": 7,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 3
+        }
       },
       "original_factory_requests": 7,
       "original_definitions_AST_sha256": {
@@ -201,7 +229,7 @@
       "source_git_blob": "8d596df79c4b3606235760287ea753d4dc135f41",
       "source_sha256": "00cd99a67a139a72b9bf19bf144d0634ac92f81eaa7a31d4d1dae2d5a9093931",
       "destination_sha256": "a58486638656a6b2279c46d1cf43065e806e2d4c467812a7af5f7a673b31bd82",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_original_CLI_numerical_verified",
       "factory_and_helper_AST_exact": true,
       "all_original_cases_retained": true,
       "adaptations": [
@@ -219,7 +247,7 @@
         "host_import_cache_and_default_device_isolation": true,
         "source": true,
         "SDK": true,
-        "device": false,
+        "device": true,
         "ON_component_tests": "54 passed (28 host +26 source; real Torch tensor allocation forbidden)",
         "OFF_component_tests": "28 passed/26 native source requests skipped; strict OFF native maps",
         "real_TA_external_availability_probe": true,
@@ -231,7 +259,14 @@
         "AIV_call_order_and_control_headers_equal": true,
         "AIV_parameter_spelling_difference": null,
         "extra_main_AIC_loop_local_barriers_retained": true,
-        "no_source_equals_or_numerical_pass_claim": true
+        "source_stage_no_source_equals_or_numerical_pass_claim": true,
+        "S19_original_CLI": {
+          "exitcode": 0,
+          "runtime_requests": 7,
+          "original_assertions_passed": 7,
+          "precision_classification": "original_assertions_passed",
+          "actual_SDK_compiles": 3
+        }
       },
       "original_factory_requests": 7,
       "original_definitions_AST_sha256": {
@@ -857,13 +892,40 @@
     "TA_false_and_explicit_true_controls_retained": true,
     "ON": "54 passed",
     "OFF": "28 passed/26 skipped",
-    "device": false,
+    "device": true,
     "extra_main_dynamic_AIC_loop": {
       "requests": 14,
       "source_barrier_statements": 28,
       "effects": "Only scalar control and PIPE_ALL; no GM/UB access, crosscore flags or vector math; no deletion/projection."
     },
     "extra_component_test_not_original_76_asset_count": true,
-    "original_TA_native_binary_scope": "Actual existing read-only TA libraries recorded by path/SHA/mtime, not a fresh 0deb rebuild claim."
+    "original_TA_native_binary_scope": "Actual existing read-only TA libraries recorded by path/SHA/mtime, not a fresh 0deb rebuild claim.",
+    "device_requests_run": 26,
+    "original_CLI_programs_run": 5,
+    "original_numerical_assertions_passed": 26,
+    "original_print_only_programs_completed": 0,
+    "actual_device_run_SDK_commands": 18,
+    "performance_samples": 0
+  },
+  "device_validation": {
+    "ready_sha": "2e2eeb56036dbae7f80d7e439c0d6ba4b2f2567c",
+    "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+    "actual_soc": "Ascend910_9392",
+    "original_CLI_argv": "No arguments; complete original main loops.",
+    "original_CLI_programs": 5,
+    "original_runtime_requests": 26,
+    "original_assertions_passed": 26,
+    "actual_Bisheng_commands": 18,
+    "independent_child_process_cache_and_CWD": true,
+    "actual_Cython_sha256": "90a357b27c56452b3632c054dfce88bdf761eadab2956b50b52841aabc798aeb",
+    "all_native_source_and_Cython_pre_post_hashes_identical": true,
+    "pre_post_sync_and_NPU_health_passed": true,
+    "physical_NPU0_window_released": true,
+    "initial_runner_observer_only_failure_retained": "The first observer incorrectly required AscendC before the original PTO tanh compiled; zero tanh SDK/runtime in that attempt. Four successful CLI/eight assertions inherited only after verifying1000 frozen files. The corrected observer matches each original decorator target.",
+    "combined_audit": "refactor_main/reports/p3_S19_combined_device_audit.json",
+    "independent_root_review": "refactor_main/reports/p3_S19_combined_device_root_review.json",
+    "report": "refactor_main/reports/p3_S19_device_completion.md",
+    "actual_bench_collector_or_pytest_CI_claim": false,
+    "performance_claim": false
   }
 }
