@@ -150,16 +150,18 @@
       "destination_path": "testing/ascend_a2a3/python/language/conftest.py",
       "source_git_blob": "c971b331f2e3f3e917f21aadb454961276965fe8",
       "source_sha256": "8145972dc24ac8b2623ebefa9c01388799022f273e38d73526c3b4ebe0886726",
-      "destination_sha256": "e3e0f920562dc1e27265ae62efa62c0253b17d9c6d5fe387b919d20115f5fc5e",
+      "destination_sha256": "c5c0d2d93f3644e0ebca0cf23ff16646f0578f185218d5ca954909edf6db6d47",
       "adaptations": [
-        "Scope disable_tilelang_cache to the requesting case with raw CacheState restoration; preserve original random_seed and dtype/low_priority collector hook exactly."
+        "Scope disable_tilelang_cache to the requesting case with raw CacheState restoration; preserve original random_seed and dtype/low_priority collector hook exactly.",
+        "Classify only the adopted max/min generated-class items as host/native or device while preserving their original case IDs, dtype generation and priority marks; scoped source platform/torch backend setup leaves other cases unchanged."
       ],
       "validation": {
         "source_AST_or_byte_comparison": true,
         "actual_OFF_pure_host_checks": 7,
         "actual_OFF_native_trace_cases_skipped": 4,
         "actual_ON_host_and_native_trace_checks": 11,
-        "scoped_disable_fixture_external_state_audit": 2
+        "scoped_disable_fixture_external_state_audit": 2,
+        "max_min_all_original_case_ids_and_marks_preserved": 284
       },
       "all_original_cases_retained": true
     },
@@ -769,6 +771,54 @@
         "original_device_cases": 7,
         "device_execution": false,
         "source_function_AST_preserved": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tile_max.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tile_max.py",
+      "source_git_blob": "fdf755b5ca6b411ece53cf83376dbadb0cd11acc",
+      "source_sha256": "13c2f1282c8b1f8527f0dc41a44c0323eab4e331bd8e157a144392a9adbe3187",
+      "destination_sha256": "97581eb2d687b489fcda33885d64c79f080d6883733f0db473322c126cbd64e7",
+      "adaptations": [
+        "Explicit backend-private dialect and already adopted test-base imports; all remaining module AST, original spec/registration/priority/dtype choices unchanged.",
+        "Keep all original registered Compile/E2E/Boundary classes and collect the exact original 284 cases across this pair; narrow adopted conftest adds per-item native/device requirements, not algorithm or parameter changes."
+      ],
+      "validation": {
+        "entire_non_import_module_AST_exact": true,
+        "TA_and_main_original_host_cases_passed_batch": 24,
+        "TA_and_main_real_SDK_ELF_each_batch": 20,
+        "TA_and_main_exact_host_prototypes_batch": 20,
+        "all_original_case_ids_and_marks_preserved_batch": 284,
+        "original_numerical_cases_pending_batch": 260,
+        "actual_OFF_pure_test_helpers_passed": 7,
+        "actual_OFF_adopted_original_cases_skipped_batch": 284,
+        "actual_OFF_preexisting_native_IR_checks_skipped": 4,
+        "numerical_device_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tile_min.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tile_min.py",
+      "source_git_blob": "989ac0f44ed5093dcb0927e128b4b6e74f60625e",
+      "source_sha256": "949c1d4f03c8ca3276ee8b95bc673039bf745dd4aef7fade8884692926cb5a84",
+      "destination_sha256": "b2668b4ed515e4afcca771bb3bf67cf4e0cf9fd803570a00407d807abc81c705",
+      "adaptations": [
+        "Explicit backend-private dialect and already adopted test-base imports; all remaining module AST, original spec/registration/priority/dtype choices unchanged.",
+        "Keep all original registered Compile/E2E/Boundary classes and collect the exact original 284 cases across this pair; narrow adopted conftest adds per-item native/device requirements, not algorithm or parameter changes."
+      ],
+      "validation": {
+        "entire_non_import_module_AST_exact": true,
+        "TA_and_main_original_host_cases_passed_batch": 24,
+        "TA_and_main_real_SDK_ELF_each_batch": 20,
+        "TA_and_main_exact_host_prototypes_batch": 20,
+        "all_original_case_ids_and_marks_preserved_batch": 284,
+        "original_numerical_cases_pending_batch": 260,
+        "actual_OFF_pure_test_helpers_passed": 7,
+        "actual_OFF_adopted_original_cases_skipped_batch": 284,
+        "actual_OFF_preexisting_native_IR_checks_skipped": 4,
+        "numerical_device_execution": false
       },
       "all_original_cases_retained": true
     },
