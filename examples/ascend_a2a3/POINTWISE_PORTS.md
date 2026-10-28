@@ -46,3 +46,43 @@ The exact named operand uses and full operation/synchronization payload are
 compared separately from allocation maps. No pass or emitted source is edited
 to force textual equality. Numerical device and performance validation remain
 pending for these sources.
+
+## GEMV, top-k and unsorted segment sum
+
+Four complete sources retain fourteen original runtime requests:
+
+| Source | Original CLI/default matrix |
+|---|---|
+| `gemv/example_gemv_c.py` | `1024,1024,128,128` float16/float32; `64,64,16,16` float16 |
+| `gemv/example_gemv_v.py` | `1024,1024,128,128` float16; `1024,1024,64,64` float32; `64,64,16,16` float16 |
+| `topk_selector/example_topk_selector.py` | `B=64,N=4096,top_k=2048`; `B=N=1024,top_k=128` |
+| `unsorted_segment_sum/unsorted_segment_sum.py` | All six original float16/bfloat16 rows and original atomic dispatch |
+
+All three segment strategies and their original host dispatch, padding,
+sorting, dtype promotion, references and return behavior remain. Two additional
+source probes exercise the original non-CLI segment and block-reduce
+strategies. Three additional GEMV vector source probes select PTO through the
+actual JIT object target. These five probes are explicitly supplementary;
+they are not original runtime matrix rows or numerical device validation.
+
+The GEMV vector helper reads the modern `JITImpl.target` field instead of the
+old `__jit_impl__.target` indirection. The default field is `None` in main and
+`"auto"` in TA; both preserve the original `is_pto=False` branch, while explicit
+PTO selects `True` on each side. The original `alloc_temp` definition stays
+intact; the factory does not call that local allocation helper. No shared
+legacy attribute is introduced. The original GEMV cube docstring's leading
+space is normalized by Ruff; algorithm statements remain unchanged.
+
+Existing runtime entries are named `_original_main` with their original
+signatures and complete bodies. The outer `main` registers the device backend
+and preserves the original clear/disable/neutral cache mode. Clear remains at
+its original point inside the top-k host entry. Disabling is restored on exit,
+including failure; cache-neutral GEMV cube stays neutral.
+
+Generated sources keep allocation/order differences and original synchronization.
+The supplementary segment-reduce probe has two additional read-only C-core GM
+reads and two `PIPE_ALL` barriers. For that exact probe, the reads use the same
+Offsets address set `0..8` as the original AIV path, with no C-core writes,
+flags or vector math. This difference is retained and does not establish a
+general segmented-shape, alias, numerical or performance guarantee. Source/SDK
+acceptance remains separate from the pending device matrix.

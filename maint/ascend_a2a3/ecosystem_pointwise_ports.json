@@ -146,6 +146,165 @@
       "original_seed_calls": [
         "torch.manual_seed(42)"
       ]
+    },
+    {
+      "source_path": "examples/gemv/example_gemv_c.py",
+      "destination_path": "examples/ascend_a2a3/gemv/example_gemv_c.py",
+      "source_git_blob": "0d15bc2363bc8fb0c21c69a3078f766dccd8d692",
+      "source_sha256": "074875f2bdd291444f4a000f986455e25ee782e07354c682e3654735e6a65a60",
+      "destination_sha256": "1d25d2c62a3f409067c70ced8814404361ba541345a557e036be4962b2d4137e",
+      "batch": "Q2",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Rename only original main entry to _original_main, preserving signature/body except declared cache API."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q2/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": false,
+      "canonical_docstring_whitespace_exception": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(y, ref_y, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ],
+      "modern_JIT_target_reader_exception": false
+    },
+    {
+      "source_path": "examples/gemv/example_gemv_v.py",
+      "destination_path": "examples/ascend_a2a3/gemv/example_gemv_v.py",
+      "source_git_blob": "a8cca682b94d6f9f256f13a94f0ce3070bb9ed12",
+      "source_sha256": "f01f121a97998784451541ea02a6533d410e43766e3f92fa4fb7e40083b4d2bb",
+      "destination_sha256": "999b906ee0a55cae511d9e4fcc6b715fcc1022f31c7e6ee280b9cf30d3442c69",
+      "batch": "Q2",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve original disable mode and restore caller cache state in finally.",
+        "Rename only original main entry to _original_main, preserving signature/body except declared cache API.",
+        "Read modern JITImpl.target directly instead of removed __jit_impl__.target indirection; keep original is_pto and alloc_temp branches. First failure and actual old/new JIT target branch evidence retained."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q2/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": false,
+      "canonical_docstring_whitespace_exception": false,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(y, ref_y, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ],
+      "modern_JIT_target_reader_exception": true
+    },
+    {
+      "source_path": "examples/topk_selector/example_topk_selector.py",
+      "destination_path": "examples/ascend_a2a3/topk_selector/example_topk_selector.py",
+      "source_git_blob": "2c281c150fd7f1aa54fc9eed3048d76f346c2ba4",
+      "source_sha256": "abbaffcec49eb0ba3a27ddef0371a267d3a9c5209941f27bf1373c4e47b3bb71",
+      "destination_sha256": "2337fcda05484cdf0b4c46b59865e0bf04cff48f5a571802218235261a98d413",
+      "batch": "Q2",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve actual clear and original position with dedicated cache/resolved guard.",
+        "Rename only original main entry to _original_main, preserving signature/body except declared cache API."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q2/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "canonical_docstring_whitespace_exception": false,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ],
+      "modern_JIT_target_reader_exception": false
+    },
+    {
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py",
+      "destination_path": "examples/ascend_a2a3/unsorted_segment_sum/unsorted_segment_sum.py",
+      "source_git_blob": "3f2fdd43fdad48025cf77e25919ce3c971bd22c6",
+      "source_sha256": "91512f7f5a1d9216131a8ba2f3b40d6431919f7d3d25e5cfad7497ff401da30b",
+      "destination_sha256": "432439bc59ebd5755dabf669d6596f17abc266d2686fdd42b4c5869236b42104",
+      "batch": "Q2",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true,
+        "set_default_device": false,
+        "inputs_before_factory": true
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve original disable mode and restore caller cache state in finally."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q2/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "canonical_docstring_whitespace_exception": false,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(out, ref, rtol=tol[0], atol=tol[1])",
+        "torch.testing.assert_close(out, ref, rtol=tol[0], atol=tol[1])"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)",
+        "torch.manual_seed(0)"
+      ],
+      "modern_JIT_target_reader_exception": false
     }
   ],
   "factory_requests": [
@@ -331,6 +490,325 @@
       "source_original_merge_num": 4,
       "id": "example_merge_sort_2",
       "source_path": "examples/sort/example_merge_sort.py"
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "id": "example_gemv_c_0",
+      "source_path": "examples/gemv/example_gemv_c.py"
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "kwargs": {
+        "dtype": "float32"
+      },
+      "kind": "original_CLI_matrix",
+      "id": "example_gemv_c_1",
+      "source_path": "examples/gemv/example_gemv_c.py"
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        64,
+        64,
+        16,
+        16
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "id": "example_gemv_c_2",
+      "source_path": "examples/gemv/example_gemv_c.py"
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "id": "example_gemv_v_0",
+      "source_path": "examples/gemv/example_gemv_v.py"
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        1024,
+        1024,
+        64,
+        64
+      ],
+      "kwargs": {
+        "dtype": "float32"
+      },
+      "kind": "original_CLI_matrix",
+      "id": "example_gemv_v_1",
+      "source_path": "examples/gemv/example_gemv_v.py"
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        64,
+        64,
+        16,
+        16
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "id": "example_gemv_v_2",
+      "source_path": "examples/gemv/example_gemv_v.py"
+    },
+    {
+      "factory": "simple_topk_selector",
+      "args": [
+        64,
+        4096,
+        2048,
+        512
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "id": "example_topk_selector_0",
+      "source_path": "examples/topk_selector/example_topk_selector.py"
+    },
+    {
+      "factory": "simple_topk_selector",
+      "args": [
+        1024,
+        1024,
+        128,
+        32
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "id": "example_topk_selector_1",
+      "source_path": "examples/topk_selector/example_topk_selector.py"
+    },
+    {
+      "factory": "atomic_add_kernel",
+      "args": [
+        473,
+        128,
+        32,
+        128,
+        14
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        473,
+        128,
+        32,
+        "float16"
+      ],
+      "id": "unsorted_segment_sum_0",
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py"
+    },
+    {
+      "factory": "atomic_add_kernel",
+      "args": [
+        97,
+        512,
+        8,
+        512,
+        4
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        97,
+        512,
+        8,
+        "float16"
+      ],
+      "id": "unsorted_segment_sum_1",
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py"
+    },
+    {
+      "factory": "atomic_add_kernel",
+      "args": [
+        512,
+        512,
+        32,
+        512,
+        16
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        512,
+        512,
+        32,
+        "float16"
+      ],
+      "id": "unsorted_segment_sum_2",
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py"
+    },
+    {
+      "factory": "atomic_add_kernel",
+      "args": [
+        183,
+        128,
+        16,
+        128,
+        6
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        183,
+        128,
+        16,
+        "bfloat16"
+      ],
+      "id": "unsorted_segment_sum_3",
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py"
+    },
+    {
+      "factory": "atomic_add_kernel",
+      "args": [
+        25,
+        256,
+        4,
+        256,
+        2
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        25,
+        256,
+        4,
+        "bfloat16"
+      ],
+      "id": "unsorted_segment_sum_4",
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py"
+    },
+    {
+      "factory": "atomic_add_kernel",
+      "args": [
+        256,
+        128,
+        16,
+        128,
+        8
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        256,
+        128,
+        16,
+        "bfloat16"
+      ],
+      "id": "unsorted_segment_sum_5",
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py"
+    },
+    {
+      "factory": "seg_reduce_kernel",
+      "args": [
+        97,
+        8192,
+        8,
+        8192,
+        97
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "kind": "supplemental_original_strategy_source_probe",
+      "scope_note": "Original seg_reduce predicate true; max_seg_len=N is legal worst-case, not claimed source CLI or numerical input.",
+      "id": "unsorted_segment_sum_6",
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py"
+    },
+    {
+      "factory": "block_reduce_kernel",
+      "args": [
+        65792,
+        4,
+        256
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "kind": "supplemental_original_strategy_source_probe",
+      "scope_note": "Original block_reduce threshold N=65537,D4,segments1; original helper pads N to ceil(N/256)*256=65792, not claimed source CLI or numerical input.",
+      "id": "unsorted_segment_sum_7",
+      "source_path": "examples/unsorted_segment_sum/unsorted_segment_sum.py"
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "kind": "supplemental_original_dialect_source_probe",
+      "id": "example_gemv_v_pto_0",
+      "source_path": "examples/gemv/example_gemv_v.py",
+      "jit_target_override": "pto",
+      "scope_note": "Actual original/modern JIT object target set to pto only for source branch evidence; original CLI remains auto/AscendC, no numerical claim."
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        1024,
+        1024,
+        64,
+        64
+      ],
+      "kwargs": {
+        "dtype": "float32"
+      },
+      "kind": "supplemental_original_dialect_source_probe",
+      "id": "example_gemv_v_pto_1",
+      "source_path": "examples/gemv/example_gemv_v.py",
+      "jit_target_override": "pto",
+      "scope_note": "Actual original/modern JIT object target set to pto only for source branch evidence; original CLI remains auto/AscendC, no numerical claim."
+    },
+    {
+      "factory": "simple_gemv",
+      "args": [
+        64,
+        64,
+        16,
+        16
+      ],
+      "kwargs": {},
+      "kind": "supplemental_original_dialect_source_probe",
+      "id": "example_gemv_v_pto_2",
+      "source_path": "examples/gemv/example_gemv_v.py",
+      "jit_target_override": "pto",
+      "scope_note": "Actual original/modern JIT object target set to pto only for source branch evidence; original CLI remains auto/AscendC, no numerical claim."
     }
   ]
 }

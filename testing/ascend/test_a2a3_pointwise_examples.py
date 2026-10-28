@@ -138,11 +138,13 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
         modes_after = torch.overrides._get_current_function_mode_stack()
         assert len(modes_before) == len(modes_after)
         assert all(a is b for a, b in zip(modes_before, modes_after))
-        assert events == [
-            "registration",
-            "disable" if entry["source_runtime"]["disable_cache"] else "clear",
-            "inputs" if entry["source_runtime"].get("inputs_before_factory") else "factory",
-        ]
+        expected = ["registration"]
+        if entry["source_runtime"]["disable_cache"]:
+            expected.append("disable")
+        elif entry["source_runtime"]["clear_cache"]:
+            expected.append("clear")
+        expected.append("inputs" if entry["source_runtime"].get("inputs_before_factory") else "factory")
+        assert events == expected
     finally:
         CacheState.enable() if before else CacheState.disable()
 
@@ -158,6 +160,8 @@ def test_full_original_factory_lowers_without_device(case, monkeypatch):
             pytest.skip("requires USE_ASCEND=ON with the complete A2A3 pipeline")
     monkeypatch.setenv("TL_PLATFORM", "A3")
     factory = getattr(_load(BY_SOURCE[case["source_path"]]), case["factory"])
+    if case.get("jit_target_override"):
+        factory.target = case["jit_target_override"]
     dialect = "pto" if factory.target == "pto" else "ascendc"
     target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect, "ascend"]})
     with target:
