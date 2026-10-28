@@ -86,7 +86,11 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
     monkeypatch.setenv("TILELANG_CACHE_DIR", str(tmp_path / "owned"))
     monkeypatch.setitem(sys.modules, "torch_npu", ModuleType("torch_npu"))
     monkeypatch.setattr(torch, "manual_seed", lambda *args: None)
-    if entry["source_runtime"]["set_default_device"] or entry["source_runtime"].get("host_availability_gate"):
+    if (
+        entry["source_runtime"]["set_default_device"]
+        or entry["source_runtime"].get("host_availability_gate")
+        or entry["source_runtime"].get("constructs_device_object_before_factory")
+    ):
         # Exercise the public CPU context stack without selecting an NPU.
         class HostTorch:
             def device(self, name):
@@ -167,7 +171,8 @@ def test_full_original_factory_lowers_without_device(case, monkeypatch):
     dialect = "pto" if factory.target == "pto" else "ascendc"
     target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect, "ascend"]})
     with target:
-        prim = factory.get_tir(*case["args"], **case["kwargs"])
+        args = [tuple(value) if i in case.get("tuple_arg_indices", []) else value for i, value in enumerate(case["args"])]
+        prim = factory.get_tir(*args, **case["kwargs"])
     config = normalize_a2a3_pass_configs(target, factory.pass_configs)
     with tvm.transform.PassContext(opt_level=3, config=config):
         artifact = tilelang.lower(prim, target=target)

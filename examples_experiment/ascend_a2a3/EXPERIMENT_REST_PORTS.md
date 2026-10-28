@@ -50,3 +50,40 @@ payload, synchronization, operand uses, host launches and allocation maps are
 checked separately; additional unused shift/division arithmetic is bounded in
 the actual original launch/loop domain. No pass or emitted source is rewritten
 to force equality. Numerical device and performance validation remains pending.
+
+## E2: grouped GEMM
+
+Three complete original sources retain their original input construction,
+metadata generation, references, CLI options and return behavior:
+
+| Entry | Original default CLI |
+|---|---|
+| Backward | Groups 64/128; M=N=512; block M/N/K=64 |
+| Forward | Groups 64/128; K=output dimension=8192; blocks 64/128/64; transposed reference flag remains available |
+| Padded forward | Groups 64/128/256; K=N=4096; blocks 64/128/64; optional original profile mode |
+
+All three keep their original seed behavior: no seed is added. The backward
+and ordinary forward only print mismatches, without raising a failing exit;
+the padded forward retains its original assertion-based verification. Ordinary
+forward's original partial-group limitation and unused valid-row field remain
+in source. The original five forward and four padded-forward helper test
+requests are retained and separately marked as helper entries rather than the
+three default CLI runs. Their source/SDK results do not establish tail-case
+numerical support.
+
+Backward's original module cache clear requires the dedicated cache contract.
+Padded forward's original disable-cache mode is restored to the caller. Runtime
+registration and argument parsing occur in main; the backward reference's
+original free `block_K` binding is assigned globally by the same CLI before use.
+Original tuple arguments are preserved explicitly in the source request ledger.
+
+All twelve default/helper requests passed complete lowering and SDK compilation
+on both sides. Raw source retains additional read-only metadata loads on AIV;
+ordinary forward also reads the previously unused third metadata column on C.
+This third-column address set was not read by the old emitted source. Each
+original complete int32 metadata table and every added grid/row/column read is
+checked separately, with the original independent input and no kernel writes
+or output alias. The added loads are not described as pure scalar operations
+or removed from the compiled source. Full remaining payload/synchronization and
+physical allocation maps are checked independently. These bounded source checks
+are separate from pending numerical device and performance acceptance.
