@@ -1,0 +1,1056 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "owner_scope": "G1 first three complete standard GDN leaves and original empty package; remaining leaves/full GDN pipeline pending",
+  "entries": [
+    {
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_cumsum.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/gdn/gdn_chunk_cumsum.py",
+      "source_sha256": "39f3013fc1660b96063b18ef5dd03d9dcf475da9f9578059af5c87354dfc26d9",
+      "source_git_blob": "4fe0b7bcfe66265de105ac0e23aaa97ad70b6fff",
+      "device_not_run": true,
+      "state": "complete_leaf_source_actual_SDK_verified_device_pending",
+      "destination_sha256": "bcf821f73ba965e087bedde8a9c0c38384aa483e80003e4f9c84e8bcffc13d3f",
+      "original_definition_AST_sha256": {
+        "cumsum_ker": "48d68e866952bd65be6b4aae269c3aba99fe6a197e8e802f14d554b2be47560f",
+        "chunk_cumsum": "14d1540584042f1b40ae69574230cbf9a4485a0df641942d5dc81d083a3c2419",
+        "ref_chunk_cumsum": "6c9dbb3262c8bb9e4460881839b7952d1e0e62b5b9e5fd410aed82dad293db00"
+      },
+      "original_CLI_AST_sha256": "c4cb5e7afa3368b5ff53ff3a10b1455aee9b02b21a3f9d2b643aa91f119ae3db",
+      "original_factory": "cumsum_ker",
+      "original_test_configs": [
+        [
+          2,
+          32,
+          256,
+          32
+        ]
+      ],
+      "original_raw_target": "auto",
+      "original_seed": 0,
+      "original_clear_cache_calls": 1,
+      "original_printoptions": {
+        "threshold": "inf",
+        "sci_mode": true
+      },
+      "original_golden_tolerances": {
+        "rtol": 1e-05,
+        "atol": 1e-05
+      },
+      "original_golden_assertions": 1,
+      "original_runtime_calls": 1,
+      "original_success_marker": "Kernel Output Match!",
+      "out_idx": [
+        -1
+      ],
+      "workspace_idx": null,
+      "adaptations": [
+        "private A2A3 language import",
+        "raw CRLF source normalized to formatted destination LF without AST/body changes",
+        "only original cache-clear call replaced by existing A2A3 cache singleton; full original CLI retained",
+        "main requires explicit matching task cache, scopes singleton memory cache and restores exact caller memory object, CacheState, staging state and print options; cache descriptor never assigned"
+      ]
+    },
+    {
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_scaled_dot_kkt.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/gdn/gdn_chunk_scaled_dot_kkt.py",
+      "source_sha256": "2851077e88b0d07ca861b1eb86de279a195b3cc40b0582f05df6122fa3305d4e",
+      "source_git_blob": "c4b2b001c31a6e013dd3e9cd903d775d5b6ec17a",
+      "device_not_run": true,
+      "state": "complete_leaf_source_actual_SDK_verified_device_pending",
+      "destination_sha256": "ce530c8513dbcd89aa70bebc9a81f5705db03429609bc89107d51fcad8559115",
+      "original_definition_AST_sha256": {
+        "kkt_ker": "e967153d8ac0d33bbcedac4f29d8deb5103c90f311c03246f4c401628606fc9d",
+        "kkt": "d207b5506cdf3aa1a3d1b17eb4ea92781e5d1462c3b834591e615fcdcaa21dbc",
+        "ref_kkt": "0819e0797263bf404e1de4c42dc58733dabdb55c99b50e490a26693fd5754eb5"
+      },
+      "original_CLI_AST_sha256": "8556a1eb88047fa5d025a7b60ad707898b1c1d9c245572e8a1d1df357ff21e97",
+      "original_factory": "kkt_ker",
+      "original_test_configs": [
+        [
+          2,
+          32,
+          256,
+          64,
+          32,
+          32
+        ]
+      ],
+      "original_raw_target": "auto",
+      "original_seed": 0,
+      "original_clear_cache_calls": 1,
+      "original_printoptions": {
+        "threshold": "inf",
+        "sci_mode": true
+      },
+      "original_golden_tolerances": {
+        "rtol": 1e-05,
+        "atol": 1e-05
+      },
+      "original_golden_assertions": 1,
+      "original_runtime_calls": 1,
+      "original_success_marker": "Kernel Output Match!",
+      "out_idx": [
+        -1
+      ],
+      "workspace_idx": [
+        -2
+      ],
+      "adaptations": [
+        "private A2A3 language import",
+        "raw CRLF source normalized to formatted destination LF without AST/body changes",
+        "only original cache-clear call replaced by existing A2A3 cache singleton; full original CLI retained",
+        "main requires explicit matching task cache, scopes singleton memory cache and restores exact caller memory object, CacheState, staging state and print options; cache descriptor never assigned"
+      ]
+    },
+    {
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_wy_fast.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/gdn/gdn_wy_fast.py",
+      "source_sha256": "4a71012c250894aa3c8505ceeb3ce18bda452dcfa4cfdd7b0ccd28e1fa92f179",
+      "source_git_blob": "7b767708c7c99de6d730be308b138774ae168fc0",
+      "device_not_run": true,
+      "state": "complete_leaf_source_actual_SDK_verified_device_pending",
+      "destination_sha256": "31274758e15d3e6104dc8f23dde0db8d62985d176edc53933244e17bf60ff102",
+      "original_definition_AST_sha256": {
+        "wy_fast_ker": "6cadcc4819d2a552f01b65863fc2e937ce9fcaaf887c8c079e35353f11193f02",
+        "wy_fast": "9574fa0935badc40531d64f24125da3efbf8791eb8c065b398731328991997d4",
+        "ref_wy_fast": "7a04bb567f6c352c6812e9a7103eb7771bf0d86a105730c62140c97c6dab5362"
+      },
+      "original_CLI_AST_sha256": "4ddfb683df91a6832460b0b47dbeb5d1dc3af64f37b2075f093f5d04a459d1e4",
+      "original_factory": "wy_fast_ker",
+      "original_test_configs": [
+        [
+          2,
+          32,
+          256,
+          64,
+          64,
+          32,
+          32,
+          32
+        ]
+      ],
+      "original_raw_target": "auto",
+      "original_seed": 0,
+      "original_clear_cache_calls": 1,
+      "original_printoptions": {
+        "threshold": "inf",
+        "sci_mode": true
+      },
+      "original_golden_tolerances": {
+        "rtol": 1e-05,
+        "atol": 1e-05
+      },
+      "original_golden_assertions": 2,
+      "original_runtime_calls": 1,
+      "original_success_marker": "Kernel Output Match!",
+      "out_idx": [
+        -2,
+        -1
+      ],
+      "workspace_idx": [
+        -4,
+        -3
+      ],
+      "adaptations": [
+        "private A2A3 language import",
+        "raw CRLF source normalized to formatted destination LF without AST/body changes",
+        "only original cache-clear call replaced by existing A2A3 cache singleton; full original CLI retained",
+        "main requires explicit matching task cache, scopes singleton memory cache and restores exact caller memory object, CacheState, staging state and print options; cache descriptor never assigned"
+      ]
+    },
+    {
+      "source_path": "examples/linear_attention_and_rnn/gdn/__init__.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/gdn/__init__.py",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "device_not_run": true,
+      "state": "original_empty_package_marker",
+      "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_definition_AST_sha256": {},
+      "original_runtime_calls": 0,
+      "original_golden_assertions": 0
+    }
+  ],
+  "factory_requests": [
+    {
+      "id": "gdn_chunk_cumsum",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_cumsum.py",
+      "factory": "cumsum_ker",
+      "args": [
+        2,
+        32,
+        256,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none"
+    },
+    {
+      "id": "gdn_chunk_scaled_dot_kkt",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_scaled_dot_kkt.py",
+      "factory": "kkt_ker",
+      "args": [
+        2,
+        32,
+        256,
+        64,
+        32,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none"
+    },
+    {
+      "id": "gdn_wy_fast",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_wy_fast.py",
+      "factory": "wy_fast_ker",
+      "args": [
+        2,
+        32,
+        256,
+        64,
+        64,
+        32,
+        32,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none"
+    }
+  ],
+  "validation": {
+    "original_leaf_CLIs": 3,
+    "complete_original_top_level_definitions": 9,
+    "original_runtime_calls": 3,
+    "original_golden_assertions": 4,
+    "original_full_GDN_pipeline_not_ported_yet": true,
+    "source_SDK_pending": false,
+    "device_not_run": true,
+    "TA_complete_source": 3,
+    "main_complete_source": 3,
+    "TA_actual_SDK": 3,
+    "main_actual_SDK": 3,
+    "actual_properties_context_or_NPU_tensor_or_launch": false,
+    "actual_driver_availability": true,
+    "actual_driver_count": 16,
+    "existing_TA_native_not_fresh": true,
+    "host_ON_passed": 25,
+    "actual_OFF_passed": 22,
+    "actual_OFF_native_only_skipped": 3,
+    "actual_cache_memory_descriptor_staging_printopts_restore_checked": true,
+    "original_clear_cache_calls_per_CLI": 1,
+    "complete_original_kernel_definitions": 9,
+    "source_SDK_repeated_during_host_followup": false
+  },
+  "source_contracts": [
+    {
+      "id": "gdn_chunk_cumsum",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G1/ta/gdn_chunk_cumsum/kernel.cc",
+        "sha256": "291ef0cdf8971649e9fa1168241a8d320ae8f211c1e07bdbca0ffb97f5b80946",
+        "size": 2595
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G1/main/gdn_chunk_cumsum/kernel.cc",
+        "sha256": "32d85de8ca0189913e997cafd734045ccb0a0688de114a81d6311b3016b2ed77",
+        "size": 2854
+      },
+      "host_ABI": "uint8_t* G_handle, uint8_t* S_handle, aclrtStream stream",
+      "full_remaining_source_byte_equal": true,
+      "review_only_differences": {
+        "include_relocation": true,
+        "unused_pure_scalar_declarations": [
+          {
+            "name": "bx",
+            "expression": "(cid % 8)",
+            "minimum": 0,
+            "maximum": 7,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                255
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "by",
+            "expression": "((((cid % 128) / 8) * 2) + vid)",
+            "minimum": 0,
+            "maximum": 31,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                255
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bz",
+            "expression": "(cid / 128)",
+            "minimum": 0,
+            "maximum": 1,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                255
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bx_1",
+            "expression": "(cid % 8)",
+            "minimum": 0,
+            "maximum": 7,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                255
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "by_1",
+            "expression": "((((cid % 128) / 8) * 2) + vid)",
+            "minimum": 0,
+            "maximum": 31,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                255
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bz_1",
+            "expression": "(cid / 128)",
+            "minimum": 0,
+            "maximum": 1,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                255
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          }
+        ],
+        "new_Cumsum_scalar_only_AIC_shell_removed_for_comparison": 1
+      },
+      "named_views": [
+        {
+          "name": "s_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 32,
+          "offset_bytes": 0,
+          "end_bytes": 128
+        },
+        {
+          "name": "g_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 32,
+          "offset_bytes": 128,
+          "end_bytes": 256
+        }
+      ],
+      "named_view_order_and_all_descriptor_args_equal": true,
+      "aliases": [],
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "alias_lifetime_scope": "all allocations/declaration order, complete original memory payload/control and synchronization calls are byte-exact after only listed unused-scalar/include/empty-shell substitutions; no allocator or lifetime change",
+      "buffer_bounds": [
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            2,
+            32,
+            256
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float32",
+          "shape": [
+            2,
+            32,
+            256
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        }
+      ],
+      "original_default_grid": 256,
+      "proof_scope": "exact original leaf default inputs only, no claim for full GDN composed configurations or arbitrary input",
+      "device_not_run": true
+    },
+    {
+      "id": "gdn_chunk_scaled_dot_kkt",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G1/ta/gdn_chunk_scaled_dot_kkt/kernel.cc",
+        "sha256": "697532f9f90c9cd0e93a45e072290469f7e02c4505a49d0efa5794347f64b12c",
+        "size": 7339
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G1/main/gdn_chunk_scaled_dot_kkt/kernel.cc",
+        "sha256": "8b0b89464b856ff34487498da04fa95e549ed136026666d60a6fb36edc4cd329",
+        "size": 7545
+      },
+      "host_ABI": "uint8_t* K_handle, uint8_t* Beta_handle, uint8_t* G_handle, uint8_t* Msk_handle, uint8_t* workspace_handle, uint8_t* A_handle, aclrtStream stream",
+      "full_remaining_source_byte_equal": true,
+      "review_only_differences": {
+        "include_relocation": true,
+        "unused_pure_scalar_declarations": [
+          {
+            "name": "bx",
+            "expression": "(cid % 8)",
+            "minimum": 0,
+            "maximum": 7,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "by",
+            "expression": "((cid % 256) / 8)",
+            "minimum": 0,
+            "maximum": 31,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bz",
+            "expression": "(cid / 256)",
+            "minimum": 0,
+            "maximum": 1,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bx_1",
+            "expression": "(cid % 8)",
+            "minimum": 0,
+            "maximum": 7,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "by_1",
+            "expression": "((cid % 256) / 8)",
+            "minimum": 0,
+            "maximum": 31,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bz_1",
+            "expression": "(cid / 256)",
+            "minimum": 0,
+            "maximum": 1,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          }
+        ],
+        "new_Cumsum_scalar_only_AIC_shell_removed_for_comparison": 0
+      },
+      "named_views": [
+        {
+          "name": "a_l0",
+          "pool": "ascend_l0c",
+          "dtype": "float",
+          "count": 1024,
+          "offset_bytes": 0,
+          "end_bytes": 4096
+        },
+        {
+          "name": "k_l1",
+          "pool": "ascend_l1",
+          "dtype": "half",
+          "count": 1024,
+          "offset_bytes": 0,
+          "end_bytes": 2048
+        },
+        {
+          "name": "zero_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 32,
+          "offset_bytes": 0,
+          "end_bytes": 128
+        },
+        {
+          "name": "beta_ub_half",
+          "pool": "ascend_ub",
+          "dtype": "half",
+          "count": 16,
+          "offset_bytes": 128,
+          "end_bytes": 160
+        },
+        {
+          "name": "g_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 32,
+          "offset_bytes": 160,
+          "end_bytes": 288
+        },
+        {
+          "name": "msk_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 512,
+          "offset_bytes": 288,
+          "end_bytes": 2336
+        },
+        {
+          "name": "beta_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 16,
+          "offset_bytes": 2336,
+          "end_bytes": 2400
+        },
+        {
+          "name": "coeff_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 512,
+          "offset_bytes": 2400,
+          "end_bytes": 4448
+        },
+        {
+          "name": "a_ub_half",
+          "pool": "ascend_ub",
+          "dtype": "half",
+          "count": 512,
+          "offset_bytes": 4448,
+          "end_bytes": 5472
+        },
+        {
+          "name": "a_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 512,
+          "offset_bytes": 5472,
+          "end_bytes": 7520
+        }
+      ],
+      "named_view_order_and_all_descriptor_args_equal": true,
+      "aliases": [],
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "alias_lifetime_scope": "all allocations/declaration order, complete original memory payload/control and synchronization calls are byte-exact after only listed unused-scalar/include/empty-shell substitutions; no allocator or lifetime change",
+      "buffer_bounds": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            64
+          ],
+          "elements": 1048576,
+          "bytes": 2097152
+        },
+        {
+          "name": "Beta_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256
+          ],
+          "elements": 16384,
+          "bytes": 32768
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            2,
+            32,
+            256
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        },
+        {
+          "name": "Msk_handle",
+          "dtype": "float32",
+          "shape": [
+            32,
+            32
+          ],
+          "elements": 1024,
+          "bytes": 4096
+        },
+        {
+          "name": "workspace_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            32
+          ],
+          "elements": 524288,
+          "bytes": 1048576
+        },
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            32
+          ],
+          "elements": 524288,
+          "bytes": 1048576
+        }
+      ],
+      "original_default_grid": 512,
+      "proof_scope": "exact original leaf default inputs only, no claim for full GDN composed configurations or arbitrary input",
+      "device_not_run": true
+    },
+    {
+      "id": "gdn_wy_fast",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G1/ta/gdn_wy_fast/kernel.cc",
+        "sha256": "172a1e4f6ee4a8d4a206e96efefd4e7f509041c5be1d37e51c9c77344fc94bcf",
+        "size": 8852
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G1/main/gdn_wy_fast/kernel.cc",
+        "sha256": "f5f3faccaf8840460b9ede567873a3c94c822c37ea53c5670a25c6886d489167",
+        "size": 9058
+      },
+      "host_ABI": "uint8_t* K_handle, uint8_t* V_handle, uint8_t* Beta_handle, uint8_t* G_handle, uint8_t* A_handle, uint8_t* workspace_k_handle, uint8_t* workspace_v_handle, uint8_t* W_handle, uint8_t* U_handle, aclrtStream stream",
+      "full_remaining_source_byte_equal": true,
+      "review_only_differences": {
+        "include_relocation": true,
+        "unused_pure_scalar_declarations": [
+          {
+            "name": "bx",
+            "expression": "(cid % 8)",
+            "minimum": 0,
+            "maximum": 7,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "by",
+            "expression": "((cid % 256) / 8)",
+            "minimum": 0,
+            "maximum": 31,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bz",
+            "expression": "(cid / 256)",
+            "minimum": 0,
+            "maximum": 1,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bx_1",
+            "expression": "(cid % 8)",
+            "minimum": 0,
+            "maximum": 7,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "by_1",
+            "expression": "((cid % 256) / 8)",
+            "minimum": 0,
+            "maximum": 31,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "bz_1",
+            "expression": "(cid / 256)",
+            "minimum": 0,
+            "maximum": 1,
+            "pure_no_memory_read": true,
+            "domain": {
+              "cid": [
+                0,
+                511
+              ],
+              "vid": [
+                0,
+                1
+              ]
+            }
+          }
+        ],
+        "new_Cumsum_scalar_only_AIC_shell_removed_for_comparison": 0
+      },
+      "named_views": [
+        {
+          "name": "a_l1",
+          "pool": "ascend_l1",
+          "dtype": "half",
+          "count": 1024,
+          "offset_bytes": 0,
+          "end_bytes": 2048
+        },
+        {
+          "name": "k_l1",
+          "pool": "ascend_l1",
+          "dtype": "half",
+          "count": 1024,
+          "offset_bytes": 2048,
+          "end_bytes": 4096
+        },
+        {
+          "name": "w_l0",
+          "pool": "ascend_l0c",
+          "dtype": "float",
+          "count": 1024,
+          "offset_bytes": 0,
+          "end_bytes": 4096
+        },
+        {
+          "name": "v_l1",
+          "pool": "ascend_l1",
+          "dtype": "half",
+          "count": 1024,
+          "offset_bytes": 4096,
+          "end_bytes": 6144
+        },
+        {
+          "name": "u_l0",
+          "pool": "ascend_l0c",
+          "dtype": "float",
+          "count": 1024,
+          "offset_bytes": 4096,
+          "end_bytes": 8192
+        },
+        {
+          "name": "k_ub_half",
+          "pool": "ascend_ub",
+          "dtype": "half",
+          "count": 1024,
+          "offset_bytes": 0,
+          "end_bytes": 2048
+        },
+        {
+          "name": "v_ub_half",
+          "pool": "ascend_ub",
+          "dtype": "half",
+          "count": 1024,
+          "offset_bytes": 2048,
+          "end_bytes": 4096
+        },
+        {
+          "name": "beta_ub_half",
+          "pool": "ascend_ub",
+          "dtype": "half",
+          "count": 16,
+          "offset_bytes": 4096,
+          "end_bytes": 4128
+        },
+        {
+          "name": "g_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 16,
+          "offset_bytes": 4128,
+          "end_bytes": 4192
+        },
+        {
+          "name": "k_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 1024,
+          "offset_bytes": 4192,
+          "end_bytes": 8288
+        },
+        {
+          "name": "v_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 1024,
+          "offset_bytes": 8288,
+          "end_bytes": 12384
+        },
+        {
+          "name": "beta_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 16,
+          "offset_bytes": 12384,
+          "end_bytes": 12448
+        }
+      ],
+      "named_view_order_and_all_descriptor_args_equal": true,
+      "aliases": [],
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "alias_lifetime_scope": "all allocations/declaration order, complete original memory payload/control and synchronization calls are byte-exact after only listed unused-scalar/include/empty-shell substitutions; no allocator or lifetime change",
+      "buffer_bounds": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            64
+          ],
+          "elements": 1048576,
+          "bytes": 2097152
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            64
+          ],
+          "elements": 1048576,
+          "bytes": 2097152
+        },
+        {
+          "name": "Beta_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256
+          ],
+          "elements": 16384,
+          "bytes": 32768
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            2,
+            32,
+            256
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        },
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            32
+          ],
+          "elements": 524288,
+          "bytes": 1048576
+        },
+        {
+          "name": "workspace_k_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            64
+          ],
+          "elements": 1048576,
+          "bytes": 2097152
+        },
+        {
+          "name": "workspace_v_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            64
+          ],
+          "elements": 1048576,
+          "bytes": 2097152
+        },
+        {
+          "name": "W_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            64
+          ],
+          "elements": 1048576,
+          "bytes": 2097152
+        },
+        {
+          "name": "U_handle",
+          "dtype": "float16",
+          "shape": [
+            2,
+            32,
+            256,
+            64
+          ],
+          "elements": 1048576,
+          "bytes": 2097152
+        }
+      ],
+      "original_default_grid": 512,
+      "proof_scope": "exact original leaf default inputs only, no claim for full GDN composed configurations or arbitrary input",
+      "device_not_run": true
+    }
+  ]
+}
