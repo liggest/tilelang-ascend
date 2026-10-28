@@ -87,3 +87,37 @@ or output alias. The added loads are not described as pure scalar operations
 or removed from the compiled source. Full remaining payload/synchronization and
 physical allocation maps are checked independently. These bounded source checks
 are separate from pending numerical device and performance acceptance.
+
+## E3: chunk gated delta rule
+
+Both complete developer and expert sources preserve their original variable-length
+wrappers, gating, initial/final state, new-value outputs, workspace decorators,
+manual/automatic synchronization, references and 1e-5 precision assertions.
+The developer default uses sequence length 2048 with H=8/Hg=4/K=V=128 and
+seed 41. The expert default retains all eight original cases and their original
+seeds, including the original 2048 case and the seven C++-test-derived rows.
+All original CLI flags and failure propagation remain unchanged.
+
+Nine original default runtime rows are distinct from 27 explicitly labelled
+source probes of the original `--use_g`/`--use_initial_state` Boolean options.
+They produce twelve unique native constructor requests. Complete original test
+and wrapper shape/control runs reach the native constructor without executing
+an original golden comparison or a device operation. Optional non-CLI helper
+modes, such as disabling final-state or new-value storage, remain in the complete
+original implementation and are not claimed as validated by this matrix.
+
+All twelve requests passed full lowering and actual SDK compilation on both
+sides. The larger expert source differences include repeated pure integer
+conditional temporaries. A comparison-only normalization checks unique
+single-assignment temporaries and complete branch expressions, preserving
+memory-read effect positions and physical allocation maps. Eleven sources
+match after these declared name/binding differences. Pure integer branches and
+unused arithmetic are bounded in the actual sequence/grid/loop domain.
+
+The remaining developer gating request retains an additional C-side conditional
+read of `g_last` and a `PIPE_ALL` barrier. Its 256 actual read points lie within
+the original independent float32 `g_pad[8,2112]` and match the old and new AIV
+last-value read addresses. The added read and barrier remain in the compiled
+source and are not described as pure scalar operations. These source witnesses
+are limited to the recorded original requests. Numerical device and performance
+validation remains pending.

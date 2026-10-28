@@ -306,6 +306,88 @@
       "original_precision_assertion_source_lines": [
         99
       ]
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "destination_path": "examples_experiment/ascend_a2a3/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "source_git_blob": "7f357d651b0d721802ac9d227f0e60781ed5c0c7",
+      "source_sha256": "56bd0de7ec80d48dc209314c0b84789e2dc11d126683ca502ad2f210737e57e9",
+      "destination_sha256": "2840e788d7d8a99b51cd02f237e554fa8c1c97ddd0b6c452230874fd54e8e2ac",
+      "batch": "E3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "clear_count": 1,
+        "inputs_before_factory": true,
+        "input_constructor": "tensor",
+        "set_default_device": false
+      },
+      "original_main_renamed": false,
+      "configured_CLI_globals": [],
+      "adaptations": [
+        "Private dialect import; original factory/helper/config/CLI/golden/seed/exit preserved.",
+        "Guard complete original runtime in main with explicit backend registration; actual clear requires dedicated cache, disable-cache restored on exit."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E3/"
+      },
+      "whole_factory_helpers_decorators_configs_AST_equal": true,
+      "whole_original_runtime_AST_preserved_with_declared_cache_main_adapters": true,
+      "original_precision_assertion_source_lines": [
+        361,
+        362,
+        363
+      ],
+      "non_CLI_optional_helper_modes_not_source_validated": [
+        "output_final_state=False",
+        "save_new_value=False"
+      ]
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "destination_path": "examples_experiment/ascend_a2a3/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "source_git_blob": "ed18a5983e2b182f351cb7b37a87240bd9e95950",
+      "source_sha256": "3f58149c63b242c544c018fb328cb0ec5f08d0b85a759c46af85acea7d6d7e6a",
+      "destination_sha256": "8074b83939b29d9e5a72f40f2df6fca1b60ba1ee95d845dd6ecb8d2a204084fd",
+      "batch": "E3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "clear_count": 1,
+        "inputs_before_factory": true,
+        "input_constructor": "tensor",
+        "set_default_device": false
+      },
+      "original_main_renamed": false,
+      "configured_CLI_globals": [],
+      "adaptations": [
+        "Private dialect import; original factory/helper/config/CLI/golden/seed/exit preserved.",
+        "Guard complete original runtime in main with explicit backend registration; actual clear requires dedicated cache, disable-cache restored on exit."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E3/"
+      },
+      "whole_factory_helpers_decorators_configs_AST_equal": true,
+      "whole_original_runtime_AST_preserved_with_declared_cache_main_adapters": true,
+      "original_precision_assertion_source_lines": [
+        493,
+        494,
+        495
+      ],
+      "non_CLI_optional_helper_modes_not_source_validated": [
+        "output_final_state=False",
+        "save_new_value=False"
+      ]
     }
   ],
   "factory_requests": [
@@ -1007,6 +1089,246 @@
         0
       ],
       "id": "experiment_e2_11"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule",
+      "args": [
+        1,
+        8,
+        2112,
+        4,
+        128,
+        128,
+        32
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": true,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_0"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule",
+      "args": [
+        1,
+        8,
+        2112,
+        4,
+        128,
+        128,
+        32
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": false,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_1"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        1,
+        8,
+        2048,
+        4,
+        128,
+        128,
+        32
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": true,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_2"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        1,
+        16,
+        64,
+        16,
+        128,
+        128,
+        1
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": true,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_3"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        1,
+        16,
+        128,
+        8,
+        128,
+        128,
+        2
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": true,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_4"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        2,
+        16,
+        256,
+        16,
+        128,
+        128,
+        2
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": true,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_5"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        1,
+        32,
+        128,
+        16,
+        128,
+        128,
+        2
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": true,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_6"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        1,
+        8,
+        2048,
+        4,
+        128,
+        128,
+        32
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": false,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_7"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        1,
+        16,
+        64,
+        16,
+        128,
+        128,
+        1
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": false,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_8"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        1,
+        16,
+        128,
+        8,
+        128,
+        128,
+        2
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": false,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_9"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        2,
+        16,
+        256,
+        16,
+        128,
+        128,
+        2
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": false,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_10"
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "factory": "chunk_gated_delta_rule_fwd_kernel",
+      "args": [
+        1,
+        32,
+        128,
+        16,
+        128,
+        128,
+        2
+      ],
+      "kwargs": {
+        "BT": 64,
+        "USE_G": false,
+        "STORE_FINAL_STATE": true,
+        "SAVE_NEW_VALUE": true
+      },
+      "id": "experiment_e3_11"
     }
   ],
   "E1_original_runtime_cases": [
@@ -2567,6 +2889,764 @@
         "int",
         "int"
       ]
+    }
+  ],
+  "E3_original_CLI_and_boolean_probes": [
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          2048
+        ],
+        "H": 8,
+        "Hg": 4,
+        "K": 128,
+        "V": 128,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        41,
+        41
+      ],
+      "request_index": 0
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          2048
+        ],
+        "H": 8,
+        "Hg": 4,
+        "K": 128,
+        "V": 128,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        41,
+        41
+      ],
+      "request_index": 1
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          2048
+        ],
+        "H": 8,
+        "Hg": 4,
+        "K": 128,
+        "V": 128,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        41,
+        41
+      ],
+      "request_index": 0
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          2048
+        ],
+        "H": 8,
+        "Hg": 4,
+        "K": 128,
+        "V": 128,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        41,
+        41
+      ],
+      "request_index": 1
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          2048
+        ],
+        "H": 8,
+        "Hg": 4,
+        "K": 128,
+        "V": 128,
+        "seed": 41,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        41,
+        41
+      ],
+      "request_index": 2
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          64
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260511,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260511,
+        20260511
+      ],
+      "request_index": 3
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 16,
+        "Hg": 8,
+        "K": 128,
+        "V": 128,
+        "seed": 20260515,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260515,
+        20260515
+      ],
+      "request_index": 4
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          128,
+          128
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260512,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260512,
+        20260512
+      ],
+      "request_index": 5
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 32,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260512,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260512,
+        20260512
+      ],
+      "request_index": 6
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          64
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260513,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260513,
+        20260513
+      ],
+      "request_index": 3
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 16,
+        "Hg": 8,
+        "K": 128,
+        "V": 128,
+        "seed": 20260516,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260516,
+        20260516
+      ],
+      "request_index": 4
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "original_default_CLI",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 32,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260514,
+        "use_g": true,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260514,
+        20260514
+      ],
+      "request_index": 6
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          2048
+        ],
+        "H": 8,
+        "Hg": 4,
+        "K": 128,
+        "V": 128,
+        "seed": 41,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        41,
+        41
+      ],
+      "request_index": 7
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          64
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260511,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260511,
+        20260511
+      ],
+      "request_index": 8
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 16,
+        "Hg": 8,
+        "K": 128,
+        "V": 128,
+        "seed": 20260515,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260515,
+        20260515
+      ],
+      "request_index": 9
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128,
+          128
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260512,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260512,
+        20260512
+      ],
+      "request_index": 10
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 32,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260512,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260512,
+        20260512
+      ],
+      "request_index": 11
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          64
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260513,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260513,
+        20260513
+      ],
+      "request_index": 8
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 16,
+        "Hg": 8,
+        "K": 128,
+        "V": 128,
+        "seed": 20260516,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260516,
+        20260516
+      ],
+      "request_index": 9
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 32,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260514,
+        "use_g": false,
+        "use_initial_state": true
+      },
+      "actual_seed_calls": [
+        20260514,
+        20260514
+      ],
+      "request_index": 11
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          2048
+        ],
+        "H": 8,
+        "Hg": 4,
+        "K": 128,
+        "V": 128,
+        "seed": 41,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        41,
+        41
+      ],
+      "request_index": 2
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          64
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260511,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260511,
+        20260511
+      ],
+      "request_index": 3
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 16,
+        "Hg": 8,
+        "K": 128,
+        "V": 128,
+        "seed": 20260515,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260515,
+        20260515
+      ],
+      "request_index": 4
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128,
+          128
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260512,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260512,
+        20260512
+      ],
+      "request_index": 5
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 32,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260512,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260512,
+        20260512
+      ],
+      "request_index": 6
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          64
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260513,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260513,
+        20260513
+      ],
+      "request_index": 3
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 16,
+        "Hg": 8,
+        "K": 128,
+        "V": 128,
+        "seed": 20260516,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260516,
+        20260516
+      ],
+      "request_index": 4
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 32,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260514,
+        "use_g": true,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260514,
+        20260514
+      ],
+      "request_index": 6
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          2048
+        ],
+        "H": 8,
+        "Hg": 4,
+        "K": 128,
+        "V": 128,
+        "seed": 41,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        41,
+        41
+      ],
+      "request_index": 7
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          64
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260511,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260511,
+        20260511
+      ],
+      "request_index": 8
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 16,
+        "Hg": 8,
+        "K": 128,
+        "V": 128,
+        "seed": 20260515,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260515,
+        20260515
+      ],
+      "request_index": 9
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128,
+          128
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260512,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260512,
+        20260512
+      ],
+      "request_index": 10
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 32,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260512,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260512,
+        20260512
+      ],
+      "request_index": 11
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          64
+        ],
+        "H": 16,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260513,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260513,
+        20260513
+      ],
+      "request_index": 8
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 16,
+        "Hg": 8,
+        "K": 128,
+        "V": 128,
+        "seed": 20260516,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260516,
+        20260516
+      ],
+      "request_index": 9
+    },
+    {
+      "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "kind": "explicit_original_CLI_boolean_probe_not_default_matrix",
+      "original_test_kwargs": {
+        "seqlens": [
+          128
+        ],
+        "H": 32,
+        "Hg": 16,
+        "K": 128,
+        "V": 128,
+        "seed": 20260514,
+        "use_g": false,
+        "use_initial_state": false
+      },
+      "actual_seed_calls": [
+        20260514,
+        20260514
+      ],
+      "request_index": 11
     }
   ]
 }
