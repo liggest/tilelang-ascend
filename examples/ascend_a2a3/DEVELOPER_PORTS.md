@@ -73,3 +73,26 @@ The two pipeline sources have a different ordering of the same independent
 C0 tensor lookup declaration. The actual generated source is retained; no
 emitted payload is removed or reordered by this port. The difference is
 recorded, not optimized away in the compiler.
+
+## Intrinsic, persistent and transposed L1 GEMM
+
+Four further complete sources retain their original CLI defaults:
+
+| Source under `gemm/` | Original default shape and block arguments |
+|---|---|
+| `example_gemm_intrinsic.py` | `8192,1024,8192`; `128,256,64,256,2,2` |
+| `example_gemm_intrinsic_persistent.py` | Same defaults and double-buffer arguments |
+| `example_gemm_persistent.py` | `1024,1024,1024`; `128,256,64` |
+| `example_gemm_transpose_l1.py` | `512,256,1024`; `256,128,64` |
+
+The manual flags, ordinary macros, original swizzle, Persistent arguments,
+transpose operation and `rtol=atol=1e-2` references are retained. The transpose
+example keeps seed 42; the others keep seed 0. Both intrinsic examples retain
+the original source printing and `do_bench` calls in `main()`; no timing is
+performed by import or by source validation.
+
+The Persistent launch and scheduler core counts stay exactly as written in the
+original. Generated address expressions have different integer simplifications;
+the original logical grid/wave domains and complete payload arguments are
+compared explicitly. Source and actual SDK compilation passed, while numerical
+and performance execution remain pending.
