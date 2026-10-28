@@ -203,6 +203,67 @@
         "original_NPU_runtime_numerical_or_benchmark_executed": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/flash_attention/fa_opt/bench.sh",
+      "destination_path": "examples/ascend_a2a3/flash_attention/fa_opt/bench.sh",
+      "source_git_blob": "62c4e6f7d0cfd0ecadb4f2d9d6eb9eea15308016",
+      "source_sha256": "59c43ec940772c1dca30862bad09cd571d47477cf077dbe4f0442eb0a0dfb45d",
+      "destination_sha256": "59c43ec940772c1dca30862bad09cd571d47477cf077dbe4f0442eb0a0dfb45d",
+      "adaptations": [
+        "bench.sh and run.py remain whole-source byte identical; adopted same-directory paths naturally select adopted assets. Preserve original full zip/product/performance/simulator/timeout/CSV/status protocol, commands, default expert_v2/reference paths and exit behavior.",
+        "Reference keeps complete original parser, FusionAttention allocation/call, grouped-head golden and 1e-2 threshold AST; defer Torch/TorchNPU registration and original default-device/seed into a finally-restoring explicit CLI scope. No fake reference output, new execution mode, profiler or modern timing replacement.",
+        "Preserve complete shell bytes; mark the existing shebang script executable for the canonical main pre-commit requirement (TA git mode was non-executable)."
+      ],
+      "validation": {
+        "pure_host_protocol_tests_passed": 23,
+        "actual_heavy_runtime_modules_imported": false,
+        "actual_native_libraries_loaded": false,
+        "full_original_bench_and_harness_bytes_equal": true,
+        "full_reference_parser_operation_golden_AST_equal": true,
+        "actual_msprof_SDK_NPU_subprocess_or_original_benchmark_executed": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/flash_attention/fa_opt/run.py",
+      "destination_path": "examples/ascend_a2a3/flash_attention/fa_opt/run.py",
+      "source_git_blob": "c89d3c31cc269346001eca58d8478979e47f4f24",
+      "source_sha256": "951ec7822fd32c68e90fdbe07ed05e70147e6fc7bcfd7874a341a4f0ff0327d3",
+      "destination_sha256": "951ec7822fd32c68e90fdbe07ed05e70147e6fc7bcfd7874a341a4f0ff0327d3",
+      "adaptations": [
+        "bench.sh and run.py remain whole-source byte identical; adopted same-directory paths naturally select adopted assets. Preserve original full zip/product/performance/simulator/timeout/CSV/status protocol, commands, default expert_v2/reference paths and exit behavior.",
+        "Reference keeps complete original parser, FusionAttention allocation/call, grouped-head golden and 1e-2 threshold AST; defer Torch/TorchNPU registration and original default-device/seed into a finally-restoring explicit CLI scope. No fake reference output, new execution mode, profiler or modern timing replacement."
+      ],
+      "validation": {
+        "pure_host_protocol_tests_passed": 23,
+        "actual_heavy_runtime_modules_imported": false,
+        "actual_native_libraries_loaded": false,
+        "full_original_bench_and_harness_bytes_equal": true,
+        "full_reference_parser_operation_golden_AST_equal": true,
+        "actual_msprof_SDK_NPU_subprocess_or_original_benchmark_executed": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/flash_attention/fa_opt/reference/ascendc.py",
+      "destination_path": "examples/ascend_a2a3/flash_attention/fa_opt/reference/ascendc.py",
+      "source_git_blob": "13a18bbddb1144fa76736e53bd3c0e23445064e2",
+      "source_sha256": "32ac48325622405c70b16345dbe87ced5b41bc6365210fd210353c93077b3414",
+      "destination_sha256": "219f4421a885024b00d0434cfd3f0d40f6b03f0ba66400697b159c602735232d",
+      "adaptations": [
+        "bench.sh and run.py remain whole-source byte identical; adopted same-directory paths naturally select adopted assets. Preserve original full zip/product/performance/simulator/timeout/CSV/status protocol, commands, default expert_v2/reference paths and exit behavior.",
+        "Reference keeps complete original parser, FusionAttention allocation/call, grouped-head golden and 1e-2 threshold AST; defer Torch/TorchNPU registration and original default-device/seed into a finally-restoring explicit CLI scope. No fake reference output, new execution mode, profiler or modern timing replacement."
+      ],
+      "validation": {
+        "pure_host_protocol_tests_passed": 23,
+        "actual_heavy_runtime_modules_imported": false,
+        "actual_native_libraries_loaded": false,
+        "full_original_bench_and_harness_bytes_equal": true,
+        "full_reference_parser_operation_golden_AST_equal": true,
+        "actual_msprof_SDK_NPU_subprocess_or_original_benchmark_executed": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
