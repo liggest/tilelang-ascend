@@ -3,7 +3,7 @@
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
   "validated_main_native_checkpoint": "03d12088987a47256c58afb745a764344541985a",
   "validation_date_utc": "2026-10-27",
-  "scope": "Forty-six reviewed owner assets including B2-C original source/SDK/device observations. GQA retains one exact source-known nonblocking boundary numerical warning; that input is not counted as a precision pass. Remaining candidates are not completed ports.",
+  "scope": "Fifty-six reviewed owner assets. Experimental D10 are source/SDK verified with the original device matrix pending; they are not counted as numerical passes. Prior B2-C preserves the exact source-known GQA warning.",
   "entries": [
     {
       "source_path": "examples/gemm/example_gemm.py",
@@ -1477,6 +1477,286 @@
           "original_nonblocking_warning_semantics_preserved": true
         }
       }
+    },
+    {
+      "source_path": "examples_experiment/blocksparse_gemm/example_blocksparse_gemm.py",
+      "destination_path": "examples_experiment/ascend_a2a3/blocksparse_gemm/example_blocksparse_gemm.py",
+      "source_git_blob": "5cf5f838445399a4f6cfd8c19f19cddc88f61002",
+      "source_sha256": "a685544d2d09c9998dd7ec1f153e1491af6d31b16f386f28b43edb25804e7300",
+      "destination_sha256": "bdd9b2d4d1bcf3eb890fe6e279c2fef37873226f94fc71ba759c9d390c266175",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/blocksparse_gemm/test_example_blocksparse_gemm.py",
+      "destination_path": "examples_experiment/ascend_a2a3/blocksparse_gemm/test_example_blocksparse_gemm.py",
+      "source_git_blob": "845fa7f50e6a7946bf6239001e739664c87a04c6",
+      "source_sha256": "15b741a016a9018f312df5d350eb641691738d3f707dd8f2348cf9dcce0ccda8",
+      "destination_sha256": "a39056671dab0a4afea16f95503daa57c9b1ce74602b47f6c94192b97a1754af",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/convolution/example_convolution.py",
+      "destination_path": "examples_experiment/ascend_a2a3/convolution/example_convolution.py",
+      "source_git_blob": "f1f98d1b7f1414cd161160a09f2ed4195aa11859",
+      "source_sha256": "feafce71b21b2801458c5dd24086acc6ac744a4724eebf61ccc650f3bc8105b4",
+      "destination_sha256": "e6aa5c3d6ae4abd029aa794df8974a4b9b5635e4d88e17dbd617ecb2b4f16dae",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/convolution/test_example_convolution.py",
+      "destination_path": "examples_experiment/ascend_a2a3/convolution/test_example_convolution.py",
+      "source_git_blob": "f6cd7b2fdd27db38cd13227285092547561309a9",
+      "source_sha256": "4e88648900a11c543bff8b603d165aeca5276426a0f8555d6a94e3b0f4a33ed0",
+      "destination_sha256": "f87e99004532929bff4b88856944452ca12545551babcf44cf244a251999a505",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/convolution/example_convolution_autotune.py",
+      "destination_path": "examples_experiment/ascend_a2a3/convolution/example_convolution_autotune.py",
+      "source_git_blob": "7a99b91e5b26020a67c092e3e08ed5680b717480",
+      "source_sha256": "801b15e2e0cb5f2dcf81e673ff8b013f8085469edc6e10c4031fcced75d41126",
+      "destination_sha256": "562856d6a1bee42c22dcf05ab62dacd0e86178099cf6d74eb7cbd10b5925d3b9",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/convolution/test_example_convolution_autotune.py",
+      "destination_path": "examples_experiment/ascend_a2a3/convolution/test_example_convolution_autotune.py",
+      "source_git_blob": "8b6773c25112cb8e9b4a799c72cc11d274894f1b",
+      "source_sha256": "5e6cf0622e87ebb178ccdb73f50aff9154b262620d0e9d994885547e9bf2625a",
+      "destination_sha256": "a9d292e602f63ede54b0933d3c733a2815b13a018702eecc2cf1b47279454adb",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/dequantize_gemm/example_dequant_gemm_fine_grained.py",
+      "destination_path": "examples_experiment/ascend_a2a3/dequantize_gemm/example_dequant_gemm_fine_grained.py",
+      "source_git_blob": "8a13f2c4d5a1f45f4e1fce12bfcd96b3cdc56931",
+      "source_sha256": "4abc53d4e1ef078a089daa940a814de6d8bac820315a6004d0d8cbba58f6796b",
+      "destination_sha256": "a6d9e7c4ff17054322c52dea3286ce110a34cd9016a7edb71d73067bc6ccc918",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/dequantize_gemm/test_example_dequant_gemm_fine_grained.py",
+      "destination_path": "examples_experiment/ascend_a2a3/dequantize_gemm/test_example_dequant_gemm_fine_grained.py",
+      "source_git_blob": "9a3f88640c000d658e2731684917d7161212799b",
+      "source_sha256": "9877c2d18086d86796212740e5b5624a29f8ef99717d0d76f987166c43be1bb8",
+      "destination_sha256": "f4d61f4c8f6b45027bf05145fb2997cd9414b34dfff749e3147b13c2e46fe1ce",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/dequantize_gemm/example_dequant_gemm_w4a8.py",
+      "destination_path": "examples_experiment/ascend_a2a3/dequantize_gemm/example_dequant_gemm_w4a8.py",
+      "source_git_blob": "6c7f2e4274adb4f95af43f1da238b6c182337a64",
+      "source_sha256": "3a1d47c3709773956ca30eea621d3cae722aa2d228778d5bbd6aa7aaaaf9f9fa",
+      "destination_sha256": "0801fcb58671219f83ea9683340da90c9ffd97aa643e6b2f2fc23c2753a2d473",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples_experiment/dequantize_gemm/test_example_dequant_gemm_w4a8.py",
+      "destination_path": "examples_experiment/ascend_a2a3/dequantize_gemm/test_example_dequant_gemm_w4a8.py",
+      "source_git_blob": "60eefc4ebf5b6e17cea210b212e945a4f7d5d6ad",
+      "source_sha256": "b66bb7702c8f4b713c4f389a3f76a59323cdef131112452bdc5cc3d51e06ab58",
+      "destination_sha256": "0e8726f2623f172002e0de6cfe36977cbb6d188bdef295b1d0284abf755e1841",
+      "classification_draft": "A2A3",
+      "review_decision": "a2a3",
+      "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
+      "adaptations": [
+        "Private A2A3 language namespace; original algorithms, factory/test definitions and all decorator configs retained.",
+        "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
+        "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
+        "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
+        "LF destination normalization; pinned original source bytes/hash retained."
+      ],
+      "validation": {
+        "source_and_SDK_verified": true,
+        "original_device_pytest_cases": 27,
+        "original_CPU_unpack_passed": true,
+        "actual_OFF_CPU_passed": 1,
+        "actual_OFF_device_skipped": 27,
+        "device_status": "pending_root_frozen_window",
+        "all_original_cases_retained": true
+      },
+      "state": "reviewed_source_SDK_device_pending",
+      "all_original_cases_retained": true
     }
   ],
   "test_isolation_validation": {
@@ -1498,7 +1778,7 @@
     "pending_original_entries": 5,
     "original_manifest_statuses_changed": false,
     "full_nightly_290_cases_preserved_for_final_regression": true,
-    "source_SDK_verified_device_pending_entries": 0
+    "source_SDK_verified_device_pending_entries": 5
   },
   "example_namespace_scope_validation": {
     "prior_cache_states": [
@@ -1553,5 +1833,25 @@
     "caller_cache_state_preserved_before_runner_cleanup": true,
     "device_window_released": true,
     "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
+  },
+  "batch_B2_D_validation": {
+    "state": "source_SDK_verified_device_pending",
+    "original_active_entries": 5,
+    "original_assets": 10,
+    "original_pytest_items": 28,
+    "original_device_items": 27,
+    "original_CPU_items": 1,
+    "all_original_CI_factory_config_mappings": 93,
+    "additional_original_source_autotune_mappings": 18,
+    "all_source_mappings": 111,
+    "positive_full_pipeline_mappings": 109,
+    "actual_unique_SDK_identities_per_framework": 86,
+    "original_invalid_extra_configurations": [
+      "blocksparse_original_source_autotune_16",
+      "blocksparse_original_source_autotune_17"
+    ],
+    "same_named_allocation_fields_and_per_pool_order_all_positive": true,
+    "all_positive_complete_source_equal_after_documented_read_only_projection": true,
+    "device_not_run": true
   }
 }
