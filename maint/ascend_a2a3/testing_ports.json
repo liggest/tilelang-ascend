@@ -1664,6 +1664,60 @@
         "original_device_cases_run": 0
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_explicit_tmp.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_explicit_tmp.py",
+      "source_git_blob": "52edf983e14c1657ed24995ad5bdb026df5c166b",
+      "source_sha256": "8607465b79e57b067431cf88a43aa5eecf2a97b4fbd2c6cfa5e8f2fed1fc664d",
+      "destination_sha256": "7c15c80a77f222848c05455ffdcebc0a8b99b85135749ba9648cb24b1b938ddc",
+      "adaptations": [
+        "Use backend-private A2A3 language and TIRX types/Op lookup; preserve every original definition, kernel/factory/decorator, complete dtype/shape matrix, flags, seeds, golden, tolerance, priority and ci_skip mark.",
+        "Gate native/device requirements per test without module import-time hardware discovery or cache clearing.",
+        "Raw old LLVM/model dialect stand-ins become real Ascend dav-2201/model=A3 targets with mutually exclusive dialect keys; existing neutral BindTarget/MaterializeKernelLaunch prefix precedes the same original native pass order/options.",
+        "Map tir.Block/BlockRealize/access_ptr names to current TIRX SBlock/SBlockRealize/tirx builtin and DataType.itemsize property. Keep all original validation, workspace byte geometry, planner/sync metadata, idempotence and raw npu_platform=A5 fallback guard assertions without claiming A5 public codegen/device support.",
+        "Original 12 source-only codegen assertions all run. Additional real SDK audits classify matching 3 successful ELF and 9 original zero-parameter main_kernel first-comma syntax failures per side; no dummy handles or codegen fixes."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "original_function_count": 44,
+        "original_host_native_cases_passed_per_side": 73,
+        "original_caught_expected_errors_preserved": true,
+        "source_only_getter_requests_per_side": 12,
+        "actual_positive_source_getter_SDK_per_side": 3,
+        "original_source_only_getter_SDK_rejections_per_side": 9,
+        "actual_OFF_pure_validation_cases_passed": 1,
+        "original_device_cases_run": 0
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_elementwise.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_elementwise.py",
+      "source_git_blob": "2c3d3e02741d2d66582ccf654b895c4d5c842be5",
+      "source_sha256": "c7538329ae11e00c86de89d68aa9ac72e69df402052ba25e78d065fd288f1c87",
+      "destination_sha256": "ed30d34f98b63eaefa703ba2bbd802cca7116af39ab801c6477925b8ae6d73a3",
+      "adaptations": [
+        "Use backend-private A2A3 language and TIRX types/Op lookup; preserve every original definition, kernel/factory/decorator, complete dtype/shape matrix, flags, seeds, golden, tolerance, priority and ci_skip mark.",
+        "Gate native/device requirements per test without module import-time hardware discovery or cache clearing.",
+        "Replace old session-wide clear with the existing scoped isolated_a2a3_cache fixture; retain caller descriptor override, disk and memory identities, CacheState and original pytest CLI behavior.",
+        "Both original same-name gather definitions remain byte/AST traceable in their original order; no accidental deduplication.",
+        "The bilinear original host helper transfers before elaborating: source companion invokes the complete unchanged factory using the exact original real CPU arange tensor data/dtypes/shapes and scalar arguments. AST proves the factory reads only tensor .shape; no fake .npu outputs, golden or numerical pass."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "original_function_definition_count_including_duplicate_gather": 296,
+        "original_host_native_cases_passed_per_side": 24,
+        "original_numerical_parameter_nodes_unexecuted": 509,
+        "full_source_prefix_cases_passed": 509,
+        "positive_source_ELF_backed_requests_per_side": 509,
+        "actual_successful_Bisheng_per_side": 499,
+        "identical_request_reuses_per_side": 10,
+        "actual_OFF_pure_frontend_cases_passed": 19,
+        "external_source_and_actual_cache_fixture_isolation_cases_passed": 1020,
+        "original_device_cases_run": 0
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
