@@ -82,6 +82,8 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
     from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 
     module = _load(entry)
+    if entry["source_runtime"].get("cache_disable_env"):
+        monkeypatch.delenv(entry["source_runtime"]["cache_disable_env"], raising=False)
     monkeypatch.setattr(sys, "argv", [entry["destination_path"]])
     monkeypatch.setenv("TILELANG_CACHE_DIR", str(tmp_path / "owned"))
     monkeypatch.setitem(sys.modules, "torch_npu", ModuleType("torch_npu"))
@@ -405,3 +407,75 @@ def test_dsa_core_query_and_original_exception_fallback_are_host_contracts(monke
     assert module._get_cube_core_num() == 20
     fake.npu = SimpleNamespace(is_available=lambda: True)
     assert module._get_cube_core_num() == 20
+
+
+def test_gqa_layered_uses_exact_private_kernel_and_autograd_alias():
+    entry = next(e for e in ENTRIES if e["batch"] == "E6a" and "/test_" in e["source_path"])
+    module = _load(entry)
+    expected = ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]
+    assert Path(module._gqa_module.__file__).resolve() == expected.resolve()
+    assert module.kernel is module._gqa_module.attention
+    assert module.flashattn_fwd is module._gqa_module.flashattn_fwd
+
+
+@pytest.mark.parametrize("disable_env", [False, True])
+@pytest.mark.parametrize("enabled", [False, True])
+def test_gqa_original_cache_env_selects_warmup_or_precision_without_running_either(disable_env, enabled, monkeypatch):
+    import torch
+    from tilelang.env import CacheState
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E6a" and "/test_" in e["source_path"])
+    module = _load(entry)
+    monkeypatch.setitem(sys.modules, "torch_npu", ModuleType("torch_npu"))
+    monkeypatch.setattr(sys, "argv", [entry["destination_path"]])
+    monkeypatch.setattr(torch, "manual_seed", lambda *args: None)
+    monkeypatch.setenv("TILELANG_DISABLE_CACHE", "1" if disable_env else "0")
+    events = []
+
+    class StopBeforeOriginalWorkload(BaseException):
+        pass
+
+    def stop_at(boundary):
+        def stop():
+            events.append(boundary)
+            assert CacheState.is_enabled() == (False if disable_env else enabled)
+            raise StopBeforeOriginalWorkload
+
+        return stop
+
+    monkeypatch.setattr(module, "_warmup_compilation", stop_at("warmup"))
+    monkeypatch.setattr(module, "test_gqa_bwd_l0", stop_at("precision"))
+    before = CacheState.is_enabled()
+    try:
+        CacheState.enable() if enabled else CacheState.disable()
+        with pytest.raises(StopBeforeOriginalWorkload):
+            module.main()
+        assert events == ["precision" if disable_env else "warmup"]
+        assert CacheState.is_enabled() == enabled
+    finally:
+        CacheState.enable() if before else CacheState.disable()
+
+
+def test_gqa_rendered_msprof_loader_uses_only_real_sibling_before_any_workload(tmp_path, monkeypatch):
+    import ast
+    import os
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E6a" and "/test_" in e["source_path"])
+    module = _load(entry)
+    script = module._MSPROF_TARGET_SCRIPT.format(B=1, H=4, N=128, D_qk=128, D_v=128, groups=2, is_causal=False)
+    tree = ast.parse(script)
+    start = next(i for i, n in enumerate(tree.body) if isinstance(n, ast.Import) and any(a.name == "importlib.util" for a in n.names))
+    # Execute only the exact sibling loader, not the generated script imports,
+    # tensor generation, compile, benchmark or kernel calls.
+    prefix = tree.body[start : start + 4]
+    code = compile(ast.Module(body=prefix, type_ignores=[]), "<private msprof loader only>", "exec")
+    expected = ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]
+    previous = sys.modules.get("torch_npu")
+    namespace = {"os": os, "__file__": str(expected.with_name("_msprof_target_auto.py"))}
+    exec(code, namespace)
+    assert Path(namespace["_gqa_module"].__file__).resolve() == expected.resolve()
+    assert sys.modules.get("torch_npu") is previous
+    # A global old-name decoy cannot replace a missing private neighbor.
+    monkeypatch.setitem(sys.modules, "example_gqa_bwd", ModuleType("example_gqa_bwd"))
+    with pytest.raises(FileNotFoundError):
+        exec(code, {"os": os, "__file__": str(tmp_path / "_msprof_target_auto.py")})

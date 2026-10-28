@@ -1028,6 +1028,72 @@
       "source_request_owner": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
       "runtime_factory": "flashattn",
       "validation_scope": "Complete26original standalone/layered/perf shape rows;17TA/main positive fullsource pairs+34actualSDK,3original ctor guard pairs;full reference/numerical/perf/exit pending device."
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/example_gqa_bwd/example_gqa_bwd.py",
+      "source_git_blob": "9b1e08f8a70cd65c5b3bf1a6d3768ceaf8adee5f",
+      "source_sha256": "da4fe4410df1062abe5a6a8997dda1533f4de41c9fc3110529dad1ae2528b360",
+      "destination_sha256": "a5ba422eacec06263ed24a27b20d6f00fb5486498539ae5aac687660cae576d8",
+      "batch": "E6a",
+      "source_domain": "original_experiments",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "runtime_factory": "flashattn_fwd",
+      "source_request_owner": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "adaptations": [
+        "Private language/layout/sibling imports; delayed real runtime registration, scoped standalone default device and caller cache state restoration; all original kernels/Autograd class/helper/ref/matrices/precision/CLI/exit preserved."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "validation_scope": "Complete29original outer entries,108TA/main positive fullsource pairs/216actualSDK and2original ctor assertions;all original numerical, atomic retries, Autograd gradients, L2runtime, precision/nonblocking/perf/msprof results pending."
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/test_gqa_bwd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/example_gqa_bwd/test_gqa_bwd.py",
+      "source_git_blob": "27101042b52709e1c11a26779619b3531f96511a",
+      "source_sha256": "71d89b48229dd5257c02ebdce238b57830f57bf34fd340ca1b15eab6e538dfbe",
+      "destination_sha256": "c5bcb18fd44b7826d63917dc1f0e7096623dea4f5484323488302c43509ff246",
+      "batch": "E6a",
+      "source_domain": "original_experiments",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn",
+        "cache_disable_env": "TILELANG_DISABLE_CACHE"
+      },
+      "original_main_renamed": true,
+      "runtime_factory": "flashattn_fwd",
+      "source_request_owner": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "adaptations": [
+        "Private language/layout/sibling imports; delayed real runtime registration, scoped standalone default device and caller cache state restoration; all original kernels/Autograd class/helper/ref/matrices/precision/CLI/exit preserved.",
+        "exact private sibling top-level API",
+        "regression exact private attention binding",
+        "generated msprof child exact sibling import; all kernel/host/ABI/bench body unchanged"
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "validation_scope": "Complete29original outer entries,108TA/main positive fullsource pairs/216actualSDK and2original ctor assertions;all original numerical, atomic retries, Autograd gradients, L2runtime, precision/nonblocking/perf/msprof results pending."
     }
   ],
   "factory_requests": [
@@ -4473,6 +4539,1773 @@
       },
       "expected_frontend_error": "AssertionError",
       "source_sampling_scope": "additional original low-level constructor guard, not original runtime row"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        true,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_0"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_1"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_2"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_3"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_4"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_5"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_6"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        16,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_7"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        16,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_8"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        16,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_9"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        16,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_10"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        16,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_11"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        16,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_12"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        4,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_13"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        32,
+        256,
+        128,
+        128,
+        16,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_14"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        32,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_15"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        32,
+        256,
+        128,
+        128,
+        16,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_16"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        32,
+        256,
+        128,
+        128,
+        16,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_17"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        32,
+        256,
+        128,
+        128,
+        16,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_18"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        32,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_19"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        2,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_20"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        8,
+        256,
+        192,
+        128,
+        4,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_21"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_22"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        8,
+        256,
+        192,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_23"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        8,
+        256,
+        192,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_24"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        8,
+        256,
+        192,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_25"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        8,
+        256,
+        192
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_26"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        2,
+        256,
+        192
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_27"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        4,
+        true,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_28"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        4,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_29"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        4,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_30"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        4,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_31"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_32"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        2,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_33"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        2,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_34"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        2,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_35"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        2,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_36"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        2,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_37"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        2,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_38"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        2,
+        2,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_39"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        8,
+        32,
+        1024,
+        192,
+        128,
+        16,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_40"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        8,
+        32,
+        1024,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_41"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        8,
+        32,
+        1024,
+        192,
+        128,
+        16,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_42"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        8,
+        32,
+        1024,
+        192,
+        128,
+        16,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_43"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        8,
+        32,
+        1024,
+        192,
+        128,
+        16,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_44"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        8,
+        32,
+        1024,
+        192
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_45"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        8,
+        2,
+        1024,
+        192
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_46"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        8,
+        2,
+        1024,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_47"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        8,
+        512,
+        128,
+        128,
+        4,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_48"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        8,
+        512,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_49"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        8,
+        512,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_50"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        8,
+        512,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_51"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        8,
+        512,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_52"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        8,
+        512,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_53"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        2,
+        512,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_54"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        8,
+        true,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_55"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        8,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_56"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        8,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_57"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        8,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_58"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        1,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_59"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        4,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_60"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        4,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_61"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        4,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_62"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        4,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_63"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        4,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_64"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        4,
+        8,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_65"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        4,
+        2,
+        256,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_66"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        2,
+        128,
+        128,
+        128,
+        1,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_67"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_68"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        2,
+        128,
+        128,
+        128,
+        1,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_69"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        2,
+        128,
+        128,
+        128,
+        1,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_70"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        2,
+        128,
+        128,
+        128,
+        1,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_71"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        32,
+        256,
+        128,
+        128,
+        16,
+        true,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_72"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        32,
+        256,
+        128,
+        128,
+        16,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_73"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        32,
+        256,
+        128,
+        128,
+        16,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_74"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        32,
+        256,
+        128,
+        128,
+        16,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_75"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        8,
+        512,
+        192,
+        128,
+        4,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_76"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        8,
+        512,
+        192,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_77"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        8,
+        512,
+        192,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_78"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        8,
+        512,
+        192,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_79"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        8,
+        512,
+        192
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_80"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        2,
+        512,
+        192
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_81"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        2,
+        8,
+        256,
+        128,
+        128,
+        4,
+        true,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_82"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        2,
+        8,
+        256,
+        128,
+        128,
+        4,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_83"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        2,
+        8,
+        256,
+        128,
+        128,
+        4,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_84"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        2,
+        8,
+        256,
+        128,
+        128,
+        4,
+        true,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_85"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_86"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_87"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_88"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        8,
+        256,
+        128,
+        128,
+        4,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_89"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        4,
+        192,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_90"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_preprocess",
+      "args": [
+        1,
+        4,
+        192,
+        128
+      ],
+      "kwargs": {
+        "blk": 32
+      },
+      "id": "experiment_e6a_91"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        4,
+        192,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_92"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        4,
+        192,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_93"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        4,
+        192,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_94"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        4,
+        192,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_95"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        2,
+        192,
+        128
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_96"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_97"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        4,
+        129,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e6a_98"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        4,
+        509,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "expected_frontend_error": "AssertionError",
+      "id": "experiment_e6a_99"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_100"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_101"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_102"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_103"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        4,
+        128,
+        129,
+        128,
+        2,
+        false,
+        64,
+        128
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_104"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_s_dp",
+      "args": [
+        1,
+        4,
+        128,
+        144,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_105"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_softmax_ds",
+      "args": [
+        1,
+        4,
+        128,
+        129,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_106"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_gemm_dv_dk_dq",
+      "args": [
+        1,
+        4,
+        128,
+        144,
+        128,
+        2,
+        false,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6a_107"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        4,
+        128,
+        144
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_108"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
+      "factory": "flashattn_bwd_postprocess",
+      "args": [
+        1,
+        2,
+        128,
+        144
+      ],
+      "kwargs": {
+        "blk": 64
+      },
+      "id": "experiment_e6a_109"
     }
   ],
   "E1_original_runtime_cases": [
@@ -12759,6 +14592,828 @@
       "input_scale": 1,
       "original_numerical_exit_not_executed": true,
       "request_id": "experiment_e6dep_16"
+    }
+  ],
+  "E6a_original_entry_matrix": [
+    {
+      "label": "standalone_smoke",
+      "scope": "original standalone",
+      "original_shape": [
+        1,
+        4,
+        2,
+        128,
+        128,
+        128,
+        true
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_0",
+        "experiment_e6a_1",
+        "experiment_e6a_2",
+        "experiment_e6a_3",
+        "experiment_e6a_4",
+        "experiment_e6a_5",
+        "experiment_e6a_6",
+        "experiment_e6a_6"
+      ]
+    },
+    {
+      "label": "l0_gqa_g4",
+      "scope": "original L0; two original backward attempts retained, no numerical result",
+      "original_shape": [
+        1,
+        16,
+        4,
+        256,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_7",
+        "experiment_e6a_8",
+        "experiment_e6a_9",
+        "experiment_e6a_10",
+        "experiment_e6a_11",
+        "experiment_e6a_12",
+        "experiment_e6a_13",
+        "experiment_e6a_13"
+      ]
+    },
+    {
+      "label": "l0_gqa_g16",
+      "scope": "original L0; two original backward attempts retained, no numerical result",
+      "original_shape": [
+        1,
+        32,
+        16,
+        256,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_14",
+        "experiment_e6a_15",
+        "experiment_e6a_16",
+        "experiment_e6a_17",
+        "experiment_e6a_18",
+        "experiment_e6a_19",
+        "experiment_e6a_20",
+        "experiment_e6a_20"
+      ]
+    },
+    {
+      "label": "l0_dqk192",
+      "scope": "original L0; two original backward attempts retained, no numerical result",
+      "original_shape": [
+        1,
+        8,
+        4,
+        256,
+        192,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_21",
+        "experiment_e6a_22",
+        "experiment_e6a_23",
+        "experiment_e6a_24",
+        "experiment_e6a_25",
+        "experiment_e6a_26",
+        "experiment_e6a_27",
+        "experiment_e6a_20"
+      ]
+    },
+    {
+      "label": "l0_causal",
+      "scope": "original L0; two original backward attempts retained, no numerical result",
+      "original_shape": [
+        1,
+        8,
+        4,
+        256,
+        128,
+        128,
+        true
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_28",
+        "experiment_e6a_22",
+        "experiment_e6a_29",
+        "experiment_e6a_30",
+        "experiment_e6a_31",
+        "experiment_e6a_32",
+        "experiment_e6a_20",
+        "experiment_e6a_20"
+      ]
+    },
+    {
+      "label": "l0_batch",
+      "scope": "original L0; two original backward attempts retained, no numerical result",
+      "original_shape": [
+        2,
+        8,
+        4,
+        256,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_33",
+        "experiment_e6a_34",
+        "experiment_e6a_35",
+        "experiment_e6a_36",
+        "experiment_e6a_37",
+        "experiment_e6a_38",
+        "experiment_e6a_39",
+        "experiment_e6a_39"
+      ]
+    },
+    {
+      "label": "l0_default",
+      "scope": "original L0; two original backward attempts retained, no numerical result",
+      "original_shape": [
+        8,
+        32,
+        16,
+        1024,
+        192,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_40",
+        "experiment_e6a_41",
+        "experiment_e6a_42",
+        "experiment_e6a_43",
+        "experiment_e6a_44",
+        "experiment_e6a_45",
+        "experiment_e6a_46",
+        "experiment_e6a_47"
+      ]
+    },
+    {
+      "label": "l1_n512_g4",
+      "scope": "original L1",
+      "original_shape": [
+        1,
+        8,
+        4,
+        512,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-PARAM-groups",
+        "D-PARAM-seq_len",
+        "D-VALRANGE-M"
+      ],
+      "requests": [
+        "experiment_e6a_48",
+        "experiment_e6a_49",
+        "experiment_e6a_50",
+        "experiment_e6a_51",
+        "experiment_e6a_52",
+        "experiment_e6a_53",
+        "experiment_e6a_54",
+        "experiment_e6a_54"
+      ]
+    },
+    {
+      "label": "l1_n256_causal_g8",
+      "scope": "original L1",
+      "original_shape": [
+        1,
+        8,
+        8,
+        256,
+        128,
+        128,
+        true
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-PARAM-is_causal",
+        "D-PARAM-groups"
+      ],
+      "requests": [
+        "experiment_e6a_55",
+        "experiment_e6a_22",
+        "experiment_e6a_56",
+        "experiment_e6a_57",
+        "experiment_e6a_58",
+        "experiment_e6a_32",
+        "experiment_e6a_59",
+        "experiment_e6a_59"
+      ]
+    },
+    {
+      "label": "l1_dqk192_g4",
+      "scope": "original L1",
+      "original_shape": [
+        1,
+        8,
+        4,
+        256,
+        192,
+        128,
+        false
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-PARAM-dim"
+      ],
+      "requests": [
+        "experiment_e6a_21",
+        "experiment_e6a_22",
+        "experiment_e6a_23",
+        "experiment_e6a_24",
+        "experiment_e6a_25",
+        "experiment_e6a_26",
+        "experiment_e6a_27",
+        "experiment_e6a_20"
+      ]
+    },
+    {
+      "label": "l1_b4_g4",
+      "scope": "original L1",
+      "original_shape": [
+        4,
+        8,
+        4,
+        256,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-PARAM-batch"
+      ],
+      "requests": [
+        "experiment_e6a_60",
+        "experiment_e6a_61",
+        "experiment_e6a_62",
+        "experiment_e6a_63",
+        "experiment_e6a_64",
+        "experiment_e6a_65",
+        "experiment_e6a_66",
+        "experiment_e6a_66"
+      ]
+    },
+    {
+      "label": "l1_edge_min",
+      "scope": "original L1",
+      "original_shape": [
+        1,
+        2,
+        1,
+        128,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-EDGE",
+        "D-PARAM-groups"
+      ],
+      "requests": [
+        "experiment_e6a_67",
+        "experiment_e6a_68",
+        "experiment_e6a_69",
+        "experiment_e6a_70",
+        "experiment_e6a_71",
+        "experiment_e6a_6",
+        "experiment_e6a_6",
+        "experiment_e6a_6"
+      ]
+    },
+    {
+      "label": "l1_h32_g16_causal",
+      "scope": "original L1",
+      "original_shape": [
+        1,
+        32,
+        16,
+        256,
+        128,
+        128,
+        true
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-PARAM-heads",
+        "D-PARAM-groups",
+        "D-PARAM-is_causal"
+      ],
+      "requests": [
+        "experiment_e6a_72",
+        "experiment_e6a_15",
+        "experiment_e6a_73",
+        "experiment_e6a_74",
+        "experiment_e6a_75",
+        "experiment_e6a_19",
+        "experiment_e6a_20",
+        "experiment_e6a_20"
+      ]
+    },
+    {
+      "label": "l1_n512_dqk192",
+      "scope": "original L1",
+      "original_shape": [
+        1,
+        8,
+        4,
+        512,
+        192,
+        128,
+        false
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-PARAM-seq_len",
+        "D-PARAM-dim",
+        "D-VALRANGE-L"
+      ],
+      "requests": [
+        "experiment_e6a_76",
+        "experiment_e6a_49",
+        "experiment_e6a_77",
+        "experiment_e6a_78",
+        "experiment_e6a_79",
+        "experiment_e6a_80",
+        "experiment_e6a_81",
+        "experiment_e6a_54"
+      ]
+    },
+    {
+      "label": "l1_b2_causal",
+      "scope": "original L1",
+      "original_shape": [
+        2,
+        8,
+        4,
+        256,
+        128,
+        128,
+        true
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-PARAM-batch",
+        "D-PARAM-is_causal"
+      ],
+      "requests": [
+        "experiment_e6a_82",
+        "experiment_e6a_34",
+        "experiment_e6a_83",
+        "experiment_e6a_84",
+        "experiment_e6a_85",
+        "experiment_e6a_38",
+        "experiment_e6a_39",
+        "experiment_e6a_39"
+      ]
+    },
+    {
+      "label": "l1_n256_asym",
+      "scope": "original L1",
+      "original_shape": [
+        1,
+        8,
+        4,
+        256,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.1,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-VALRANGE-ASYM"
+      ],
+      "requests": [
+        "experiment_e6a_86",
+        "experiment_e6a_22",
+        "experiment_e6a_87",
+        "experiment_e6a_88",
+        "experiment_e6a_89",
+        "experiment_e6a_32",
+        "experiment_e6a_20",
+        "experiment_e6a_20"
+      ]
+    },
+    {
+      "label": "l1_n192_tail_mid",
+      "scope": "original L1",
+      "original_shape": [
+        1,
+        4,
+        2,
+        192,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1.0,
+      "original_shift": 0.0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "tags": [
+        "D-DTYPE-fp16",
+        "D-SHAPE-ALIGNED",
+        "D-SHAPE-TAIL-MID"
+      ],
+      "requests": [
+        "experiment_e6a_90",
+        "experiment_e6a_91",
+        "experiment_e6a_92",
+        "experiment_e6a_93",
+        "experiment_e6a_94",
+        "experiment_e6a_95",
+        "experiment_e6a_96",
+        "experiment_e6a_96"
+      ]
+    },
+    {
+      "label": "l2_dtype_f32",
+      "scope": "original float32 runtime input mismatch; positive float16 constructor does not prove runtime rejection",
+      "original_shape": [
+        1,
+        4,
+        2,
+        128,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_97"
+      ]
+    },
+    {
+      "label": "l2_shape_n129",
+      "scope": "original shape constructor assertion; nonblocking original wrapper preserved",
+      "original_shape": [
+        1,
+        4,
+        2,
+        129,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_98"
+      ]
+    },
+    {
+      "label": "l2_shape_n509",
+      "scope": "original shape constructor assertion; nonblocking original wrapper preserved",
+      "original_shape": [
+        1,
+        4,
+        2,
+        509,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_99"
+      ]
+    },
+    {
+      "label": "boundary_q_nan",
+      "scope": "original special-value boundary; full original input/golden callback retained, no values evaluated",
+      "original_shape": [
+        1,
+        4,
+        2,
+        128,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_100",
+        "experiment_e6a_1",
+        "experiment_e6a_101",
+        "experiment_e6a_102",
+        "experiment_e6a_103",
+        "experiment_e6a_5",
+        "experiment_e6a_6",
+        "experiment_e6a_6"
+      ]
+    },
+    {
+      "label": "boundary_do_zero",
+      "scope": "original special-value boundary; full original input/golden callback retained, no values evaluated",
+      "original_shape": [
+        1,
+        4,
+        2,
+        128,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_100",
+        "experiment_e6a_1",
+        "experiment_e6a_101",
+        "experiment_e6a_102",
+        "experiment_e6a_103",
+        "experiment_e6a_5",
+        "experiment_e6a_6",
+        "experiment_e6a_6"
+      ]
+    },
+    {
+      "label": "boundary_dbound",
+      "scope": "original special-value boundary; full original input/golden callback retained, no values evaluated",
+      "original_shape": [
+        1,
+        4,
+        2,
+        128,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_100",
+        "experiment_e6a_1",
+        "experiment_e6a_101",
+        "experiment_e6a_102",
+        "experiment_e6a_103",
+        "experiment_e6a_5",
+        "experiment_e6a_6",
+        "experiment_e6a_6"
+      ]
+    },
+    {
+      "label": "boundary_q_inf",
+      "scope": "original special-value boundary; full original input/golden callback retained, no values evaluated",
+      "original_shape": [
+        1,
+        4,
+        2,
+        128,
+        128,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_100",
+        "experiment_e6a_1",
+        "experiment_e6a_101",
+        "experiment_e6a_102",
+        "experiment_e6a_103",
+        "experiment_e6a_5",
+        "experiment_e6a_6",
+        "experiment_e6a_6"
+      ]
+    },
+    {
+      "label": "regression_logical_D129",
+      "scope": "original public Autograd regression",
+      "original_shape": [
+        1,
+        4,
+        2,
+        128,
+        129,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": true,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_104",
+        "experiment_e6a_1",
+        "experiment_e6a_105",
+        "experiment_e6a_106",
+        "experiment_e6a_107",
+        "experiment_e6a_108",
+        "experiment_e6a_109",
+        "experiment_e6a_6"
+      ]
+    },
+    {
+      "label": "regression_output_sum_noncontiguous_grad",
+      "scope": "original public Autograd regression",
+      "original_shape": [
+        1,
+        4,
+        2,
+        128,
+        129,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": true,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_104",
+        "experiment_e6a_1",
+        "experiment_e6a_105",
+        "experiment_e6a_106",
+        "experiment_e6a_107",
+        "experiment_e6a_108",
+        "experiment_e6a_109",
+        "experiment_e6a_6"
+      ]
+    },
+    {
+      "label": "atomic_warmup",
+      "scope": "original warmup/default CLI/msprof source; actual warmup/benchmark/subprocess not executed",
+      "original_shape": [
+        8,
+        32,
+        16,
+        1024,
+        192,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_40",
+        "experiment_e6a_41",
+        "experiment_e6a_42",
+        "experiment_e6a_43",
+        "experiment_e6a_44",
+        "experiment_e6a_45",
+        "experiment_e6a_46",
+        "experiment_e6a_47"
+      ]
+    },
+    {
+      "label": "perf_default",
+      "scope": "original warmup/default CLI/msprof source; actual warmup/benchmark/subprocess not executed",
+      "original_shape": [
+        8,
+        32,
+        16,
+        1024,
+        192,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_40",
+        "experiment_e6a_41",
+        "experiment_e6a_42",
+        "experiment_e6a_43",
+        "experiment_e6a_44",
+        "experiment_e6a_45",
+        "experiment_e6a_46",
+        "experiment_e6a_47"
+      ]
+    },
+    {
+      "label": "msprof_default",
+      "scope": "original warmup/default CLI/msprof source; actual warmup/benchmark/subprocess not executed",
+      "original_shape": [
+        8,
+        32,
+        16,
+        1024,
+        192,
+        128,
+        false
+      ],
+      "original_scale": 1,
+      "original_shift": 0,
+      "ctor_logical_dim_override": false,
+      "original_numerical_reference_retry_and_exit_not_executed": true,
+      "requests": [
+        "experiment_e6a_40",
+        "experiment_e6a_41",
+        "experiment_e6a_42",
+        "experiment_e6a_43",
+        "experiment_e6a_44",
+        "experiment_e6a_45",
+        "experiment_e6a_46",
+        "experiment_e6a_47"
+      ]
     }
   ]
 }
