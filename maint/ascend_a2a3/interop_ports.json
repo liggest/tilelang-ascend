@@ -131,6 +131,74 @@
         "dump_recovery_verified": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/cann-bench/transpose/transpose.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/transpose/transpose.py",
+      "source_git_blob": "fd59dcbaa6745e03bf8b662768acefab7b8bd974",
+      "source_sha256": "84bdbf4576ce565d6adec9cb9d76d88ae55cfa48c288bc04285394c617048ec2",
+      "destination_sha256": "4c40ba10cab34ae458e79e054bb00a1055b60e3dbd02d5e86523bd295d096826",
+      "adaptations": [
+        "Preserve the full original three real kernel factories/decorators, fixed core control 24, wrapper dispatch, all L0 10/L1 20/Boundary 5 requests, four invalid permutations, standalone1024x1024 smoke, seed, dtype/NaN/inf/integer precision and CLI blocking/exit contract. Use backend-private A2/A3 language.",
+        "Use sibling file-location loading without modifying caller sys.path; scope the wrapper cache with existing isolated_a2a3_cache. Move standalone runtime registration/seed/tensors under explicit main and parse --help first; no import-time launch.",
+        "Preserve first huge-IR/three SDK timeouts and the first actual block-gate miss. Require the reviewed native CombineCV narrow pure dead-Bind/block-shell adaptation before full source coverage; do not change shared TVM or original loop/matrix."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_explicit_import_main_and_fixture_inverse": true,
+        "original_function_class_count": 12,
+        "full_original_positive_source_requests_per_side": 36,
+        "actual_Bisheng_ELFs_per_side": 27,
+        "source_and_entire_frozen_compiler_identity_reuses_per_side": 9,
+        "host_prototypes_and_canonical_parameter_shape_dtype_equal": true,
+        "ordered_template_and_set_wait_flag_source_sequences_equal": true,
+        "host_and_source_companion_tests_passed": 50,
+        "original_device_level_functions_deselected": 4,
+        "actual_OFF_host_tests_passed": 14,
+        "actual_OFF_native_device_cases_skipped": 40,
+        "external_caller_isolation_checks_passed": 28,
+        "actual_main_storage_rewrite_is_npu": true,
+        "main_source_TorchNPU_registered_or_device_discovery": false,
+        "original_NPU_numerics_or_performance_validated": false
+      },
+      "source_differences": [
+        "Full textual diffs retained: private header path and existing additional pure scalar declarations/AIC-only shells, with some additional C barriers. These are not claimed to be general IR/numerical equivalence.",
+        "TA parameter dtype reports torch.dtype spelling while main reports native dtype spelling; compare canonical names explicitly."
+      ],
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/cann-bench/transpose/test_transpose.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/transpose/test_transpose.py",
+      "source_git_blob": "b14743b491fd22f5f3ec9485c062e8dd38848c6f",
+      "source_sha256": "1384bbd20f9d6690fe7b69dcea220d87571d8a36f6e62a3d06dfff9f0eb2eedd",
+      "destination_sha256": "52c3a2fe413a7715f82aa670968da8fc1c566a18164e6501bcc214c186359e9e",
+      "adaptations": [
+        "Preserve the full original three real kernel factories/decorators, fixed core control 24, wrapper dispatch, all L0 10/L1 20/Boundary 5 requests, four invalid permutations, standalone1024x1024 smoke, seed, dtype/NaN/inf/integer precision and CLI blocking/exit contract. Use backend-private A2/A3 language.",
+        "Use sibling file-location loading without modifying caller sys.path; scope the wrapper cache with existing isolated_a2a3_cache. Move standalone runtime registration/seed/tensors under explicit main and parse --help first; no import-time launch.",
+        "Preserve first huge-IR/three SDK timeouts and the first actual block-gate miss. Require the reviewed native CombineCV narrow pure dead-Bind/block-shell adaptation before full source coverage; do not change shared TVM or original loop/matrix."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_explicit_import_main_and_fixture_inverse": true,
+        "original_function_class_count": 12,
+        "full_original_positive_source_requests_per_side": 36,
+        "actual_Bisheng_ELFs_per_side": 27,
+        "source_and_entire_frozen_compiler_identity_reuses_per_side": 9,
+        "host_prototypes_and_canonical_parameter_shape_dtype_equal": true,
+        "ordered_template_and_set_wait_flag_source_sequences_equal": true,
+        "host_and_source_companion_tests_passed": 50,
+        "original_device_level_functions_deselected": 4,
+        "actual_OFF_host_tests_passed": 14,
+        "actual_OFF_native_device_cases_skipped": 40,
+        "external_caller_isolation_checks_passed": 28,
+        "actual_main_storage_rewrite_is_npu": true,
+        "main_source_TorchNPU_registered_or_device_discovery": false,
+        "original_NPU_numerics_or_performance_validated": false
+      },
+      "source_differences": [
+        "Full textual diffs retained: private header path and existing additional pure scalar declarations/AIC-only shells, with some additional C barriers. These are not claimed to be general IR/numerical equivalence.",
+        "TA parameter dtype reports torch.dtype spelling while main reports native dtype spelling; compare canonical names explicitly."
+      ],
+      "all_original_cases_retained": true
     }
   ]
 }
