@@ -6,7 +6,7 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
-from types import ModuleType
+from types import ModuleType, SimpleNamespace
 
 import pytest
 
@@ -86,7 +86,7 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
     monkeypatch.setenv("TILELANG_CACHE_DIR", str(tmp_path / "owned"))
     monkeypatch.setitem(sys.modules, "torch_npu", ModuleType("torch_npu"))
     monkeypatch.setattr(torch, "manual_seed", lambda *args: None)
-    if entry["source_runtime"]["set_default_device"]:
+    if entry["source_runtime"]["set_default_device"] or entry["source_runtime"].get("host_availability_gate"):
         # Exercise the public CPU context stack without selecting an NPU.
         class HostTorch:
             def device(self, name):
@@ -94,6 +94,8 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
                 return torch.device("cpu")
 
             def __getattr__(self, name):
+                if name == "npu" and entry["source_runtime"].get("host_availability_gate"):
+                    return SimpleNamespace(is_available=lambda: True)
                 return getattr(torch, name)
 
         monkeypatch.setattr(module, "torch", HostTorch())

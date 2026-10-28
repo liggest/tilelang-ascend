@@ -461,6 +461,173 @@
       "original_seed_calls": [
         "torch.manual_seed(0)"
       ]
+    },
+    {
+      "source_path": "examples/causal_conv1d/causal_conv1d.py",
+      "destination_path": "examples/ascend_a2a3/causal_conv1d/causal_conv1d.py",
+      "source_git_blob": "74bb717cd576a28399dd3fe181c9b94a034d26ed",
+      "source_sha256": "e440d68c24a70077042147a0f7151cb8aaabe3977013b73cd105303a5e456f4c",
+      "destination_sha256": "0c8d2672029146f1464ef7bfaf22539a6edaeee1c8e6775ed82ff8f049017319",
+      "batch": "Q4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "tensor",
+        "host_availability_gate": false
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve actual clear and original position with dedicated cache/resolved guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q4/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_seed_calls": [
+        "torch.manual_seed(42)"
+      ],
+      "original_precision_assertion_source_lines": [
+        347
+      ],
+      "original_precision_assertion_evidence": "AST_audit.json contains complete expressions; original/ported source preserves all assertions.",
+      "original_identifiers_preserved_with_targeted_spelling_comments": true
+    },
+    {
+      "source_path": "examples/causal_conv1d/causal_conv1d_decode.py",
+      "destination_path": "examples/ascend_a2a3/causal_conv1d/causal_conv1d_decode.py",
+      "source_git_blob": "dcd9f42d5c0a2fe97dbac7fd8626aec391070026",
+      "source_sha256": "9c77625c815179121e0a18d8de1df3277b8fc9e9d69806ad5203f73bffd7b420",
+      "destination_sha256": "c4f0aa3c4d18c61e5884abd6a649dbd7b6149769f0dd906e7cae7328b5674361",
+      "batch": "Q4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn",
+        "host_availability_gate": true
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Rename only original main entry to _original_main, preserving signature/body except declared cache API."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q4/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_seed_calls": [
+        "torch.manual_seed(seed)"
+      ],
+      "original_precision_assertion_source_lines": [
+        395,
+        396
+      ],
+      "original_precision_assertion_evidence": "AST_audit.json contains complete expressions; original/ported source preserves all assertions.",
+      "original_identifiers_preserved_with_targeted_spelling_comments": true
+    },
+    {
+      "source_path": "examples/causal_conv1d/causal_conv1d_pto.py",
+      "destination_path": "examples/ascend_a2a3/causal_conv1d/causal_conv1d_pto.py",
+      "source_git_blob": "ad33ddacd106d9728873e21b762330f426168422",
+      "source_sha256": "72ababa5fbddd034ee5986a8b3e7d255682b02c144126204d4c2f1003ba0011f",
+      "destination_sha256": "6c6525d3f738101f1816e7628c8bc3f048347fc0b1f69ec755a45231d91492b2",
+      "batch": "Q4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "tensor",
+        "host_availability_gate": false
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve actual clear and original position with dedicated cache/resolved guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q4/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_seed_calls": [
+        "torch.manual_seed(42)"
+      ],
+      "original_precision_assertion_source_lines": [
+        347
+      ],
+      "original_precision_assertion_evidence": "AST_audit.json contains complete expressions; original/ported source preserves all assertions.",
+      "original_identifiers_preserved_with_targeted_spelling_comments": true
+    },
+    {
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py",
+      "destination_path": "examples/ascend_a2a3/cross_entropy_loss/example_cross_entro.py",
+      "source_git_blob": "fe3244761df01e57c1cd14a721d8c08e605d8e24",
+      "source_sha256": "ff5d00c4ff43f24ae2542122e5dc0a81d2f43eca4b4a723548866d277173a6af",
+      "destination_sha256": "392a26f2f9462120253c99c1acd8c025615419e595b39afa61782947f00c3e7c",
+      "batch": "Q4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn",
+        "host_availability_gate": false
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve actual clear and original position with dedicated cache/resolved guard.",
+        "Rename only original main entry to _original_main, preserving signature/body except declared cache API."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q4/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ],
+      "original_precision_assertion_source_lines": [
+        257,
+        258
+      ],
+      "original_precision_assertion_evidence": "AST_audit.json contains complete expressions; original/ported source preserves all assertions.",
+      "original_identifiers_preserved_with_targeted_spelling_comments": false
     }
   ],
   "factory_requests": [
@@ -1387,6 +1554,775 @@
       "kind": "original_CLI_matrix",
       "id": "example_quant_matmul_1",
       "source_path": "examples/quant_batch_matmul/example_quant_matmul.py"
+    },
+    {
+      "factory": "_build_kernel",
+      "args": [
+        4,
+        24,
+        2,
+        2048,
+        "float16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "original_input_dtype": "float16",
+      "original_host_static_values": {
+        "dim": 2048,
+        "width": 4,
+        "num_batches": 2,
+        "total_tokens": 2048,
+        "num_cache_lines": 804,
+        "state_len": 3,
+        "cache_indices_list": [
+          0,
+          1
+        ],
+        "initial_state_mode_list": [
+          1,
+          1
+        ]
+      },
+      "original_kernel_dtype_after_wrapper_cast": "float16",
+      "scope_note": "Original wrapper intentionally selects float16 for both fp16/bf16 inputs, with original cast/writeback preserved.",
+      "id": "causal_conv1d_0",
+      "source_path": "examples/causal_conv1d/causal_conv1d.py"
+    },
+    {
+      "factory": "_build_kernel",
+      "args": [
+        4,
+        24,
+        2,
+        2048,
+        "float16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "original_input_dtype": "bfloat16",
+      "original_host_static_values": {
+        "dim": 2048,
+        "width": 4,
+        "num_batches": 2,
+        "total_tokens": 2048,
+        "num_cache_lines": 804,
+        "state_len": 3,
+        "cache_indices_list": [
+          0,
+          1
+        ],
+        "initial_state_mode_list": [
+          1,
+          1
+        ]
+      },
+      "original_kernel_dtype_after_wrapper_cast": "float16",
+      "scope_note": "Original wrapper intentionally selects float16 for both fp16/bf16 inputs, with original cast/writeback preserved.",
+      "id": "causal_conv1d_1",
+      "source_path": "examples/causal_conv1d/causal_conv1d.py"
+    },
+    {
+      "factory": "_build_decode_kernel_jit",
+      "args": [
+        4,
+        1,
+        2048,
+        "bfloat16",
+        true
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "original_REF_CHECK_CONFIG": {
+        "name": "decode_bs1_sl1",
+        "dim": 2048,
+        "batch_size": 1,
+        "has_silu": true,
+        "num_cache_lines": 4,
+        "seed": 42
+      },
+      "source_only_pure_trace_annotation_note": "Only report helper copy return type annotation removed to avoid importing Torch; complete executable helper body preserved.",
+      "id": "causal_conv1d_decode_0",
+      "source_path": "examples/causal_conv1d/causal_conv1d_decode.py"
+    },
+    {
+      "factory": "_build_decode_kernel_jit",
+      "args": [
+        4,
+        2,
+        2048,
+        "bfloat16",
+        true
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "original_REF_CHECK_CONFIG": {
+        "name": "qwen35_2b_tp2_decode_bs1_sl1",
+        "dim": 3072,
+        "batch_size": 1,
+        "has_silu": true,
+        "num_cache_lines": 4,
+        "seed": 43
+      },
+      "source_only_pure_trace_annotation_note": "Only report helper copy return type annotation removed to avoid importing Torch; complete executable helper body preserved.",
+      "id": "causal_conv1d_decode_1",
+      "source_path": "examples/causal_conv1d/causal_conv1d_decode.py"
+    },
+    {
+      "factory": "_build_kernel",
+      "args": [
+        4,
+        24,
+        2,
+        2048,
+        "float16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "original_input_dtype": "float16",
+      "original_host_static_values": {
+        "dim": 2048,
+        "width": 4,
+        "num_batches": 2,
+        "total_tokens": 2048,
+        "num_cache_lines": 804,
+        "state_len": 3,
+        "cache_indices_list": [
+          0,
+          1
+        ],
+        "initial_state_mode_list": [
+          1,
+          1
+        ]
+      },
+      "original_kernel_dtype_after_wrapper_cast": "float16",
+      "scope_note": "Original wrapper intentionally selects float16 for both fp16/bf16 inputs, with original cast/writeback preserved.",
+      "id": "causal_conv1d_pto_0",
+      "source_path": "examples/causal_conv1d/causal_conv1d_pto.py"
+    },
+    {
+      "factory": "_build_kernel",
+      "args": [
+        4,
+        24,
+        2,
+        2048,
+        "float16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "original_input_dtype": "bfloat16",
+      "original_host_static_values": {
+        "dim": 2048,
+        "width": 4,
+        "num_batches": 2,
+        "total_tokens": 2048,
+        "num_cache_lines": 804,
+        "state_len": 3,
+        "cache_indices_list": [
+          0,
+          1
+        ],
+        "initial_state_mode_list": [
+          1,
+          1
+        ]
+      },
+      "original_kernel_dtype_after_wrapper_cast": "float16",
+      "scope_note": "Original wrapper intentionally selects float16 for both fp16/bf16 inputs, with original cast/writeback preserved.",
+      "id": "causal_conv1d_pto_1",
+      "source_path": "examples/causal_conv1d/causal_conv1d_pto.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          1024,
+          1024,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_0",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy_fp32",
+      "args": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float32",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          1024,
+          1024,
+          128,
+          128
+        ],
+        "kwargs": {
+          "x_dtype": "float32"
+        }
+      },
+      "id": "example_cross_entro_1",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "bfloat16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          1024,
+          1024,
+          128,
+          128
+        ],
+        "kwargs": {
+          "x_dtype": "bfloat16"
+        }
+      },
+      "id": "example_cross_entro_2",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        64,
+        64,
+        32,
+        32
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          64,
+          32,
+          32
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_3",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy_fp32",
+      "args": [
+        64,
+        64,
+        32,
+        32
+      ],
+      "kwargs": {
+        "x_dtype": "float32",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          64,
+          32,
+          32
+        ],
+        "kwargs": {
+          "x_dtype": "float32"
+        }
+      },
+      "id": "example_cross_entro_4",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        64,
+        64,
+        16,
+        16
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          64,
+          16,
+          16
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_5",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        128,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          128,
+          128,
+          64,
+          64
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_6",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          64,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_7",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        4,
+        131072,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          4,
+          131072,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_8",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        64,
+        131072,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          131072,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_9",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        256,
+        131072,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          256,
+          131072,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_10",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy_fp32",
+      "args": [
+        4,
+        131072,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float32",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          4,
+          131072,
+          128,
+          128
+        ],
+        "kwargs": {
+          "x_dtype": "float32"
+        }
+      },
+      "id": "example_cross_entro_11",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        4,
+        131072,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "bfloat16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          4,
+          131072,
+          128,
+          128
+        ],
+        "kwargs": {
+          "x_dtype": "bfloat16"
+        }
+      },
+      "id": "example_cross_entro_12",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        4,
+        131072,
+        128,
+        64
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          4,
+          131072,
+          128,
+          64
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_13",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy_fp32",
+      "args": [
+        4,
+        131072,
+        128,
+        192
+      ],
+      "kwargs": {
+        "x_dtype": "float32",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          4,
+          131072,
+          128,
+          192
+        ],
+        "kwargs": {
+          "x_dtype": "float32"
+        }
+      },
+      "id": "example_cross_entro_14",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        64,
+        32768,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          32768,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_15",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        128,
+        65536,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          128,
+          65536,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_16",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        64,
+        262144,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          262144,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_17",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        64,
+        131073,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          131073,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_18",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        64,
+        130000,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          130000,
+          128,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_19",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy_fp32",
+      "args": [
+        64,
+        131073,
+        128,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float32",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          64,
+          131073,
+          128,
+          128
+        ],
+        "kwargs": {
+          "x_dtype": "float32"
+        }
+      },
+      "id": "example_cross_entro_20",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy",
+      "args": [
+        128,
+        131072,
+        64,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float16",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          128,
+          131072,
+          64,
+          128
+        ],
+        "kwargs": {}
+      },
+      "id": "example_cross_entro_21",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
+    },
+    {
+      "factory": "cross_entropy_fp32",
+      "args": [
+        128,
+        131072,
+        64,
+        128
+      ],
+      "kwargs": {
+        "x_dtype": "float32",
+        "y_dtype": "int32"
+      },
+      "kind": "original_CLI_matrix",
+      "source_original_check_case": {
+        "args": [
+          128,
+          131072,
+          64,
+          128
+        ],
+        "kwargs": {
+          "x_dtype": "float32"
+        }
+      },
+      "id": "example_cross_entro_22",
+      "source_path": "examples/cross_entropy_loss/example_cross_entro.py"
     }
   ]
 }

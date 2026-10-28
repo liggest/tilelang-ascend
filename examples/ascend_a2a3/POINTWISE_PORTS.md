@@ -119,3 +119,38 @@ all named operands, actual buffer sizes and logical alias relationships are
 checked. Original intentional buffer reuse is preserved, rather than assuming
 that every allocation must be disjoint for the entire kernel. Numerical device
 and performance checks remain pending.
+
+## Causal convolution and cross entropy
+
+Four complete sources retain twenty-nine original runtime requests:
+
+| Source | Complete original request set |
+|---|---|
+| `causal_conv1d/causal_conv1d.py` | Both original fp16/bf16 prefill inputs; width 4, two batches, 2048 tokens and channels, 24-way splitting |
+| `causal_conv1d/causal_conv1d_decode.py` | Both original bf16 configurations: batch 1, channels 2048/3072, seeds 42/43 |
+| `causal_conv1d/causal_conv1d_pto.py` | Both original prefill dtype inputs with the original PTO target |
+| `cross_entropy_loss/example_cross_entro.py` | All 23 original dtype/large-class/partial-boundary calls |
+
+Prefill retains the original wrapper that casts bf16 input to an fp16 kernel
+and converts outputs/state back. Both original cache clears and state handling
+remain. Decode preserves the original NPU availability guard and its printed
+summary; an unavailable-device skip is not numerical acceptance. Its complete
+symbolic dimensions, state/index/bias handling and both output/state reference
+checks remain. Cross entropy keeps both original factories, dtype dispatcher,
+negative output indices, scalar loss and complete log-probability references.
+
+Every request passed full lowering and actual SDK compilation on each side.
+Source/AST checks retain complete factory/helper/host behavior, with only the
+private language, guarded runtime and modern cache entry adaptation. The
+original symbolic declarations and dependent module constants remain global;
+original shebangs remain first and executable where canonical checks require.
+
+Generated convolution sources retain additional C-core read-only metadata
+loads. For the original prefill, C reads only the same sequence-length addresses
+`0..2` already read by AIV. For both decode inputs, C reads the same original
+index/mode address set as AIV, within batch-1 arrays. There are no added C-core
+writes, flags or vector operations. Observed integer address reorderings and
+cross-entropy index promotion are checked within the original shape/index
+domains; all original allocations and aliases remain. These bounded source
+witnesses do not establish arbitrary-shape/alias or device correctness.
+Numerical device and timing validation remain pending.
