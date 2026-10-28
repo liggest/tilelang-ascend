@@ -277,6 +277,88 @@
         "127 JIT keys must remain distinct: one pair has identical C++ and compiler options but different retained Y_out logical parameter shape. Do not collapse the fixture to126 solely by source bytes."
       ],
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/cann-bench/lstm/lstm.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/lstm/lstm.py",
+      "source_git_blob": "8fe163d54333d90dc09873e9ba1bb0ebb9a37710",
+      "source_sha256": "7549d2ea1424d151579095614451cd6a3357f6c5a60fc47c54de3209402a01c8",
+      "destination_sha256": "9ee599bacbaa1ea9372de74c14e54186dfe2f55aea4cdfe0e6717bba4976f140",
+      "adaptations": [
+        "Preserve both complete original LSTM modules, all12 genuine JIT factories and49 original definitions, full build_inputs/fp64 golden/precision/optional TensorLists/bias/projection/initial states; original L0 five/L1 twenty/Boundary nine/standalone one, five negative inputs and two same-input repeats. Use backend-private language only.",
+        "Import-safe main/help, deferred actual TorchNPU registration and sibling file loading without sys.path mutation. Per-level fresh complete original namespace restores all aliases and caches while preserving within-level memo/order.",
+        "Ignored source observer only: actual public compiled JITKernel and original list/optional factory producers; sentinel caught only at independent void Expr boundaries. No fake kernels, outputs or golden success. Original numeric functions and warning/blocking/exit rules retained."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_explicit_import_main_and_fixture_inverse": true,
+        "original_function_class_count": 31,
+        "original_source_entries_per_side": 35,
+        "factory_requests_per_side": 437,
+        "runtime_void_boundaries_per_side": 851,
+        "actual_lower_SDK_and_ELF_groups_per_side": 204,
+        "original_decorator_memo_references_per_side": 233,
+        "all_twelve_original_factories_covered": true,
+        "all_host_prototypes_and_canonical_parameters_match": true,
+        "ordered_sync_token_owner_guard_and_payload_anchor_records_per_side": 8932,
+        "ordered_sync_records_all_equal": true,
+        "all_named_allocation_type_count_offset_and_arena_capacities_equal_and_in_capacity": true,
+        "added_unused_int32_declarations_proven_bounded": 852,
+        "added_int32_max_intermediate": 3184,
+        "correlated_declarations_requiring_exact_finite_domain_enumeration": 6,
+        "original_negative_inputs_exact_type_message_before_compile": 5,
+        "host_and_full_factory_source_companion_passed": 216,
+        "actual_OFF_host_passed": 12,
+        "actual_OFF_native_device_skipped": 208,
+        "ON_original_device_functions_deselected": 4,
+        "TorchNPU_context_initialized_or_NPU_runtime_invoked": false,
+        "original_numerics_deadlock_performance_validated": false
+      },
+      "source_differences": [
+        "Keep full generated C++ differences. Comparison normalizes lexical For binders and only real IR-corresponding logical-thread binders (old cid vs current row is verified against GetBlockIdx, final IR Var/tag/extent, no name-only assumption). Old explicit threadIdx.x and default blockIdx.y both retain their exact extents through cthread.",
+        "Additional unused arithmetic and allocation declaration order retained in full sources. Every device payload, guard and ordered sync record agrees after the recorded binder correspondence.204 JIT requests remain distinct despite200 source/compiler groups; do not collapse retained logical metadata by C++ bytes."
+      ],
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/cann-bench/lstm/test_lstm.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/lstm/test_lstm.py",
+      "source_git_blob": "e7dd1be409f9de55c0eb41ed26ef5e0bbb47c689",
+      "source_sha256": "7506b7e31158873911e3e53da0c875eca6f358f459965b6fb91b44ec3f2e4c3f",
+      "destination_sha256": "2733de9296aa68a45179d5b64ba4e53597d518d58a0db2254d0e0a278c5985c1",
+      "adaptations": [
+        "Preserve both complete original LSTM modules, all12 genuine JIT factories and49 original definitions, full build_inputs/fp64 golden/precision/optional TensorLists/bias/projection/initial states; original L0 five/L1 twenty/Boundary nine/standalone one, five negative inputs and two same-input repeats. Use backend-private language only.",
+        "Import-safe main/help, deferred actual TorchNPU registration and sibling file loading without sys.path mutation. Per-level fresh complete original namespace restores all aliases and caches while preserving within-level memo/order.",
+        "Ignored source observer only: actual public compiled JITKernel and original list/optional factory producers; sentinel caught only at independent void Expr boundaries. No fake kernels, outputs or golden success. Original numeric functions and warning/blocking/exit rules retained."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_explicit_import_main_and_fixture_inverse": true,
+        "original_function_class_count": 18,
+        "original_source_entries_per_side": 35,
+        "factory_requests_per_side": 437,
+        "runtime_void_boundaries_per_side": 851,
+        "actual_lower_SDK_and_ELF_groups_per_side": 204,
+        "original_decorator_memo_references_per_side": 233,
+        "all_twelve_original_factories_covered": true,
+        "all_host_prototypes_and_canonical_parameters_match": true,
+        "ordered_sync_token_owner_guard_and_payload_anchor_records_per_side": 8932,
+        "ordered_sync_records_all_equal": true,
+        "all_named_allocation_type_count_offset_and_arena_capacities_equal_and_in_capacity": true,
+        "added_unused_int32_declarations_proven_bounded": 852,
+        "added_int32_max_intermediate": 3184,
+        "correlated_declarations_requiring_exact_finite_domain_enumeration": 6,
+        "original_negative_inputs_exact_type_message_before_compile": 5,
+        "host_and_full_factory_source_companion_passed": 216,
+        "actual_OFF_host_passed": 12,
+        "actual_OFF_native_device_skipped": 208,
+        "ON_original_device_functions_deselected": 4,
+        "TorchNPU_context_initialized_or_NPU_runtime_invoked": false,
+        "original_numerics_deadlock_performance_validated": false
+      },
+      "source_differences": [
+        "Keep full generated C++ differences. Comparison normalizes lexical For binders and only real IR-corresponding logical-thread binders (old cid vs current row is verified against GetBlockIdx, final IR Var/tag/extent, no name-only assumption). Old explicit threadIdx.x and default blockIdx.y both retain their exact extents through cthread.",
+        "Additional unused arithmetic and allocation declaration order retained in full sources. Every device payload, guard and ordered sync record agrees after the recorded binder correspondence.204 JIT requests remain distinct despite200 source/compiler groups; do not collapse retained logical metadata by C++ bytes."
+      ],
+      "all_original_cases_retained": true
     }
   ]
 }
