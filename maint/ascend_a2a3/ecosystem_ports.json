@@ -1595,7 +1595,7 @@
       "destination_path": "examples_experiment/ascend_a2a3/convolution/example_convolution_autotune.py",
       "source_git_blob": "7a99b91e5b26020a67c092e3e08ed5680b717480",
       "source_sha256": "801b15e2e0cb5f2dcf81e673ff8b013f8085469edc6e10c4031fcced75d41126",
-      "destination_sha256": "562856d6a1bee42c22dcf05ab62dacd0e86178099cf6d74eb7cbd10b5925d3b9",
+      "destination_sha256": "ae44d7d024caf7ba723a5bd974678d6b5f24599c6b29e8fe93ab55f3c7457d3b",
       "classification_draft": "A2A3",
       "review_decision": "a2a3",
       "review_reason": "Original active experimental CI asset, with explicit itertools or ordinary convolution configs; no Carver dependency.",
@@ -1604,7 +1604,8 @@
         "CLI-only cache clearing and torch_npu bootstrap; importing leaves cache and device untouched.",
         "Per-case existing example cache fixture, device markers only on actual NPU cases; CPU unpack remains runnable with OFF.",
         "Only the two autotune companions opt in to temporary AutoTuner result dictionary; restore the original dictionary object and disk namespace afterward.",
-        "LF destination normalization; pinned original source bytes/hash retained."
+        "LF destination normalization; pinned original source bytes/hash retained.",
+        "Adapt only the example configuration callback to main positional/keyword invocation; original get_configs and ordered12 candidates retained."
       ],
       "validation": {
         "source_and_SDK_verified": true,
@@ -1613,7 +1614,8 @@
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
         "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "all_original_cases_retained": true,
+        "first_device_attempt": "10 original prior cases passed; this original autotune entry exposed callback arity mismatch before its kernel compilation. Same-input original TA passed all12 candidates; current adapter numerical continuation pending."
       },
       "state": "reviewed_source_SDK_device_pending",
       "all_original_cases_retained": true
@@ -1852,6 +1854,15 @@
     ],
     "same_named_allocation_fields_and_per_pool_order_all_positive": true,
     "all_positive_complete_source_equal_after_documented_read_only_projection": true,
-    "device_not_run": true
+    "device_not_run": false,
+    "device_first_attempt": {
+      "root_READY": "83cdfbe305e81c1a91ce28c67badfb387aeac373",
+      "original_prior_cases_passed": 10,
+      "blocked_original_case": "convolution_autotune[perfect_alignment]",
+      "reason": "main callback invocation positional args vs original helper tuple contract",
+      "same_input_TA_passed_with_original12_candidates": true,
+      "remaining_original_items_pending": 18
+    },
+    "device_matrix_complete": false
   }
 }

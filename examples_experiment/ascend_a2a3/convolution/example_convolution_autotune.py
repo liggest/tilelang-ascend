@@ -41,6 +41,11 @@ def get_configs(key_args, _key_kwargs=None):
     return configs
 
 
+def _configs_for_main(*key_args, **key_kwargs):
+    """Pass the main callback arguments to the original configuration helper."""
+    return get_configs(key_args, key_kwargs)
+
+
 def supply_prog(params):
     M_val, K_val = int(params[0].shape[0]), int(params[0].shape[1])
     _, N_val = int(params[1].shape[0]), int(params[1].shape[1])
@@ -56,7 +61,7 @@ def ref_prog(A, B):
 
 
 @tilelang.autotune(
-    configs=get_configs,
+    configs=_configs_for_main,
     ref_prog=ref_prog,
     supply_prog=supply_prog,
     atol=1e-2,
