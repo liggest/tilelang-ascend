@@ -295,30 +295,41 @@ private:
       scope_level_--;
     }
     void VisitStmt_(const WhileNode *op) final { VisitNewScope(op); }
-    void VisitStmt_(const SeqStmtNode *op) final { VisitSequence(op->seq, 0); }
-    void VisitSequence(const Array<Stmt> &seq, size_t start) {
-      for (size_t i = start; i < seq.size(); ++i) {
-        if (seq[i].as<BindNode>() || seq[i].as<AssertStmtNode>()) {
+    void VisitStmt_(const SeqStmtNode *op) final { VisitSequence(op->seq); }
+    void VisitSequence(const Array<Stmt> &seq) {
+      // A flat Bind/Assert scopes the rest of this sequence. Keep its enter
+      // event open until the tail has been visited, without one native stack
+      // frame per binding in unrolled TIRX sequences.
+      std::vector<int64_t> pending_scope_begins;
+      for (const Stmt &stmt : seq) {
+        if (stmt.as<BindNode>() || stmt.as<AssertStmtNode>()) {
           scope_.push_back(StmtEntry());
           StmtEntry entry;
-          entry.stmt = seq[i].get();
+          entry.stmt = stmt.get();
           UpdateStmtAttr(entry.stmt, scope_level_);
-          int64_t begin = linear_seq_.size();
+          int64_t begin = static_cast<int64_t>(linear_seq_.size());
           linear_seq_.push_back(entry);
-          if (const auto *bind = seq[i].as<BindNode>())
+          pending_scope_begins.push_back(begin);
+          if (const auto *bind = stmt.as<BindNode>())
             StmtExprVisitor::VisitStmt_(bind);
           else
-            StmtExprVisitor::VisitStmt_(seq[i].as<AssertStmtNode>());
-          VisitSequence(seq, i + 1);
-          entry.touched = std::move(scope_.back().touched);
-          scope_.pop_back();
-          int64_t end = linear_seq_.size();
-          entry.scope_pair_offset = begin - end;
-          linear_seq_.push_back(entry);
-          linear_seq_[begin].scope_pair_offset = end - begin;
-          return;
+            StmtExprVisitor::VisitStmt_(stmt.as<AssertStmtNode>());
+        } else {
+          this->VisitStmt(stmt);
         }
-        this->VisitStmt(seq[i]);
+      }
+      // Close lexical tails from innermost to outermost, preserving the
+      // original touched-buffer ownership and scope event pair offsets.
+      for (auto it = pending_scope_begins.rbegin();
+           it != pending_scope_begins.rend(); ++it) {
+        int64_t begin = *it;
+        StmtEntry entry = linear_seq_[begin];
+        entry.touched = std::move(scope_.back().touched);
+        scope_.pop_back();
+        int64_t end = static_cast<int64_t>(linear_seq_.size());
+        entry.scope_pair_offset = begin - end;
+        linear_seq_.push_back(entry);
+        linear_seq_[begin].scope_pair_offset = end - begin;
       }
     }
     void VisitStmt_(const AssertStmtNode *op) final { VisitNewScope(op); }

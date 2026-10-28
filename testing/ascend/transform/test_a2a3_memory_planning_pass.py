@@ -212,3 +212,52 @@ def test_memory_planning_assert_tail_and_conditional_scope_keep_body():
     after = _run(body, auto=True)
     assert _named(after.attrs["address_map"]) == {"a": 0, "b": 64}
     assert after.body.same_as(body)
+
+
+@pytest.mark.parametrize("auto", [False, True])
+def test_memory_planning_nested_bind_assert_tails_preserve_original_offsets(auto):
+    a, b, c = [_buffer(name) for name in ("a", "b", "c")]
+    outer = tirx.Var("outer", "float32")
+    inner = tirx.Var("inner", "float32")
+    body = tirx.SeqStmt(
+        [
+            tirx.AllocBuffer(a),
+            tirx.AllocBuffer(b),
+            tirx.AllocBuffer(c),
+            tirx.BufferStore(a, tirx.FloatImm("float32", 1), [0]),
+            tirx.Bind(outer, tirx.BufferLoad(a, [0])),
+            tirx.SeqStmt(
+                [
+                    tirx.AssertStmt(tirx.BufferLoad(a, [0]) > 0, tirx.StringImm("RuntimeError"), [tirx.StringImm("positive")]),
+                    tirx.BufferStore(b, outer, [0]),
+                    tirx.Bind(inner, tirx.BufferLoad(b, [0])),
+                    tirx.Evaluate(outer + inner),
+                ]
+            ),
+            tirx.BufferStore(c, outer, [0]),
+            tirx.Evaluate(outer + tirx.BufferLoad(c, [0])),
+        ]
+    )
+    after = _run(body, auto=auto, attrs={"logic_buffer_shapes": _shape_map([a, b, c])})
+    assert _named(after.attrs["address_map"]) == {"a": 0, "b": 64, "c": 128}
+    assert _named(after.attrs["size_map"]) == {"a": 64, "b": 64, "c": 64}
+    assert after.body.same_as(body)
+
+
+def test_memory_planning_wide_flat_bind_assert_tail_does_not_exhaust_stack():
+    # The original NSA varlen request has 11,881 flat bindings after unrolling.
+    # These statements stay flat; their lexical tails must not become native
+    # recursion, even when no simplification removes unused bindings.
+    buffer = _buffer("wide")
+    statements = [tirx.AllocBuffer(buffer), tirx.BufferStore(buffer, tirx.FloatImm("float32", 1), [0])]
+    for i in range(12000):
+        if i % 2:
+            statements.append(tirx.AssertStmt(tirx.const(True, "bool"), tirx.StringImm("RuntimeError"), []))
+        else:
+            statements.append(tirx.Bind(tirx.Var(f"value_{i}", "float32"), tirx.BufferLoad(buffer, [0])))
+    statements.append(tirx.Evaluate(tirx.BufferLoad(buffer, [0])))
+    body = tirx.SeqStmt(statements)
+    after = _run(body, auto=True, attrs={"logic_buffer_shapes": _shape_map([buffer])})
+    assert _named(after.attrs["address_map"]) == {"wide": 0}
+    assert _named(after.attrs["size_map"]) == {"wide": 64}
+    assert after.body.same_as(body)
