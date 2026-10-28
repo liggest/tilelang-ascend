@@ -63,7 +63,7 @@
       ],
       "removed_hygienic_false_keywords": 12,
       "destination_sha256": "7cd1a0a127020273a87fee1028e4fc499d784fb285edc00fd134516a3f464b0d",
-      "state": "source_SDK_and_default_CLI_device_verified",
+      "state": "source_SDK_default_CLI_and_fixed_capture_API_device_verified",
       "adaptations": [
         "Private A2A3 language/layout imports.",
         "Use the supported ordinary eager @T.macro, per the migration scope decision; no complete legacy hygiene API is introduced.",
@@ -80,9 +80,24 @@
           "TA_main_actual_inputs_outputs_and_references_exact": true,
           "no_shape_seed_flags_or_tolerance_changes": true
         },
-        "pending_device_domains": [
-          "capture=True public API branch"
-        ]
+        "pending_device_domains": [],
+        "fixed_capture_API_device": {
+          "kwargs": {
+            "batch": 1,
+            "seq_len": 4096,
+            "heads_q": 12,
+            "heads_kv": 1,
+            "dim": 128,
+            "kernel_name": "main_kernel",
+            "capture": true
+          },
+          "TA_main_public_API_calls": 2,
+          "return_ABI": "list[Output,SP,OP,Trace]; positions3..6, workspace[], autoGM[], three QKV inputs.",
+          "added_Output_original_reference_checks_per_framework": 1,
+          "debug_original_numerical_golden_claim": false,
+          "only_fixed_source_proven_written_regions_TA_main_exact": true,
+          "other_capture_parameter_combinations_validated": false
+        }
       }
     },
     {
@@ -160,7 +175,7 @@
       45472,
       302432
     ],
-    "device_validation": "default_CLI_and_original_xattention_full18_passed; v3_capture_True_remains_pending",
+    "device_validation": "default_CLI_original_xattention_full18_and_fixed_fa3_capture_API_passed; other_capture_shapes_and_CI_not_claimed",
     "general_legacy_hygiene_support": "not_implemented; use supported ordinary eager form as reviewed for these assets",
     "source_stage_all25_macros_exercised_including_v3_capture_branch": true
   },
@@ -243,17 +258,19 @@
     "root_TA_native_Cython_PYX_source_freeze_identical": true,
     "physical_NPU0_sync_health_and_release_confirmed": true,
     "TA_native_fresh_rebuild_claim": false,
-    "existing_source_factory_request_count_5_not_all_device_validated": true,
     "xattention_original_matrix_inputs": 18,
     "xattention_default_inputs_verified": 2,
-    "v3_capture_True_device_validated": false,
     "kernel_tl_is_independent_CLI": false,
     "actual_bench_collector_pytest_CI_claim": false,
     "performance_claim": false,
     "evidence": "refactor_main/reports/p3_macro_defaults_083ce4/summary.json",
     "independent_archive_audit": "refactor_main/reports/p3_macro_defaults_083ce4/independent_archive_audit.json",
     "report": "refactor_main/reports/p3_macro_defaults_device_completion.md",
-    "xattention_additional_unique_inputs_outside_default_layer": 16
+    "xattention_additional_unique_inputs_outside_default_layer": 16,
+    "source_factory_requests_outside_default_CLI_layer": [
+      "fa3_capture"
+    ],
+    "includes_v3_capture_True": false
   },
   "xattention_full_matrix_device_validation": {
     "ready_sha": "195748ee520201d8c7d7c64b6d2b85878d39512a",
@@ -276,11 +293,69 @@
     "root_TA_native_Cython_PYX_source_freeze_identical": true,
     "physical_NPU0_sync_health_and_release_confirmed": true,
     "TA_native_fresh_rebuild_claim": false,
-    "v3_capture_True_device_validated": false,
     "actual_bench_collector_pytest_CI_claim": false,
     "performance_claim": false,
     "evidence": "refactor_main/reports/p3_macro_XA_full_195748/summary.json",
     "independent_stream_audit": "refactor_main/reports/p3_macro_XA_full_195748/independent_stream_archive_audit.json",
-    "root_review": "refactor_main/reports/p3_xattention_full_device_root_review.json"
+    "root_review": "refactor_main/reports/p3_xattention_full_device_root_review.json",
+    "includes_v3_capture_True": false
+  },
+  "fixed_fa3_capture_API_validation": {
+    "ready_sha": "59af3a26d72d4e45f6d559d8a4a54b0fd08da2b8",
+    "kwargs": {
+      "batch": 1,
+      "seq_len": 4096,
+      "heads_q": 12,
+      "heads_kv": 1,
+      "dim": 128,
+      "kernel_name": "main_kernel",
+      "capture": true
+    },
+    "not_original_CLI_or_original_capture_golden": true,
+    "original_default_QKV_archived_bytes_reused": true,
+    "public_API_calls_per_framework": 1,
+    "added_Output_original_SDPA_reference_checks_per_framework": 1,
+    "Output_rtol_and_atol": 0.01,
+    "actual_TA_Bisheng_commands": 1,
+    "actual_main_Bisheng_commands": 1,
+    "returned_ABI": "list[Output,SP,OP,Trace], original out_idx3..6; workspace[], autoGM[], three public inputs.",
+    "returned_shapes": [
+      [
+        1,
+        12,
+        4096,
+        128
+      ],
+      [
+        24,
+        3,
+        256,
+        512
+      ],
+      [
+        24,
+        3,
+        256,
+        128
+      ],
+      [
+        1536,
+        66560
+      ]
+    ],
+    "TA_main_QKV_Output_reference_and_four_returns_exact": true,
+    "debug_original_numerical_golden_claim": false,
+    "debug_scope": "Only the fixed request source-proven fully written logical regions. No prefill, random regeneration or hardware clock/counter payload.",
+    "written_region_contract_sha256": "68205959736c5b72b48a8d10cd4a0c52261b50d98658147a8eba994d345c1e27",
+    "other_capture_shapes_or_unwritten_regions_validated": false,
+    "CPU_tensor_archives_stream_reloaded": 12,
+    "root_TA_source_native_Cython_PYX_freeze_identical": true,
+    "physical_NPU0_sync_health_and_release_confirmed": true,
+    "TA_native_fresh_rebuild_claim": false,
+    "actual_CLI_bench_collector_pytest_CI_claim": false,
+    "performance_claim": false,
+    "evidence": "refactor_main/reports/p3_macro_capture_API_59af3a26/summary.json",
+    "independent_stream_audit": "refactor_main/reports/p3_macro_capture_API_59af3a26/independent_stream_archive_audit.json",
+    "root_review": "refactor_main/reports/p3_fa3_capture_device_root_review.json"
   }
 }

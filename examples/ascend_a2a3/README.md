@@ -147,7 +147,11 @@ reference tensors match exactly. This covers only the three no-argument CLIs.
 The complete original xattention `--all-cases` matrix has since passed in
 one TA and one main process: all 18 inputs and 54 original calls/assertions
 per framework, including beams4096. Actual input, output and reference tensors
-also match exactly. FA v3's `capture=True` API branch still awaits device
-validation. `kernel.tl` is
+also match exactly. FA v3's fixed `capture=True` API case (B1/S4096/Hq12/
+Hkv1/D128) has also passed using the same archived Q/K/V bytes. Its four-item
+return ABI and Output reference check passed; SP/OP/Trace matched TA exactly
+only in the source-proven written regions for that fixed case. These debug
+buffers have no original numerical golden, and other capture shapes are not
+covered by this result. `kernel.tl` is
 a preprocessor source, not a fourth CLI. Adopted bench/pytest execution and
 performance are separate from this default-CLI result.
