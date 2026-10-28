@@ -19,7 +19,7 @@
       ],
       "removed_hygienic_false_keywords": 6,
       "destination_sha256": "f797a12193a85def53ae367afb9232a5109c187e8482af893e0154c94872a9a2",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_default_CLI_device_verified",
       "adaptations": [
         "Private A2A3 language/layout imports.",
         "Use the supported ordinary eager @T.macro, per the migration scope decision; no complete legacy hygiene API is introduced.",
@@ -28,7 +28,15 @@
       "validation": {
         "all_original_definition_AST_other_than_macro_decorator_equal": true,
         "all_original_factory_flags_and_parameters_retained": true,
-        "device_not_run": true
+        "device_not_run": false,
+        "default_CLI_device": {
+          "original_inputs": 1,
+          "original_runtime_calls": 1,
+          "original_assertions_passed_per_framework": 1,
+          "TA_main_actual_inputs_outputs_and_references_exact": true,
+          "no_shape_seed_flags_or_tolerance_changes": true
+        },
+        "pending_device_domains": []
       }
     },
     {
@@ -55,7 +63,7 @@
       ],
       "removed_hygienic_false_keywords": 12,
       "destination_sha256": "7cd1a0a127020273a87fee1028e4fc499d784fb285edc00fd134516a3f464b0d",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_default_CLI_device_verified",
       "adaptations": [
         "Private A2A3 language/layout imports.",
         "Use the supported ordinary eager @T.macro, per the migration scope decision; no complete legacy hygiene API is introduced.",
@@ -64,7 +72,17 @@
       "validation": {
         "all_original_definition_AST_other_than_macro_decorator_equal": true,
         "all_original_factory_flags_and_parameters_retained": true,
-        "device_not_run": true
+        "device_not_run": false,
+        "default_CLI_device": {
+          "original_inputs": 1,
+          "original_runtime_calls": 1,
+          "original_assertions_passed_per_framework": 1,
+          "TA_main_actual_inputs_outputs_and_references_exact": true,
+          "no_shape_seed_flags_or_tolerance_changes": true
+        },
+        "pending_device_domains": [
+          "capture=True public API branch"
+        ]
       }
     },
     {
@@ -85,7 +103,7 @@
       ],
       "removed_hygienic_false_keywords": 7,
       "destination_sha256": "4a8641857b5615f1308f4ba30a4d72f575c61624c3a75c2bf3fd1f64a792e647",
-      "state": "source_SDK_verified_device_pending",
+      "state": "source_SDK_and_default_CLI_device_verified",
       "adaptations": [
         "Private A2A3 language/layout imports.",
         "Use the supported ordinary eager @T.macro, per the migration scope decision; no complete legacy hygiene API is introduced.",
@@ -94,7 +112,17 @@
       "validation": {
         "all_original_definition_AST_other_than_macro_decorator_equal": true,
         "all_original_factory_flags_and_parameters_retained": true,
-        "device_not_run": true
+        "device_not_run": false,
+        "default_CLI_device": {
+          "original_inputs": 2,
+          "original_runtime_calls": 6,
+          "original_assertions_passed_per_framework": 6,
+          "TA_main_actual_inputs_outputs_and_references_exact": true,
+          "no_shape_seed_flags_or_tolerance_changes": true
+        },
+        "pending_device_domains": [
+          "Original --all-cases18 matrix:16 additional unique inputs pending beyond the two verified defaults."
+        ]
       }
     },
     {
@@ -115,7 +143,6 @@
     "original_python_functions_classes_other_than_macro_decorator_AST_equal": 32,
     "macro_decorators_adapted": 25,
     "complete_source_factory_requests": 5,
-    "all25_macros_exercised_including_v3_capture_branch": true,
     "actual_TA_Bisheng": 5,
     "actual_main_Bisheng": 5,
     "ON_source_and_import_tests_passed": 8,
@@ -127,8 +154,9 @@
       45472,
       302432
     ],
-    "device_validation": "not_run",
-    "general_legacy_hygiene_support": "not_implemented; use supported ordinary eager form as reviewed for these assets"
+    "device_validation": "default_CLI_layer_only_passed; capture=True and full_xattention18 remain pending",
+    "general_legacy_hygiene_support": "not_implemented; use supported ordinary eager form as reviewed for these assets",
+    "source_stage_all25_macros_exercised_including_v3_capture_branch": true
   },
   "SDK_source_library_hashes": [
     {
@@ -193,5 +221,32 @@
     }
   ],
   "generated_source_companion": "testing/ascend_a2a3/python/ecosystem/test_expert_macro_source.py",
-  "source_contracts": "examples/ascend_a2a3/flash_attention/fa_opt/expert_macro_source_contracts.json"
+  "source_contracts": "examples/ascend_a2a3/flash_attention/fa_opt/expert_macro_source_contracts.json",
+  "default_CLI_device_validation": {
+    "ready_sha": "083ce4dbc2f3d9e313260fb8c32faa94599defa8",
+    "actual_soc": "Ascend910_9392",
+    "original_CLI_per_framework": 3,
+    "original_factory_inputs_per_framework": 4,
+    "original_runtime_calls_per_framework": 8,
+    "original_assertions_passed_per_framework": 8,
+    "original_rtol_and_atol": 0.01,
+    "actual_TA_Bisheng_commands": 4,
+    "actual_main_Bisheng_commands": 4,
+    "TA_main_all_actual_inputs_and_assertion_output_reference_tensors_exact": true,
+    "independent_CPU_tensor_archives_reloaded": 24,
+    "root_TA_native_Cython_PYX_source_freeze_identical": true,
+    "physical_NPU0_sync_health_and_release_confirmed": true,
+    "TA_native_fresh_rebuild_claim": false,
+    "existing_source_factory_request_count_5_not_all_device_validated": true,
+    "xattention_original_matrix_inputs": 18,
+    "xattention_default_inputs_verified": 2,
+    "xattention_additional_unique_device_inputs_pending": 16,
+    "v3_capture_True_device_validated": false,
+    "kernel_tl_is_independent_CLI": false,
+    "actual_bench_collector_pytest_CI_claim": false,
+    "performance_claim": false,
+    "evidence": "refactor_main/reports/p3_macro_defaults_083ce4/summary.json",
+    "independent_archive_audit": "refactor_main/reports/p3_macro_defaults_083ce4/independent_archive_audit.json",
+    "report": "refactor_main/reports/p3_macro_defaults_device_completion.md"
+  }
 }

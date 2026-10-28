@@ -139,3 +139,12 @@ python -m pytest testing/ascend_a2a3/python/ecosystem/
 
 These checks retain native/OFF gating and isolated caches, and do not launch
 kernels or stand in for the original example/device cases.
+
+The expert FA v2/v3 and xattention v2 default CLIs also passed on A3 using
+the supported ordinary `@T.macro` form. TA and main each ran all four default
+inputs and eight original calls/assertions; archived actual input, output and
+reference tensors match exactly. This covers only the three no-argument CLIs.
+The remaining 16 xattention inputs from its original `--all-cases` matrix and
+FA v3's `capture=True` API branch still await device validation. `kernel.tl` is
+a preprocessor source, not a fourth CLI. Adopted bench/pytest execution and
+performance are separate from this default-CLI result.
