@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "planned_source_assets": 9,
+  "scope": "Remaining assigned Flash8/GQAperf1; separate from interop and other example ledgers",
+  "entries": [
+    {
+      "source_path": "examples/flash_attention/flash_attn_bhsd_cc_sync.py",
+      "destination_path": "examples/ascend_a2a3/flash_attention/flash_attn_bhsd_cc_sync.py",
+      "source_git_blob": "13604fba19bd1ca07f5c1a75025d744ce4fbe932",
+      "source_sha256": "682463d32978d9e16dbece17821016cb772093bad28b33466d1e27e13680c0e9",
+      "destination_sha256": "e0ca5ba31c6de425ea4f0dd0c3ca6fd917c8fbb5967922f58f55ca5f50fead85",
+      "adaptations": [
+        "Preserve every complete original factory/decorator/helper/reference, default shape/seed/tolerance and execution statement order. Replace only language path; defer top-level execution/default-device/cache side effects behind explicit CLI and restore caller state.",
+        "Use the actual JITImpl constructor in a fresh execution module, preserving cache types/capacities rather than mutating caller memo policy. Require dedicated cache environment matching the actual descriptor before any registration/clear/allocation.",
+        "Paged retains original -h=heads, parse_known_args/unknown-message semantics, full gen_cache/reference, and original real clear position through modern A2A3CythonKernelCache; adds safe explicit --help. cc_sync retains disable-cache behavior only inside a restoring explicit run scope."
+      ],
+      "validation": {
+        "whole_original_factory_helper_reference_AST_and_execution_sequence": true,
+        "ON_host_source_tests": 18,
+        "actual_OFF_host_tests": 14,
+        "actual_OFF_native_cases_skipped": 4,
+        "paired_original_default_AscendC_source_SDK_ELF_adapter_per_asset": 1,
+        "paired_explicit_PTO_source_control_SDK_ELF_adapter_per_asset": 1,
+        "fresh_source_full_CPP_equals_actual_SDK_inputs": true,
+        "all_named_type_size_offset_maps_equal_no_physical_relocation": true,
+        "source_effect_difference": "2unused cid-only int32 declarations per dialect, same remaining full payload/sync after private include and declaration-order differences",
+        "NPU_context_tensor_launch_golden_or_performance_executed": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/flash_attention/paged_flash_attn_bhsd.py",
+      "destination_path": "examples/ascend_a2a3/flash_attention/paged_flash_attn_bhsd.py",
+      "source_git_blob": "d44998c1c7068425d42527e9b6c00d4a91cc5aec",
+      "source_sha256": "2ae8191fab478acb020881a6aebbc283673b5f2be434d4520cb9d096720afb4e",
+      "destination_sha256": "9ef04e07ed57ddaf75c880f511c220ce4d01208e30e27169c653eebf1727c1a2",
+      "adaptations": [
+        "Preserve every complete original factory/decorator/helper/reference, default shape/seed/tolerance and execution statement order. Replace only language path; defer top-level execution/default-device/cache side effects behind explicit CLI and restore caller state.",
+        "Use the actual JITImpl constructor in a fresh execution module, preserving cache types/capacities rather than mutating caller memo policy. Require dedicated cache environment matching the actual descriptor before any registration/clear/allocation.",
+        "Paged retains original -h=heads, parse_known_args/unknown-message semantics, full gen_cache/reference, and original real clear position through modern A2A3CythonKernelCache; adds safe explicit --help. cc_sync retains disable-cache behavior only inside a restoring explicit run scope."
+      ],
+      "validation": {
+        "whole_original_factory_helper_reference_AST_and_execution_sequence": true,
+        "ON_host_source_tests": 18,
+        "actual_OFF_host_tests": 14,
+        "actual_OFF_native_cases_skipped": 4,
+        "paired_original_default_AscendC_source_SDK_ELF_adapter_per_asset": 1,
+        "paired_explicit_PTO_source_control_SDK_ELF_adapter_per_asset": 1,
+        "fresh_source_full_CPP_equals_actual_SDK_inputs": true,
+        "all_named_type_size_offset_maps_equal_no_physical_relocation": true,
+        "source_effect_difference": "main Vector retains one dead scalar GM read of the original same readonly block_table[0] and preceding PIPE_ALL; launch static source-level counts and exact payload anchors retained; not blanket sync/runtime equivalence",
+        "NPU_context_tensor_launch_golden_or_performance_executed": false
+      },
+      "all_original_cases_retained": true
+    }
+  ]
+}
