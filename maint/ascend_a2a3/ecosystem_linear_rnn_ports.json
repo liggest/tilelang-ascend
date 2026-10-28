@@ -1,0 +1,2058 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "owner_scope": "L1 two standalone linear-attention assets; no GDN/interop/tools examples",
+  "entries": [
+    {
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/linear_attention_causal.py",
+      "source_sha256": "d5ededcbaf7bc1903c140b73f681880c2688d7b1d1f33cd79e3af5c81c5e8fc6",
+      "source_git_blob": "9d3cfeab8dd8693537a5cb740f9fa6ebc4c81be0",
+      "destination_sha256": "e9752a73d00f2764a338a8c4ec7fa730fd5a1dff3ed343f946432eaea63bb9d3",
+      "state": "implementation_candidate_source_SDK_verified_device_pending",
+      "original_runtime_requests": [
+        {
+          "ordinal": 0,
+          "parameters": {
+            "B": 1,
+            "H": 2,
+            "L": 64,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            1,
+            64
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": false
+        },
+        {
+          "ordinal": 1,
+          "parameters": {
+            "B": 1,
+            "H": 2,
+            "L": 256,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            1,
+            256
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 2,
+          "parameters": {
+            "B": 4,
+            "H": 2,
+            "L": 128,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            4,
+            128
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 3,
+          "parameters": {
+            "B": 8,
+            "H": 2,
+            "L": 512,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            8,
+            512
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 4,
+          "parameters": {
+            "B": 12,
+            "H": 2,
+            "L": 512,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            12,
+            512
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 5,
+          "parameters": {
+            "B": 16,
+            "H": 2,
+            "L": 256,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            16,
+            256
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 6,
+          "parameters": {
+            "B": 32,
+            "H": 2,
+            "L": 128,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            32,
+            128
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 7,
+          "parameters": {
+            "B": 50,
+            "H": 20,
+            "L": 128,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            20,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            50,
+            128
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": false
+        },
+        {
+          "ordinal": 8,
+          "parameters": {
+            "B": 1,
+            "H": 2,
+            "L": 1024,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            1,
+            1024
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 9,
+          "parameters": {
+            "B": 8,
+            "H": 2,
+            "L": 2048,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            8,
+            2048
+          ],
+          "rtol": 0.01,
+          "atol": 0.02,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 10,
+          "parameters": {
+            "B": 2,
+            "H": 2,
+            "L": 4096,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            2,
+            4096
+          ],
+          "rtol": 0.01,
+          "atol": 0.04,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        },
+        {
+          "ordinal": 11,
+          "parameters": {
+            "B": 16,
+            "H": 2,
+            "L": 1024,
+            "D": 128,
+            "C": 64
+          },
+          "factory": "linear_attention_ker",
+          "factory_args": [
+            2,
+            128,
+            64
+          ],
+          "dynamic_runtime_B_L": [
+            16,
+            1024
+          ],
+          "rtol": 0.01,
+          "atol": 0.01,
+          "QKV_normalization": "Q,K divide by own sqrt(sum(square))+1e-6; no normalization of V",
+          "kernel_calls": 1,
+          "original_assertions": 1,
+          "original_lru_hit_expected": true
+        }
+      ],
+      "original_CLI_source_config_list": [
+        [
+          1,
+          2,
+          64,
+          128,
+          64
+        ],
+        [
+          1,
+          2,
+          256,
+          128,
+          64
+        ],
+        [
+          4,
+          2,
+          128,
+          128,
+          64
+        ],
+        [
+          8,
+          2,
+          512,
+          128,
+          64
+        ],
+        [
+          12,
+          2,
+          512,
+          128,
+          64
+        ],
+        [
+          16,
+          2,
+          256,
+          128,
+          64
+        ],
+        [
+          32,
+          2,
+          128,
+          128,
+          64
+        ],
+        [
+          50,
+          20,
+          128,
+          128,
+          64
+        ],
+        [
+          1,
+          2,
+          1024,
+          128,
+          64
+        ],
+        [
+          8,
+          2,
+          2048,
+          128,
+          64
+        ],
+        [
+          2,
+          2,
+          4096,
+          128,
+          64
+        ],
+        [
+          16,
+          2,
+          1024,
+          128,
+          64
+        ]
+      ],
+      "adaptations": [
+        "Private A2A3 language import, no shared frontend modification.",
+        "All original CLI/cache/seed/print/device operations move into guarded main; task-owned cache only.",
+        "Original core query/except24 deferred and cached at first factory use with a lock; same explicit integer is bound before the original kernel algorithm.",
+        "Original disable-cache raw bit restored exactly after CLI, including original assertion exceptions."
+      ],
+      "original_definition_AST_sha256": {
+        "linear_attention_ker": "012d2ee6f28ec33811242e00d62fe4dd2a67e1ebff70bf4d70f8347b4740b37e",
+        "_compiled_ker": "5e795da2ea3eaabc2243eb29e46113c5dc2b58694ffc54ecc9bbedb6bd548787",
+        "linear_attention": "809b92ba75d3e880a0998eccf192b6ca2c1e02cfb0f1c372412db9e81d92fce9",
+        "ref_linear_attention": "d8761f76410272a0d1c26350dd96f34bd69e168fa0414c47add846d14f9df07b"
+      },
+      "original_cli_operation_AST_sha256": "03414ac6938f27c114b5e066a9dbd192cfb1485500e0d3d3d62af9263eb8eb2b",
+      "original_core_try_AST_sha256": "6da179ec25eadc9c4d2bab979b8c597b048f7757096b08c70415e0d25c2a8576",
+      "source_and_SDK_status": "8 explicit environment-sampled requests across two assets passed per framework; actual hardware core properties not queried; device pending",
+      "source_and_SDK_executed_for_sampled_domains": true,
+      "device_execution": false
+    },
+    {
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_normalize.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/linear_attention_normalize.py",
+      "source_sha256": "b31900c1ee9fbfdc272ae7a9f6cfbbd923d06ce953e05fc404195ea501d5a1c9",
+      "source_git_blob": "991ed5ba8e599ab2ec16c9543e7f4f54c02cf057",
+      "destination_sha256": "b658aa309a7a922b6144a7e3f8f9536551c3e45666632d54d0e588e9414ea824",
+      "state": "implementation_candidate_source_SDK_verified_device_pending",
+      "original_runtime_requests": [
+        {
+          "ordinal": 0,
+          "parameters": {
+            "B": 2,
+            "H": 32,
+            "L": 512,
+            "D": 128,
+            "block_L": 64,
+            "block_D": 64
+          },
+          "factory_args": [
+            2,
+            32,
+            512,
+            128,
+            64,
+            64
+          ],
+          "factories": [
+            "linear_attention_ker1",
+            "linear_attention_ker2"
+          ],
+          "rtol": 0.001,
+          "atol": 0.001,
+          "QK_transform": "abs",
+          "kernel_calls": 2,
+          "original_assertions": 1
+        }
+      ],
+      "original_CLI_source_config_list": [
+        [
+          2,
+          32,
+          512,
+          128,
+          64,
+          64
+        ]
+      ],
+      "adaptations": [
+        "Private A2A3 language import, no shared frontend modification.",
+        "All original CLI/cache/seed/print/device operations move into guarded main; task-owned cache only.",
+        "Old wrapper private target access replaced with public JIT target; only missing/None maps to auto."
+      ],
+      "original_definition_AST_sha256": {
+        "current_jit_target": "674ca3c895922a7f61ccea489d930a407604f9bc1bdc08e4001bfbcc167824a4",
+        "linear_attention_ker1": "b0b2c480668b0adfa4b2438c16ed3e6c5cec7bd34efee548f7a1b9d3c9ee29e8",
+        "linear_attention_ker2": "03e82d88390085aee6ef0a9491ba439568448f8fb5bc30905dfa88188ba8fa4c",
+        "linear_attention": "3a1d4c700741570e1c979764726a16ca2bde960b9b2f05ab6171be669e1a39db",
+        "ref_linear_attention": "c44bb6811e389163f03eb3e2e580e62955eb851d5e2388b755be6bef02e05343"
+      },
+      "original_cli_operation_AST_sha256": "fe79efbe3900d01d9a977af140c61965366085cf8426a9e04e21e3365f7f7502",
+      "original_core_try_AST_sha256": null,
+      "source_and_SDK_status": "8 explicit environment-sampled requests across two assets passed per framework; actual hardware core properties not queried; device pending",
+      "source_and_SDK_executed_for_sampled_domains": true,
+      "device_execution": false
+    }
+  ],
+  "factory_requests": [
+    {
+      "id": "causal_H2",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "factory": "linear_attention_ker",
+      "args": [
+        2,
+        128,
+        64
+      ],
+      "kwargs": {}
+    },
+    {
+      "id": "causal_H20",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "factory": "linear_attention_ker",
+      "args": [
+        20,
+        128,
+        64
+      ],
+      "kwargs": {}
+    },
+    {
+      "id": "normalize_linear_attention_ker1",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_normalize.py",
+      "factory": "linear_attention_ker1",
+      "args": [
+        2,
+        32,
+        512,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {}
+    },
+    {
+      "id": "normalize_linear_attention_ker2",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_normalize.py",
+      "factory": "linear_attention_ker2",
+      "args": [
+        2,
+        32,
+        512,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {}
+    }
+  ],
+  "validation": {
+    "original_CLIs": 2,
+    "runtime_inputs": 13,
+    "kernel_calls": 14,
+    "original_golden_assertions": 13,
+    "core_fallback24_is_not_an_actual_hardware_property_claim": true,
+    "device_not_run": true,
+    "actual_OFF_host_and_import_passed": 31,
+    "pure_host_no_conftest_passed": 29,
+    "source_requests_each_framework": 8,
+    "distinct_source_SDK_identities_each_framework": 6,
+    "actual_SDK_compiles_each_framework": 6,
+    "exact_source_complete_config_and_ABI_reuse_each_framework": 2,
+    "device_pending_original_inputs": 13,
+    "NPU_tensor_H2D_or_launch": false,
+    "core_source_sampling_values": [
+      20,
+      24
+    ],
+    "source_original_fallback24_path_also_verified": true,
+    "actual_hardware_properties_queried": false,
+    "actual_driver_availability_True_not_mocked": true,
+    "TorchNPU_initialized_before_and_after_source": false,
+    "normal_root_native_libtilelang_sha256": "1fa7b9f8a980156549cf6c06bb106f3a87dfaefceb2901555c9cace85dc83140",
+    "source_and_SDK_complete_for_explicit_sampled_domains": true,
+    "device_execution": false,
+    "actual_OFF_native_skipped": 8,
+    "actual_OFF_no_torch_npu_import": true,
+    "initial0c5_source_SDK_archive_preserved": true,
+    "main_fresh1fa_full_source8_byte_equal_to_initial0c5": true,
+    "current_native1fa_host_and_source_passed": 39,
+    "current_native1fa_no_torch_npu_import_in_companion": true,
+    "latest_main_source_SDK_report_directory": "p3_linear_L1_native1fa/main",
+    "TA_source_SDK_report_directory": "p3_linear_L1/ta",
+    "main1fa_actual_SDK_compiles": 6,
+    "main1fa_exact_source_config_ABI_reuses": 2,
+    "old0c5_full_source_SDK_not_overwritten": true
+  },
+  "source_requests": [
+    {
+      "id": "causal_H2_properties20",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "factory": "linear_attention_ker",
+      "args": [
+        2,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "core_sampling": "properties20"
+    },
+    {
+      "id": "causal_H20_properties20",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "factory": "linear_attention_ker",
+      "args": [
+        20,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "core_sampling": "properties20"
+    },
+    {
+      "id": "causal_H2_properties24",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "factory": "linear_attention_ker",
+      "args": [
+        2,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "core_sampling": "properties24"
+    },
+    {
+      "id": "causal_H20_properties24",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "factory": "linear_attention_ker",
+      "args": [
+        20,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "core_sampling": "properties24"
+    },
+    {
+      "id": "causal_H2_fallback24",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "factory": "linear_attention_ker",
+      "args": [
+        2,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "core_sampling": "fallback24"
+    },
+    {
+      "id": "causal_H20_fallback24",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_causal.py",
+      "factory": "linear_attention_ker",
+      "args": [
+        20,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "core_sampling": "fallback24"
+    },
+    {
+      "id": "normalize_linear_attention_ker1",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_normalize.py",
+      "factory": "linear_attention_ker1",
+      "args": [
+        2,
+        32,
+        512,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "core_sampling": "none"
+    },
+    {
+      "id": "normalize_linear_attention_ker2",
+      "source_path": "examples/linear_attention_and_rnn/linear_attention_normalize.py",
+      "factory": "linear_attention_ker2",
+      "args": [
+        2,
+        32,
+        512,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "core_sampling": "none"
+    }
+  ],
+  "source_contracts": [
+    {
+      "id": "causal_H2_properties20",
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "20",
+            "64",
+            "64"
+          ]
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "20",
+            "128",
+            "128"
+          ]
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        }
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* O_handle, int64_t B, int64_t L, aclrtStream stream",
+      "main_source_sha256": "250e8c4031702d1410ea216603ddff904681b1aeb967dbb2d7b7eeef675a508a",
+      "TA_source_sha256": "e1e2f2c7efedd8384382106fa17b41e386f6d5439a22d2ce211dbc0670376703",
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 11,
+        "tl.ascend_wait_cross_flag": 3,
+        "tl.ascend_auto_set_flag": 12,
+        "tl.ascend_auto_wait_flag": 12,
+        "tir.type_annotation": 43,
+        "tir.tvm_access_ptr": 43,
+        "tir.call_extern": 13,
+        "tl.ascend_gemm_v0": 4,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_set_mask_mode": 3,
+        "tl.ascend_set_mask_payload": 3,
+        "tl.ascend_fill_raw_counter": 2,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "acc_l0",
+          "ascend_l0c",
+          "float",
+          "4096",
+          "0"
+        ],
+        [
+          "acc_l1",
+          "ascend_l1",
+          "half",
+          "4096",
+          "81920"
+        ],
+        [
+          "acc_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "20480"
+        ],
+        [
+          "h_l0",
+          "ascend_l0c",
+          "float",
+          "16384",
+          "16384"
+        ],
+        [
+          "h_l1",
+          "ascend_l1",
+          "half",
+          "16384",
+          "49152"
+        ],
+        [
+          "h_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "24576"
+        ],
+        [
+          "hsum_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "4096"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "16384"
+        ],
+        [
+          "o_l0",
+          "ascend_l0c",
+          "float",
+          "8192",
+          "81920"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "0"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "32768"
+        ],
+        [
+          "zero_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "0"
+        ]
+      ],
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_compile_flags": null,
+      "source_core_value": 20,
+      "actual_core_properties_queried": false,
+      "source_sampling": "properties20",
+      "source_review": "p3_linear_L1/source_allocation_effect_review.json"
+    },
+    {
+      "id": "causal_H20_properties20",
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "20",
+            "64",
+            "64"
+          ]
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "20",
+            "128",
+            "128"
+          ]
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        }
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* O_handle, int64_t B, int64_t L, aclrtStream stream",
+      "main_source_sha256": "2df928ccb48bdbc0025a8a3b4cdbc8b20604b3765587b49d63028894e1f02269",
+      "TA_source_sha256": "0cdf1af33a0dcf50ab909ea0b8bdd840c7d363ff3b1a8e85cff1eb54daad29a3",
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 11,
+        "tl.ascend_wait_cross_flag": 3,
+        "tl.ascend_auto_set_flag": 12,
+        "tl.ascend_auto_wait_flag": 12,
+        "tir.type_annotation": 43,
+        "tir.tvm_access_ptr": 43,
+        "tir.call_extern": 13,
+        "tl.ascend_gemm_v0": 4,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_set_mask_mode": 3,
+        "tl.ascend_set_mask_payload": 3,
+        "tl.ascend_fill_raw_counter": 2,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "acc_l0",
+          "ascend_l0c",
+          "float",
+          "4096",
+          "0"
+        ],
+        [
+          "acc_l1",
+          "ascend_l1",
+          "half",
+          "4096",
+          "81920"
+        ],
+        [
+          "acc_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "20480"
+        ],
+        [
+          "h_l0",
+          "ascend_l0c",
+          "float",
+          "16384",
+          "16384"
+        ],
+        [
+          "h_l1",
+          "ascend_l1",
+          "half",
+          "16384",
+          "49152"
+        ],
+        [
+          "h_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "24576"
+        ],
+        [
+          "hsum_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "4096"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "16384"
+        ],
+        [
+          "o_l0",
+          "ascend_l0c",
+          "float",
+          "8192",
+          "81920"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "0"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "32768"
+        ],
+        [
+          "zero_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "0"
+        ]
+      ],
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_compile_flags": null,
+      "source_core_value": 20,
+      "actual_core_properties_queried": false,
+      "source_sampling": "properties20",
+      "source_review": "p3_linear_L1/source_allocation_effect_review.json"
+    },
+    {
+      "id": "causal_H2_properties24",
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "64",
+            "64"
+          ]
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "128",
+            "128"
+          ]
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        }
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* O_handle, int64_t B, int64_t L, aclrtStream stream",
+      "main_source_sha256": "01649cf8b8bd6b049525542858a718db8b356b8bd62b5634f3f6aeebabf133f8",
+      "TA_source_sha256": "0d78fc8badb58c3a1a510664428e3979645211317ee965fc34e8c7835f94bae7",
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 11,
+        "tl.ascend_wait_cross_flag": 3,
+        "tl.ascend_auto_set_flag": 12,
+        "tl.ascend_auto_wait_flag": 12,
+        "tir.type_annotation": 43,
+        "tir.tvm_access_ptr": 43,
+        "tir.call_extern": 13,
+        "tl.ascend_gemm_v0": 4,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_set_mask_mode": 3,
+        "tl.ascend_set_mask_payload": 3,
+        "tl.ascend_fill_raw_counter": 2,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "acc_l0",
+          "ascend_l0c",
+          "float",
+          "4096",
+          "0"
+        ],
+        [
+          "acc_l1",
+          "ascend_l1",
+          "half",
+          "4096",
+          "81920"
+        ],
+        [
+          "acc_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "20480"
+        ],
+        [
+          "h_l0",
+          "ascend_l0c",
+          "float",
+          "16384",
+          "16384"
+        ],
+        [
+          "h_l1",
+          "ascend_l1",
+          "half",
+          "16384",
+          "49152"
+        ],
+        [
+          "h_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "24576"
+        ],
+        [
+          "hsum_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "4096"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "16384"
+        ],
+        [
+          "o_l0",
+          "ascend_l0c",
+          "float",
+          "8192",
+          "81920"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "0"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "32768"
+        ],
+        [
+          "zero_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "0"
+        ]
+      ],
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_compile_flags": null,
+      "source_core_value": 24,
+      "actual_core_properties_queried": false,
+      "source_sampling": "properties24",
+      "source_review": "p3_linear_L1/source_allocation_effect_review.json"
+    },
+    {
+      "id": "causal_H20_properties24",
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "64",
+            "64"
+          ]
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "128",
+            "128"
+          ]
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        }
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* O_handle, int64_t B, int64_t L, aclrtStream stream",
+      "main_source_sha256": "e7b48f87f51188b9719acef34ce057d6108232e8ff9ce2d43955d6b803e72fb2",
+      "TA_source_sha256": "960ebbb31292ff7b4d8345378532274615b6b8215e08cbc7b3e815f92907a061",
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 11,
+        "tl.ascend_wait_cross_flag": 3,
+        "tl.ascend_auto_set_flag": 12,
+        "tl.ascend_auto_wait_flag": 12,
+        "tir.type_annotation": 43,
+        "tir.tvm_access_ptr": 43,
+        "tir.call_extern": 13,
+        "tl.ascend_gemm_v0": 4,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_set_mask_mode": 3,
+        "tl.ascend_set_mask_payload": 3,
+        "tl.ascend_fill_raw_counter": 2,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "acc_l0",
+          "ascend_l0c",
+          "float",
+          "4096",
+          "0"
+        ],
+        [
+          "acc_l1",
+          "ascend_l1",
+          "half",
+          "4096",
+          "81920"
+        ],
+        [
+          "acc_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "20480"
+        ],
+        [
+          "h_l0",
+          "ascend_l0c",
+          "float",
+          "16384",
+          "16384"
+        ],
+        [
+          "h_l1",
+          "ascend_l1",
+          "half",
+          "16384",
+          "49152"
+        ],
+        [
+          "h_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "24576"
+        ],
+        [
+          "hsum_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "4096"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "16384"
+        ],
+        [
+          "o_l0",
+          "ascend_l0c",
+          "float",
+          "8192",
+          "81920"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "0"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "32768"
+        ],
+        [
+          "zero_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "0"
+        ]
+      ],
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_compile_flags": null,
+      "source_core_value": 24,
+      "actual_core_properties_queried": false,
+      "source_sampling": "properties24",
+      "source_review": "p3_linear_L1/source_allocation_effect_review.json"
+    },
+    {
+      "id": "causal_H2_fallback24",
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "64",
+            "64"
+          ]
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "128",
+            "128"
+          ]
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "2",
+            "L",
+            "128"
+          ]
+        }
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* O_handle, int64_t B, int64_t L, aclrtStream stream",
+      "main_source_sha256": "01649cf8b8bd6b049525542858a718db8b356b8bd62b5634f3f6aeebabf133f8",
+      "TA_source_sha256": "0d78fc8badb58c3a1a510664428e3979645211317ee965fc34e8c7835f94bae7",
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 11,
+        "tl.ascend_wait_cross_flag": 3,
+        "tl.ascend_auto_set_flag": 12,
+        "tl.ascend_auto_wait_flag": 12,
+        "tir.type_annotation": 43,
+        "tir.tvm_access_ptr": 43,
+        "tir.call_extern": 13,
+        "tl.ascend_gemm_v0": 4,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_set_mask_mode": 3,
+        "tl.ascend_set_mask_payload": 3,
+        "tl.ascend_fill_raw_counter": 2,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "acc_l0",
+          "ascend_l0c",
+          "float",
+          "4096",
+          "0"
+        ],
+        [
+          "acc_l1",
+          "ascend_l1",
+          "half",
+          "4096",
+          "81920"
+        ],
+        [
+          "acc_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "20480"
+        ],
+        [
+          "h_l0",
+          "ascend_l0c",
+          "float",
+          "16384",
+          "16384"
+        ],
+        [
+          "h_l1",
+          "ascend_l1",
+          "half",
+          "16384",
+          "49152"
+        ],
+        [
+          "h_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "24576"
+        ],
+        [
+          "hsum_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "4096"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "16384"
+        ],
+        [
+          "o_l0",
+          "ascend_l0c",
+          "float",
+          "8192",
+          "81920"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "0"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "32768"
+        ],
+        [
+          "zero_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "0"
+        ]
+      ],
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_compile_flags": null,
+      "source_core_value": 24,
+      "actual_core_properties_queried": false,
+      "source_sampling": "fallback24",
+      "source_review": "p3_linear_L1/source_allocation_effect_review.json"
+    },
+    {
+      "id": "causal_H20_fallback24",
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "64",
+            "64"
+          ]
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "128",
+            "128"
+          ]
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "B",
+            "20",
+            "L",
+            "128"
+          ]
+        }
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* O_handle, int64_t B, int64_t L, aclrtStream stream",
+      "main_source_sha256": "e7b48f87f51188b9719acef34ce057d6108232e8ff9ce2d43955d6b803e72fb2",
+      "TA_source_sha256": "960ebbb31292ff7b4d8345378532274615b6b8215e08cbc7b3e815f92907a061",
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 11,
+        "tl.ascend_wait_cross_flag": 3,
+        "tl.ascend_auto_set_flag": 12,
+        "tl.ascend_auto_wait_flag": 12,
+        "tir.type_annotation": 43,
+        "tir.tvm_access_ptr": 43,
+        "tir.call_extern": 13,
+        "tl.ascend_gemm_v0": 4,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_set_mask_mode": 3,
+        "tl.ascend_set_mask_payload": 3,
+        "tl.ascend_fill_raw_counter": 2,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "acc_l0",
+          "ascend_l0c",
+          "float",
+          "4096",
+          "0"
+        ],
+        [
+          "acc_l1",
+          "ascend_l1",
+          "half",
+          "4096",
+          "81920"
+        ],
+        [
+          "acc_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "20480"
+        ],
+        [
+          "h_l0",
+          "ascend_l0c",
+          "float",
+          "16384",
+          "16384"
+        ],
+        [
+          "h_l1",
+          "ascend_l1",
+          "half",
+          "16384",
+          "49152"
+        ],
+        [
+          "h_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "24576"
+        ],
+        [
+          "hsum_ub",
+          "ascend_ub",
+          "half",
+          "8192",
+          "4096"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "16384"
+        ],
+        [
+          "o_l0",
+          "ascend_l0c",
+          "float",
+          "8192",
+          "81920"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "0"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "32768"
+        ],
+        [
+          "zero_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "0"
+        ]
+      ],
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_compile_flags": null,
+      "source_core_value": 24,
+      "actual_core_properties_queried": false,
+      "source_sampling": "fallback24",
+      "source_review": "p3_linear_L1/source_allocation_effect_review.json"
+    },
+    {
+      "id": "normalize_linear_attention_ker1",
+      "frontend_params": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "512",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "512",
+            "128"
+          ]
+        },
+        {
+          "name": "Acc_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "129",
+            "128"
+          ]
+        }
+      ],
+      "host_prototype": "uint8_t* K_handle, uint8_t* V_handle, uint8_t* Acc_handle, aclrtStream stream",
+      "main_source_sha256": "d612f331e1f0497c668f15176453827a2694fbcf6f2ab98c1f7022c109bd1284",
+      "TA_source_sha256": "4a12dddcf2464e2316ab539cc28023c2e57cbd9d29b66e0c1303aa628033ea57",
+      "final_op_calls": {
+        "tl.ascend_auto_set_flag": 6,
+        "tl.ascend_auto_wait_flag": 6,
+        "tl.ascend_auto_barrier": 6,
+        "tir.type_annotation": 24,
+        "tir.tvm_access_ptr": 24,
+        "tir.call_extern": 5,
+        "tl.ascend_gemm_v0": 1,
+        "tl.ascend_set_mask_mode": 2,
+        "tl.ascend_set_mask_payload": 2,
+        "tl.ascend_fill_raw_counter": 1,
+        "tl.ascend_copy_ub_to_ub_selected": 2,
+        "tl.ascend_reduce_advanced_composite": 1,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "acc_half_ub",
+          "ascend_ub",
+          "half",
+          "32",
+          "128"
+        ],
+        [
+          "acc_l0",
+          "ascend_l0c",
+          "float",
+          "8192",
+          "0"
+        ],
+        [
+          "acc_ub",
+          "ascend_ub",
+          "float",
+          "32",
+          "0"
+        ],
+        [
+          "k_half_ub",
+          "ascend_ub",
+          "half",
+          "2048",
+          "192"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "4096",
+          "0"
+        ],
+        [
+          "k_ub",
+          "ascend_ub",
+          "float",
+          "2048",
+          "4288"
+        ],
+        [
+          "sumk_ub",
+          "ascend_ub",
+          "float",
+          "32",
+          "12480"
+        ],
+        [
+          "tmp_ub",
+          "ascend_ub",
+          "uint8_t",
+          "4096",
+          "12608"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "8192"
+        ]
+      ],
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_compile_flags": null,
+      "source_core_value": null,
+      "actual_core_properties_queried": false,
+      "source_sampling": "none",
+      "source_review": "p3_linear_L1/source_allocation_effect_review.json"
+    },
+    {
+      "id": "normalize_linear_attention_ker2",
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "512",
+            "128"
+          ]
+        },
+        {
+          "name": "Acc_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "129",
+            "128"
+          ]
+        },
+        {
+          "name": "workspace_handle",
+          "dtype": "float32",
+          "shape": [
+            "512",
+            "64",
+            "128"
+          ]
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "512",
+            "128"
+          ]
+        }
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* Acc_handle, uint8_t* workspace_handle, uint8_t* O_handle, aclrtStream stream",
+      "main_source_sha256": "daf9200d40069d708f6b069e4107e4feb114d56a3443f74fe8f17e50494763a0",
+      "TA_source_sha256": "dcc692cc75ff1f3b5776942a4ee643705021a0c9596fe2be186858ed1404dcc3",
+      "final_op_calls": {
+        "tl.ascend_auto_set_flag": 6,
+        "tl.ascend_auto_wait_flag": 6,
+        "tl.ascend_auto_barrier": 6,
+        "tir.type_annotation": 32,
+        "tir.tvm_access_ptr": 32,
+        "tir.call_extern": 7,
+        "tl.ascend_gemm_v0": 1,
+        "tl.ascend_set_cross_flag": 1,
+        "tl.ascend_copy_ub_to_ub_selected": 3,
+        "tl.ascend_set_mask_mode": 3,
+        "tir.large_uint_imm": 3,
+        "tl.ascend_set_mask_payload": 3,
+        "tl.ascend_mul_raw": 1,
+        "tl.ascend_reduce_fp32_v2": 1,
+        "tl.ascend_wait_cross_flag": 1,
+        "tl.ascend_divs_raw": 1
+      },
+      "allocation_views": [
+        [
+          "acc_half_ub",
+          "ascend_ub",
+          "half",
+          "128",
+          "8192"
+        ],
+        [
+          "acc_l1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "8192"
+        ],
+        [
+          "acc_ub",
+          "ascend_ub",
+          "float",
+          "128",
+          "24832"
+        ],
+        [
+          "denom_ub",
+          "ascend_ub",
+          "float",
+          "32",
+          "25344"
+        ],
+        [
+          "o_half_ub",
+          "ascend_ub",
+          "half",
+          "4096",
+          "60608"
+        ],
+        [
+          "o_l0",
+          "ascend_l0c",
+          "float",
+          "8192",
+          "0"
+        ],
+        [
+          "o_ub",
+          "ascend_ub",
+          "float",
+          "4096",
+          "44224"
+        ],
+        [
+          "q_half_ub",
+          "ascend_ub",
+          "half",
+          "4096",
+          "0"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "4096",
+          "0"
+        ],
+        [
+          "q_ub",
+          "ascend_ub",
+          "float",
+          "4096",
+          "8448"
+        ],
+        [
+          "qkv_ub",
+          "ascend_ub",
+          "float",
+          "4096",
+          "27840"
+        ],
+        [
+          "tmp_ub",
+          "ascend_ub",
+          "uint8_t",
+          "2368",
+          "25472"
+        ]
+      ],
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true
+      },
+      "original_compile_flags": null,
+      "source_core_value": null,
+      "actual_core_properties_queried": false,
+      "source_sampling": "none",
+      "source_review": "p3_linear_L1/source_allocation_effect_review.json"
+    }
+  ]
+}
