@@ -1096,6 +1096,34 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/test_tilelang_ascend_resource_scope.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_resource_scope.py",
+      "source_git_blob": "6fe15d742d387b55170c8c854fbb4404541a5800",
+      "source_sha256": "497e5fa66c0d14cee18f9f9717788ee8596501da0ea607166d63567fa875e246",
+      "destination_sha256": "15f704fbdd04651d8b5632c7b6bb45f497bf6645b6126ea832c99674e629c8e2",
+      "adaptations": [
+        "Private dialect/pass imports; TIRX SBlock/SBlockRealize, Op name and Bind reader names.",
+        "Local _bind_body constructs Bind followed by original body in one SeqStmt, flattening only this immediate body to keep lexical lifetime; all three original Let bodies have no competing declaration identity. No public legacy LetStmt is introduced.",
+        "Explicit source target has kind ascend, dav-2201, model A3 and dialect keys in place of LLVM model dialect/platform keyword; raw pass semantics and source scope/invalid boundaries unchanged.",
+        "Remove now-unused local Target imports; global Target used by the local explicit source-target helper."
+      ],
+      "validation": {
+        "original_test_functions": 18,
+        "whole_module_AST_exact_except_listed_adaptations": true,
+        "original_functions_preserved": 24,
+        "original_host_native_tests_TA_main_each_passed": 30,
+        "actual_full_pipeline_source_requests_TA_main_each": 22,
+        "host_prototypes_all_equal": true,
+        "TA_actual_probe_and_StorageRewrite_is_npu_true": true,
+        "main_hardware_queries_during_pure_host_tests": 0,
+        "actual_OFF_parser_passed": 5,
+        "actual_OFF_original_native_cases_skipped": 30,
+        "SDK_compilation": false,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
