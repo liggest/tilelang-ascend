@@ -1,0 +1,575 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "owner_scope": "I1 regular static/dynamic lightning indexer only; no deepseek_v4/developer variants",
+  "entries": [
+    {
+      "source_path": "examples/lightning_indexer/example_lightning_indexer.py",
+      "destination_path": "examples/ascend_a2a3/lightning_indexer/example_lightning_indexer.py",
+      "source_sha256": "211480a9bcda53b1d241eaf068e1ce906ca610e25c7163c7ad183011d462563c",
+      "source_git_blob": "cabfdf46b812f4798c583610333e7950ceaa5691",
+      "destination_sha256": "ee70c132705b048ed372cef7d19456b0e633f06d1f4b29247573c1a622ed53a7",
+      "state": "ported_full_source_and_actual_SDK_verified_device_pending",
+      "original_function_AST_sha256": {
+        "indexer": "efe7006145666d7613da9f89c09468ff6519cda4a789f6d4e9c7ca1e84df51d5",
+        "index_golden": "f49c3e6100da3a894d0c71d970d0b3124e2d6863499fafe9cc8af83783752a0a",
+        "count_mismatches_last_dim": "5e5754be1c6ace3523661714c4f8fed891570a223a2ed6674e9b27ac09214557",
+        "compare_tensors": "f325a88d6fee4d1da7089ce44d3f9583ef85e4c0bec6709954048c83a792992f",
+        "test_indexer": "5dc50392cab9adfbda0562f7fb60d7a26b5ba9bd392e287762db8c409655934b"
+      },
+      "original_constants": {
+        "B": 2,
+        "N2": 1,
+        "G": 32,
+        "S1": 512,
+        "S2": 4096,
+        "D": 64,
+        "TOP_K": 1024
+      },
+      "original_cli_local_constants": {
+        "B": 2,
+        "N2": 1,
+        "G": 32,
+        "S1": 512,
+        "S2": 4096,
+        "D": 64,
+        "TOP_K": 1024
+      },
+      "original_factory_args": [
+        2,
+        1,
+        32,
+        512,
+        4096,
+        64,
+        1024,
+        256,
+        16,
+        64,
+        64,
+        64
+      ],
+      "runtime_input_shapes": {
+        "Query": [
+          2,
+          512,
+          1,
+          2048
+        ],
+        "KEY": [
+          2,
+          4096,
+          1,
+          64
+        ],
+        "WEIGHTS": [
+          2,
+          512,
+          1,
+          32,
+          1
+        ]
+      },
+      "kernel_WEIGHTS_shape": [
+        2,
+        512,
+        1,
+        32
+      ],
+      "original_runtime_calls": 1,
+      "original_accuracy_threshold": 0.99,
+      "strict_accuracy_comparison": ">",
+      "original_failure_is_print_only_exit0": true,
+      "original_no_argument_CLI": true,
+      "workspace_idx": [
+        -3
+      ],
+      "out_idx": [
+        -1
+      ],
+      "original_raw_target": "auto",
+      "original_seed": 2,
+      "original_cache_policy": "disable, no clear",
+      "device_not_run": true,
+      "adaptations": [
+        "private A2A3 T import",
+        "seed2 and disable-cache moved into explicit task-owned main with exact raw cache-bit restoration",
+        "original test_indexer print/exit behavior unchanged; no fake success marker or new assertion"
+      ]
+    },
+    {
+      "source_path": "examples/lightning_indexer/example_lightning_indexer_dynamic_shape.py",
+      "destination_path": "examples/ascend_a2a3/lightning_indexer/example_lightning_indexer_dynamic_shape.py",
+      "source_sha256": "e16a77737a0f3f338a22b5caca6d245275a405b18ced0c65a2892d79d1c30c3e",
+      "source_git_blob": "be3fc28062d6fe966455bb3373802d80b98fe77a",
+      "destination_sha256": "8218d7ddaf983b4fd9392854bf79f7fcbdd68eced8b74475360b6280759bb0ad",
+      "state": "ported_full_source_and_actual_SDK_verified_device_pending",
+      "original_function_AST_sha256": {
+        "indexer": "2414c68adb4f183e51df13948abf94c1cfbf74d50266398f2718fb5f0b63d735",
+        "index_golden": "f49c3e6100da3a894d0c71d970d0b3124e2d6863499fafe9cc8af83783752a0a",
+        "count_mismatches_last_dim": "5e5754be1c6ace3523661714c4f8fed891570a223a2ed6674e9b27ac09214557",
+        "compare_tensors": "f325a88d6fee4d1da7089ce44d3f9583ef85e4c0bec6709954048c83a792992f",
+        "test_indexer": "6a16996e85708585858686419183b7bd5c712a603333820a65f7b9af2f30bd72"
+      },
+      "original_constants": {
+        "N2": 1,
+        "G": 32,
+        "D": 64,
+        "TOP_K": 1024
+      },
+      "original_cli_local_constants": {
+        "N2": 1,
+        "G": 32,
+        "D": 64,
+        "TOP_K": 1024,
+        "B": 1,
+        "S1": 512,
+        "S2": 4096
+      },
+      "original_factory_args": [
+        1,
+        32,
+        64,
+        1024,
+        256,
+        16,
+        64,
+        64,
+        64
+      ],
+      "runtime_input_shapes": {
+        "Query": [
+          1,
+          512,
+          1,
+          2048
+        ],
+        "KEY": [
+          1,
+          4096,
+          1,
+          64
+        ],
+        "WEIGHTS": [
+          1,
+          512,
+          1,
+          32,
+          1
+        ]
+      },
+      "kernel_WEIGHTS_shape": [
+        1,
+        512,
+        1,
+        32
+      ],
+      "original_runtime_calls": 1,
+      "original_accuracy_threshold": 0.99,
+      "strict_accuracy_comparison": ">",
+      "original_failure_is_print_only_exit0": true,
+      "original_no_argument_CLI": true,
+      "workspace_idx": [
+        -3
+      ],
+      "out_idx": [
+        -1
+      ],
+      "original_raw_target": "ascendc",
+      "original_seed": 2,
+      "original_cache_policy": "disable, no clear",
+      "device_not_run": true,
+      "adaptations": [
+        "private A2A3 T import",
+        "seed2 and disable-cache moved into explicit task-owned main with exact raw cache-bit restoration",
+        "original test_indexer print/exit behavior unchanged; no fake success marker or new assertion"
+      ]
+    }
+  ],
+  "factory_requests": [
+    {
+      "id": "static",
+      "source_path": "examples/lightning_indexer/example_lightning_indexer.py",
+      "factory": "indexer",
+      "args": [
+        2,
+        1,
+        32,
+        512,
+        4096,
+        64,
+        1024,
+        256,
+        16,
+        64,
+        64,
+        64
+      ],
+      "kwargs": {}
+    },
+    {
+      "id": "dynamic",
+      "source_path": "examples/lightning_indexer/example_lightning_indexer_dynamic_shape.py",
+      "factory": "indexer",
+      "args": [
+        1,
+        32,
+        64,
+        1024,
+        256,
+        16,
+        64,
+        64,
+        64
+      ],
+      "kwargs": {}
+    }
+  ],
+  "validation": {
+    "original_CLIs": 2,
+    "original_runtime_inputs": 2,
+    "original_runtime_calls": 2,
+    "original_numeric_assertions": 0,
+    "original_accuracy_evaluations": 2,
+    "device_not_run": true,
+    "source_SDK_pending": false,
+    "TA_complete_source": 2,
+    "main_complete_source": 2,
+    "TA_actual_Bisheng": 2,
+    "main_actual_Bisheng": 2,
+    "actual_NPU_properties_or_context_or_tensor_or_launch": false,
+    "source_provenance": "main native1fa and actual driver-only availability true/count16; TA existing native/PYX, not fresh",
+    "source_compile_repeated_for_host_followup": false,
+    "host_ON_passed": 28,
+    "actual_OFF_passed": 26,
+    "actual_OFF_native_only_skipped": 2,
+    "complete_original_top_level_definitions": 10,
+    "complete_original_kernel_factories": 2,
+    "device_numeric_pending": true,
+    "CLI_exit0_not_numeric_pass": true,
+    "source_companion_placed_under_actual_pytest_root": true,
+    "host_tests_repeat_frontend_only_not_full_lower_or_SDK": true
+  },
+  "source_contracts": [
+    {
+      "id": "static",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_indexer_I1/ta/static/kernel.cc",
+        "sha256": "6ba15d7d101d9a72c5932758f3f9e4c7293d67725f88d3e0affb8ccc34806fd0",
+        "size": 7401
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_indexer_I1/main/static/kernel.cc",
+        "sha256": "5b99bad120d21b4b984b33c3bfd9ac78208456ff5986648bd4a0042cd274f7ba",
+        "size": 7503
+      },
+      "source_only_audit_normalizations": "include relocation, exact enumerated expression substitutions, exactly two unused V scalar definitions removed for comparison; never applied to SDK or product",
+      "original_definition_count": 5,
+      "complete_AST_exact": true,
+      "extra_main_definitions": [
+        "main"
+      ],
+      "unused_main_V_definitions": [
+        "      int32_t s1_start_idx = (vid * 256);\n",
+        "      int32_t s1_end_idx = ((vid * 256) + 256);\n"
+      ],
+      "changes": [],
+      "full_remaining_source_byte_equal": true,
+      "named_allocation_views": [
+        {
+          "name": "Q_L1",
+          "pool": "ascend_l1",
+          "dtype": "half",
+          "count": 4096,
+          "offset": 0,
+          "end": 8192
+        },
+        {
+          "name": "K_L1",
+          "pool": "ascend_l1",
+          "dtype": "half",
+          "count": 4096,
+          "offset": 8192,
+          "end": 16384
+        },
+        {
+          "name": "C_L0",
+          "pool": "ascend_l0c",
+          "dtype": "float",
+          "count": 4096,
+          "offset": 0,
+          "end": 16384
+        },
+        {
+          "name": "tmp_ub",
+          "pool": "ascend_ub",
+          "dtype": "uint8_t",
+          "count": 65536,
+          "offset": 33856,
+          "end": 99392
+        },
+        {
+          "name": "score_accum_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 4096,
+          "offset": 99392,
+          "end": 115776
+        },
+        {
+          "name": "reduce_tmp_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 4096,
+          "offset": 0,
+          "end": 16384
+        },
+        {
+          "name": "reduce_g_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 256,
+          "offset": 16384,
+          "end": 17408
+        },
+        {
+          "name": "mm_res_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 4096,
+          "offset": 17408,
+          "end": 33792
+        },
+        {
+          "name": "weight_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 16,
+          "offset": 33792,
+          "end": 33856
+        },
+        {
+          "name": "topk_dst_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 2048,
+          "offset": 115776,
+          "end": 123968
+        },
+        {
+          "name": "topk_index_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 1024,
+          "offset": 123968,
+          "end": 128064
+        },
+        {
+          "name": "output_ub",
+          "pool": "ascend_ub",
+          "dtype": "int",
+          "count": 1024,
+          "offset": 128064,
+          "end": 132160
+        }
+      ],
+      "all_named_views_same_and_disjoint": true,
+      "ABI_TA": "uint8_t* Query_handle, uint8_t* KEY_handle, uint8_t* QK_RES_handle, uint8_t* WEIGHTS_handle, uint8_t* OUT_handle, aclrtStream stream",
+      "ABI_main": "uint8_t* Query_handle, uint8_t* KEY_handle, uint8_t* QK_RES_handle, uint8_t* WEIGHTS_handle, uint8_t* OUT_handle, aclrtStream stream",
+      "default_integer_bounds": {
+        "Query_elements": 2097152,
+        "KEY_elements": 524288,
+        "QK_workspace_elements": 134217728,
+        "WEIGHTS_elements": 32768,
+        "OUT_elements": 1048576
+      },
+      "default_max_byte_size": 536870912,
+      "integer_proof_scope": "original default CLI input only; positive-dimension loop extent identity also follows loop inequality; not arbitrary huge or overcapacity dynamic input validation",
+      "original_extra_singleton_WEIGHTS_host_shape_preserved": true,
+      "original_print_only_failure_exit0_preserved": true
+    },
+    {
+      "id": "dynamic",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_indexer_I1/ta/dynamic/kernel.cc",
+        "sha256": "28dbbcc00e928b10156f16bcdc2afb468cceff64d7d8f8d6c6d509156a2586ee",
+        "size": 8016
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_indexer_I1/main/dynamic/kernel.cc",
+        "sha256": "9619b4a1d59f517d520be6ea039faa4f0581e8018be3034a8c140e6b5d0aef3a",
+        "size": 7924
+      },
+      "source_only_audit_normalizations": "include relocation, exact enumerated expression substitutions, exactly two unused V scalar definitions removed for comparison; never applied to SDK or product",
+      "original_definition_count": 5,
+      "complete_AST_exact": true,
+      "extra_main_definitions": [
+        "main"
+      ],
+      "unused_main_V_definitions": [
+        "      int32_t s1_start_idx = (vid * (S1 / 2));\n",
+        "      int32_t s1_end_idx = ((vid + 1) * (S1 / 2));\n"
+      ],
+      "changes": [
+        {
+          "kind": "unreachable remainder arm",
+          "old": "((1 <= ((S1 / 64) - m)) ? 64 : ((0 < (S1 - (m * 64))) ? (S1 - (m * 64)) : 0))",
+          "new": "((1 <= ((S1 / 64) - m)) ? 64 : 0)",
+          "count": 2,
+          "proof": "original m loop: 0 <= m < floor(S1/64); therefore floor(S1/64) - m >= 1 for every entered iteration"
+        },
+        {
+          "kind": "unreachable remainder arm",
+          "old": "((1 <= ((S2 / 64) - n)) ? 64 : ((0 < (S2 - (n * 64))) ? (S2 - (n * 64)) : 0))",
+          "new": "((1 <= ((S2 / 64) - n)) ? 64 : 0)",
+          "count": 2,
+          "proof": "original n loop: 0 <= n < floor(S2/64); therefore floor(S2/64) - n >= 1 for every entered iteration"
+        },
+        {
+          "kind": "unreachable remainder arm",
+          "old": "((1 <= ((S2 / 256) - s2_id)) ? 256 : ((0 < (S2 - (s2_id * 256))) ? (S2 - (s2_id * 256)) : 0))",
+          "new": "((1 <= ((S2 / 256) - s2_id)) ? 256 : 0)",
+          "count": 1,
+          "proof": "original s2_id loop: 0 <= s2_id < floor(S2/256); therefore floor(S2/256) - s2_id >= 1 for every entered iteration"
+        },
+        {
+          "kind": "commutative/distributive nonnegative integer identity",
+          "old": "((S1 / 2) * (vid + 1))",
+          "new": "((vid + 1) * (S1 / 2))",
+          "count": 1
+        },
+        {
+          "kind": "commutative/distributive nonnegative integer identity",
+          "old": "((n * 64) + ((((m * 2048) + ((cid * S1) * 32)) + g) * S2))",
+          "new": "(((((m * S2) * 2048) + (n * 64)) + (((cid * S2) * S1) * 32)) + (g * S2))",
+          "count": 1
+        },
+        {
+          "kind": "commutative/distributive nonnegative integer identity",
+          "old": "((s2_id * 256) + (((((cid * S1) * 32) + (s1_id * 32)) + (g_id * 16)) * S2))",
+          "new": "((((s2_id * 256) + (((cid * S2) * S1) * 32)) + ((s1_id * S2) * 32)) + ((g_id * S2) * 16))",
+          "count": 1
+        },
+        {
+          "kind": "commutative/distributive nonnegative integer identity",
+          "old": "((((cid * S1) * 32) + (s1_id * 32)) + (g_id * 16))",
+          "new": "(((s1_id * 32) + ((cid * S1) * 32)) + (g_id * 16))",
+          "count": 1
+        }
+      ],
+      "full_remaining_source_byte_equal": true,
+      "named_allocation_views": [
+        {
+          "name": "Q_L1",
+          "pool": "ascend_l1",
+          "dtype": "half",
+          "count": 4096,
+          "offset": 0,
+          "end": 8192
+        },
+        {
+          "name": "K_L1",
+          "pool": "ascend_l1",
+          "dtype": "half",
+          "count": 4096,
+          "offset": 8192,
+          "end": 16384
+        },
+        {
+          "name": "C_L0",
+          "pool": "ascend_l0c",
+          "dtype": "float",
+          "count": 4096,
+          "offset": 0,
+          "end": 16384
+        },
+        {
+          "name": "tmp_ub",
+          "pool": "ascend_ub",
+          "dtype": "uint8_t",
+          "count": 65536,
+          "offset": 33856,
+          "end": 99392
+        },
+        {
+          "name": "score_accum_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 4096,
+          "offset": 99392,
+          "end": 115776
+        },
+        {
+          "name": "reduce_tmp_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 4096,
+          "offset": 0,
+          "end": 16384
+        },
+        {
+          "name": "reduce_g_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 256,
+          "offset": 16384,
+          "end": 17408
+        },
+        {
+          "name": "mm_res_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 4096,
+          "offset": 17408,
+          "end": 33792
+        },
+        {
+          "name": "weight_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 16,
+          "offset": 33792,
+          "end": 33856
+        },
+        {
+          "name": "topk_dst_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 2048,
+          "offset": 115776,
+          "end": 123968
+        },
+        {
+          "name": "topk_index_ub",
+          "pool": "ascend_ub",
+          "dtype": "float",
+          "count": 1024,
+          "offset": 123968,
+          "end": 128064
+        },
+        {
+          "name": "output_ub",
+          "pool": "ascend_ub",
+          "dtype": "int",
+          "count": 1024,
+          "offset": 128064,
+          "end": 132160
+        }
+      ],
+      "all_named_views_same_and_disjoint": true,
+      "ABI_TA": "uint8_t* Query_handle, uint8_t* KEY_handle, uint8_t* QK_RES_handle, uint8_t* WEIGHTS_handle, uint8_t* OUT_handle, int64_t B, int64_t S1, int64_t S2, aclrtStream stream",
+      "ABI_main": "uint8_t* Query_handle, uint8_t* KEY_handle, uint8_t* QK_RES_handle, uint8_t* WEIGHTS_handle, uint8_t* OUT_handle, int64_t B, int64_t S1, int64_t S2, aclrtStream stream",
+      "default_integer_bounds": {
+        "Query_elements": 1048576,
+        "KEY_elements": 262144,
+        "QK_workspace_elements": 67108864,
+        "WEIGHTS_elements": 16384,
+        "OUT_elements": 524288
+      },
+      "default_max_byte_size": 268435456,
+      "integer_proof_scope": "original default CLI input only; positive-dimension loop extent identity also follows loop inequality; not arbitrary huge or overcapacity dynamic input validation",
+      "original_extra_singleton_WEIGHTS_host_shape_preserved": true,
+      "original_print_only_failure_exit0_preserved": true
+    }
+  ]
+}
