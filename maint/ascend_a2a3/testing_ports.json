@@ -582,6 +582,121 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_tile_atomic_add_dtype_coverage.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_tile_atomic_add_dtype_coverage.py",
+      "source_git_blob": "8c4c39b1a778b8e982cb5f189a781f11cfa53c26",
+      "source_sha256": "51407a902f0b2402e007ced886bed25a171114b79787e6b3fd39cf3a638f80ac",
+      "destination_sha256": "880e0fba652c3a042603b8cebc2b31473d32c09c0dc729002a9cab7b5ab5300a",
+      "adaptations": [
+        "Explicit A2A3 dialect; preserve complete kernels, supported/known-broken matrices, original numerical inputs, tolerance, all parameters and low_priority markers.",
+        "Use scoped raw CacheState monkeypatch instead of module-global disable/enable; per-case native/device gates replace import-time hardware skip.",
+        "Seven old parser DiagnosticError wrappers become their identical source helper ValueError/AssertionError in eager frontend; illegal inputs and rejection phase unchanged."
+      ],
+      "validation": {
+        "all_source_function_AST_preserved_except_fixture_and_documented_raises": true,
+        "original_TA_negative_cases_batch": 17,
+        "main_negative_cases_batch": 17,
+        "full_positive_source_cases_batch": 39,
+        "actual_OFF_pure_host_passed": 5,
+        "actual_OFF_native_device_source_cases_skipped_batch": 95,
+        "device_execution": false,
+        "positive_SDK_compilation": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_tile_broadcast_dtype_coverage.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_tile_broadcast_dtype_coverage.py",
+      "source_git_blob": "d2278707c73499b02daf58e220df86cafa0715c7",
+      "source_sha256": "ebdc3b92d54ca7ff4d527155c32985584d2747a78134348d64bdfd1232bb1e4d",
+      "destination_sha256": "4de6c9b1e80c2a01c1e7cf409ccf25a0fd79e064f52747b6322ae1527d022c1d",
+      "adaptations": [
+        "Explicit A2A3 dialect; preserve complete kernels, supported/known-broken matrices, original numerical inputs, tolerance, all parameters and low_priority markers.",
+        "Use scoped raw CacheState monkeypatch instead of module-global disable/enable; per-case native/device gates replace import-time hardware skip.",
+        "Seven old parser DiagnosticError wrappers become their identical source helper ValueError/AssertionError in eager frontend; illegal inputs and rejection phase unchanged."
+      ],
+      "validation": {
+        "all_source_function_AST_preserved_except_fixture_and_documented_raises": true,
+        "original_TA_negative_cases_batch": 17,
+        "main_negative_cases_batch": 17,
+        "full_positive_source_cases_batch": 39,
+        "actual_OFF_pure_host_passed": 5,
+        "actual_OFF_native_device_source_cases_skipped_batch": 95,
+        "device_execution": false,
+        "positive_SDK_compilation": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_tile_compare_dtype_coverage.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_tile_compare_dtype_coverage.py",
+      "source_git_blob": "ace73dd900113676e8fed59628cb08da143a2ced",
+      "source_sha256": "1df5d24d38481a6e30cf9b8ea9e84557503d190bc0a7e9d816d9e9b93eb1a767",
+      "destination_sha256": "b475d3b04ebc3429e7744455ab641098dc3d780701ed468f06cdfa5d7a9219a6",
+      "adaptations": [
+        "Explicit A2A3 dialect; preserve complete kernels, supported/known-broken matrices, original numerical inputs, tolerance, all parameters and low_priority markers.",
+        "Use scoped raw CacheState monkeypatch instead of module-global disable/enable; per-case native/device gates replace import-time hardware skip.",
+        "Seven old parser DiagnosticError wrappers become their identical source helper ValueError/AssertionError in eager frontend; illegal inputs and rejection phase unchanged."
+      ],
+      "validation": {
+        "all_source_function_AST_preserved_except_fixture_and_documented_raises": true,
+        "original_TA_negative_cases_batch": 17,
+        "main_negative_cases_batch": 17,
+        "full_positive_source_cases_batch": 39,
+        "actual_OFF_pure_host_passed": 5,
+        "actual_OFF_native_device_source_cases_skipped_batch": 95,
+        "device_execution": false,
+        "positive_SDK_compilation": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_tile_createvecindex_dtype_coverage.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_tile_createvecindex_dtype_coverage.py",
+      "source_git_blob": "4b43afe4626587fe08fa16d9b2c4b8330a8c19b0",
+      "source_sha256": "23741d93815135dd5affadd34567becc84a283b4cea99406af8c398f178a5bde",
+      "destination_sha256": "7da73ce46f2fcdd0d4e966aef29d030b025178d3876f0a25728a214340cba2a5",
+      "adaptations": [
+        "Explicit A2A3 dialect; preserve complete kernels, supported/known-broken matrices, original numerical inputs, tolerance, all parameters and low_priority markers.",
+        "Use scoped raw CacheState monkeypatch instead of module-global disable/enable; per-case native/device gates replace import-time hardware skip.",
+        "Seven old parser DiagnosticError wrappers become their identical source helper ValueError/AssertionError in eager frontend; illegal inputs and rejection phase unchanged."
+      ],
+      "validation": {
+        "all_source_function_AST_preserved_except_fixture_and_documented_raises": true,
+        "original_TA_negative_cases_batch": 17,
+        "main_negative_cases_batch": 17,
+        "full_positive_source_cases_batch": 39,
+        "actual_OFF_pure_host_passed": 5,
+        "actual_OFF_native_device_source_cases_skipped_batch": 95,
+        "device_execution": false,
+        "positive_SDK_compilation": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_tile_gather_dtype_coverage.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_tile_gather_dtype_coverage.py",
+      "source_git_blob": "a210b29ea83a2b7ba6f264fe1ce3bd52dbea256a",
+      "source_sha256": "da820e4446b46e59d1cf6e376d6715921340cde90bbb437b6bf807b177c5655a",
+      "destination_sha256": "0e4262a2d54ded7c6037cbf13ae19a1d82ac9ada2fc154961052f2b3a1fd766c",
+      "adaptations": [
+        "Explicit A2A3 dialect; preserve complete kernels, supported/known-broken matrices, original numerical inputs, tolerance, all parameters and low_priority markers.",
+        "Use scoped raw CacheState monkeypatch instead of module-global disable/enable; per-case native/device gates replace import-time hardware skip.",
+        "Seven old parser DiagnosticError wrappers become their identical source helper ValueError/AssertionError in eager frontend; illegal inputs and rejection phase unchanged."
+      ],
+      "validation": {
+        "all_source_function_AST_preserved_except_fixture_and_documented_raises": true,
+        "original_TA_negative_cases_batch": 17,
+        "main_negative_cases_batch": 17,
+        "full_positive_source_cases_batch": 39,
+        "actual_OFF_pure_host_passed": 5,
+        "actual_OFF_native_device_source_cases_skipped_batch": 95,
+        "device_execution": false,
+        "positive_SDK_compilation": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
