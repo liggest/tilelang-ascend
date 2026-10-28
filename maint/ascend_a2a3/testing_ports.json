@@ -1301,6 +1301,115 @@
         "actual_Bisheng_source_cases": 4
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_var.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_var.py",
+      "source_git_blob": "dcb732aff851ea3710ec798f031cc74acd028325",
+      "source_sha256": "7a46ac8a0e3ca184ba2067e98fcba79f764a32424a0563acd1e9991a68a75a79",
+      "destination_sha256": "d609be01f6a9ab6234f58d38c338f9060398befa5c103298f254d549c340825b",
+      "adaptations": [
+        "Private A2A3 language import; all original factories, numerical/reference bodies, matrices, seeds, tolerances and priority marks retained.",
+        "Use existing per-case native/device markers rather than import-time hardware probing.",
+        "Use scoped existing isolated_a2a3_cache and original clear behavior or restore the original raw CacheState bit through monkeypatch."
+      ],
+      "validation": {
+        "original_numerical_cases_pending": 2,
+        "paired_full_source_and_ELFs_per_side": 2,
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "original_output_validation_is_print_only_not_numeric_assert": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_tile_arith.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_tile_arith.py",
+      "source_git_blob": "0dccc12784e3a4ec779f2e55beecd5ce30cb31ad",
+      "source_sha256": "f054ce54e7caf92ece95df7ff81676d9d9110d4acc1769babde7f8f2098ae224",
+      "destination_sha256": "5837ebadd4a8a322d27909870d4c611f8bb498776ba43661287fafe47df741c6",
+      "adaptations": [
+        "Private A2A3 language import; all original factories, numerical/reference bodies, matrices, seeds, tolerances and priority marks retained.",
+        "Use existing per-case native/device markers rather than import-time hardware probing.",
+        "Use scoped existing isolated_a2a3_cache and original clear behavior or restore the original raw CacheState bit through monkeypatch.",
+        "Two size mismatch assertions use the precise current frontend AssertionError and original size must be same message; original TA DiagnosticError subclasses RuntimeError.",
+        "Keep the complete original CLI, requiring an explicit dedicated TILELANG_CACHE_DIR before its real clear operation and explicitly importing torch_npu only when invoked.",
+        "Before the original CLI clear, require the actual resolved env cache path to match the explicit environment request; reject descriptor override conflicts without clearing or allocating."
+      ],
+      "validation": {
+        "original_native_error_cases_ON": 6,
+        "original_numerical_cases_pending": 126,
+        "paired_full_source_and_ELFs_per_side": 126,
+        "integer_division_rejections_per_side": {
+          "AscendC_codegen": 2,
+          "PTO_real_SDK": 2
+        },
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "CLI_missing_env_and_descriptor_conflict_host_cases": 2
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_tile_atomic_add.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_tile_atomic_add.py",
+      "source_git_blob": "10561e467df0bf0327a220e850fb305607e5b9d7",
+      "source_sha256": "06e2f99b7c6bcf30542297c280e8e1d55ed1db13c29430177fbf2fd7ac537e66",
+      "destination_sha256": "fd6f4e4a54282a744cf43d8d2cd463978461c87b6d41064310c2a82137127dac",
+      "adaptations": [
+        "Private A2A3 language import; all original factories, numerical/reference bodies, matrices, seeds, tolerances and priority marks retained.",
+        "Use existing per-case native/device markers rather than import-time hardware probing.",
+        "Use scoped existing isolated_a2a3_cache and original clear behavior or restore the original raw CacheState bit through monkeypatch."
+      ],
+      "validation": {
+        "original_numerical_cases_pending": 8,
+        "paired_full_source_and_ELFs_per_side": 8,
+        "whole_module_AST_equal_after_declared_adapters": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_ascend_compile_flags.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_ascend_compile_flags.py",
+      "source_git_blob": "b882a29367cbc62c6c8967b9336b68c4bcfe544d",
+      "source_sha256": "b1e31442ab7313c68614045c77ffaf7672cb8ca3c227bbca150723eda49fca3a",
+      "destination_sha256": "9a64e894020ee5914191ee7a5b0de28ebbbc6eba7be7be4f0a93d9d5c45184ba",
+      "adaptations": [
+        "Backend-private compiler imports; preserve all nine literal flag rows and all ten original test names.",
+        "PTO effective VS input supplied explicitly to pure compiler tests; real backend defaults verified by the paired source matrix.",
+        "Freeze native Target/model/keys once and delegate LibraryGenerator its CompileConfig; capture real argv with mocked subprocess only for hermetic command assertions.",
+        "Keep the original copy-kernel body in a lazy factory so pure flags tests import with USE_ASCEND=OFF.",
+        "Use current JIT adapter signature and assert requested flags separately from final compiler flags; use full stamped snapshot in the modern shared cache key.",
+        "Map retired fake params pickle/auto_gm_idx/platform restore mock to current JSON params and A2A3 cache frozen-ABI delegation; actual autoGM sidecar validation remains covered by modern real restore tests.",
+        "Frozen A2/A3 target replaces retired CompileArgs(platform=...) field; retain explicit flag identity assertion.",
+        "Original synchronization kernel, decorator, inputs, seed, golden and negative unsynchronized-runtime assertion unchanged; runtime NPU gating moved to existing scoped marker."
+      ],
+      "validation": {
+        "original_hermetic_cases_ON": 17,
+        "original_pure_compiler_cases_actual_OFF": 11,
+        "native_hermetic_cases_actual_OFF_skipped": 6,
+        "original_NPU_cases_pending": 1,
+        "paired_original_sync_factory_sources_and_ELFs_per_side": 2,
+        "original_copy_kernel_body_AST_equal": true,
+        "unchanged_functions": [
+          "clean_env",
+          "test_resolve_compile_flags",
+          "test_env_opt_level_invalid_raises",
+          "test_no_environ_mutation",
+          "test_libgen_appends_flags",
+          "test_libgen_direct_caller_falls_back_to_derived",
+          "_build_sync_dependency_kernel",
+          "test_auto_sync_pass_prevents_dependency_hazard"
+        ],
+        "modern_interface_functions": [
+          "_pc",
+          "_bisheng_command",
+          "_copy_kernel",
+          "test_compile_resolves_and_threads_flags",
+          "test_cache_key_scopes_flags",
+          "test_autotuner_restore_threads_full_signature",
+          "test_compile_args_hash_scopes_platform_and_flags"
+        ]
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
