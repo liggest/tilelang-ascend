@@ -9,6 +9,9 @@ import pytest
 from tilelang.autotuner import tuner as tuner_module
 
 
+_ROOT = Path(__file__).resolve().parents[4]
+
+
 _SHAPES = [
     pytest.param((128, 128, 128), id="perfect_alignment"),
     pytest.param((128, 1024, 128), id="m_padding"),
@@ -25,7 +28,7 @@ pytestmark = pytest.mark.usefixtures("isolated_a2a3_cache")
 
 
 def _example():
-    path = Path(__file__).with_name("example_convolution_autotune.py")
+    path = _ROOT / "examples_experiment/ascend_a2a3/convolution/example_convolution_autotune.py"
     spec = importlib.util.spec_from_file_location("_convolution_config_boundary", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

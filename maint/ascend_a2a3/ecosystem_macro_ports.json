@@ -192,6 +192,6 @@
       "library_sha256": "4c28f1a143285a87c32cf81252a8a4de18881cd9590e71d692a87e78feff559d"
     }
   ],
-  "generated_source_companion": "examples/ascend_a2a3/flash_attention/fa_opt/test_expert_macro_source.py",
+  "generated_source_companion": "testing/ascend_a2a3/python/ecosystem/test_expert_macro_source.py",
   "source_contracts": "examples/ascend_a2a3/flash_attention/fa_opt/expert_macro_source_contracts.json"
 }

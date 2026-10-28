@@ -11,8 +11,9 @@ import tilelang
 from tilelang import tvm
 
 
-_NAMESPACE = Path(__file__).resolve().parents[2]
-_CONTRACTS = json.loads(Path(__file__).with_name("expert_macro_source_contracts.json").read_text())["rows"]
+_ROOT = Path(__file__).resolve().parents[4]
+_NAMESPACE = _ROOT / "examples/ascend_a2a3"
+_CONTRACTS = json.loads((_NAMESPACE / "flash_attention/fa_opt/expert_macro_source_contracts.json").read_text())["rows"]
 
 
 def _load(row):

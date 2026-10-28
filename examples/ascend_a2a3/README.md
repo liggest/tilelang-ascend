@@ -129,3 +129,13 @@ directory. This verifies the original CLI entry points; adopted-install
 `bench_test.sh`/collector/pytest execution and performance remain separate.
 The two result ledgers are `maint/ascend_a2a3/ecosystem_simple_ports.json` and
 `maint/ascend_a2a3/ecosystem_activation_ports.json`.
+
+Migration-only source and callback helpers run under the actual pytest root,
+not as legacy example CLIs:
+
+```bash
+python -m pytest testing/ascend_a2a3/python/ecosystem/
+```
+
+These checks retain native/OFF gating and isolated caches, and do not launch
+kernels or stand in for the original example/device cases.
