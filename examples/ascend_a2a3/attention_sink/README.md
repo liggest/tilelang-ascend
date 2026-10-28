@@ -34,5 +34,22 @@ requests. Their fixed original table addresses/values are checked, and the
 remaining payload, allocations and manual synchronization match. These reads
 remain in the actual compiled sources; their cost is not measured. This is
 source/SDK validation, not numerical, deadlock, performance or CI acceptance.
-Device execution of the original matrix is pending. The backward pair is a
-separate pending migration.
+Device execution of the original matrix is pending.
+
+The backward-BHSD pair preserves both complete original sources, Autograd,
+CPU references, double precision gates, retry policy and all 25 original control
+rows (standalone1, L0 seven, L1 eight, L2 five, boundary4). Its 34 distinct
+constructors produce 31 full source pairs and 62 successful Bisheng compilations;
+N129/N509 forward and D64 backward retain their three original assertion
+rejections. Original L2 N192 is a valid forward constructor; the float32 case is
+an input/runtime boundary, not a source rejection. Seven backward requests swap
+`delta_ub`/`tmp_ub` within the same exclusive byte range; all other payload,
+allocation aliases and synchronization agree. No added scalar reads or PIPE_ALL
+are separated here. Numerical execution remains pending.
+
+Backward test cleanup never scans `/tmp/tmp*.so`. It only removes regular
+libraries observed from this component's real JIT result or the actual compiler
+exception frame, after exact source/output-pair and file-identity checks. Unknown
+argv, cached paths, symlinks, replaced files and other components' libraries are
+left intact; source `.cpp` files remain. The original three-attempt compile-error
+retry, sleep, stderr capture, returned objects and exceptions remain unchanged.

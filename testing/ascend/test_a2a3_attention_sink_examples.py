@@ -117,9 +117,31 @@ def test_complete_original_source_request(case):
     module = _load(ROOT / entry["destination_path"])
     factory = getattr(module, case["factory"])
     target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": ["ascendc", "ascend"]})
+    if case.get("expected_frontend_error"):
+        assert case["expected_frontend_error"] == "AssertionError"
+        with target, pytest.raises(AssertionError):
+            factory.get_tir(*case["args"], **case["kwargs"])
+        return
     with target:
         function = factory.get_tir(*case["args"], **case["kwargs"])
     configs = normalize_a2a3_pass_configs(target, factory.pass_configs)
     with tvm.transform.PassContext(opt_level=3, config=configs):
         artifact = tilelang.lower(function, target=target)
     assert 'extern "C" void call(' in artifact.kernel_source
+
+
+@pytest.mark.parametrize("level", ["l0", "l1", "l2", "boundary", "all"])
+@pytest.mark.parametrize("positive", [False, True])
+def test_original_backward_cli_exit_and_nonblocking_levels(level, positive, monkeypatch):
+    path = TEST.parent.parent / "example_gqa_sink_bwd_bhsd/test_gqa_sink_bwd_bhsd.py"
+    module = _load(path)
+    calls = []
+    monkeypatch.setattr(sys, "argv", [str(path), "--level", level])
+    monkeypatch.setattr(module.tilelang, "disable_cache", lambda: None)
+    monkeypatch.setattr(module.torch, "manual_seed", lambda seed: calls.append(seed))
+    for name in ["l0", "l1", "l2", "boundary"]:
+        monkeypatch.setattr(module, "test_gqa_sink_bwd_bhsd_" + name, lambda n=name: (calls.append(n) or positive, []))
+    with pytest.raises(SystemExit) as error:
+        module.main.__wrapped__()
+    assert error.value.code == (0 if positive or level in ["l2", "boundary"] else 1)
+    assert calls == [42] + (["l0", "l1", "l2", "boundary"] if level == "all" else [level])
