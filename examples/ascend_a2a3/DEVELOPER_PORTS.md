@@ -96,3 +96,28 @@ original. Generated address expressions have different integer simplifications;
 the original logical grid/wave domains and complete payload arguments are
 compared explicitly. Source and actual SDK compilation passed, while numerical
 and performance execution remain pending.
+
+## Developer attention
+
+Three complete developer attention sources retain their original requests:
+
+| Source under `developer_mode/` | Original factory and runtime shape |
+|---|---|
+| `flash_attn_bshd_developer.py` | `B=1,H=1,S=128,D=512`; blocks `32,64` |
+| `sparse_flash_attn_developer.py` | `B=1,S=128,SKV=32768,H=128,HKV=1,DQK=576,DV=512,topk=2048` |
+| `sparse_flash_attn_developer_vid_reduce.py` | Same sparse runtime shape and original automatic vector split |
+
+All reference helpers, seed 0, input construction, index generation, workspace
+indices, pipeline and original `rtol=atol=1e-2` checks remain. Immutable globals
+read by the factory remain at module scope. Import has no runtime effects.
+The original following host segment runs inside a public `torch.device("npu")`
+context instead of leaving a process-wide default device changed. Original
+cache disabling remains in that segment, and the caller's cache state is
+restored on exit, including failure.
+
+All three original factories passed complete lowering and actual SDK
+compilation on each side. Numerical and timing execution remain pending.
+Generated source retains unused scalar bindings and pure empty scheduling
+loops, and a different ordering of one independent tensor lookup declaration.
+The full memory, math, synchronization and host launch payload is compared
+explicitly; these differences are preserved in the compiled source.

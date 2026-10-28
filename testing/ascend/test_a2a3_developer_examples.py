@@ -86,6 +86,17 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
     monkeypatch.setenv("TILELANG_CACHE_DIR", str(tmp_path / "owned"))
     monkeypatch.setitem(sys.modules, "torch_npu", ModuleType("torch_npu"))
     monkeypatch.setattr(torch, "manual_seed", lambda *args: None)
+    if entry["source_runtime"]["set_default_device"]:
+        # Exercise the public CPU context stack without selecting an NPU.
+        class HostTorch:
+            def device(self, name):
+                assert name == "npu"
+                return torch.device("cpu")
+
+            def __getattr__(self, name):
+                return getattr(torch, name)
+
+        monkeypatch.setattr(module, "torch", HostTorch())
     events = []
     original_import = builtins.__import__
     original_disable = tilelang.disable_cache
