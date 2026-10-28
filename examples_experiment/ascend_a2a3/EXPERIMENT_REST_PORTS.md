@@ -121,3 +121,33 @@ last-value read addresses. The added read and barrier remain in the compiled
 source and are not described as pure scalar operations. These source witnesses
 are limited to the recorded original requests. Numerical device and performance
 validation remains pending.
+
+## E4a: MLA decode and layered tests
+
+The complete original kernel and layered test module retain both smoke requests,
+three L0, nine L1, three L2 and five Boundary entries, including the original
+132-batch/128-head/8192-KV large request. All references, seeds, retry conditions,
+three-attempt limit, precision checks and exit behavior remain unchanged.
+Twenty-two original entry rows produce nine distinct successful native
+constructors and two original constructor assertions. Both assertions retain
+same rejection for 100 heads and zero actual KV length. The original runtime
+wrong-input-dtype check is retained and has not been exercised on a device.
+
+Imports do not change the default device, allocate CPU or NPU tensors, or disable
+caches. The kernel smoke body uses a scoped NPU default-device context, preserving
+the entire original body and restoring its caller's state. The layered test loads
+its exact private sibling instead of changing `sys.path`. Its deterministic
+float32 column indices remain CPU values 0 through 127, created lazily only at
+the two original use sites. A separate real CPU check verifies values, cache
+identity and unchanged CPU RNG state. Original runtime cache disabling remains
+in the same execution order and restores the caller's cache state on exit.
+
+Nine full source pairs passed actual SDK compilation. All complete physical
+allocation maps, including the original overlapping aliases and offsets, match.
+After comparison-only pure binding and lexical loop-name normalization, the
+remaining memory payload and original synchronization match. Generated source
+retains four additional static `PIPE_ALL` waits around pure control regions;
+the large request additionally expresses those waits in fourteen-iteration
+empty wave loops. The recorded integer and loop domains are bounded. These
+real added waits remain in the compiled source, and are not described as
+numerical, deadlock or performance equivalence. All device validation is pending.

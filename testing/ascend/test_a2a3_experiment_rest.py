@@ -128,7 +128,7 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
         assert CacheState.is_enabled() == (False if entry["source_runtime"]["disable_cache"] else enabled)
         raise StopFactory
 
-    request = next(r for r in REQUESTS if r["source_path"] == entry["source_path"])
+    request = next(r for r in REQUESTS if r["source_path"] == entry.get("source_request_owner", entry["source_path"]))
     monkeypatch.setattr(module, request["factory"], stop)
     if entry["source_runtime"].get("inputs_before_factory"):
         # Preserve original input allocation before factory construction; fail
@@ -172,6 +172,11 @@ def test_full_original_factory_lowers_without_device(case, monkeypatch):
     target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect, "ascend"]})
     with target:
         args = [tuple(value) if i in case.get("tuple_arg_indices", []) else value for i, value in enumerate(case["args"])]
+        if case.get("expected_frontend_error"):
+            assert case["expected_frontend_error"] == "AssertionError"
+            with pytest.raises(AssertionError):
+                factory.get_tir(*args, **case["kwargs"])
+            return
         prim = factory.get_tir(*args, **case["kwargs"])
     config = normalize_a2a3_pass_configs(target, factory.pass_configs)
     with tvm.transform.PassContext(opt_level=3, config=config):
@@ -208,3 +213,34 @@ def test_random_original_parser_reconfigures_factory_globals(argv, expected, tmp
     monkeypatch.setattr(module, "random_1d", original_factory_boundary)
     with pytest.raises(StopFactory):
         module.main()
+
+
+def test_mla_decode_layered_uses_exact_private_sibling():
+    entry = next(e for e in ENTRIES if e["batch"] == "E4a" and "/test_" in e["source_path"])
+    module = _load(entry)
+    assert Path(module._mla_module.__file__).resolve() == (ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]).resolve()
+    assert module._col_indices_cpu is None
+
+
+def test_mla_decode_lazy_indices_real_CPU_values(tmp_path):
+    import subprocess
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E4a" and "/test_" in e["source_path"])
+    script = ROOT / entry["destination_path"]
+    # Explicit CPU-only metadata probe in a separate process; parent tests keep
+    # all real tensor factories forbidden and do not execute kernel/golden.
+    code = (
+        "import os,ctypes\nif os.environ.get('SKIP_LOADING_TILELANG_SO')=='1':\n import tvm\n ctypes.CDLL(os.path.join(os.environ['TVM_LIBRARY_PATH'],'libtilelang.so'),mode=ctypes.RTLD_GLOBAL)\nimport importlib.util,torch; s=importlib.util.spec_from_file_location('mla_cpu_metadata',"
+        + repr(str(script))
+        + "); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); assert m._col_indices_cpu is None; before=torch.random.get_rng_state().clone(); x=m._get_col_indices_cpu(); assert x.device.type=='cpu' and x.dtype==torch.float32 and x.tolist()==list(range(m.BLOCK_N)); assert m._get_col_indices_cpu() is x and torch.equal(before,torch.random.get_rng_state()); print('CPU indices exact, cached, RNG unchanged')"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=tmp_path,
+        env=dict(__import__("os").environ, TORCH_DEVICE_BACKEND_AUTOLOAD="0", PYTHONDONTWRITEBYTECODE="1"),
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "CPU indices exact, cached, RNG unchanged" in result.stdout
