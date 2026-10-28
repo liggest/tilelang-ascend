@@ -380,3 +380,9 @@ Complete source comparisons preserve all nine scalar reads and twelve `PIPE_ALL`
 完整 backward 模块与原分层测试保留4个 backward factory、原 Autograd 五核调用链、20个 standalone/L0/L1/L2/Boundary 入口控制、4次原数值重试和原退出合同。forward 复用已迁 regular 私有依赖；固定 TA 不含的 optional perf 模块继续原 WARN-return 边界。61个阳性 full-source 请求及122次实际 SDK 编译通过；3个原未对齐 K1 构造断言两侧一致。此处不代表数值、Autograd、workspace零化或性能已通过。
 
 原导入时全局 `torch.empty` monkeypatch 改为仅原 K1 `_zeroed_npu_workspace` 作用域内的 entry allocator 委托，保原 NPU 分配后 `zero_()` 顺序和线程局部条件；K2/K3/K4/K5 与 golden 不置标志。组件 RLock 支持同组件嵌套/异常/并发，不提供不同模块实例或外部 Torch 替换的全局协调保证；退出只按身份恢复，不覆盖外部新替换。CPU 协议测试不使用 fake kernel/golden 输出。真实 NPU K1 workspace 与完整数值仍待独立设备验收。
+
+### Seer block sparse attention（E6d）
+
+完整原单文件、1个 factory 与2个 topk/threshold mask helpers、两个原 NPU 输入/golden 请求均保留。2对完整 source 和4次实际 SDK 编译通过；相同实读位置的 int8 mask→int32 显式提升与原零比较在完整256有符号值域等价，4个实际 scalar read/5个 PIPE_ALL 及精确物理分配/alias/容量保留。真实 CPU mask helper 的4个检查只验证该 helper，不代替原 NPU随机输入/golden/数值。原 `Test passed!` 字面保留，符合原 bench 的大小写兼容regex；未运行该CLI/设备或性能。
+
+该账本至此候选覆盖原剩余33个实验来源（另有2个regular前向依赖），不代表Root已全部集成或整个生态/CLI/CI/设备验收完成。各来源验证状态仍分别记录。
