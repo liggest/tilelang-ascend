@@ -20,10 +20,23 @@ BENCH = ROPE.with_name("bench.sh")
 
 
 def _load(path=ROPE):
-    spec = importlib.util.spec_from_file_location("_a2a3_pos_moe_" + path.stem, path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    saved = sys.modules.get("moe_token_utils")
+    helper_path = path.with_name("moe_token_utils.py")
+    try:
+        if path.stem != "moe_token_utils" and helper_path.is_file():
+            helper_spec = importlib.util.spec_from_file_location("moe_token_utils", helper_path)
+            helper = importlib.util.module_from_spec(helper_spec)
+            helper_spec.loader.exec_module(helper)
+            sys.modules["moe_token_utils"] = helper
+        spec = importlib.util.spec_from_file_location("_a2a3_pos_moe_" + path.stem, path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        if saved is None:
+            sys.modules.pop("moe_token_utils", None)
+        else:
+            sys.modules["moe_token_utils"] = saved
 
 
 @pytest.mark.parametrize("entry", PYTHON, ids=lambda e: e["source_path"])
@@ -159,7 +172,7 @@ def test_original_bench_complete_command_matrix_without_profiling(tmp_path):
 
 
 @pytest.mark.parametrize("case", MANIFEST["factory_requests"], ids=lambda r: r["id"])
-def test_complete_original_source_request(case):
+def test_complete_original_source_request(case, monkeypatch):
     import tilelang
     from tilelang import tvm
     from tilelang.ascend.a2a3.pass_config import normalize_a2a3_pass_configs
@@ -168,11 +181,96 @@ def test_complete_original_source_request(case):
         pytest.skip("A2A3 native source codegen is not built")
     entry = next(e for e in PYTHON if e["source_path"] == case["source_path"])
     module = _load(ROOT / entry["destination_path"])
-    factory = getattr(module, case["factory"])
-    target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": ["ascendc", "ascend"]})
-    with target:
-        function = factory.get_tir(*case["args"], **case["kwargs"])
-    configs = normalize_a2a3_pass_configs(target, module.pass_configs)
+    if entry["component"] == "M1":
+        import importlib
+
+        jit_module = importlib.import_module("tilelang.jit")
+        captured = []
+
+        def source_compile(self, *args, **kwargs):
+            dialect = "pto" if self.target == "pto" else "ascendc"
+            target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": [dialect, "ascend"]})
+            captured.append((target, self.pass_configs))
+            with target:
+                return self.get_tir(*args, **kwargs)
+
+        monkeypatch.setattr(jit_module.JITImpl, "compile", source_compile)
+        function = getattr(module, case["factory"])(*case["args"], **case["kwargs"])
+        assert len(captured) == 1
+        target, original_configs = captured[0]
+    else:
+        factory = getattr(module, case["factory"])
+        target = tvm.target.Target({"kind": "ascend", "arch": "dav-2201", "model": "A3", "keys": ["ascendc", "ascend"]})
+        with target:
+            function = factory.get_tir(*case["args"], **case["kwargs"])
+        original_configs = module.pass_configs
+    configs = normalize_a2a3_pass_configs(target, original_configs)
     with tvm.transform.PassContext(opt_level=3, config=configs):
         artifact = tilelang.lower(function, target=target)
     assert 'extern "C" void call(' in artifact.kernel_source
+
+
+@pytest.mark.parametrize(
+    "case",
+    MANIFEST["M1_original_class_constructors"],
+    ids=lambda r: r["class"] + ":" + r["dtype"] + ":" + str(r["original_constructor_line"]),
+)
+def test_complete_original_class_constructor_dispatch(case, monkeypatch):
+    entry = next(e for e in PYTHON if e["source_path"] == case["source_path"])
+    module = _load(ROOT / entry["destination_path"])
+    calls = []
+    for name in vars(module):
+        if name.startswith("_build_"):
+
+            def capture(*args, factory=name, **kwargs):
+                calls.append((factory, list(args), kwargs))
+                return object()
+
+            monkeypatch.setattr(module, name, capture)
+    instance = getattr(module, case["class"])(**case["kwargs"])
+    request = next(r for r in MANIFEST["factory_requests"] if r["id"] == "moe_" + str(case["request_index"]))
+    assert calls == [(request["factory"], request["args"], request["kwargs"])]
+    for key, value in case["original_derived_state"].items():
+        assert getattr(instance, key) == value
+
+
+@pytest.mark.parametrize(
+    "filename,entry,parameterized",
+    [
+        ("moe_token_permute", "test_permute", "test_permute_parameterized"),
+        ("moe_token_permute_grad", "test_permute_grad", "test_permute_grad_parameterized"),
+        ("moe_token_unpermute", "test_unpermute", "test_unpermute_parameterized"),
+        ("moe_token_unpermute_grad", "test_unpermute_grad", "test_unpermute_grad_parameterized"),
+    ],
+)
+def test_original_moe_failure_summary_preserves_print_only_exit(filename, entry, parameterized, monkeypatch, capsys):
+    module = _load(ROOT / "examples/ascend_a2a3/moe_token_permute" / (filename + ".py"))
+    calls = []
+
+    def original_comparison_failure(pt_dtype, tl_dtype_str):
+        calls.append(tl_dtype_str)
+        return False
+
+    monkeypatch.setattr(module, parameterized, original_comparison_failure)
+    assert getattr(module, entry)() is None
+    assert calls == ["float16", "bfloat16", "float32"]
+    assert "Test failed! The precision is not correct!" in capsys.readouterr().out
+
+
+def test_original_moe_utils_complete_CPU_main(tmp_path):
+    path = ROOT / "examples/ascend_a2a3/moe_token_permute/moe_token_utils.py"
+    code = (
+        "import runpy,torch,sys; assert 'torch_npu' not in sys.modules; assert str(torch.get_default_device())=='cpu'; runpy.run_path("
+        + repr(str(path))
+        + ",run_name='__main__')"
+    )
+    result = subprocess.run(
+        [sys.executable, "-I", "-c", code],
+        cwd=tmp_path,
+        env=dict(os.environ, TORCH_DEVICE_BACKEND_AUTOLOAD="0", PYTHONDONTWRITEBYTECODE="1"),
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "Kernel Output Match" in result.stdout

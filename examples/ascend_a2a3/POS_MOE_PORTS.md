@@ -46,5 +46,47 @@ numerical device and performance checks remain pending.
 
 ## MoE status
 
-The four original MoE token kernels/classes and shared utility form the next
-five-file closure. They are not counted as ported by this RoPE component.
+The following independent five-file component records the original MoE token
+kernels/classes and shared utility; they are counted separately from RoPE.
+
+## Complete MoE token classes and shared utility
+
+The five original files under `moe_token_permute/` retain all four classes,
+all native builders and compile dispatch branches, workspace/output decorators,
+manual synchronization, padding, original references and default Torch precision
+thresholds. Imports defer NPU registration to the original parameterized tests
+and explicit main. Each complete original CLI remains callable directly; no
+cache clear or altered cache policy is introduced.
+
+The full original default matrix uses float16, bfloat16 and float32 with seed 42:
+
+| Class | Original scenarios per dtype |
+|---|---|
+| `MoeTokenPermute` | N=16/H=8/K=4/experts=4, standard and clip-to-10; original PTO and workspace |
+| `MoeTokenPermuteGrad` | N=16/H=16/K=4/experts=4, standard and clip-to-10 |
+| `MoeTokenUnpermute` | No-probs N=16/H=8/K=4, weighted N=8/H=4/K=2, original round-trip N=16/H=8/K=4 |
+| `MoeTokenUnpermuteGrad` | N=8/H=4/K=2, with/without probs, including both original gradient checks |
+
+The 27 original class-constructor scenarios produce 21 unique native builder
+requests. The first class keeps explicit PTO; the others keep their original
+automatic dialect. Constructors retain their actual padding, dtype and strategy
+selection. Every original builder remains in source, including branches not
+selected by the default matrix; the ledger explicitly distinguishes those from
+validated default requests. `moe_token_utils.py` retains its complete original
+CPU self-test and helpers.
+
+The four original test summaries only print precision failures and do not raise
+or exit nonzero. This behavior is preserved and tested; exit 0 is not numerical
+acceptance. Native request checks intercept only the JIT compile boundary to
+return the real PrimFunc, then perform actual complete lowering and SDK compile.
+They neither load generated kernels nor compare placeholder outputs to golden.
+
+All 21 default native requests passed source and SDK checks on both sides.
+Generated sources retain allocation/name/unused-binding differences. The six PTO
+forward requests also retain additional reads of the same local int32 `wp_ub[0]`
+for a conditional copy count. The original integer guard `wp < output_rows`
+implies `wp <= output_rows - 1`, so the active count is one in both sources;
+no intervening local-buffer write is introduced. Additional UB reads remain
+explicit in the evidence. These source witnesses do not establish arbitrary
+aliasing, device correctness or performance. Numerical device checks remain
+pending for the complete original CLI matrix.
