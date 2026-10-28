@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
-  "owner_scope": "G1/G2 six complete standard GDN leaves and original empty package; composed/optimized GDN pipelines pending",
+  "owner_scope": "G1/G2 six complete standard GDN leaves and G3 complete standard composition; optimized GDN pending",
   "entries": [
     {
       "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_cumsum.py",
@@ -350,6 +350,60 @@
       "adapted_definition_AST_sha256": {
         "current_jit_target": "3d6af6f94b5ff3fa8f5ee76adba9f5da400c73c4f5a7d6d064f7f0bc00d0e010"
       }
+    },
+    {
+      "source_path": "examples/linear_attention_and_rnn/gdn_full.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/gdn_full.py",
+      "component": "G3",
+      "source_sha256": "3b472be46e7a30ab155dac7650ac298b1fbbbe810f670124d0d9962edfd26c78",
+      "source_git_blob": "ec088dd091cfca44b48b4c7872847b063afd5ab4",
+      "destination_sha256": "ab51e27535743efd0e903ab4a422001179de92855ba35e007add75bf9bcbb3aa",
+      "state": "complete_composition_source_actual_SDK_verified_device_pending",
+      "original_definition_AST_sha256": {
+        "ref_seq_gdn": "c7f34ecd2726bbcfd232602b2ed44db14f440669219db8be8fa079fedd32d871",
+        "ref_chunk_gdn": "b0232054769bff8c3696eb574dfbfe54fc82dcf9fe816f6bee1ff9fe459659b3",
+        "kernel_chunk_gdn": "5e813a2259916d6c214acb2411409aac3ce6ac5803b070a97230d66338086d24"
+      },
+      "original_CLI_AST_sha256": "ef88b09db0eec8fdcfedab30a828c2b0de22862e563116fb686f36817906b140",
+      "original_test_configs": [
+        [
+          2,
+          32,
+          1024,
+          64,
+          64,
+          32,
+          32,
+          32
+        ]
+      ],
+      "original_runtime_calls": 6,
+      "original_golden_assertions": 2,
+      "original_golden_tolerances": {
+        "rtol": 0.001,
+        "atol": 0.001
+      },
+      "original_seed": 0,
+      "original_clear_cache_calls": 1,
+      "original_printoptions": {
+        "threshold": "inf",
+        "sci_mode": true
+      },
+      "original_success_marker": "Kernel Output Match!",
+      "original_leaf_dependencies": [
+        "gdn.gdn_chunk_cumsum",
+        "gdn.gdn_chunk_h",
+        "gdn.gdn_chunk_o",
+        "gdn.gdn_chunk_scaled_dot_kkt",
+        "gdn.gdn_solve_tril",
+        "gdn.gdn_wy_fast"
+      ],
+      "device_not_run": true,
+      "adaptations": [
+        "exact sibling file imports under private nonregistered module names; no fallback to foreign gdn, no sys.path/sys.modules mutation",
+        "complete original top-level CLI moved into inert state-restoring main with original single clear adapted to task-owned backend singleton",
+        "source CRLF/tab formatting normalized without definition or CLI AST changes"
+      ]
     }
   ],
   "factory_requests": [
@@ -447,6 +501,110 @@
       "kwargs": {},
       "core_sampling": "none",
       "component": "G2"
+    },
+    {
+      "id": "gdn_full_gdn_chunk_cumsum",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_cumsum.py",
+      "factory": "cumsum_ker",
+      "args": [
+        2,
+        32,
+        1024,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none",
+      "component": "G3",
+      "origin_composition": "examples/linear_attention_and_rnn/gdn_full.py"
+    },
+    {
+      "id": "gdn_full_gdn_chunk_scaled_dot_kkt",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_scaled_dot_kkt.py",
+      "factory": "kkt_ker",
+      "args": [
+        2,
+        32,
+        1024,
+        64,
+        32,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none",
+      "component": "G3",
+      "origin_composition": "examples/linear_attention_and_rnn/gdn_full.py"
+    },
+    {
+      "id": "gdn_full_gdn_wy_fast",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_wy_fast.py",
+      "factory": "wy_fast_ker",
+      "args": [
+        2,
+        32,
+        1024,
+        64,
+        64,
+        32,
+        32,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none",
+      "component": "G3",
+      "origin_composition": "examples/linear_attention_and_rnn/gdn_full.py"
+    },
+    {
+      "id": "gdn_full_gdn_chunk_h",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_h.py",
+      "factory": "chunk_h_ker",
+      "args": [
+        2,
+        32,
+        1024,
+        64,
+        64,
+        32,
+        32,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none",
+      "component": "G3",
+      "origin_composition": "examples/linear_attention_and_rnn/gdn_full.py"
+    },
+    {
+      "id": "gdn_full_gdn_chunk_o",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_o.py",
+      "factory": "chunk_o_ker",
+      "args": [
+        2,
+        32,
+        1024,
+        64,
+        64,
+        32,
+        32,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none",
+      "component": "G3",
+      "origin_composition": "examples/linear_attention_and_rnn/gdn_full.py"
+    },
+    {
+      "id": "gdn_full_gdn_solve_tril",
+      "source_path": "examples/linear_attention_and_rnn/gdn/gdn_solve_tril.py",
+      "factory": "solve_tril_ker",
+      "args": [
+        2,
+        32,
+        1024,
+        32
+      ],
+      "kwargs": {},
+      "core_sampling": "none",
+      "component": "G3",
+      "origin_composition": "examples/linear_attention_and_rnn/gdn_full.py"
     }
   ],
   "validation": {
@@ -501,7 +659,41 @@
       "proof_of_original_TA_chunk_alpha_frontend_and_final_structural_equal": "refactor_main/reports/p3_gdn_G2_alpha/TA_proof/proof.json"
     },
     "standard_leaves_ported_candidate": 6,
-    "composed_standard_and_opt_GDN_pipeline_pending": true
+    "composed_standard_and_opt_GDN_pipeline_pending": true,
+    "G3": {
+      "original_complete_composition_definitions": 3,
+      "original_leaf_dependencies": 6,
+      "original_default_matrix": [
+        2,
+        32,
+        1024,
+        64,
+        64,
+        32,
+        32,
+        32
+      ],
+      "original_runtime_calls": 6,
+      "original_golden_assertions": 2,
+      "source_SDK_pending": false,
+      "device_not_run": true,
+      "TA_complete_source": 6,
+      "main_complete_source": 6,
+      "TA_actual_SDK": 6,
+      "main_actual_SDK": 6,
+      "actual_properties_context_or_NPU_tensor_or_launch": false,
+      "actual_driver_availability": true,
+      "actual_driver_count": 16,
+      "existing_TA_native_not_fresh": true,
+      "combined_G1_G2_G3_host_ON_passed": 69,
+      "combined_G1_G2_G3_actual_OFF_passed": 57,
+      "combined_G1_G2_G3_actual_OFF_native_only_skipped": 12,
+      "exact_local_sibling_imports_ignore_foreign_gdn": true,
+      "caller_sys_path_and_foreign_modules_unchanged": true,
+      "all_seven_CLIs_restore_cache_descriptor_memory_staging_and_printopts": true,
+      "source_SDK_not_repeated_during_host_followup": true,
+      "redundant_object_routing_test_removed": true
+    }
   },
   "source_contracts": [
     {
@@ -2775,6 +2967,2453 @@
           ],
           "elements": 524288,
           "bytes": 1048576
+        }
+      ],
+      "proof_scope": "original leaf default request only; not composed GDN or arbitrary overrides; SDK success is not numerical evidence",
+      "device_not_run": true
+    }
+  ],
+  "source_contracts_G3": [
+    {
+      "id": "gdn_chunk_cumsum",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/ta/gdn_full_gdn_chunk_cumsum/kernel.cc",
+        "sha256": "f43e4beea770b8ebd26155e4a9bee38d0bd6b219e0bf83de94612705349c5e9e",
+        "size": 2606
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/main/gdn_full_gdn_chunk_cumsum/kernel.cc",
+        "sha256": "e9dc5c928301ab283b1824371060e5b08a7f261a4d3444b5f094e7366a56d55c",
+        "size": 2869
+      },
+      "host_ABI": "uint8_t* G_handle, uint8_t* S_handle, aclrtStream stream",
+      "frontend_buffer_params_equal": true,
+      "complete_original_default_launch": 1024,
+      "unused_pure_int32_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "((((cid % 512) / 32) * 2) + vid)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "(cid / 512)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "((((cid % 512) / 32) * 2) + vid)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "(cid / 512)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "empty_AIC_shell": 1,
+      "lexical_chunk_alpha": false,
+      "full_remaining_source_byte_equal": true,
+      "named_views": {
+        "ta": [
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 0,
+            "end_bytes": 128
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 128,
+            "end_bytes": 256
+          }
+        ],
+        "main": [
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 0,
+            "end_bytes": 128
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 128,
+            "end_bytes": 256
+          }
+        ]
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "L1_packing_permutation": null,
+      "buffer_capacities": [
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "2",
+            "32",
+            "1024"
+          ],
+          "elements": 65536,
+          "bytes": 262144
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float32",
+          "shape": [
+            "2",
+            "32",
+            "1024"
+          ],
+          "elements": 65536,
+          "bytes": 262144
+        }
+      ],
+      "proof_scope": "original leaf default request only; not composed GDN or arbitrary overrides; SDK success is not numerical evidence",
+      "device_not_run": true
+    },
+    {
+      "id": "gdn_chunk_scaled_dot_kkt",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/ta/gdn_full_gdn_chunk_scaled_dot_kkt/kernel.cc",
+        "sha256": "5612be45f4d1e4a21366c55e136bdaadc6ff13f36afcda44cf344886cece852c",
+        "size": 7342
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/main/gdn_full_gdn_chunk_scaled_dot_kkt/kernel.cc",
+        "sha256": "ab3e1005a9ad3e71f2ee2eb3dba6efd803269e52a2519fad1a8f92af0eb00e6d",
+        "size": 7556
+      },
+      "host_ABI": "uint8_t* K_handle, uint8_t* Beta_handle, uint8_t* G_handle, uint8_t* Msk_handle, uint8_t* workspace_handle, uint8_t* A_handle, aclrtStream stream",
+      "frontend_buffer_params_equal": true,
+      "complete_original_default_launch": 2048,
+      "unused_pure_int32_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "((cid % 1024) / 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "(cid / 1024)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "((cid % 1024) / 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "(cid / 1024)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "empty_AIC_shell": 0,
+      "lexical_chunk_alpha": false,
+      "full_remaining_source_byte_equal": true,
+      "named_views": {
+        "ta": [
+          {
+            "name": "a_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 0,
+            "end_bytes": 128
+          },
+          {
+            "name": "beta_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 16,
+            "offset_bytes": 128,
+            "end_bytes": 160
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 160,
+            "end_bytes": 288
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 288,
+            "end_bytes": 2336
+          },
+          {
+            "name": "beta_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 2336,
+            "end_bytes": 2400
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 2400,
+            "end_bytes": 4448
+          },
+          {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 512,
+            "offset_bytes": 4448,
+            "end_bytes": 5472
+          },
+          {
+            "name": "a_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 5472,
+            "end_bytes": 7520
+          }
+        ],
+        "main": [
+          {
+            "name": "a_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 0,
+            "end_bytes": 128
+          },
+          {
+            "name": "beta_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 16,
+            "offset_bytes": 128,
+            "end_bytes": 160
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 160,
+            "end_bytes": 288
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 288,
+            "end_bytes": 2336
+          },
+          {
+            "name": "beta_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 2336,
+            "end_bytes": 2400
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 2400,
+            "end_bytes": 4448
+          },
+          {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 512,
+            "offset_bytes": 4448,
+            "end_bytes": 5472
+          },
+          {
+            "name": "a_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 5472,
+            "end_bytes": 7520
+          }
+        ]
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "L1_packing_permutation": null,
+      "buffer_capacities": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "Beta_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024"
+          ],
+          "elements": 65536,
+          "bytes": 131072
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "2",
+            "32",
+            "1024"
+          ],
+          "elements": 65536,
+          "bytes": 262144
+        },
+        {
+          "name": "Msk_handle",
+          "dtype": "float32",
+          "shape": [
+            "32",
+            "32"
+          ],
+          "elements": 1024,
+          "bytes": 4096
+        },
+        {
+          "name": "workspace_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "32"
+          ],
+          "elements": 2097152,
+          "bytes": 4194304
+        },
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "32"
+          ],
+          "elements": 2097152,
+          "bytes": 4194304
+        }
+      ],
+      "proof_scope": "original leaf default request only; not composed GDN or arbitrary overrides; SDK success is not numerical evidence",
+      "device_not_run": true
+    },
+    {
+      "id": "gdn_wy_fast",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/ta/gdn_full_gdn_wy_fast/kernel.cc",
+        "sha256": "f93e7d3234a4080c4d8b29027ae4e2af5aed2832b2fdd43b26e1724a416bb939",
+        "size": 8855
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/main/gdn_full_gdn_wy_fast/kernel.cc",
+        "sha256": "113589e3d21e2d760557bbe70325098720b09411fb02bd4dc6dd0d1524f78dee",
+        "size": 9069
+      },
+      "host_ABI": "uint8_t* K_handle, uint8_t* V_handle, uint8_t* Beta_handle, uint8_t* G_handle, uint8_t* A_handle, uint8_t* workspace_k_handle, uint8_t* workspace_v_handle, uint8_t* W_handle, uint8_t* U_handle, aclrtStream stream",
+      "frontend_buffer_params_equal": true,
+      "complete_original_default_launch": 2048,
+      "unused_pure_int32_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "((cid % 1024) / 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "(cid / 1024)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "((cid % 1024) / 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "(cid / 1024)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "empty_AIC_shell": 0,
+      "lexical_chunk_alpha": false,
+      "full_remaining_source_byte_equal": true,
+      "named_views": {
+        "ta": [
+          {
+            "name": "a_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 4096
+          },
+          {
+            "name": "w_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 6144
+          },
+          {
+            "name": "u_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "k_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "v_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 4096
+          },
+          {
+            "name": "beta_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 16,
+            "offset_bytes": 4096,
+            "end_bytes": 4128
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 4128,
+            "end_bytes": 4192
+          },
+          {
+            "name": "k_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4192,
+            "end_bytes": 8288
+          },
+          {
+            "name": "v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 8288,
+            "end_bytes": 12384
+          },
+          {
+            "name": "beta_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 12384,
+            "end_bytes": 12448
+          }
+        ],
+        "main": [
+          {
+            "name": "a_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 4096
+          },
+          {
+            "name": "w_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 6144
+          },
+          {
+            "name": "u_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "k_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "v_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 4096
+          },
+          {
+            "name": "beta_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 16,
+            "offset_bytes": 4096,
+            "end_bytes": 4128
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 4128,
+            "end_bytes": 4192
+          },
+          {
+            "name": "k_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4192,
+            "end_bytes": 8288
+          },
+          {
+            "name": "v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 8288,
+            "end_bytes": 12384
+          },
+          {
+            "name": "beta_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 12384,
+            "end_bytes": 12448
+          }
+        ]
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "L1_packing_permutation": null,
+      "buffer_capacities": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "Beta_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024"
+          ],
+          "elements": 65536,
+          "bytes": 131072
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "2",
+            "32",
+            "1024"
+          ],
+          "elements": 65536,
+          "bytes": 262144
+        },
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "32"
+          ],
+          "elements": 2097152,
+          "bytes": 4194304
+        },
+        {
+          "name": "workspace_k_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "workspace_v_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "W_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "U_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        }
+      ],
+      "proof_scope": "original leaf default request only; not composed GDN or arbitrary overrides; SDK success is not numerical evidence",
+      "device_not_run": true
+    },
+    {
+      "id": "gdn_chunk_h",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/ta/gdn_full_gdn_chunk_h/kernel.cc",
+        "sha256": "ade1312538da14a9ebb6fea8033f339e15412910c2ec77f7b38a7d8f54b8be82",
+        "size": 12342
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/main/gdn_full_gdn_chunk_h/kernel.cc",
+        "sha256": "61e5c4fc7b6ee61144c7559157f666bc416ca359152c25f40c1fe7ec39174289",
+        "size": 12634
+      },
+      "host_ABI": "uint8_t* K_handle, uint8_t* W_handle, uint8_t* U_handle, uint8_t* G_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* workspace_3_handle, uint8_t* workspace_4_handle, uint8_t* S_handle, uint8_t* V_handle, uint8_t* FS_handle, aclrtStream stream",
+      "frontend_buffer_params_equal": true,
+      "complete_original_default_launch": 128,
+      "unused_pure_int32_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 2)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            127
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "((cid % 64) / 2)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            127
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "(cid / 64)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            127
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 2)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            127
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "((cid % 64) / 2)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            127
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "(cid / 64)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            127
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "empty_AIC_shell": 0,
+      "lexical_chunk_alpha": true,
+      "full_remaining_source_byte_equal": true,
+      "named_views": {
+        "ta": [
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "w_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "ws_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 8192,
+            "end_bytes": 12288
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 12288,
+            "end_bytes": 14336
+          },
+          {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 2048,
+            "offset_bytes": 4096,
+            "end_bytes": 12288
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 0,
+            "end_bytes": 64
+          },
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 64,
+            "end_bytes": 4160
+          },
+          {
+            "name": "s_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 4160,
+            "end_bytes": 6208
+          },
+          {
+            "name": "u_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 512,
+            "offset_bytes": 6208,
+            "end_bytes": 7232
+          },
+          {
+            "name": "u_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 7232,
+            "end_bytes": 9280
+          },
+          {
+            "name": "k_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 9280,
+            "end_bytes": 11328
+          },
+          {
+            "name": "k_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 11328,
+            "end_bytes": 15424
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 15424,
+            "end_bytes": 15552
+          },
+          {
+            "name": "gv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 15552,
+            "end_bytes": 15616
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 15616,
+            "end_bytes": 15680
+          },
+          {
+            "name": "ws_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 512,
+            "offset_bytes": 15680,
+            "end_bytes": 16704
+          },
+          {
+            "name": "ws_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 16704,
+            "end_bytes": 18752
+          },
+          {
+            "name": "kv_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 18752,
+            "end_bytes": 20800
+          },
+          {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 20800,
+            "end_bytes": 24896
+          }
+        ],
+        "main": [
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "w_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "ws_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 8192,
+            "end_bytes": 12288
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 12288,
+            "end_bytes": 14336
+          },
+          {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 2048,
+            "offset_bytes": 4096,
+            "end_bytes": 12288
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 0,
+            "end_bytes": 64
+          },
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 64,
+            "end_bytes": 4160
+          },
+          {
+            "name": "s_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 4160,
+            "end_bytes": 6208
+          },
+          {
+            "name": "u_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 512,
+            "offset_bytes": 6208,
+            "end_bytes": 7232
+          },
+          {
+            "name": "u_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 7232,
+            "end_bytes": 9280
+          },
+          {
+            "name": "k_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 9280,
+            "end_bytes": 11328
+          },
+          {
+            "name": "k_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 11328,
+            "end_bytes": 15424
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 15424,
+            "end_bytes": 15552
+          },
+          {
+            "name": "gv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 15552,
+            "end_bytes": 15616
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 16,
+            "offset_bytes": 15616,
+            "end_bytes": 15680
+          },
+          {
+            "name": "ws_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 512,
+            "offset_bytes": 15680,
+            "end_bytes": 16704
+          },
+          {
+            "name": "ws_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 16704,
+            "end_bytes": 18752
+          },
+          {
+            "name": "kv_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 18752,
+            "end_bytes": 20800
+          },
+          {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 20800,
+            "end_bytes": 24896
+          }
+        ]
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "L1_packing_permutation": null,
+      "buffer_capacities": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "W_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "U_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "2",
+            "32",
+            "1024"
+          ],
+          "elements": 65536,
+          "bytes": 262144
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "128",
+            "32",
+            "32"
+          ],
+          "elements": 131072,
+          "bytes": 262144
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "128",
+            "32",
+            "64"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "workspace_3_handle",
+          "dtype": "float16",
+          "shape": [
+            "128",
+            "64",
+            "32"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "workspace_4_handle",
+          "dtype": "float16",
+          "shape": [
+            "128",
+            "64",
+            "32"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "32",
+            "64",
+            "64"
+          ],
+          "elements": 8388608,
+          "bytes": 16777216
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "FS_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "64",
+            "64"
+          ],
+          "elements": 262144,
+          "bytes": 524288
+        }
+      ],
+      "proof_scope": "original leaf default request only; not composed GDN or arbitrary overrides; SDK success is not numerical evidence",
+      "device_not_run": true
+    },
+    {
+      "id": "gdn_chunk_o",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/ta/gdn_full_gdn_chunk_o/kernel.cc",
+        "sha256": "1f7ecef0b5aa367425d20db8b0a4af376926e1c879ce63ea4f33e9218377876c",
+        "size": 11088
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/main/gdn_full_gdn_chunk_o/kernel.cc",
+        "sha256": "6fa831e25c44b8bad00c8e59f2e9abc2ce4d53422405fa6f47403dc3f4314e8b",
+        "size": 11302
+      },
+      "host_ABI": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* S_handle, uint8_t* G_handle, uint8_t* Msk_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* workspace_3_handle, uint8_t* O_handle, aclrtStream stream",
+      "frontend_buffer_params_equal": true,
+      "complete_original_default_launch": 2048,
+      "unused_pure_int32_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "((cid % 1024) / 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "(cid / 1024)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "((cid % 1024) / 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "(cid / 1024)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            2047
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "empty_AIC_shell": 0,
+      "lexical_chunk_alpha": false,
+      "full_remaining_source_byte_equal": true,
+      "named_views": {
+        "ta": [
+          {
+            "name": "qk_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "qs_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 2048,
+            "offset_bytes": 4096,
+            "end_bytes": 12288
+          },
+          {
+            "name": "q_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 4096
+          },
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "qk_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 8192,
+            "end_bytes": 10240
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 12288
+          },
+          {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 12288,
+            "end_bytes": 16384
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 2048,
+            "end_bytes": 2176
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 2176,
+            "end_bytes": 4224
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 4224,
+            "end_bytes": 6272
+          },
+          {
+            "name": "qk_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 512,
+            "offset_bytes": 6272,
+            "end_bytes": 7296
+          },
+          {
+            "name": "qs_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 7296,
+            "end_bytes": 9344
+          },
+          {
+            "name": "qk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 9344,
+            "end_bytes": 11392
+          },
+          {
+            "name": "qs_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 11392,
+            "end_bytes": 15488
+          },
+          {
+            "name": "qkv_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 15488,
+            "end_bytes": 17536
+          },
+          {
+            "name": "qkv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 17536,
+            "end_bytes": 21632
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 21632,
+            "end_bytes": 25728
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 25728,
+            "end_bytes": 27776
+          }
+        ],
+        "main": [
+          {
+            "name": "qk_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "qs_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 2048,
+            "offset_bytes": 4096,
+            "end_bytes": 12288
+          },
+          {
+            "name": "qk_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "q_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 4096
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 6144
+          },
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 6144,
+            "end_bytes": 10240
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 12288
+          },
+          {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 12288,
+            "end_bytes": 16384
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 2048,
+            "end_bytes": 2176
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 2176,
+            "end_bytes": 4224
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 4224,
+            "end_bytes": 6272
+          },
+          {
+            "name": "qk_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 512,
+            "offset_bytes": 6272,
+            "end_bytes": 7296
+          },
+          {
+            "name": "qs_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 7296,
+            "end_bytes": 9344
+          },
+          {
+            "name": "qk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 512,
+            "offset_bytes": 9344,
+            "end_bytes": 11392
+          },
+          {
+            "name": "qs_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 11392,
+            "end_bytes": 15488
+          },
+          {
+            "name": "qkv_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 15488,
+            "end_bytes": 17536
+          },
+          {
+            "name": "qkv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 17536,
+            "end_bytes": 21632
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 21632,
+            "end_bytes": 25728
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 25728,
+            "end_bytes": 27776
+          }
+        ]
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "L1_packing_permutation": {
+        "pool": "ascend_l1",
+        "old_intervals": [
+          [
+            0,
+            2048
+          ],
+          [
+            2048,
+            4096
+          ],
+          [
+            4096,
+            8192
+          ],
+          [
+            8192,
+            10240
+          ],
+          [
+            10240,
+            12288
+          ]
+        ],
+        "new_intervals": [
+          [
+            0,
+            2048
+          ],
+          [
+            2048,
+            4096
+          ],
+          [
+            4096,
+            6144
+          ],
+          [
+            6144,
+            10240
+          ],
+          [
+            10240,
+            12288
+          ]
+        ],
+        "same_exact_union": [
+          0,
+          12288
+        ],
+        "same_named_dtype_element_count": true,
+        "no_overlaps": true,
+        "all_payload_name_uses_and_synchronization_unchanged": true,
+        "descriptor_note": "GetWithOffset writes TBuf shared dataLen then copies a per-LocalTensor descriptor. Last L1 declaration v_l1 remains same count1024/offset10240, hence final shared dataLen and each named tensor size stay equal; named addresses relocate within the same disjoint union. It is not a no-side-effect call."
+      },
+      "buffer_capacities": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "32",
+            "64",
+            "64"
+          ],
+          "elements": 8388608,
+          "bytes": 16777216
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "2",
+            "32",
+            "1024"
+          ],
+          "elements": 65536,
+          "bytes": 262144
+        },
+        {
+          "name": "Msk_handle",
+          "dtype": "float32",
+          "shape": [
+            "32",
+            "32"
+          ],
+          "elements": 1024,
+          "bytes": 4096
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "2048",
+            "32",
+            "32"
+          ],
+          "elements": 2097152,
+          "bytes": 4194304
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "2048",
+            "32",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        },
+        {
+          "name": "workspace_3_handle",
+          "dtype": "float16",
+          "shape": [
+            "2048",
+            "32",
+            "32"
+          ],
+          "elements": 2097152,
+          "bytes": 4194304
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "64"
+          ],
+          "elements": 4194304,
+          "bytes": 8388608
+        }
+      ],
+      "proof_scope": "original leaf default request only; not composed GDN or arbitrary overrides; SDK success is not numerical evidence",
+      "device_not_run": true
+    },
+    {
+      "id": "gdn_solve_tril",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/ta/gdn_full_gdn_solve_tril/kernel.cc",
+        "sha256": "150aef8e079425c361addee3332edcf4a1e73d53bc161fbc3fb4adc919c08f4c",
+        "size": 4683
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G3/main/gdn_full_gdn_solve_tril/kernel.cc",
+        "sha256": "c4400b48ce769bf4bb30b9fc2b1fa156ff034ca1d268eb352b6bb7490752de37",
+        "size": 4946
+      },
+      "host_ABI": "uint8_t* A_handle, uint8_t* I_handle, uint8_t* O_handle, aclrtStream stream",
+      "frontend_buffer_params_equal": true,
+      "complete_original_default_launch": 1024,
+      "unused_pure_int32_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "((((cid % 512) / 32) * 2) + vid)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "(cid / 512)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 32)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "((((cid % 512) / 32) * 2) + vid)",
+          "minimum": 0,
+          "maximum": 31,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "(cid / 512)",
+          "minimum": 0,
+          "maximum": 1,
+          "cid": [
+            0,
+            1023
+          ],
+          "vid": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "empty_AIC_shell": 1,
+      "lexical_chunk_alpha": false,
+      "full_remaining_source_byte_equal": true,
+      "named_views": {
+        "ta": [
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 14336
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 14336,
+            "end_bytes": 14464
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 14464,
+            "end_bytes": 16512
+          }
+        ],
+        "main": [
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 14336
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 14336,
+            "end_bytes": 14464
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 14464,
+            "end_bytes": 16512
+          }
+        ]
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "L1_packing_permutation": null,
+      "buffer_capacities": [
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "32"
+          ],
+          "elements": 2097152,
+          "bytes": 4194304
+        },
+        {
+          "name": "I_handle",
+          "dtype": "float32",
+          "shape": [
+            "32",
+            "32"
+          ],
+          "elements": 1024,
+          "bytes": 4096
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "32",
+            "1024",
+            "32"
+          ],
+          "elements": 2097152,
+          "bytes": 4194304
         }
       ],
       "proof_scope": "original leaf default request only; not composed GDN or arbitrary overrides; SDK success is not numerical evidence",

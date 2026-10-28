@@ -16,8 +16,8 @@ G1_SOURCES = {
     "examples/linear_attention_and_rnn/gdn/" + name for name in ("gdn_chunk_cumsum.py", "gdn_chunk_scaled_dot_kkt.py", "gdn_wy_fast.py")
 }
 ENTRIES = [e for e in MANIFEST["entries"] if e["source_path"] in G1_SOURCES]
-SOURCE_REQUESTS = [r for r in MANIFEST["factory_requests"] if r["source_path"] in G1_SOURCES]
-ALL_STANDARD_ENTRIES = [e for e in MANIFEST["entries"] if e.get("original_factory")]
+SOURCE_REQUESTS = [r for r in MANIFEST["factory_requests"] if r["source_path"] in G1_SOURCES and r.get("component", "G1") == "G1"]
+ALL_STANDARD_ENTRIES = [e for e in MANIFEST["entries"] if e.get("original_factory") or e.get("component") == "G3"]
 
 
 def _tree(entry):
