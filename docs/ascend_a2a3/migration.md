@@ -51,7 +51,7 @@ cmake --build build -j8
 export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
 ```
 
-依赖安装前后的 Torch/TorchNPU metadata 必须与保存的精确 constraints 一致（含 local version）；解析不能满足时停止并修复依赖，不删约束换 SDK。上述专属 `TILELANG_CACHE_DIR` 也用于保真脚本执行，因为其 `main()` 会真实清理所选 cache，不能使用调用者默认 cache。
+依赖安装前后的 Torch/TorchNPU metadata 必须与保存的精确 constraints 一致（含 local version）；解析不能满足时停止并修复依赖，不删约束换 SDK。上述构建命令无需设置 `TILELANG_CACHE_DIR`；运行会清理 cache 的原脚本时，按下一节示例先创建并导出专属目录，不能使用调用者默认 cache。
 
 这条路径只构建，不替你安装 CANN、TorchNPU 或运行设备测试。需要安装 wheel 或 editable 包时，用主线 `pip install .` / `pip install -e .` 与同样的 CMake 配置参数，按现行 build 文档处理 native/Cython 产物。
 
@@ -72,11 +72,17 @@ export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
 使用原 factory、decorator、`pass_configs`、`out_idx`、`workspace_idx`、shape/dtype 和原 golden 门槛。例如运行已迁移的原脚本时：
 
 ```bash
-export TL_PLATFORM=A3
-export TL_RUN_MODE=npu
-TILELANG_CACHE_DIR=/tmp/tilelang-a2a3-doc-gemm \
+(
+  export TL_PLATFORM=A3
+  export TL_RUN_MODE=npu
+  TILELANG_CACHE_DIR=$(mktemp -d /tmp/tilelang-a2a3-doc-gemm.XXXXXXXX) || exit 1
+  export TILELANG_CACHE_DIR
+  echo "示例专属 cache: $TILELANG_CACHE_DIR"
   python examples/ascend_a2a3/gemm/example_gemm.py
+)
 ```
+
+这个子 shell 只新建随机目录，不复用或删除调用者默认 cache；变量不影响外层环境，结束后保留该目录供排查。脚本的 `main()` 会真实清理这个专属目录内的缓存。
 
 具体脚本的参数、内存预算和支持范围以该脚本及其迁移记录为准。上面的路径选择不是所有 shape 或设备的通过承诺。
 
