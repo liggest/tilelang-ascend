@@ -1410,6 +1410,80 @@
         ]
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_gemm_v0.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_gemm_v0.py",
+      "source_git_blob": "652ab2ef87e730698c5cb8f52e4ad6befb2c4a57",
+      "source_sha256": "121fed4447c0ea5f3d0643c116c8ceaf1ee8b9f216fb02221415585b3bfd3f67",
+      "destination_sha256": "23777615b4a2dc82a3712b0a44bc59add44ef994bdb90b9b4dfda21c20d576bc",
+      "adaptations": [
+        "Private A2A3 language entry; all original factories/decorators, complete shape/dtype/transpose/K-tail/kL0Size matrices, seed/golden/tolerance and priority marks retained.",
+        "Existing per-test device/native markers replace import-time NPU probes; original raw cache disable or real clear behavior is scoped with existing restoration/isolation fixtures.",
+        "Four illegal kL0Size values keep exact original calls/message fragments and now assert the precise eager AssertionError rather than the old parser stderr channel; TA original six native tests passed unchanged."
+      ],
+      "validation": {
+        "original_numerical_cases_pending": 38,
+        "original_native_validation_cases_passed_per_side": 6,
+        "paired_full_sources_and_ELF_backed_requests_per_side": 38,
+        "whole_module_AST_equal_after_declared_adapters": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_gemm_v0_k_tail.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_gemm_v0_k_tail.py",
+      "source_git_blob": "264ae8a0baf7c24202bf37afcc19a8229ce0e36e",
+      "source_sha256": "4cf980b7e010902c19ab21c0885f33b5c72c6b7a0f2b092775dec695a7b9f956",
+      "destination_sha256": "158e203c08ff99afb0def38b71156ade84689d405fc4efec11ee84a084e0670c",
+      "adaptations": [
+        "Private A2A3 language entry; all original factories/decorators, complete shape/dtype/transpose/K-tail/kL0Size matrices, seed/golden/tolerance and priority marks retained.",
+        "Existing per-test device/native markers replace import-time NPU probes; original raw cache disable or real clear behavior is scoped with existing restoration/isolation fixtures."
+      ],
+      "validation": {
+        "original_numerical_cases_pending": 29,
+        "original_compile_only_reject_branches_passed_per_side": 3,
+        "paired_full_sources_and_ELF_backed_requests_per_side": 29,
+        "original_Compilation_Failed_exception_type_message_and_bad_values_preserved": true,
+        "whole_module_AST_equal_after_declared_adapters": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_gemm_v0_n_actual.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_gemm_v0_n_actual.py",
+      "source_git_blob": "ca33c38d92eb55e38a71b2b0080ba07d0b4774b8",
+      "source_sha256": "57585cb3a41859c22e0461585225fda98cfe24a19b064a02880b44f32fff25b2",
+      "destination_sha256": "7db6b11f37da4a5a74e650eaea8ee7d6e54dcb823577c6b543c7a063b7640011",
+      "adaptations": [
+        "Private A2A3 language entry; all original factories/decorators, complete shape/dtype/transpose/K-tail/kL0Size matrices, seed/golden/tolerance and priority marks retained.",
+        "Existing per-test device/native markers replace import-time NPU probes; original raw cache disable or real clear behavior is scoped with existing restoration/isolation fixtures.",
+        "Import the already migrated backend-local make_zn_layout/make_nz_layout with identical original layout calls; retain AscendC-only domain."
+      ],
+      "validation": {
+        "original_numerical_cases_pending": 8,
+        "paired_full_sources_and_ELF_backed_requests_per_side": 8,
+        "whole_module_AST_equal_after_declared_adapters": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_gemm_v0_n_tiling.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_gemm_v0_n_tiling.py",
+      "source_git_blob": "d4e8d778f5078d435e5927ffe3c5900428328a0d",
+      "source_sha256": "fcc793651b4846ce60ac7234a45417c02bc061c22a2ebd822576cd9912607ef7",
+      "destination_sha256": "620ec06e0b1bac89de87d852f4c9ce53e91f17d98a228378576c37e00044a728",
+      "adaptations": [
+        "Private A2A3 language entry; all original factories/decorators, complete shape/dtype/transpose/K-tail/kL0Size matrices, seed/golden/tolerance and priority marks retained.",
+        "Existing per-test device/native markers replace import-time NPU probes; original raw cache disable or real clear behavior is scoped with existing restoration/isolation fixtures."
+      ],
+      "validation": {
+        "original_numerical_cases_pending": 6,
+        "paired_full_sources_and_ELF_backed_requests_per_side": 6,
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "original_AscendC_only_domain_retained": true
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
