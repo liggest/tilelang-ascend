@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "main_base": "8b68e6c1a3e0b05ed89c6f4105688c4ede2161ab",
+  "scope": "Nineteen complete original pointwise/quantization/reduction/conv/cann-bench Python assets, in small source/SDK batches. Hardware numerical and performance validation separate; no AOT or A5-only migration.",
+  "entries": [
+    {
+      "source_path": "examples/pad/example_broadcast.py",
+      "destination_path": "examples/ascend_a2a3/pad/example_broadcast.py",
+      "source_git_blob": "047aaa37a3e8d343f52afe64ee96901c9df53129",
+      "source_sha256": "a948eb38b6d4e6e339826a87a01505e8fc0bdc0f40cb790aad9c6a2a16e986e8",
+      "destination_sha256": "66aad9b243155d2d34b3d87f68fd24954ce3f56ff6284d0918ffd1fae05c1e6d",
+      "batch": "Q1",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": false
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language import; preserve all factory/helper/decorator/config/host/golden AST.",
+        "Move original top-level and __main__ runtime to explicit main; guard actual clear with dedicated caller cache and resolved override check, register torch_npu."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q1/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/pad/example_broadcast_pipeline.py",
+      "destination_path": "examples/ascend_a2a3/pad/example_broadcast_pipeline.py",
+      "source_git_blob": "64b40bd21971bb673335fe2a6ace37a5b09ce348",
+      "source_sha256": "586d9f404ff1fa106b3145d1a42fa1af63deea7014eb0328edc0cbdfacfa8f23",
+      "destination_sha256": "c94b5f1968654556aa4c96dbb4d8a6d63d943662e811af64971087ab992582ef",
+      "batch": "Q1",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": false
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language import; preserve all factory/helper/decorator/config/host/golden AST.",
+        "Move original top-level and __main__ runtime to explicit main; guard actual clear with dedicated caller cache and resolved override check, register torch_npu."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q1/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/softmax/example_online_softmax.py",
+      "destination_path": "examples/ascend_a2a3/softmax/example_online_softmax.py",
+      "source_git_blob": "9696b900ba32277d6b49d015dc6bdf750d365834",
+      "source_sha256": "f16aae7a4b859ad5032305072ee978ea7ee4baaf38113dbf3018f6b5a5a14d53",
+      "destination_sha256": "b3200041e373eb39e2250457d9ab6834f8b692229d9d19d536457380a88a0353",
+      "batch": "Q1",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": false
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language import; preserve all factory/helper/decorator/config/host/golden AST.",
+        "Move original top-level and __main__ runtime to explicit main; guard actual clear with dedicated caller cache and resolved override check, register torch_npu."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q1/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(b, ref_b, rtol=rtol, atol=atol)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/sort/example_merge_sort.py",
+      "destination_path": "examples/ascend_a2a3/sort/example_merge_sort.py",
+      "source_git_blob": "b104719837430c666e9ff415970640c7caf4df39",
+      "source_sha256": "c3728f1e26229198bb9aeb53eb7e950fe8b84902a0c5eb20498835b75270fa89",
+      "destination_sha256": "de7bc35489c9f6d911ff651d3402a78eef986b7fe1c4a2f2c756da6cff4787c5",
+      "batch": "Q1",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language import; preserve all factory/helper/decorator/config/host/golden AST.",
+        "Move original top-level and __main__ runtime to explicit main; guard actual clear with dedicated caller cache and resolved override check, register torch_npu.",
+        "Rename only original main function to _original_main without changing its signature or body; call it from guarded runtime."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q1/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [],
+      "original_seed_calls": [
+        "torch.manual_seed(42)"
+      ]
+    }
+  ],
+  "factory_requests": [
+    {
+      "factory": "broadcast",
+      "args": [
+        1024,
+        256,
+        128
+      ],
+      "kwargs": {},
+      "source_CLI_defaults": {
+        "m": 1024,
+        "n": 256
+      },
+      "id": "example_broadcast_0",
+      "source_path": "examples/pad/example_broadcast.py"
+    },
+    {
+      "factory": "broadcast_pipeline",
+      "args": [
+        1024,
+        256,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "source_CLI_defaults": {
+        "m": 1024,
+        "n": 256,
+        "block_m": 128,
+        "sub_m": 64
+      },
+      "id": "example_broadcast_pipeline_0",
+      "source_path": "examples/pad/example_broadcast_pipeline.py"
+    },
+    {
+      "factory": "online_softmax",
+      "args": [
+        34,
+        130,
+        32,
+        32
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "source_original_test_config": [
+        34,
+        130,
+        32,
+        32,
+        "float"
+      ],
+      "id": "example_online_softmax_0",
+      "source_path": "examples/softmax/example_online_softmax.py"
+    },
+    {
+      "factory": "online_softmax",
+      "args": [
+        34,
+        130,
+        32,
+        32
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "source_original_test_config": [
+        34,
+        130,
+        32,
+        32,
+        "float16"
+      ],
+      "id": "example_online_softmax_1",
+      "source_path": "examples/softmax/example_online_softmax.py"
+    },
+    {
+      "factory": "online_softmax",
+      "args": [
+        34,
+        130,
+        32,
+        32
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "source_original_test_config": [
+        34,
+        130,
+        32,
+        32,
+        "bfloat16"
+      ],
+      "id": "example_online_softmax_2",
+      "source_path": "examples/softmax/example_online_softmax.py"
+    },
+    {
+      "factory": "online_softmax",
+      "args": [
+        1024,
+        51200,
+        128,
+        128
+      ],
+      "kwargs": {
+        "dtype": "float"
+      },
+      "source_original_test_config": [
+        1024,
+        51200,
+        128,
+        128,
+        "float"
+      ],
+      "id": "example_online_softmax_3",
+      "source_path": "examples/softmax/example_online_softmax.py"
+    },
+    {
+      "factory": "online_softmax",
+      "args": [
+        1024,
+        51200,
+        128,
+        128
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "source_original_test_config": [
+        1024,
+        51200,
+        128,
+        128,
+        "float16"
+      ],
+      "id": "example_online_softmax_4",
+      "source_path": "examples/softmax/example_online_softmax.py"
+    },
+    {
+      "factory": "online_softmax",
+      "args": [
+        1024,
+        51200,
+        128,
+        128
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "source_original_test_config": [
+        1024,
+        51200,
+        128,
+        128,
+        "bfloat16"
+      ],
+      "id": "example_online_softmax_5",
+      "source_path": "examples/softmax/example_online_softmax.py"
+    },
+    {
+      "factory": "generate_merge_sort_2way",
+      "args": [],
+      "kwargs": {},
+      "source_original_merge_num": 2,
+      "id": "example_merge_sort_0",
+      "source_path": "examples/sort/example_merge_sort.py"
+    },
+    {
+      "factory": "generate_merge_sort_3way",
+      "args": [],
+      "kwargs": {},
+      "source_original_merge_num": 3,
+      "id": "example_merge_sort_1",
+      "source_path": "examples/sort/example_merge_sort.py"
+    },
+    {
+      "factory": "generate_merge_sort_4way",
+      "args": [],
+      "kwargs": {},
+      "source_original_merge_num": 4,
+      "id": "example_merge_sort_2",
+      "source_path": "examples/sort/example_merge_sort.py"
+    }
+  ]
+}
