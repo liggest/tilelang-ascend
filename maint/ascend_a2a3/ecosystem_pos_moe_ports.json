@@ -1,0 +1,1276 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "main_base": "1148f707a8fb0b1dc8a69215ce6114cb03bd4c6c",
+  "scope": "Remaining seven RoPE/MoE assets only; existing twelve pos Python and resource README excluded. Source/SDK is distinct from pending numerical device validation.",
+  "entries": [
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "source_git_blob": "3f7b35e0154801c28a28cb553265e2b97a252c1e",
+      "source_sha256": "367699861931b33712c94d40d1f3d8535781a08de482f49dd1df3fda196e399a",
+      "destination_sha256": "d5588dba9fca5f82164059d0510b8092eaaa51838968b106cf3fc7cabca2d9b4",
+      "component": "R1",
+      "state": "source_SDK_verified_device_pending",
+      "adaptations": [
+        "Private language namespace and import-safe lazy device registration; preserve all original factory/decorator/config/host/golden/CLI matrices.",
+        "Original main body retained as _original_main; disable-cache restored to caller state on success/failure; no extra clear."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pos_moe_plan/R1/"
+      }
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/bench.sh",
+      "destination_path": "examples/ascend_a2a3/pos_embedding/RotaryPositionEmbedding/bench.sh",
+      "source_git_blob": "70210b64465651dc62cfcf64703944608110492a",
+      "source_sha256": "c6600885c0f9478cb17b0e8b4c05169e23889cb4b851c43cce71a5e889500981",
+      "destination_sha256": "1ef0ffa3b90e32f9bae3a52bbc2d1878e352c862c0fc70ca304ba4ec819470ba",
+      "component": "R1",
+      "state": "host_orchestration_verified_profiling_pending",
+      "adaptations": [
+        "Correct repository path for namespaced placement; preserve complete thirteen original msprof shapes/commands/options/collector/exit behavior."
+      ],
+      "validation": {
+        "host": true,
+        "source": false,
+        "SDK": false,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pos_moe_plan/R1/"
+      }
+    }
+  ],
+  "factory_requests": [
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        32,
+        32,
+        32,
+        16,
+        512,
+        256,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_0"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        32,
+        32,
+        32,
+        16,
+        512,
+        256,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_1"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        32,
+        32,
+        32,
+        16,
+        512,
+        256,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_2"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        32,
+        32,
+        32,
+        16,
+        512,
+        256,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_3"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        32,
+        32,
+        32,
+        4,
+        512,
+        256,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_4"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        32,
+        32,
+        32,
+        4,
+        512,
+        256,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_5"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        512,
+        64,
+        8,
+        8,
+        16,
+        512,
+        128,
+        32,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_6"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        128,
+        16,
+        8,
+        8,
+        16,
+        256,
+        64,
+        8,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_7"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        128,
+        64,
+        1,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_8"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        32,
+        32,
+        32,
+        16,
+        256,
+        256,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_9"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        8192,
+        32,
+        48,
+        256,
+        128,
+        512,
+        256,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_10"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        16,
+        48,
+        64,
+        32,
+        512,
+        256,
+        8,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_11"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        160,
+        32,
+        5,
+        5,
+        5,
+        512,
+        256,
+        32,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_12"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        264,
+        16,
+        17,
+        17,
+        33,
+        256,
+        128,
+        8,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_13"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        8,
+        2,
+        4,
+        4,
+        8,
+        128,
+        64,
+        1,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_14"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        32,
+        32,
+        32,
+        16,
+        256,
+        256,
+        32,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_15"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        16384,
+        32,
+        48,
+        512,
+        128,
+        512,
+        256,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_16"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        12,
+        8,
+        2,
+        2,
+        3,
+        128,
+        64,
+        4,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_17"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        8192,
+        32,
+        48,
+        256,
+        128,
+        256,
+        256,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_18"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        128,
+        32,
+        4,
+        4,
+        8,
+        128,
+        64,
+        16,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_19"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        128,
+        64,
+        1,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_20"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        792,
+        16,
+        48,
+        50,
+        33,
+        256,
+        128,
+        8,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_21"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        32,
+        64,
+        1,
+        1,
+        1,
+        128,
+        128,
+        32,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_22"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        4096,
+        64,
+        48,
+        64,
+        64,
+        128,
+        128,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_23"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        256,
+        64,
+        4,
+        4,
+        4,
+        128,
+        128,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_24"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        512,
+        64,
+        8,
+        8,
+        8,
+        128,
+        128,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_25"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        2048,
+        64,
+        32,
+        32,
+        32,
+        128,
+        128,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_26"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        256,
+        32,
+        8,
+        8,
+        4,
+        256,
+        256,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_27"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        256,
+        16,
+        16,
+        16,
+        4,
+        512,
+        512,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_28"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        256,
+        64,
+        4,
+        4,
+        4,
+        128,
+        128,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_29"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        512,
+        64,
+        8,
+        8,
+        8,
+        128,
+        128,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_30"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        256,
+        64,
+        4,
+        4,
+        4,
+        128,
+        128,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_31"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        512,
+        64,
+        8,
+        8,
+        8,
+        128,
+        128,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_32"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        256,
+        64,
+        4,
+        4,
+        4,
+        128,
+        128,
+        64,
+        "interleaved"
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "id": "rope_33"
+    },
+    {
+      "source_path": "examples/pos_embedding/RotaryPositionEmbedding/rope_half_interleaved.py",
+      "factory": "rope_kernel",
+      "args": [
+        1024,
+        64,
+        16,
+        16,
+        4,
+        128,
+        128,
+        64,
+        "half"
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "id": "rope_34"
+    }
+  ],
+  "R1_original_case_matrix": [
+    {
+      "case": "L0_CASES:0",
+      "shape": [
+        16,
+        64,
+        512,
+        256
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 0
+    },
+    {
+      "case": "L0_CASES:1",
+      "shape": [
+        16,
+        64,
+        512,
+        256
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 1
+    },
+    {
+      "case": "L0_CASES:2",
+      "shape": [
+        16,
+        64,
+        512,
+        256
+      ],
+      "layout": "interleaved",
+      "dtype": "bfloat16",
+      "request_index": 2
+    },
+    {
+      "case": "L0_CASES:3",
+      "shape": [
+        16,
+        64,
+        512,
+        256
+      ],
+      "layout": "half",
+      "dtype": "bfloat16",
+      "request_index": 3
+    },
+    {
+      "case": "L0_CASES:4",
+      "shape": [
+        4,
+        4,
+        64,
+        512,
+        256
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 4
+    },
+    {
+      "case": "L0_CASES:5",
+      "shape": [
+        4,
+        4,
+        64,
+        512,
+        256
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 5
+    },
+    {
+      "case": "L1_CASES:0",
+      "shape": [
+        16,
+        32,
+        512,
+        128
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 6
+    },
+    {
+      "case": "L1_CASES:1",
+      "shape": [
+        16,
+        8,
+        256,
+        64
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 7
+    },
+    {
+      "case": "L1_CASES:2",
+      "shape": [
+        1,
+        1,
+        128,
+        64
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 8
+    },
+    {
+      "case": "L1_CASES:3",
+      "shape": [
+        16,
+        64,
+        256,
+        256
+      ],
+      "layout": "interleaved",
+      "dtype": "bfloat16",
+      "request_index": 9
+    },
+    {
+      "case": "L1_CASES:4",
+      "shape": [
+        128,
+        64,
+        512,
+        256
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 10
+    },
+    {
+      "case": "L1_CASES:5",
+      "shape": [
+        4,
+        32,
+        8,
+        512,
+        256
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 11
+    },
+    {
+      "case": "L1_CASES:6",
+      "shape": [
+        5,
+        32,
+        512,
+        256
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 12
+    },
+    {
+      "case": "L1_CASES:7",
+      "shape": [
+        33,
+        8,
+        256,
+        128
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 13
+    },
+    {
+      "case": "L1_CASES:8",
+      "shape": [
+        8,
+        1,
+        128,
+        64
+      ],
+      "layout": "interleaved",
+      "dtype": "bfloat16",
+      "request_index": 14
+    },
+    {
+      "case": "L1_CASES:9",
+      "shape": [
+        2,
+        16,
+        32,
+        256,
+        256
+      ],
+      "layout": "half",
+      "dtype": "bfloat16",
+      "request_index": 15
+    },
+    {
+      "case": "L1_CASES:10",
+      "shape": [
+        2,
+        128,
+        64,
+        512,
+        256
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 16
+    },
+    {
+      "case": "L1_CASES:11",
+      "shape": [
+        3,
+        4,
+        128,
+        64
+      ],
+      "layout": "half",
+      "dtype": "bfloat16",
+      "request_index": 17
+    },
+    {
+      "case": "BOUNDARY:large_values",
+      "shape": [
+        [
+          16,
+          64,
+          512
+        ],
+        [
+          16,
+          1,
+          256
+        ],
+        [
+          16,
+          1,
+          256
+        ]
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 0
+    },
+    {
+      "case": "BOUNDARY:zero_values",
+      "shape": [
+        [
+          16,
+          64,
+          512
+        ],
+        [
+          16,
+          1,
+          256
+        ],
+        [
+          16,
+          1,
+          256
+        ]
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 1
+    },
+    {
+      "case": "BOUNDARY:full_rope_large_batch",
+      "shape": [
+        [
+          128,
+          64,
+          256
+        ],
+        [
+          128,
+          1,
+          256
+        ],
+        [
+          128,
+          1,
+          256
+        ]
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 18
+    },
+    {
+      "case": "BOUNDARY:min_rope_dim",
+      "shape": [
+        [
+          8,
+          16,
+          128
+        ],
+        [
+          8,
+          1,
+          64
+        ],
+        [
+          8,
+          1,
+          64
+        ]
+      ],
+      "layout": "half",
+      "dtype": "bfloat16",
+      "request_index": 19
+    },
+    {
+      "case": "BOUNDARY:single_row",
+      "shape": [
+        [
+          1,
+          1,
+          128
+        ],
+        [
+          1,
+          1,
+          64
+        ],
+        [
+          1,
+          1,
+          64
+        ]
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 20
+    },
+    {
+      "case": "BOUNDARY:bsnd_tail",
+      "shape": [
+        [
+          3,
+          33,
+          8,
+          256
+        ],
+        [
+          1,
+          33,
+          1,
+          128
+        ],
+        [
+          1,
+          33,
+          1,
+          128
+        ]
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 21
+    },
+    {
+      "case": "bench:decode_bs1",
+      "shape": [
+        1,
+        32,
+        128,
+        128
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 22
+    },
+    {
+      "case": "bench:decode_bs64",
+      "shape": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 23
+    },
+    {
+      "case": "bench:prefill_bs4_h64",
+      "shape": [
+        4,
+        64,
+        128,
+        128
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 24
+    },
+    {
+      "case": "bench:prefill_bs8_h64",
+      "shape": [
+        8,
+        64,
+        128,
+        128
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 25
+    },
+    {
+      "case": "bench:prefill_bs32_h64",
+      "shape": [
+        32,
+        64,
+        128,
+        128
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 26
+    },
+    {
+      "case": "bench:prefill_bs4_d256",
+      "shape": [
+        4,
+        64,
+        256,
+        256
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 27
+    },
+    {
+      "case": "bench:prefill_bs4_d512",
+      "shape": [
+        4,
+        64,
+        512,
+        512
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 28
+    },
+    {
+      "case": "bench:prefill_bs4_bf16",
+      "shape": [
+        4,
+        64,
+        128,
+        128
+      ],
+      "layout": "half",
+      "dtype": "bfloat16",
+      "request_index": 29
+    },
+    {
+      "case": "bench:prefill_bs8_bf16",
+      "shape": [
+        8,
+        64,
+        128,
+        128
+      ],
+      "layout": "half",
+      "dtype": "bfloat16",
+      "request_index": 30
+    },
+    {
+      "case": "bench:prefill_bs4_inter",
+      "shape": [
+        4,
+        64,
+        128,
+        128
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 31
+    },
+    {
+      "case": "bench:prefill_bs8_inter",
+      "shape": [
+        8,
+        64,
+        128,
+        128
+      ],
+      "layout": "interleaved",
+      "dtype": "float16",
+      "request_index": 32
+    },
+    {
+      "case": "bench:prefill_bs4_inter_bf16",
+      "shape": [
+        4,
+        64,
+        128,
+        128
+      ],
+      "layout": "interleaved",
+      "dtype": "bfloat16",
+      "request_index": 33
+    },
+    {
+      "case": "bench:bsnd_bs4_s4",
+      "shape": [
+        4,
+        4,
+        64,
+        128,
+        128
+      ],
+      "layout": "half",
+      "dtype": "float16",
+      "request_index": 34
+    }
+  ],
+  "R1_original_negative_cases": [
+    {
+      "case": "odd_rope_dim",
+      "exception": "ValueError",
+      "error": "rope_dim must be even, got 63",
+      "native_constructor_called": false
+    },
+    {
+      "case": "bad_dim_1d",
+      "exception": "NotImplementedError",
+      "error": "x.dim()=1 not supported, expected 3 (TND) or 4 (BSND)",
+      "native_constructor_called": false
+    },
+    {
+      "case": "bad_dim_5d",
+      "exception": "NotImplementedError",
+      "error": "x.dim()=5 not supported, expected 3 (TND) or 4 (BSND)",
+      "native_constructor_called": false
+    },
+    {
+      "case": "rope_dim_too_large",
+      "exception": "ValueError",
+      "error": "rope_dim (128) must be <= hidden_size (64)",
+      "native_constructor_called": false
+    }
+  ],
+  "R1_bench_shapes": [
+    "decode_bs1|1 32 128 128|half|float16",
+    "decode_bs64|64 64 128 128|half|float16",
+    "prefill_bs4_h64|4 64 128 128|half|float16",
+    "prefill_bs8_h64|8 64 128 128|half|float16",
+    "prefill_bs32_h64|32 64 128 128|half|float16",
+    "prefill_bs4_d256|4 64 256 256|half|float16",
+    "prefill_bs4_d512|4 64 512 512|half|float16",
+    "prefill_bs4_bf16|4 64 128 128|half|bfloat16",
+    "prefill_bs8_bf16|8 64 128 128|half|bfloat16",
+    "prefill_bs4_inter|4 64 128 128|interleaved|float16",
+    "prefill_bs8_inter|8 64 128 128|interleaved|float16",
+    "prefill_bs4_inter_bf16|4 64 128 128|interleaved|bfloat16",
+    "bsnd_bs4_s4|4 4 64 128 128|half|float16"
+  ]
+}
