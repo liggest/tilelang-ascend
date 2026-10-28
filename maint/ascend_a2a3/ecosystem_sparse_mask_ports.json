@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "owner_scope": "MASK3: two complete original masked sparse CLIs and complete eight-function local golden",
+  "entries": [
+    {
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_mask.py",
+      "destination_path": "examples/ascend_a2a3/sparse_flash_attention/example_sparse_flash_attn_mask.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "8eaaeb980e6beb322947b7363ad24471007858ce166d7de2acbf459b9e9cc59d",
+      "source_git_blob": "99a9576b8a14a004bde941eb86b17c23e11267f4",
+      "destination_sha256": "16d9cbf79683e35271209c48637fc3584747ef32dcb2bcf26f186a996babc01d",
+      "state": "complete_source_SDK_candidate_device_pending",
+      "original_definition_AST_sha256": {
+        "sparse_attention_fwd": "7eb6d29225f4756712888a056e9eb641f35e3574d5c845f0ebfb7afe8212c49c",
+        "ref_sparse_attention_fwd_interface": "d08d8fb4ba3aace1cc460ced6a4fa8dbceb5dc9a95cb3c708188ff1973ea1730"
+      },
+      "original_executable_CLI_AST_sha256": "b676eb36e78d14fe8d3ff9a7d0aeb872a85afb8ffa69848ecb9c88a764357f44",
+      "retained_original_module_constants_AST": [
+        "core_num = 24"
+      ],
+      "original_full_CLI_default": [
+        1,
+        1024,
+        32768,
+        128,
+        1,
+        576,
+        512,
+        2048
+      ],
+      "original_core_num": 24,
+      "core_num_is_original_constant_not_device_query": true,
+      "original_seed": 0,
+      "original_runtime_calls": 1,
+      "original_golden_assertions": 1,
+      "original_rtol_atol": 0.01,
+      "original_workspace_idx": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "original_out_idx": [
+        3
+      ],
+      "original_target": "auto",
+      "original_disable_cache_calls": 1,
+      "original_sync_calls": 4,
+      "original_success_marker": "Test Passed!",
+      "original_PA_block_table_all_zero": false,
+      "local_reference_dependency": null,
+      "device_not_run": true,
+      "hoisted_original_stdlib_imports": []
+    },
+    {
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_mask_pa.py",
+      "destination_path": "examples/ascend_a2a3/sparse_flash_attention/example_sparse_flash_attn_mask_pa.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "be8df406d0821451375783fe310bcab0de17cbc64837329c1eb3286bf8f60f49",
+      "source_git_blob": "76552fca65811b92d9f9121e9ccec86d2cca9e36",
+      "destination_sha256": "449a2c75838583f47e24e8be39968a2b818bf0a37899de76be54a79d7ffe4f50",
+      "state": "complete_source_SDK_candidate_device_pending",
+      "original_definition_AST_sha256": {
+        "sparse_attention_fwd": "38a13c893cf6b913fb994826c39694072fca974031f1735224f5c8a616a28871",
+        "ref_sparse_attention_fwd_interface": "d08d8fb4ba3aace1cc460ced6a4fa8dbceb5dc9a95cb3c708188ff1973ea1730"
+      },
+      "original_executable_CLI_AST_sha256": "4c11db7e62bfb8e73a5893cc44c4d433a17d3f60f132da45a3dac13bb01ea871",
+      "retained_original_module_constants_AST": [],
+      "original_full_CLI_default": [
+        1,
+        512,
+        32768,
+        128,
+        1,
+        576,
+        512,
+        2048
+      ],
+      "original_core_num": 24,
+      "core_num_is_original_constant_not_device_query": true,
+      "original_seed": 0,
+      "original_runtime_calls": 1,
+      "original_golden_assertions": 1,
+      "original_rtol_atol": 0.01,
+      "original_workspace_idx": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "original_out_idx": [
+        3
+      ],
+      "original_target": "auto",
+      "original_disable_cache_calls": 1,
+      "original_sync_calls": 3,
+      "original_success_marker": "Test Passed!",
+      "original_PA_block_table_all_zero": true,
+      "local_reference_dependency": "sfa_golden.py",
+      "device_not_run": true,
+      "hoisted_original_stdlib_imports": [
+        "math"
+      ]
+    },
+    {
+      "source_path": "examples/sparse_flash_attention/sfa_golden.py",
+      "destination_path": "examples/ascend_a2a3/sparse_flash_attention/sfa_golden.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "f0396f57784949d92cb0e7d04316f548c96e4a8c6b8236d370f5ca8f16878227",
+      "source_git_blob": "c372c09e11395e915b8db60c1659cdd0ccc2e5ed",
+      "destination_sha256": "9d890787ee3f4bb786708147c1cc3727a776ba56f828c42da0b55888b598ae68",
+      "original_definition_AST_sha256": {
+        "pa_to_bsnd": "325a0bbd01c2642dc6ae8a6a9124e2248c1cf999a01e5b8967d71db8c5641c04",
+        "trans_tnd_to_bsnd": "6e6506cca992583710598fd668f4594d7423a1f1c1ad7730fd58853acb608854",
+        "trans_bnsd_to_tnd": "d0bd388acd58b0390ddd0ac4632ecbe65cff4f1fe1d365cd1e9c9034a2c5ad76",
+        "trans_tnd_actseq": "30288f8d2879917d5fe8af097b7c84f6bd75c78f17dd1632831bd90bb7488651",
+        "gather_kv": "8a4d411d777e670182edbbb318a88bac2d5ebbc4fb3a8ef0a0ee653e7422261e",
+        "mask": "6df62ae1765abf1e761d24917236bd73b85aa42c6a7b0764e54904227d62fc09",
+        "softmax": "18a63c95e9a215ef35cde95f36269aa4b6f1ec729ca204e2934855993270301f",
+        "cpu_sparse_flash_attention": "10d4310e906492c8254378b3ccb1c5d9724b07ec658b18f9d27ad097baf91e15"
+      },
+      "state": "complete_original_host_reference_candidate",
+      "original_complete_file_byte_equal": false,
+      "original_complete_module_AST_equal": true,
+      "changes": [
+        "two narrow codespell comments retain the original variable spelling; no executable changes"
+      ]
+    }
+  ],
+  "factory_requests": [
+    {
+      "id": "example_sparse_flash_attn_mask",
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_mask.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "heads": 128,
+        "dim": 512,
+        "tail_dim": 64,
+        "topk": 2048,
+        "kv_stride": 1
+      },
+      "dialect": "ascendc",
+      "core_sampling": "none"
+    },
+    {
+      "id": "example_sparse_flash_attn_mask_pa",
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_mask_pa.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "heads": 128,
+        "dim": 512,
+        "tail_dim": 64,
+        "topk": 2048,
+        "core_num": 24,
+        "block_num": 516,
+        "block_size": 128
+      },
+      "dialect": "ascendc",
+      "core_sampling": "none"
+    }
+  ],
+  "validation": {
+    "original_assets": 3,
+    "original_definitions": 12,
+    "source_SDK_pending": false,
+    "device_not_run": true,
+    "actual_complete_source_requests_per_framework": 2,
+    "actual_Bisheng_invocations_per_framework": 2,
+    "host_ON_passed": 25,
+    "original_device_runtime_calls_pending": 2,
+    "original_golden_assertions_pending": 2,
+    "ordinary_mask_original_sentinel_gather_not_modified": true,
+    "actual_OFF_passed": 23,
+    "actual_OFF_native_only_skipped": 2,
+    "original_complete_helper_module_AST_equal": true,
+    "original_PA_values_and_all_semantic_algorithm_branches_preserved": true
+  }
+}
