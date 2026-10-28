@@ -23,7 +23,8 @@ def _parameterizations(function):
     for mark in getattr(function, "pytestmark", []):
         if mark.name != "parametrize":
             continue
-        names = [name.strip() for name in mark.args[0].split(",")]
+        names = mark.args[0]
+        names = [name.strip() for name in names.split(",")] if isinstance(names, str) else list(names)
         rows = []
         for value in mark.args[1]:
             if hasattr(value, "values") and hasattr(value, "marks"):

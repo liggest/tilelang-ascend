@@ -1578,6 +1578,92 @@
         "actual_OFF_pure_frontend_cases_passed": 7
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_merge_sort.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_merge_sort.py",
+      "source_git_blob": "3cc7f4aba49f4a6424840610fe2e9a506420fd3e",
+      "source_sha256": "fd9b69596a1478b7d0ea7ac53eb75fcaf08eea156b30c5bd1ac2fa8d2f0e4fe2",
+      "destination_sha256": "3c1ece4d8f1c5e303d9ab29e36c448456d069871f98cefa623bb9767574a93fe",
+      "adaptations": [
+        "Backend-private A2A3 language and current real cache imports; retain the complete original factory, kernel, reference and host algorithms, shapes/dtypes, seeds/tolerances, flags, out_idx, and all low_priority/ci_skip marks.",
+        "Use per-case a2a3_device collection gates and existing scoped isolated_a2a3_cache fixture without import-time device discovery or clearing caller caches.",
+        "Original CLI still clears the real A2A3 cache at its original position; after parse_args it requires a dedicated explicit TILELANG_CACHE_DIR matching the actual descriptor-resolved path, and only then registers torch_npu. Original --help remains device/cache independent.",
+        "Source companion enumerates all nine actual run_test helper calls in the three multi-call outer tests; the report-only driver catches only successful-source sentinels at unused-return helper boundaries and preserves original outer order. No fake kernel results or numerical pass is returned."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "original_function_count": 22,
+        "original_numerical_parameter_nodes_unexecuted": 16,
+        "positive_full_source_ELF_backed_requests_per_side": 22,
+        "source_only_workspace_rejections_per_side": 0,
+        "original_device_cases_run": 0
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_sort.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_sort.py",
+      "source_git_blob": "49ddd4335aa95cf739bd6e6ab053ad8b71c5d9e0",
+      "source_sha256": "13005537d663dd558ecc7a685a614c0534aa7d557c88bb88c343b576c9a67538",
+      "destination_sha256": "8d0751004717cf6ea6e3ee83b14c223b5321528059669691a67007741c4761b4",
+      "adaptations": [
+        "Backend-private A2A3 language and current real cache imports; retain the complete original factory, kernel, reference and host algorithms, shapes/dtypes, seeds/tolerances, flags, out_idx, and all low_priority/ci_skip marks.",
+        "Use per-case a2a3_device collection gates and existing scoped isolated_a2a3_cache fixture without import-time device discovery or clearing caller caches.",
+        "Original CLI still clears the real A2A3 cache at its original position; after parse_args it requires a dedicated explicit TILELANG_CACHE_DIR matching the actual descriptor-resolved path, and only then registers torch_npu. Original --help remains device/cache independent.",
+        "Both original ci_skip zero-count crash tests remain intact and unexecuted; a separate source-only observer captures the actual original PrimFunc before any transfer and asserts the matched TA/current AllocateTmpBuffer non-empty-workspace rejection, with no SDK or hardware exception injection."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "original_function_count": 18,
+        "original_numerical_parameter_nodes_unexecuted": 52,
+        "positive_full_source_ELF_backed_requests_per_side": 50,
+        "source_only_workspace_rejections_per_side": 2,
+        "original_device_cases_run": 0
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_topk.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_topk.py",
+      "source_git_blob": "84cfdb03289e4a05578249ce41c9fe6fddbc8238",
+      "source_sha256": "7d4b74ea3d3f629051771ec5a76996ff9ddf3a468632ec27acad39ba6b6fac03",
+      "destination_sha256": "bf3f65f04a86ac1ae652b6cbc746628688052f456b36d4df23429a6ea4229966",
+      "adaptations": [
+        "Backend-private A2A3 language and current real cache imports; retain the complete original factory, kernel, reference and host algorithms, shapes/dtypes, seeds/tolerances, flags, out_idx, and all low_priority/ci_skip marks.",
+        "Use per-case a2a3_device collection gates and existing scoped isolated_a2a3_cache fixture without import-time device discovery or clearing caller caches.",
+        "Original CLI still clears the real A2A3 cache at its original position; after parse_args it requires a dedicated explicit TILELANG_CACHE_DIR matching the actual descriptor-resolved path, and only then registers torch_npu. Original --help remains device/cache independent."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "original_function_count": 16,
+        "original_numerical_parameter_nodes_unexecuted": 34,
+        "positive_full_source_ELF_backed_requests_per_side": 34,
+        "source_only_workspace_rejections_per_side": 0,
+        "original_device_cases_run": 0
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_tail_block.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_tail_block.py",
+      "source_git_blob": "23070055c05a33ecde6554ae17ed8753c2865489",
+      "source_sha256": "fd63da56fa6e4b9241fc6ed7c79a43d85a2ecfc60c5e406ef83fb1575a040265",
+      "destination_sha256": "08cf98ac922a041256146d4d5e7b14bf2a9fa667173eb5a6b5b4e08a96e4cc25",
+      "adaptations": [
+        "Backend-private A2A3 language and current real cache imports; retain the complete original factory, kernel, reference and host algorithms, shapes/dtypes, seeds/tolerances, flags, out_idx, and all low_priority/ci_skip marks.",
+        "Use per-case a2a3_device collection gates and existing scoped isolated_a2a3_cache fixture without import-time device discovery or clearing caller caches.",
+        "Preserve original NaN/signed-zero comparisons, false/true tail-mask controls, CV and dtype cases. Source helper accepts pytest valid sequence argnames as well as its unchanged existing string branch; no language/parser implementation changes."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_declared_adapters": true,
+        "original_function_count": 35,
+        "original_numerical_parameter_nodes_unexecuted": 189,
+        "positive_full_source_ELF_backed_requests_per_side": 189,
+        "source_only_workspace_rejections_per_side": 0,
+        "original_device_cases_run": 0
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
