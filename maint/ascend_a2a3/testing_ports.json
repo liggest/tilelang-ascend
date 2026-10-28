@@ -966,6 +966,136 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_gm_to_ub.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_gm_to_ub.py",
+      "source_git_blob": "50bfc481d671676b47fbb57c2f60bb6e2ef82fc9",
+      "source_sha256": "ed64ec799a84e81cd86340c5fa70d9385b2dc7e133c029a83ef29e2fc10ae57e",
+      "destination_sha256": "72e86d41aa159065c7f07309ddf9d2485536a1de6cab7007a4db34eba92d18df",
+      "adaptations": [
+        "Backend-private language/layout imports; preserve the full original module and its matrix, factories, host numerical helpers, seeds, golden/tolerances, ci_skip/low_priority and original assertions.",
+        "Original cache clearing delegates to the existing isolated real A2A3 cache; disabled-cache regions restore the exact caller raw bit, including exceptional source-capture exits.",
+        "Separate native/source and original device requirements; full original test requests are lowered before any NPU inputs."
+      ],
+      "validation": {
+        "whole_module_AST_exact_except_listed_adaptations": true,
+        "original_fn_class_AST_checks": 58,
+        "original_cases": 95,
+        "original_native_source_assertions_passed": 0,
+        "original_A2A3_device_cases_unexecuted": 95,
+        "original_low_priority_cases_retained": 51,
+        "A5_only_outside_domain_retained_unverified": 0,
+        "full_original_source_requests_TA_and_main_each": 95,
+        "SDK_ELF_requests_passed_TA_and_main_each": 95,
+        "original_source_only_SDK_rejections_TA_and_main_each": 0,
+        "all_host_prototypes_and_logical_parameters_equal": true,
+        "TA_actual_availability_probe_and_StorageRewrite_is_npu_true": true,
+        "batch_actual_OFF_parser_passed": 5,
+        "batch_actual_OFF_native_device_source_checks_skipped": 592,
+        "batch_scoped_cache_and_dynamic_source_audit_passed": 14,
+        "batch_hardware_queries_in_pure_host_tests": 0,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_gm_to_l1.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_gm_to_l1.py",
+      "source_git_blob": "5efd49c7cc5590d3bc46371ee1809f0b9868ca95",
+      "source_sha256": "742c8840e80074f61a3aaa892d18edc2eccd1fcf405d67352e6cfa4e2db9f1f1",
+      "destination_sha256": "c90d0560f0afe16954834385b03a67d81268d5c0062f8b1f97a9babd87eea6e1",
+      "adaptations": [
+        "Backend-private language/layout imports; preserve the full original module and its matrix, factories, host numerical helpers, seeds, golden/tolerances, ci_skip/low_priority and original assertions.",
+        "Original cache clearing delegates to the existing isolated real A2A3 cache; disabled-cache regions restore the exact caller raw bit, including exceptional source-capture exits.",
+        "Separate native/source and original device requirements; full original test requests are lowered before any NPU inputs."
+      ],
+      "validation": {
+        "whole_module_AST_exact_except_listed_adaptations": true,
+        "original_fn_class_AST_checks": 33,
+        "original_cases": 49,
+        "original_native_source_assertions_passed": 0,
+        "original_A2A3_device_cases_unexecuted": 49,
+        "original_low_priority_cases_retained": 37,
+        "A5_only_outside_domain_retained_unverified": 0,
+        "full_original_source_requests_TA_and_main_each": 49,
+        "SDK_ELF_requests_passed_TA_and_main_each": 49,
+        "original_source_only_SDK_rejections_TA_and_main_each": 0,
+        "all_host_prototypes_and_logical_parameters_equal": true,
+        "TA_actual_availability_probe_and_StorageRewrite_is_npu_true": true,
+        "batch_actual_OFF_parser_passed": 5,
+        "batch_actual_OFF_native_device_source_checks_skipped": 592,
+        "batch_scoped_cache_and_dynamic_source_audit_passed": 14,
+        "batch_hardware_queries_in_pure_host_tests": 0,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_l1_to_l0.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_l1_to_l0.py",
+      "source_git_blob": "950d240a12dc2c68145465e2026c99d6b6a4804b",
+      "source_sha256": "2e36c191e9099038afccc7541145dac664ea68f8ebd26ef6662934f0d23a0bcb",
+      "destination_sha256": "76027b1e10981c2e57969298ef6a28b11ff80b9e19c43d86e1c4d1bf368f1b10",
+      "adaptations": [
+        "Backend-private language/layout imports; preserve the full original module and its matrix, factories, host numerical helpers, seeds, golden/tolerances, ci_skip/low_priority and original assertions.",
+        "Original cache clearing delegates to the existing isolated real A2A3 cache; disabled-cache regions restore the exact caller raw bit, including exceptional source-capture exits.",
+        "Separate native/source and original device requirements; full original test requests are lowered before any NPU inputs.",
+        "Remove obsolete lower(platform=...) keyword; preserve every source-only codegen assertion, including the two original PTO sliced shapes whose SDK rejects non-box-divisible tile dimensions."
+      ],
+      "validation": {
+        "whole_module_AST_exact_except_listed_adaptations": true,
+        "original_fn_class_AST_checks": 27,
+        "original_cases": 156,
+        "original_native_source_assertions_passed": 56,
+        "original_A2A3_device_cases_unexecuted": 100,
+        "original_low_priority_cases_retained": 128,
+        "A5_only_outside_domain_retained_unverified": 0,
+        "full_original_source_requests_TA_and_main_each": 156,
+        "SDK_ELF_requests_passed_TA_and_main_each": 154,
+        "original_source_only_SDK_rejections_TA_and_main_each": 2,
+        "all_host_prototypes_and_logical_parameters_equal": true,
+        "TA_actual_availability_probe_and_StorageRewrite_is_npu_true": true,
+        "batch_actual_OFF_parser_passed": 5,
+        "batch_actual_OFF_native_device_source_checks_skipped": 592,
+        "batch_scoped_cache_and_dynamic_source_audit_passed": 14,
+        "batch_hardware_queries_in_pure_host_tests": 0,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_tilelang_ascend_language_copy_cv.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_copy_cv.py",
+      "source_git_blob": "2c7ad1aa0c62feaed7e803d2619f9b67b5654e97",
+      "source_sha256": "8861311148d9a3383fcbfba1670cc8bed188bd972877ec577c2d5c94c6415a71",
+      "destination_sha256": "39448edac91ad405d43cd644f98e7b6d2126b2053ae6b5456a6db4af961ab1db",
+      "adaptations": [
+        "Backend-private language/layout imports; preserve the full original module and its matrix, factories, host numerical helpers, seeds, golden/tolerances, ci_skip/low_priority and original assertions.",
+        "Original cache clearing delegates to the existing isolated real A2A3 cache; disabled-cache regions restore the exact caller raw bit, including exceptional source-capture exits.",
+        "Separate native/source and original device requirements; full original test requests are lowered before any NPU inputs.",
+        "Resolve platform via the existing private API only at actual use; retain all target_skip_ascendc_in_A5 and special_shapes branches and both PTO requests. Three complete A5-only tests/kernels remain explicitly outside-A2A3 skipped, without modern A5 support claims."
+      ],
+      "validation": {
+        "whole_module_AST_exact_except_listed_adaptations": true,
+        "original_fn_class_AST_checks": 30,
+        "original_cases": 24,
+        "original_native_source_assertions_passed": 0,
+        "original_A2A3_device_cases_unexecuted": 21,
+        "original_low_priority_cases_retained": 0,
+        "A5_only_outside_domain_retained_unverified": 3,
+        "full_original_source_requests_TA_and_main_each": 23,
+        "SDK_ELF_requests_passed_TA_and_main_each": 23,
+        "original_source_only_SDK_rejections_TA_and_main_each": 0,
+        "all_host_prototypes_and_logical_parameters_equal": true,
+        "TA_actual_availability_probe_and_StorageRewrite_is_npu_true": true,
+        "batch_actual_OFF_parser_passed": 5,
+        "batch_actual_OFF_native_device_source_checks_skipped": 592,
+        "batch_scoped_cache_and_dynamic_source_audit_passed": 14,
+        "batch_hardware_queries_in_pure_host_tests": 0,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",

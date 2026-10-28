@@ -8,6 +8,7 @@ from tilelang.cache.kernel_cache import KernelCache
 
 def pytest_configure(config):
     config.addinivalue_line("markers", "ci_skip: original TA case excluded by its normal CI collector")
+    config.addinivalue_line("markers", "a2a3_original_skip_a5: original TA non-A5 requirement, resolved at test time")
     config.addinivalue_line("markers", "low_priority: original TA boundary case reserved for full testing")
     config.addinivalue_line("markers", "a2a3_native: requires the A2/A3 pipeline and native source builders")
     config.addinivalue_line("markers", "a2a3_device: requires an actual supported Ascend A2/A3 NPU")
