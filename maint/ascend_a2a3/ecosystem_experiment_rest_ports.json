@@ -666,7 +666,7 @@
       "source_sha256": "fbdfd27205be065a074d83c5905beef4eb18679684c4304352045d73ee4ad12f",
       "destination_sha256": "8d0b932216ca41a194882d064e846e60f402c3a2ade36f814ec4616be7e0bec6",
       "batch": "E5b",
-      "state": "source_SDK_verified_original_oracle_defect_device_pending",
+      "state": "source_SDK_verified_compile_boundary_device_pending",
       "source_runtime": {
         "clear_cache": false,
         "clear_count": 0,
@@ -684,11 +684,13 @@
         "source": true,
         "SDK": true,
         "device": false,
-        "original_odd_G_oracle_setup_defect_fixed": false,
-        "evidence": "refactor_main/reports/p3_experiment_rest/E5b/"
+        "original_odd_G_oracle_setup_defect_fixed": true,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5b/",
+        "original_odd_G_hardware_fault_validated": false,
+        "oracle_evidence": "refactor_main/reports/p3_experiment_rest/E5b_oracle/"
       },
       "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
-      "validation_scope": "28 original rows;16 complete positive source/SDK requests each side+1 same original odd17 native codegen rejection before SDK. Core24 sampled explicitly, original query and kwargs retained. Original -c setup oracle defect/runtimes/numerical/boundary/performance pending.",
+      "validation_scope": "28 original rows;16 complete positive source/SDK requests each side+1 same original odd17 native codegen rejection before SDK. Core24 sampled explicitly, original query and kwargs retained. Original -c setup false positive corrected by strict exact-sibling target_compile/InternalError544/2176 status71+singlemarker; no H2D/launch allowed, runtime/numerical/boundary/performance pending.",
       "source_sampling_core_override": {
         "value": 24,
         "actual_property_provenance": "refactor_main/reports/p3_experiment_rest/E4c24/hardware_property_provenance.json",
@@ -700,9 +702,9 @@
       "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd/test_example_tilelang_nsa_fwd.py",
       "source_git_blob": "47f3233d7e349a9737e8aafe35e93c8786a5ee97",
       "source_sha256": "f001502f4e049fdbc347ef7cfb6215b0cbe730de67de3a707561072092300555",
-      "destination_sha256": "0c2ffa91de000fae05bce0a2a83b97f7696d84e6e082ea08f3aa023f8e4ced89",
+      "destination_sha256": "5083effe3d00ec55026d0f9bc1d6d64c2bd22f326d423bf38600f0c7c70b9e7a",
       "batch": "E5b",
-      "state": "source_SDK_verified_original_oracle_defect_device_pending",
+      "state": "source_SDK_verified_compile_boundary_device_pending",
       "source_runtime": {
         "clear_cache": false,
         "clear_count": 0,
@@ -720,16 +722,30 @@
         "source": true,
         "SDK": true,
         "device": false,
-        "original_odd_G_oracle_setup_defect_fixed": false,
-        "evidence": "refactor_main/reports/p3_experiment_rest/E5b/"
+        "original_odd_G_oracle_setup_defect_fixed": true,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E5b/",
+        "original_odd_G_hardware_fault_validated": false,
+        "oracle_evidence": "refactor_main/reports/p3_experiment_rest/E5b_oracle/"
       },
       "source_request_owner": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
-      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
-      "validation_scope": "28 original rows;16 complete positive source/SDK requests each side+1 same original odd17 native codegen rejection before SDK. Core24 sampled explicitly, original query and kwargs retained. Original -c setup oracle defect/runtimes/numerical/boundary/performance pending.",
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": false,
+      "validation_scope": "28 original rows;16 complete positive source/SDK requests each side+1 same original odd17 native codegen rejection before SDK. Core24 sampled explicitly, original query and kwargs retained. Original -c setup false positive corrected by strict exact-sibling target_compile/InternalError544/2176 status71+singlemarker; no H2D/launch allowed, runtime/numerical/boundary/performance pending.",
       "source_sampling_core_override": {
         "value": 24,
         "actual_property_provenance": "refactor_main/reports/p3_experiment_rest/E4c24/hardware_property_provenance.json",
         "original_core_num_None_query_AST_unchanged": true
+      },
+      "original_oracle_source_archive": {
+        "path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd/original_odd_gqa_child.txt",
+        "sha256": "46ebcec7f3eacee2844ccc36afad55d954098d0b1dc371140be918a87c2a7fa5",
+        "scope": "Exact complete original -c child literal, inactive plaintext; no executable extension or automatic invocation"
+      },
+      "original_AST_contract": {
+        "all_original_functions_AST_exact": false,
+        "all_other_original_functions_AST_exact": true,
+        "original_CLI_factory_CPU_helpers_config_matrix_golden_thresholds_exact": true,
+        "authorized_exception": "test_nsa_l2 nested odd-G child and two associated result messages; explicit source-compile oracle replaces broken arbitrary-nonzero runtime oracle; original full literal archived",
+        "original_child_CPU_statements_constructor_kwargs_and_seed_behavior_exact": true
       }
     },
     {

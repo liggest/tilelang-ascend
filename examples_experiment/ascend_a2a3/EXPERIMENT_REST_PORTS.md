@@ -259,10 +259,14 @@ produce the actual `MIX_AIC_1_1` grid, rather than assuming two AIV per C.
 Sixteen positive source pairs passed actual SDK compilation. One intended
 odd17 request is rejected by both original and current native codegen with the
 same CompareScalar 544-element/2176-byte alignment error, before SDK or launch.
-The original odd-G `python -c` oracle also has an inherited missing-`__file__`
-setup error and treats arbitrary nonzero as rejection. Its complete script is
-preserved pending a separate reviewed oracle correction; neither setup failure
-nor native source rejection is claimed as a runtime hardware test. The original
+The original odd-G `python -c` oracle had a missing-`__file__` setup error
+and accepted arbitrary nonzero exits. Its complete child literal is preserved
+as inactive `original_odd_gqa_child.txt` beside the test. The corrected check
+uses exact sibling paths and accepts only one structured `target_compile`
+InternalError for the validated 544-element/2176-byte CompareScalar boundary,
+with child status71. Setup/other errors, timeout, signal, malformed markers and
+unexpected compile acceptance fail; the child stops before all H2D/launch.
+This compile-boundary check makes no runtime hardware rejection claim. The original
 float32 runtime negative and short-sequence helper assertion remain distinct.
 
 Generated source retains extra C-side read-only `BlockStarts` loads and actual

@@ -1,0 +1,26 @@
+
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import torch
+import tilelang
+from example_tilelang_nsa_fwd import native_sparse_attention
+from test_example_tilelang_nsa_fwd import prepare_inputs, _to_3d_inputs
+
+B, T, H, HQ, D, S, BS, BS_pad = 2, 64, 1, 17, 32, 1, 32, 64
+Q = torch.randn(B, T, HQ, D, dtype=torch.float16)
+K = torch.randn(B, T, H, D, dtype=torch.float16)
+V = torch.randn(B, T, H, D, dtype=torch.float16)
+bi = torch.full((B, T, H, S), 0, dtype=torch.long)
+bc = torch.ones((B, T, H), dtype=torch.long)
+K_sel, V_sel = prepare_inputs(Q, K, V, bi, bc, BS, S, bs_pad=BS_pad)
+KV_LEN = S * BS_pad
+G = HQ // H  # = 17 (odd)
+K_sel_3d, V_sel_3d = _to_3d_inputs(K_sel, V_sel, B, T, H, G, KV_LEN, D)
+block_starts = (bi.to(torch.int32) * BS).reshape(B * T * H, S)
+kernel = native_sparse_attention(
+    batch=B, seq_len=T, head_kv=H, heads=HQ, dim=D,
+    selected_blocks=S, block_size=BS, bs_pad=BS_pad, scale=0.1,
+)
+# This kernel() call crashes with aicore exception (odd M GEMM not supported)
+kernel(Q.npu(), K_sel_3d.npu(), V_sel_3d.npu(), block_starts.npu())
+torch.npu.synchronize()
