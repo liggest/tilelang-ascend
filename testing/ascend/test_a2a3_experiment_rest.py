@@ -479,3 +479,89 @@ def test_gqa_rendered_msprof_loader_uses_only_real_sibling_before_any_workload(t
     monkeypatch.setitem(sys.modules, "example_gqa_bwd", ModuleType("example_gqa_bwd"))
     with pytest.raises(FileNotFoundError):
         exec(code, {"os": os, "__file__": str(tmp_path / "_msprof_target_auto.py")})
+
+
+def test_gqa_sink_layered_exact_private_sibling():
+    entry = next(e for e in ENTRIES if e["batch"] == "E6b" and "/test_" in e["source_path"])
+    module = _load(entry)
+    expected = ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]
+    assert Path(module._gqa_sink_module.__file__).resolve() == expected.resolve()
+    assert module.flashattn_fwd is module._gqa_sink_module.flashattn_fwd
+    assert module.run_bwd_pipeline is module._gqa_sink_module.run_bwd_pipeline
+
+
+@pytest.mark.parametrize("length,message", [(129, "divisible"), (131, "divisible"), (0, "must be > 0")])
+def test_gqa_sink_original_host_guards_precede_tensor_or_factory(length, message, monkeypatch):
+    import torch
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E6b" and "/test_" in e["source_path"])
+    module = _load(entry)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("host-invalid input reached a tensor or factory")
+
+    monkeypatch.setattr(torch, "tensor", forbidden)
+    monkeypatch.setattr(module, "flashattn_fwd", forbidden)
+    with pytest.raises(AssertionError, match=message):
+        module._run_case("original_host_guard", 1, 4, 2, [length], [128], 128, None, "l2")
+
+
+def test_gqa_sink_original_l2_192_is_host_aligned_before_first_tensor(monkeypatch):
+    import torch
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E6b" and "/test_" in e["source_path"])
+    module = _load(entry)
+    seen = []
+
+    class StopBeforeDeviceAllocation(BaseException):
+        pass
+
+    def stop(values, **kwargs):
+        seen.append((values, kwargs))
+        raise StopBeforeDeviceAllocation
+
+    monkeypatch.setattr(torch, "tensor", stop)
+    with pytest.raises(StopBeforeDeviceAllocation):
+        module._run_case("l2_tailmid_seq192", 1, 4, 2, [192], [192], 128, None, "l2")
+    assert seen == [([0, 192], {"dtype": torch.int32, "device": "npu"})]
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_gqa_sink_direct_layered_helper_restores_cache_and_device_on_failure(enabled, monkeypatch):
+    import torch
+    from tilelang.env import CacheState
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E6b" and "/test_" in e["source_path"])
+    module = _load(entry)
+    monkeypatch.setitem(sys.modules, "torch_npu", ModuleType("torch_npu"))
+
+    class HostTorch:
+        def device(self, name):
+            assert name == "npu"
+            return torch.device("cpu")
+
+        def __getattr__(self, name):
+            return getattr(torch, name)
+
+    monkeypatch.setattr(module, "torch", HostTorch())
+
+    class StopBeforeOriginalWorkload(BaseException):
+        pass
+
+    def stop():
+        assert not CacheState.is_enabled()
+        raise StopBeforeOriginalWorkload
+
+    monkeypatch.setattr(module, "test_gqa_sink_bwd_l0", stop)
+    before = CacheState.is_enabled()
+    modes_before = torch.overrides._get_current_function_mode_stack()
+    try:
+        CacheState.enable() if enabled else CacheState.disable()
+        with pytest.raises(StopBeforeOriginalWorkload):
+            module.run_layered_tests("l0")
+        assert CacheState.is_enabled() == enabled
+        modes_after = torch.overrides._get_current_function_mode_stack()
+        assert len(modes_after) == len(modes_before)
+        assert all(a is b for a, b in zip(modes_before, modes_after))
+    finally:
+        CacheState.enable() if before else CacheState.disable()

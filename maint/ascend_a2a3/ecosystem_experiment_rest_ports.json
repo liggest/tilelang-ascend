@@ -1094,6 +1094,71 @@
         "device": false
       },
       "validation_scope": "Complete29original outer entries,108TA/main positive fullsource pairs/216actualSDK and2original ctor assertions;all original numerical, atomic retries, Autograd gradients, L2runtime, precision/nonblocking/perf/msprof results pending."
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "destination_path": "examples_experiment/ascend_a2a3/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "source_git_blob": "75c2d76f62aa4c78e0878088bcdfedaf090a3321",
+      "source_sha256": "76df0e8b4cbfc137ede8b0c4b3065ec821f4571eeba5381c19b65d72f2e2e718",
+      "destination_sha256": "a15df6bb49140b34e881066ce2558952e15d9781ac388874b87d605a342a8d8b",
+      "batch": "E6b",
+      "source_domain": "original_experiments",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "tensor"
+      },
+      "original_main_renamed": false,
+      "runtime_factory": "flashattn_fwd",
+      "source_request_owner": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "adaptations": [
+        "Private language and exact sibling loader; preserve complete2factories/host/ref/golden/seed/all matrices/determinism3/marks/precision/exit.",
+        "Delayed real runtime registration, original device-default lifetime scoped over full invocation and caller cache restored for both CLI and direct layered helper."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "validation_scope": "51original controls including1determinism skip/7x3repeats;44TA/main fullsource pairs/88actualSDK,3raw host guards;all original precision/determinism/runtime-negative/exit numerical results pending."
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/test_gqa_sink_bwd_varlen.py",
+      "destination_path": "examples_experiment/ascend_a2a3/example_gqa_sink_bwd_varlen/test_gqa_sink_bwd_varlen.py",
+      "source_git_blob": "4f257e2c19555a1de408279dc38790001d634b7e",
+      "source_sha256": "e27ba52b4e92c791a83f1e11caebd98c2faaa2c6b28d599ab4e4867e6190515a",
+      "destination_sha256": "b5784b2523996650b0942bf9d703dfdfb5509ca6ea603c0f7efed1b146f9b772",
+      "batch": "E6b",
+      "source_domain": "original_experiments",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "tensor",
+        "additional_registration_after_disable": true
+      },
+      "original_main_renamed": true,
+      "runtime_factory": "flashattn_fwd",
+      "source_request_owner": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "adaptations": [
+        "Private language and exact sibling loader; preserve complete2factories/host/ref/golden/seed/all matrices/determinism3/marks/precision/exit.",
+        "Delayed real runtime registration, original device-default lifetime scoped over full invocation and caller cache restored for both CLI and direct layered helper."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "validation_scope": "51original controls including1determinism skip/7x3repeats;44TA/main fullsource pairs/88actualSDK,3raw host guards;all original precision/determinism/runtime-negative/exit numerical results pending."
     }
   ],
   "factory_requests": [
@@ -6306,6 +6371,864 @@
         "blk": 64
       },
       "id": "experiment_e6a_109"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        128,
+        128,
+        128,
+        4,
+        128,
+        2,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_0"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        128,
+        128,
+        128,
+        128,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_1"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        4,
+        128,
+        2,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_2"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        256,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_3"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        8,
+        128,
+        4,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_4"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        256,
+        8,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        4
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_5"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        4,
+        128,
+        2,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_6"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        256,
+        4,
+        128,
+        128,
+        128,
+        128,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_7"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        2,
+        256,
+        256,
+        128,
+        4,
+        128,
+        2,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_8"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        2,
+        256,
+        256,
+        128,
+        128,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_9"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        128,
+        256,
+        128,
+        4,
+        128,
+        2,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_10"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        128,
+        256,
+        128,
+        256,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_11"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        512,
+        512,
+        512,
+        64,
+        128,
+        8,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_12"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        512,
+        512,
+        512,
+        512,
+        64,
+        128,
+        128,
+        128,
+        128,
+        64,
+        64,
+        8
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_13"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        4,
+        128,
+        1,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_14"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        256,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        1
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_15"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        4,
+        1024,
+        1024,
+        256,
+        16,
+        128,
+        4,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_16"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        4,
+        1024,
+        1024,
+        256,
+        256,
+        16,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        4
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_17"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        2,
+        512,
+        256,
+        256,
+        4,
+        128,
+        2,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_18"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        2,
+        512,
+        256,
+        256,
+        128,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_19"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        2,
+        256,
+        512,
+        128,
+        4,
+        128,
+        2,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_20"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        2,
+        256,
+        512,
+        128,
+        256,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_21"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        16,
+        128,
+        8,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_22"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        256,
+        256,
+        256,
+        256,
+        16,
+        128,
+        128,
+        128,
+        128,
+        64,
+        64,
+        8
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_23"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        512,
+        512,
+        512,
+        16,
+        128,
+        8,
+        256,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_24"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        512,
+        512,
+        512,
+        512,
+        16,
+        128,
+        128,
+        128,
+        256,
+        64,
+        64,
+        8
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_25"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        2,
+        384,
+        384,
+        256,
+        4,
+        128,
+        2,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_26"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        2,
+        384,
+        384,
+        256,
+        256,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_27"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        384,
+        384,
+        384,
+        8,
+        128,
+        4,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_28"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        384,
+        384,
+        384,
+        384,
+        8,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        4
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_29"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        512,
+        512,
+        512,
+        32,
+        128,
+        8,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_30"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        512,
+        512,
+        512,
+        512,
+        32,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        8
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_31"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        192,
+        192,
+        192,
+        4,
+        128,
+        2,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_32"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        192,
+        192,
+        192,
+        192,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_33"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        128,
+        128,
+        128,
+        1,
+        128,
+        1,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_34"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        128,
+        128,
+        128,
+        128,
+        1,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        1
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_35"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        128,
+        128,
+        128,
+        4,
+        128,
+        4,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_36"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        128,
+        128,
+        128,
+        128,
+        4,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        4
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_37"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        128,
+        128,
+        128,
+        4,
+        128,
+        2,
+        128,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_38"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        128,
+        128,
+        128,
+        128,
+        4,
+        128,
+        128,
+        128,
+        128,
+        64,
+        64,
+        2
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_39"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        4,
+        512,
+        512,
+        128,
+        8,
+        128,
+        4,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_40"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        4,
+        512,
+        512,
+        128,
+        128,
+        8,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        4
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_41"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_fwd",
+      "args": [
+        1,
+        512,
+        512,
+        512,
+        16,
+        128,
+        4,
+        null,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_42"
+    },
+    {
+      "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "factory": "flashattn_bwd_single",
+      "args": [
+        1,
+        512,
+        512,
+        512,
+        512,
+        16,
+        128,
+        128,
+        128,
+        null,
+        64,
+        64,
+        4
+      ],
+      "kwargs": {},
+      "id": "experiment_e6b_43"
     }
   ],
   "E1_original_runtime_cases": [
@@ -15413,6 +16336,2625 @@
         "experiment_e6a_45",
         "experiment_e6a_46",
         "experiment_e6a_47"
+      ]
+    }
+  ],
+  "E6b_original_entry_matrix": [
+    {
+      "name": "standalone_smoke",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "standalone",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "l0_basic_small",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l0",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "l0_causal_full",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "l0",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_2",
+        "experiment_e6b_3"
+      ]
+    },
+    {
+      "name": "l0_gqa",
+      "scope": "original",
+      "original_args": [
+        1,
+        8,
+        4,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "l0",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 8,
+        "groups": 4,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_4",
+        "experiment_e6b_5"
+      ]
+    },
+    {
+      "name": "l0_sliding_window",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        128
+      ],
+      "level": "l0",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": 128,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_6",
+        "experiment_e6b_7"
+      ]
+    },
+    {
+      "name": "l0_sink_nonzero",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l0",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "l0_varlen_multi_batch",
+      "scope": "original",
+      "original_args": [
+        2,
+        4,
+        2,
+        [
+          128,
+          128
+        ],
+        [
+          128,
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l0",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 2,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128,
+          128
+        ],
+        "kv_lens": [
+          128,
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          128,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_8",
+        "experiment_e6b_9"
+      ]
+    },
+    {
+      "name": "l0_varlen_unequal_qk",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "l0",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 128,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_10",
+        "experiment_e6b_11"
+      ]
+    },
+    {
+      "name": "l0_default",
+      "scope": "original",
+      "original_args": [
+        1,
+        64,
+        8,
+        [
+          512
+        ],
+        [
+          512
+        ],
+        128,
+        128
+      ],
+      "level": "l0",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 64,
+        "groups": 8,
+        "q_lens": [
+          512
+        ],
+        "kv_lens": [
+          512
+        ],
+        "D": 128,
+        "window_size": 128,
+        "max_seq_len": 512,
+        "max_kv_len": 512,
+        "cu_seqlens_q": [
+          0,
+          512
+        ],
+        "cu_seqlens_k": [
+          0,
+          512
+        ],
+        "UQ": 512,
+        "UKV": 512,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_12",
+        "experiment_e6b_13"
+      ]
+    },
+    {
+      "name": "determinism_l0_basic_small",
+      "scope": "original exactly3 runs; original default skips",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "determinism",
+      "vrange": null,
+      "original_runtime_repeat": 3,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "determinism_l0_causal_full",
+      "scope": "original exactly3 runs; original default skips",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "determinism",
+      "vrange": null,
+      "original_runtime_repeat": 3,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_2",
+        "experiment_e6b_3"
+      ]
+    },
+    {
+      "name": "determinism_l0_gqa",
+      "scope": "original exactly3 runs; original default skips",
+      "original_args": [
+        1,
+        8,
+        4,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "determinism",
+      "vrange": null,
+      "original_runtime_repeat": 3,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 8,
+        "groups": 4,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_4",
+        "experiment_e6b_5"
+      ]
+    },
+    {
+      "name": "determinism_l0_sliding_window",
+      "scope": "original exactly3 runs; original default skips",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        128
+      ],
+      "level": "determinism",
+      "vrange": null,
+      "original_runtime_repeat": 3,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": 128,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_6",
+        "experiment_e6b_7"
+      ]
+    },
+    {
+      "name": "determinism_l0_sink_nonzero",
+      "scope": "original exactly3 runs; original default skips",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "determinism",
+      "vrange": null,
+      "original_runtime_repeat": 3,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "determinism_l0_varlen_multi_batch",
+      "scope": "original exactly3 runs; original default skips",
+      "original_args": [
+        2,
+        4,
+        2,
+        [
+          128,
+          128
+        ],
+        [
+          128,
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "determinism",
+      "vrange": null,
+      "original_runtime_repeat": 3,
+      "original_skip": false,
+      "metadata": {
+        "B": 2,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128,
+          128
+        ],
+        "kv_lens": [
+          128,
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          128,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_8",
+        "experiment_e6b_9"
+      ]
+    },
+    {
+      "name": "determinism_l0_varlen_unequal_qk",
+      "scope": "original exactly3 runs; original default skips",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "determinism",
+      "vrange": null,
+      "original_runtime_repeat": 3,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 128,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_10",
+        "experiment_e6b_11"
+      ]
+    },
+    {
+      "name": "determinism_l0_default",
+      "scope": "original exactly3 runs; original default skips",
+      "original_args": [
+        1,
+        64,
+        8,
+        [
+          512
+        ],
+        [
+          512
+        ],
+        128,
+        128
+      ],
+      "level": "determinism",
+      "vrange": null,
+      "original_runtime_repeat": 0,
+      "original_skip": true,
+      "requests": []
+    },
+    {
+      "name": "l1_basic_small",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "l1_mha_causal",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        1,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 1,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_14",
+        "experiment_e6b_15"
+      ]
+    },
+    {
+      "name": "l1_gqa_medium",
+      "scope": "original",
+      "original_args": [
+        4,
+        16,
+        4,
+        [
+          256,
+          256,
+          256,
+          256
+        ],
+        [
+          256,
+          256,
+          256,
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 4,
+        "H": 16,
+        "groups": 4,
+        "q_lens": [
+          256,
+          256,
+          256,
+          256
+        ],
+        "kv_lens": [
+          256,
+          256,
+          256,
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256,
+          512,
+          768,
+          1024
+        ],
+        "cu_seqlens_k": [
+          0,
+          256,
+          512,
+          768,
+          1024
+        ],
+        "UQ": 1024,
+        "UKV": 1024,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_16",
+        "experiment_e6b_17"
+      ]
+    },
+    {
+      "name": "l1_asymmetric_sq_gt_skv",
+      "scope": "original",
+      "original_args": [
+        2,
+        4,
+        2,
+        [
+          256,
+          256
+        ],
+        [
+          128,
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 2,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          256,
+          256
+        ],
+        "kv_lens": [
+          128,
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          256,
+          512
+        ],
+        "cu_seqlens_k": [
+          0,
+          128,
+          256
+        ],
+        "UQ": 512,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_18",
+        "experiment_e6b_19"
+      ]
+    },
+    {
+      "name": "l1_asymmetric_skv_gt_sq",
+      "scope": "original",
+      "original_args": [
+        2,
+        4,
+        2,
+        [
+          128,
+          128
+        ],
+        [
+          256,
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 2,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128,
+          128
+        ],
+        "kv_lens": [
+          256,
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          128,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256,
+          512
+        ],
+        "UQ": 256,
+        "UKV": 512,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_20",
+        "experiment_e6b_21"
+      ]
+    },
+    {
+      "name": "l1_window_128",
+      "scope": "original",
+      "original_args": [
+        1,
+        16,
+        8,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        128
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 16,
+        "groups": 8,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": 128,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_22",
+        "experiment_e6b_23"
+      ]
+    },
+    {
+      "name": "l1_window_256",
+      "scope": "original",
+      "original_args": [
+        1,
+        16,
+        8,
+        [
+          512
+        ],
+        [
+          512
+        ],
+        128,
+        256
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 16,
+        "groups": 8,
+        "q_lens": [
+          512
+        ],
+        "kv_lens": [
+          512
+        ],
+        "D": 128,
+        "window_size": 256,
+        "max_seq_len": 512,
+        "max_kv_len": 512,
+        "cu_seqlens_q": [
+          0,
+          512
+        ],
+        "cu_seqlens_k": [
+          0,
+          512
+        ],
+        "UQ": 512,
+        "UKV": 512,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_24",
+        "experiment_e6b_25"
+      ]
+    },
+    {
+      "name": "l1_varlen_unequal_batches",
+      "scope": "original",
+      "original_args": [
+        2,
+        4,
+        2,
+        [
+          128,
+          256
+        ],
+        [
+          256,
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 2,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128,
+          256
+        ],
+        "kv_lens": [
+          256,
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          128,
+          384
+        ],
+        "cu_seqlens_k": [
+          0,
+          256,
+          384
+        ],
+        "UQ": 384,
+        "UKV": 384,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_26",
+        "experiment_e6b_27"
+      ]
+    },
+    {
+      "name": "l1_irregular_n_384",
+      "scope": "original",
+      "original_args": [
+        1,
+        8,
+        4,
+        [
+          384
+        ],
+        [
+          384
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 8,
+        "groups": 4,
+        "q_lens": [
+          384
+        ],
+        "kv_lens": [
+          384
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 384,
+        "max_kv_len": 384,
+        "cu_seqlens_q": [
+          0,
+          384
+        ],
+        "cu_seqlens_k": [
+          0,
+          384
+        ],
+        "UQ": 384,
+        "UKV": 384,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_28",
+        "experiment_e6b_29"
+      ]
+    },
+    {
+      "name": "l1_large_causal",
+      "scope": "original",
+      "original_args": [
+        1,
+        32,
+        8,
+        [
+          512
+        ],
+        [
+          512
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 32,
+        "groups": 8,
+        "q_lens": [
+          512
+        ],
+        "kv_lens": [
+          512
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 512,
+        "max_kv_len": 512,
+        "cu_seqlens_q": [
+          0,
+          512
+        ],
+        "cu_seqlens_k": [
+          0,
+          512
+        ],
+        "UQ": 512,
+        "UKV": 512,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_30",
+        "experiment_e6b_31"
+      ]
+    },
+    {
+      "name": "l1_block_m_64",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          256
+        ],
+        [
+          256
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          256
+        ],
+        "kv_lens": [
+          256
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 256,
+        "max_kv_len": 256,
+        "cu_seqlens_q": [
+          0,
+          256
+        ],
+        "cu_seqlens_k": [
+          0,
+          256
+        ],
+        "UQ": 256,
+        "UKV": 256,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_2",
+        "experiment_e6b_3"
+      ]
+    },
+    {
+      "name": "l1_block_n_64",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "l1_edge_min",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l1",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "l2_tail1_seq129",
+      "scope": "original negative label;192 is host-aligned64 and not forced into rejection",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          129
+        ],
+        [
+          129
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "original_pure_host_prefix_error": "AssertionError",
+      "error_message": "max_seq_len (129) must be divisible by block_M_bwd (64)",
+      "no_original_ctor_reached": true,
+      "requests": []
+    },
+    {
+      "name": "l2_tailmid_seq192",
+      "scope": "original negative label;192 is host-aligned64 and not forced into rejection",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          192
+        ],
+        [
+          192
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          192
+        ],
+        "kv_lens": [
+          192
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 192,
+        "max_kv_len": 192,
+        "cu_seqlens_q": [
+          0,
+          192
+        ],
+        "cu_seqlens_k": [
+          0,
+          192
+        ],
+        "UQ": 192,
+        "UKV": 192,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_32",
+        "experiment_e6b_33"
+      ]
+    },
+    {
+      "name": "l2_prime_seq131",
+      "scope": "original negative label;192 is host-aligned64 and not forced into rejection",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          131
+        ],
+        [
+          131
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "original_pure_host_prefix_error": "AssertionError",
+      "error_message": "max_seq_len (131) must be divisible by block_M_bwd (64)",
+      "no_original_ctor_reached": true,
+      "requests": []
+    },
+    {
+      "name": "l2_illegal_shape_empty",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          0
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "original_pure_host_prefix_error": "AssertionError",
+      "error_message": "max_seq_len (0) must be > 0 (kernel grid would divide by zero)",
+      "no_original_ctor_reached": true,
+      "requests": []
+    },
+    {
+      "name": "l2_min_config",
+      "scope": "original additional valid native configuration under nonblocking L2",
+      "original_args": [
+        1,
+        1,
+        1,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 1,
+        "groups": 1,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_34",
+        "experiment_e6b_35"
+      ]
+    },
+    {
+      "name": "l2_mqa_groups_eq_h",
+      "scope": "original additional valid native configuration under nonblocking L2",
+      "original_args": [
+        1,
+        4,
+        4,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 4,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_36",
+        "experiment_e6b_37"
+      ]
+    },
+    {
+      "name": "l2_window_eq_n",
+      "scope": "original additional valid native configuration under nonblocking L2",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        128
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": 128,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_38",
+        "experiment_e6b_39"
+      ]
+    },
+    {
+      "name": "l2_large_batch",
+      "scope": "original additional valid native configuration under nonblocking L2",
+      "original_args": [
+        4,
+        8,
+        4,
+        [
+          128,
+          128,
+          128,
+          128
+        ],
+        [
+          128,
+          128,
+          128,
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 4,
+        "H": 8,
+        "groups": 4,
+        "q_lens": [
+          128,
+          128,
+          128,
+          128
+        ],
+        "kv_lens": [
+          128,
+          128,
+          128,
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128,
+          256,
+          384,
+          512
+        ],
+        "cu_seqlens_k": [
+          0,
+          128,
+          256,
+          384,
+          512
+        ],
+        "UQ": 512,
+        "UKV": 512,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_40",
+        "experiment_e6b_41"
+      ]
+    },
+    {
+      "name": "l2_large_n_d128",
+      "scope": "original additional valid native configuration under nonblocking L2",
+      "original_args": [
+        1,
+        16,
+        4,
+        [
+          512
+        ],
+        [
+          512
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 16,
+        "groups": 4,
+        "q_lens": [
+          512
+        ],
+        "kv_lens": [
+          512
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 512,
+        "max_kv_len": 512,
+        "cu_seqlens_q": [
+          0,
+          512
+        ],
+        "cu_seqlens_k": [
+          0,
+          512
+        ],
+        "UQ": 512,
+        "UKV": 512,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_42",
+        "experiment_e6b_43"
+      ]
+    },
+    {
+      "name": "l2_unsupported_dtype_fp64",
+      "scope": "original float64 runtime input; positive float16 constructor does not prove runtime rejection",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "l2",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "requests": [
+        "experiment_e6b_0"
+      ]
+    },
+    {
+      "name": "boundary_zero_sinks",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.zeros(H, dtype=torch.float16)",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_inf_sinks",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.full((H,), float('inf'), dtype=torch.float16)",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_nan_sinks",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.full((H,), float('nan'), dtype=torch.float16)",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_dbound_sinks",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.full((H,), 32000.0, dtype=torch.float16)",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_large_sinks",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.randn(H, dtype=torch.float16) * 100",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_negative_sinks",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.randn(H, dtype=torch.float16) * -100",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_mixed_sinks",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.cat([torch.randn(H // 2, dtype=torch.float16), torch.full((H // 2,), 32000.0, dtype=torch.float16)])",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_tiny_sinks",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": null,
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.randn(H, dtype=torch.float16) * 0.0001",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_valrange_l",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": "L",
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.randn(H, dtype=torch.float16) * 10",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_valrange_m",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": "M",
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.randn(H, dtype=torch.float16) * 3",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
+      ]
+    },
+    {
+      "name": "boundary_valrange_asym",
+      "scope": "original",
+      "original_args": [
+        1,
+        4,
+        2,
+        [
+          128
+        ],
+        [
+          128
+        ],
+        128,
+        null
+      ],
+      "level": "boundary",
+      "vrange": "ASYM",
+      "original_runtime_repeat": 1,
+      "original_skip": false,
+      "metadata": {
+        "B": 1,
+        "H": 4,
+        "groups": 2,
+        "q_lens": [
+          128
+        ],
+        "kv_lens": [
+          128
+        ],
+        "D": 128,
+        "window_size": null,
+        "max_seq_len": 128,
+        "max_kv_len": 128,
+        "cu_seqlens_q": [
+          0,
+          128
+        ],
+        "cu_seqlens_k": [
+          0,
+          128
+        ],
+        "UQ": 128,
+        "UKV": 128,
+        "block_M_bwd": 64,
+        "block_N_bwd": 64
+      },
+      "original_custom_sink_lambda_AST": "lambda H: torch.randn(H, dtype=torch.float16) * 2 + 2",
+      "requests": [
+        "experiment_e6b_0",
+        "experiment_e6b_1"
       ]
     }
   ]
