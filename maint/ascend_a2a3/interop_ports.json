@@ -697,6 +697,106 @@
         "NPU_device_numerical_or_torch_compile_execution": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/test_source.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/test_source.py",
+      "source_git_blob": "7dfe114c7e32ca3a6bd57f865cdcbee10ba48243",
+      "source_sha256": "60adbfd58e5e6ff9cbd138f5ca20aecf8efd108950883252f81e05d53dc386dc",
+      "destination_sha256": "30da283ae7813c6eab64ff5bd9174049d0bd0d0eb4b8b5807d565be0a3ad79ac",
+      "adaptations": [
+        "Preserve complete fixed default original inputs/seed/sync/reference/golden/success text; defer extension and TorchNPU imports until actual CLI execution, parse help first and scope the original default-device effect and CPU RNG. The compiled binding test does not add a TileLang runtime dependency; only source JIT requires its owned cache.",
+        "Preserve original shell version check, local cleanup, install and two-test exit sequence while requiring explicit active task-owned venv and matching cache, binding pip to the same python and keeping installation inside that venv instead of --user. Help/refusal precede package commands.",
+        "Retain all 24 original notebook cells, code AST/magic source, execution metadata and historical outputs. Add visible historical/unvalidated warning only to the first markdown cell; a targeted F401 comment retains the original extension-registration import under canonical formatting."
+      ],
+      "validation": {
+        "whole_reference_and_original_main_AST_equal_except_device_scope": true,
+        "all_notebook_code_and_outputs_preserved": true,
+        "shell_original_body_equal_except_two_install_modernizations": true,
+        "ON_host_and_import_tests_passed": 19,
+        "actual_OFF_host_and_import_tests_passed": 19,
+        "actual_independent_help_CLI": 2,
+        "pure_shell_command_state_simulations": 8,
+        "actual_packaged_source_alias_is_JITImpl": true,
+        "new_SDK_builds": 0,
+        "NPU_default_numerical_install_shell_or_notebook_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/test_torch.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/test_torch.py",
+      "source_git_blob": "ce3f25785e8630f0dec21973a7513d40548914c7",
+      "source_sha256": "11f3e625c6d1a7386249fc527585e9b99a05ea1015fcfe9b305891cd2cc9c5fe",
+      "destination_sha256": "701ee8d29b3066d8298e6eea8345fd6d9a9ae3c32e5f3fc01a2e9480a17dcc0f",
+      "adaptations": [
+        "Preserve complete fixed default original inputs/seed/sync/reference/golden/success text; defer extension and TorchNPU imports until actual CLI execution, parse help first and scope the original default-device effect and CPU RNG. The compiled binding test does not add a TileLang runtime dependency; only source JIT requires its owned cache.",
+        "Preserve original shell version check, local cleanup, install and two-test exit sequence while requiring explicit active task-owned venv and matching cache, binding pip to the same python and keeping installation inside that venv instead of --user. Help/refusal precede package commands.",
+        "Retain all 24 original notebook cells, code AST/magic source, execution metadata and historical outputs. Add visible historical/unvalidated warning only to the first markdown cell; a targeted F401 comment retains the original extension-registration import under canonical formatting."
+      ],
+      "validation": {
+        "whole_reference_and_original_main_AST_equal_except_device_scope": true,
+        "all_notebook_code_and_outputs_preserved": true,
+        "shell_original_body_equal_except_two_install_modernizations": true,
+        "ON_host_and_import_tests_passed": 19,
+        "actual_OFF_host_and_import_tests_passed": 19,
+        "actual_independent_help_CLI": 2,
+        "pure_shell_command_state_simulations": 8,
+        "actual_packaged_source_alias_is_JITImpl": true,
+        "new_SDK_builds": 0,
+        "NPU_default_numerical_install_shell_or_notebook_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/test_example.sh",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/test_example.sh",
+      "source_git_blob": "795411aeff8aecc3c406b4b01b10c0940461091f",
+      "source_sha256": "5fa0d9f28a8f7c180b6c9f1142f6e076cae28ce906afd4a1c88d7b04c4753861",
+      "destination_sha256": "2538aac0a6c30fddc487644cc3fbc48e745db41cdacc38dd24734ce96d692991",
+      "adaptations": [
+        "Preserve complete fixed default original inputs/seed/sync/reference/golden/success text; defer extension and TorchNPU imports until actual CLI execution, parse help first and scope the original default-device effect and CPU RNG. The compiled binding test does not add a TileLang runtime dependency; only source JIT requires its owned cache.",
+        "Preserve original shell version check, local cleanup, install and two-test exit sequence while requiring explicit active task-owned venv and matching cache, binding pip to the same python and keeping installation inside that venv instead of --user. Help/refusal precede package commands.",
+        "Retain all 24 original notebook cells, code AST/magic source, execution metadata and historical outputs. Add visible historical/unvalidated warning only to the first markdown cell; a targeted F401 comment retains the original extension-registration import under canonical formatting."
+      ],
+      "validation": {
+        "whole_reference_and_original_main_AST_equal_except_device_scope": true,
+        "all_notebook_code_and_outputs_preserved": true,
+        "shell_original_body_equal_except_two_install_modernizations": true,
+        "ON_host_and_import_tests_passed": 19,
+        "actual_OFF_host_and_import_tests_passed": 19,
+        "actual_independent_help_CLI": 2,
+        "pure_shell_command_state_simulations": 8,
+        "actual_packaged_source_alias_is_JITImpl": true,
+        "new_SDK_builds": 0,
+        "NPU_default_numerical_install_shell_or_notebook_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/overview.ipynb",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/overview.ipynb",
+      "source_git_blob": "73b5ee69040794ff7a4a517d26eec4c2557e300f",
+      "source_sha256": "074c78b6c0e6d46fac3369354ad186abe2d60cd1c8b12d86cf6a8ceac2577361",
+      "destination_sha256": "e2dd449ca68a363b793bc9b841159a0fd65a7212da11d5724d0e622f8c803045",
+      "adaptations": [
+        "Preserve complete fixed default original inputs/seed/sync/reference/golden/success text; defer extension and TorchNPU imports until actual CLI execution, parse help first and scope the original default-device effect and CPU RNG. The compiled binding test does not add a TileLang runtime dependency; only source JIT requires its owned cache.",
+        "Preserve original shell version check, local cleanup, install and two-test exit sequence while requiring explicit active task-owned venv and matching cache, binding pip to the same python and keeping installation inside that venv instead of --user. Help/refusal precede package commands.",
+        "Retain all 24 original notebook cells, code AST/magic source, execution metadata and historical outputs. Add visible historical/unvalidated warning only to the first markdown cell; a targeted F401 comment retains the original extension-registration import under canonical formatting."
+      ],
+      "validation": {
+        "whole_reference_and_original_main_AST_equal_except_device_scope": true,
+        "all_notebook_code_and_outputs_preserved": true,
+        "shell_original_body_equal_except_two_install_modernizations": true,
+        "ON_host_and_import_tests_passed": 19,
+        "actual_OFF_host_and_import_tests_passed": 19,
+        "actual_independent_help_CLI": 2,
+        "pure_shell_command_state_simulations": 8,
+        "actual_packaged_source_alias_is_JITImpl": true,
+        "new_SDK_builds": 0,
+        "NPU_default_numerical_install_shell_or_notebook_execution": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
