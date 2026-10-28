@@ -1225,6 +1225,35 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/cvseparate/test_tilelang_ascend_language_vid_reduction.py",
+      "destination_path": "testing/ascend_a2a3/python/language/cvseparate/test_tilelang_ascend_language_vid_reduction.py",
+      "source_git_blob": "164c4b7e25eb405dfd66b9fb5a25e9d62e33374c",
+      "source_sha256": "5f93355303806b8447732b730038d35f937035e07b43f68be0a5905449f50d41",
+      "destination_sha256": "ead995bc6c4030115b9729589e35d6bf0f95a83b13fe547a38af5defdf4281c6",
+      "adaptations": [
+        "Private dialect import; retain every complete factory/body/matrix, seed fixture, golden/tolerance, out/workspace index, explicit threads=1/2 and original PTO low_priority.",
+        "Real cache clearing delegates to the existing isolated A2A3 cache fixture; no disabling substitute.",
+        "Separate device marking and new complete compile-prefix source companion; all numerical calls remain pending a scheduled device window."
+      ],
+      "validation": {
+        "all_22_original_functions_retained_and_21_exact_except_clear_cache": true,
+        "whole_module_AST_exact_except_declared_import_cache_and_device_marker": true,
+        "all_10_original_numerical_test_functions_and_full_18_cases_retained": true,
+        "original_numerical_cases_unexecuted": 18,
+        "source_companion_original_compile_requests_TA_main_each_passed": 18,
+        "actual_full_source_and_Bisheng_ELF_pairs": 18,
+        "host_prototypes_logical_shapes_dtypes_and_effective_configs_equal": true,
+        "TA_actual_probe_and_StorageRewrite_is_npu_true": true,
+        "original_out_idx_workspace_idx_and_seed_golden_tolerance_unchanged": true,
+        "actual_OFF_parser_passed": 5,
+        "actual_OFF_native_source_and_numerical_cases_skipped": 36,
+        "external_owned_cache_fixture_and_all_source_requests_audit_passed": 19,
+        "external_cache_descriptor_dict_identity_content_disk_sentinel_platform_and_raw_state_restored": true,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
