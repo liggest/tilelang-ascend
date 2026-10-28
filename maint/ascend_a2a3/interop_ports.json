@@ -893,6 +893,114 @@
         "NPU_numerical_or_standalone_install_claim": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/shmem/shmem_mm_test_get_nbi.py",
+      "destination_path": "examples/ascend_a2a3/shmem/shmem_mm_test_get_nbi.py",
+      "source_git_blob": "fdc208bef055d3d9a836b3b6f9977a9e22e58b7c",
+      "source_sha256": "f7edfb653663dd0cf2641bdfdaec7f2e114c7963c8535619a5bacc0748a784a1",
+      "destination_sha256": "f0da8ba78fba238fb78ca55a5b87e5bc45de1dba78e4f584f82c26b89c31b74a",
+      "adaptations": [
+        "Preserve full original factory/decorator/nested Kernel/Scope structure, complete worker math/seed/rank8/endpoint/heap and original weak parent print/exit behavior. Add explicit real TorchNPU/shmem imports inside each child worker; no new process start method or distributed algorithm.",
+        "Move original parser/cache clear/process orchestration behind import/help-safe main; use an explicit matching task-owned A2A3 cache and a scoped memory dictionary, restoring caller globals/raw bit/staging/memory identities. Diagnose missing pinned Python binding before registration/clear/workers; do not install or contact endpoints.",
+        "Retain original arbitrary CLI integers without claiming all shapes/rank-count combinations valid. Validate the entire original default M1,N352,int8,8PE peer matrix separately as source/SDK/adapter, never as distributed numerical success."
+      ],
+      "validation": {
+        "whole_factory_AST_equal": true,
+        "whole_worker_AST_equal_except_two_real_dependency_imports": true,
+        "whole_main_orchestration_AST_equal": true,
+        "ON_host_and_full_source_tests_passed": 56,
+        "actual_OFF_host_passed": 24,
+        "actual_OFF_native_source_skipped": 32,
+        "full_default_TA_main_peer_pairs_across_4_sources": 32,
+        "actual_TA_SDK_commands": 32,
+        "actual_main_SDK_commands": 32,
+        "all_32_entire_CPP_equal_except_private_include": true,
+        "final_32_CPP_byte_equal_to_actual_SDK_inputs": true,
+        "NPU_or_network_or_worker_or_distributed_numerical_executed": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/shmem/shmem_mm_test_put_nbi.py",
+      "destination_path": "examples/ascend_a2a3/shmem/shmem_mm_test_put_nbi.py",
+      "source_git_blob": "db9b186c4738f7e59ac6f11966c41a137b02b4bd",
+      "source_sha256": "7c537c198dcfd9477b84f89395086c10bc77bf6083680bc2d19f9c2f1ff4ef5f",
+      "destination_sha256": "26d35c654f48dd3dc7f92fa296956caa225fb25289271eaee604ffaf6a2821f0",
+      "adaptations": [
+        "Preserve full original factory/decorator/nested Kernel/Scope structure, complete worker math/seed/rank8/endpoint/heap and original weak parent print/exit behavior. Add explicit real TorchNPU/shmem imports inside each child worker; no new process start method or distributed algorithm.",
+        "Move original parser/cache clear/process orchestration behind import/help-safe main; use an explicit matching task-owned A2A3 cache and a scoped memory dictionary, restoring caller globals/raw bit/staging/memory identities. Diagnose missing pinned Python binding before registration/clear/workers; do not install or contact endpoints.",
+        "Retain original arbitrary CLI integers without claiming all shapes/rank-count combinations valid. Validate the entire original default M1,N352,int8,8PE peer matrix separately as source/SDK/adapter, never as distributed numerical success."
+      ],
+      "validation": {
+        "whole_factory_AST_equal": true,
+        "whole_worker_AST_equal_except_two_real_dependency_imports": true,
+        "whole_main_orchestration_AST_equal": true,
+        "ON_host_and_full_source_tests_passed": 56,
+        "actual_OFF_host_passed": 24,
+        "actual_OFF_native_source_skipped": 32,
+        "full_default_TA_main_peer_pairs_across_4_sources": 32,
+        "actual_TA_SDK_commands": 32,
+        "actual_main_SDK_commands": 32,
+        "all_32_entire_CPP_equal_except_private_include": true,
+        "final_32_CPP_byte_equal_to_actual_SDK_inputs": true,
+        "NPU_or_network_or_worker_or_distributed_numerical_executed": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/shmem/shmem_mm_test_ub_get_nbi.py",
+      "destination_path": "examples/ascend_a2a3/shmem/shmem_mm_test_ub_get_nbi.py",
+      "source_git_blob": "7f4cfc0d04c0ccf311908e4f88f89dabaae515c0",
+      "source_sha256": "00f6f93d7bfcd15cbf2fb41f04f010b370778c8a4b9bb30b6439fc56208b31e9",
+      "destination_sha256": "adce898f2ca72b9cd4e1ef5f1f07f2c4434e784bf2da6a1ea0b4e037b5bccaa7",
+      "adaptations": [
+        "Preserve full original factory/decorator/nested Kernel/Scope structure, complete worker math/seed/rank8/endpoint/heap and original weak parent print/exit behavior. Add explicit real TorchNPU/shmem imports inside each child worker; no new process start method or distributed algorithm.",
+        "Move original parser/cache clear/process orchestration behind import/help-safe main; use an explicit matching task-owned A2A3 cache and a scoped memory dictionary, restoring caller globals/raw bit/staging/memory identities. Diagnose missing pinned Python binding before registration/clear/workers; do not install or contact endpoints.",
+        "Retain original arbitrary CLI integers without claiming all shapes/rank-count combinations valid. Validate the entire original default M1,N352,int8,8PE peer matrix separately as source/SDK/adapter, never as distributed numerical success."
+      ],
+      "validation": {
+        "whole_factory_AST_equal": true,
+        "whole_worker_AST_equal_except_two_real_dependency_imports": true,
+        "whole_main_orchestration_AST_equal": true,
+        "ON_host_and_full_source_tests_passed": 56,
+        "actual_OFF_host_passed": 24,
+        "actual_OFF_native_source_skipped": 32,
+        "full_default_TA_main_peer_pairs_across_4_sources": 32,
+        "actual_TA_SDK_commands": 32,
+        "actual_main_SDK_commands": 32,
+        "all_32_entire_CPP_equal_except_private_include": true,
+        "final_32_CPP_byte_equal_to_actual_SDK_inputs": true,
+        "NPU_or_network_or_worker_or_distributed_numerical_executed": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/shmem/shmem_mm_test_ub_put_nbi.py",
+      "destination_path": "examples/ascend_a2a3/shmem/shmem_mm_test_ub_put_nbi.py",
+      "source_git_blob": "d4cbc9a9437cace875e5a3f54c0152736b9aacdc",
+      "source_sha256": "2178b866dc8036b34beeb42b89fcc401c290a36e4342faf9293294b0674bdc64",
+      "destination_sha256": "ef7c225180efec81571dc1cf9583399129ea6e13d69aa7a6541c76ec4ce11f01",
+      "adaptations": [
+        "Preserve full original factory/decorator/nested Kernel/Scope structure, complete worker math/seed/rank8/endpoint/heap and original weak parent print/exit behavior. Add explicit real TorchNPU/shmem imports inside each child worker; no new process start method or distributed algorithm.",
+        "Move original parser/cache clear/process orchestration behind import/help-safe main; use an explicit matching task-owned A2A3 cache and a scoped memory dictionary, restoring caller globals/raw bit/staging/memory identities. Diagnose missing pinned Python binding before registration/clear/workers; do not install or contact endpoints.",
+        "Retain original arbitrary CLI integers without claiming all shapes/rank-count combinations valid. Validate the entire original default M1,N352,int8,8PE peer matrix separately as source/SDK/adapter, never as distributed numerical success."
+      ],
+      "validation": {
+        "whole_factory_AST_equal": true,
+        "whole_worker_AST_equal_except_two_real_dependency_imports": true,
+        "whole_main_orchestration_AST_equal": true,
+        "ON_host_and_full_source_tests_passed": 56,
+        "actual_OFF_host_passed": 24,
+        "actual_OFF_native_source_skipped": 32,
+        "full_default_TA_main_peer_pairs_across_4_sources": 32,
+        "actual_TA_SDK_commands": 32,
+        "actual_main_SDK_commands": 32,
+        "all_32_entire_CPP_equal_except_private_include": true,
+        "final_32_CPP_byte_equal_to_actual_SDK_inputs": true,
+        "NPU_or_network_or_worker_or_distributed_numerical_executed": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
