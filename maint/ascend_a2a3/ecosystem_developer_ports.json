@@ -655,6 +655,177 @@
       "original_seed_calls": [
         "torch.manual_seed(0)"
       ]
+    },
+    {
+      "source_path": "examples/pipeline/flash_attn_bshd_pipeline.py",
+      "destination_path": "examples/ascend_a2a3/pipeline/flash_attn_bshd_pipeline.py",
+      "source_git_blob": "874bf789b93666ade1195455789ad0f6bff2f7d9",
+      "source_sha256": "8eb3665343270e4fa76e768236767e78fc1f550065993b2ae273d8a3f919f34c",
+      "destination_sha256": "08b4a6ae1698058c9df14e4a030e9c2788e683f3846834ba6237a2faf9c77dc7",
+      "batch": "E3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": false
+      },
+      "adaptations": [
+        "Private language entry only; complete factories/references/decorators/configs/workspaces/guards and original host inputs retained.",
+        "Retain factory-read immutable source globals; move runtime/device/RNG/cache/data/benchmark effects into main.",
+        "Use public torch.device(\"npu\") over exactly the original following host segment, restore caller cache state in finally; explicit NPU registration."
+      ],
+      "source_immutable_globals": {
+        "stages": 2,
+        "B": 1,
+        "S": 128,
+        "H": 1,
+        "D": 512,
+        "pass_configs": {
+          "tl.ascend_auto_cv_combine": true,
+          "tl.ascend_auto_cross_core_sync": true,
+          "tl.ascend_auto_sync": true
+        }
+      },
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_developer/E3/",
+        "original_full_host_AST": "AST_audit.json",
+        "source_differences": "source_review.json"
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(ref_output, output, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ],
+      "factory_AST_exceptions": []
+    },
+    {
+      "source_path": "examples/pipeline/sparse_flash_attn_gqa_pipeline.py",
+      "destination_path": "examples/ascend_a2a3/pipeline/sparse_flash_attn_gqa_pipeline.py",
+      "source_git_blob": "ce9d3850d755511809f86ac7923c344d4ba87c27",
+      "source_sha256": "99e0e57148c11bfed01677b3ec358613367d810f2c2aaf50393f597576edbd65",
+      "destination_sha256": "938977f435ce54431203a6eabffd3d2377b828acd07c0aaabf888c5573c67e76",
+      "batch": "E3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": false
+      },
+      "adaptations": [
+        "Private language entry only; complete factories/references/decorators/configs/workspaces/guards and original host inputs retained.",
+        "Retain factory-read immutable source globals; move runtime/device/RNG/cache/data/benchmark effects into main.",
+        "Use public torch.device(\"npu\") over exactly the original following host segment, restore caller cache state in finally; explicit NPU registration.",
+        "Exactly three row-loop binders/body uses alpha-renamed _row_i_0..2 to preserve the original outer h_i workspace dimension under eager lexical checking; original failure and TA/main binding evidence retained."
+      ],
+      "source_immutable_globals": {
+        "B": 2,
+        "S": 273,
+        "SKV": 44444,
+        "H_Q": 64,
+        "H_KV": 4,
+        "DIM": 128,
+        "topk": 2048,
+        "kv_group": 16,
+        "KV_stride": 1,
+        "q_start_s_index": 28672
+      },
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_developer/E3/",
+        "original_full_host_AST": "AST_audit.json",
+        "source_differences": "source_review.json"
+      },
+      "factory_and_helper_AST_exact": false,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(ref_output, output, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ],
+      "factory_AST_exceptions": [
+        {
+          "old": "h_i",
+          "new": "_row_i_0",
+          "source_line": 155
+        },
+        {
+          "old": "h_i",
+          "new": "_row_i_1",
+          "source_line": 166
+        },
+        {
+          "old": "h_i",
+          "new": "_row_i_2",
+          "source_line": 170
+        }
+      ]
+    },
+    {
+      "source_path": "examples/pipeline/sparse_flash_attn_gqa_pipeline_pto.py",
+      "destination_path": "examples/ascend_a2a3/pipeline/sparse_flash_attn_gqa_pipeline_pto.py",
+      "source_git_blob": "c589b287f681ae631b197885f21265d3e3aeda72",
+      "source_sha256": "cfbce27a943a864567d487ee357b24085fd08fbb8743746dde7cdd94ed633df8",
+      "destination_sha256": "799423addd8d8ba092a2eed3445e58d2d68ce80c2fae59449a41305aaaf67ba7",
+      "batch": "E3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true
+      },
+      "adaptations": [
+        "Private language entry only; complete factories/references/decorators/configs/workspaces/guards and original host inputs retained.",
+        "Retain factory-read immutable source globals; move runtime/device/RNG/cache/data/benchmark effects into main.",
+        "Use public torch.device(\"npu\") over exactly the original following host segment, restore caller cache state in finally; explicit NPU registration."
+      ],
+      "source_immutable_globals": {
+        "NUM_STAGES": 2,
+        "B": 2,
+        "S": 273,
+        "SKV": 44444,
+        "H_Q": 64,
+        "H_KV": 4,
+        "DIM": 128,
+        "topk": 2048,
+        "kv_group": 16,
+        "KV_stride": 1,
+        "q_start_s_index": 28672
+      },
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_developer/E3/",
+        "original_full_host_AST": "AST_audit.json",
+        "source_differences": "source_review.json"
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(ref_output, output, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(42)"
+      ],
+      "factory_AST_exceptions": []
     }
   ],
   "factory_requests": [
@@ -1022,6 +1193,82 @@
         "kv_stride": 1
       },
       "source_immutable_globals": {}
+    },
+    {
+      "id": "flash_attn_bshd_pipeline_0",
+      "source_path": "examples/pipeline/flash_attn_bshd_pipeline.py",
+      "factory": "flash_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "heads": 1,
+        "dim": 512
+      },
+      "source_immutable_globals": {
+        "stages": 2,
+        "B": 1,
+        "S": 128,
+        "H": 1,
+        "D": 512,
+        "pass_configs": {
+          "tl.ascend_auto_cv_combine": true,
+          "tl.ascend_auto_cross_core_sync": true,
+          "tl.ascend_auto_sync": true
+        }
+      }
+    },
+    {
+      "id": "sparse_flash_attn_gqa_pipeline_0",
+      "source_path": "examples/pipeline/sparse_flash_attn_gqa_pipeline.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "heads": 64,
+        "dim": 128,
+        "tail_dim": 0,
+        "topk": 2048,
+        "kv_stride": 1,
+        "kv_group": 4
+      },
+      "source_immutable_globals": {
+        "B": 2,
+        "S": 273,
+        "SKV": 44444,
+        "H_Q": 64,
+        "H_KV": 4,
+        "DIM": 128,
+        "topk": 2048,
+        "kv_group": 16,
+        "KV_stride": 1,
+        "q_start_s_index": 28672
+      }
+    },
+    {
+      "id": "sparse_flash_attn_gqa_pipeline_pto_0",
+      "source_path": "examples/pipeline/sparse_flash_attn_gqa_pipeline_pto.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "heads": 64,
+        "dim": 128,
+        "tail_dim": 0,
+        "topk": 2048,
+        "kv_stride": 1,
+        "kv_group": 4,
+        "workspace_block_num": 2184
+      },
+      "source_immutable_globals": {
+        "NUM_STAGES": 2,
+        "B": 2,
+        "S": 273,
+        "SKV": 44444,
+        "H_Q": 64,
+        "H_KV": 4,
+        "DIM": 128,
+        "topk": 2048,
+        "kv_group": 16,
+        "KV_stride": 1,
+        "q_start_s_index": 28672
+      }
     }
   ],
   "batch_validation": {

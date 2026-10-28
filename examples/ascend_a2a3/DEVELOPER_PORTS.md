@@ -121,3 +121,35 @@ Generated source retains unused scalar bindings and pure empty scheduling
 loops, and a different ordering of one independent tensor lookup declaration.
 The full memory, math, synchronization and host launch payload is compared
 explicitly; these differences are preserved in the compiled source.
+
+## Pipeline attention and dynamic GQA
+
+The final three sources retain their original full requests and references:
+
+| Source under `pipeline/` | Original request |
+|---|---|
+| `flash_attn_bshd_pipeline.py` | `B=1,H=1,S=128,D=512`; blocks `32,64`, workspace indices `4,5,6` |
+| `sparse_flash_attn_gqa_pipeline.py` | Dynamic `batch/seq_len/seq_len_kv`; original runtime `2,273,44444`, `H_Q=64,H_KV=4,DIM=128,topk=2048` |
+| `sparse_flash_attn_gqa_pipeline_pto.py` | Same dynamic runtime; original explicit workspace tensors and factory `workspace_block_num=2184` |
+
+The AscendC GQA source keeps its workspace decorator. PTO retains the explicit
+workspace construction before the original factory call, with two stages and
+seed 42. The other sources retain seed 0. All original input/index construction,
+references, precision thresholds, synchronization and benchmark calls remain.
+Import remains free of runtime effects, and device/cache contexts restore the
+caller on failure or normal return.
+
+Three AscendC GQA row-loop names are made distinct from its outer `h_i`
+workspace dimension. This preserves the original parser's lexical binding;
+the eager frontend otherwise rejects the later outer read. TA IR confirms
+three distinct loop variables and the later outer workspace binding. Main IR
+uses the same outer constant zero and three distinct row variables. Other
+factory operations, stages, shapes and configuration remain unchanged.
+
+Every request passed full lowering and actual SDK compilation on each side.
+Flash pipeline UB allocation order and offsets differ: each named tensor has
+the same type/size and the explicit non-overlapping allocation intervals have
+the same total extent. Remaining source differences include independent lookup
+order, pure unused bindings/loops and reordered integer address sums. These
+observed differences remain in the real compiled sources. Device numerical
+and timing acceptance remain pending.

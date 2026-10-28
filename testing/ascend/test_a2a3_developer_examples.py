@@ -118,12 +118,16 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
         pass
 
     def stop(*args, **kwargs):
-        events.append("factory")
+        events.append("inputs" if entry["source_runtime"].get("inputs_before_factory") else "factory")
         assert CacheState.is_enabled() == (False if entry["source_runtime"]["disable_cache"] else enabled)
         raise StopFactory
 
     request = next(r for r in REQUESTS if r["source_path"] == entry["source_path"])
     monkeypatch.setattr(module, request["factory"], stop)
+    if entry["source_runtime"].get("inputs_before_factory"):
+        # Preserve original PTO allocations before factory construction; fail
+        # at the first input boundary without allocating any device tensor.
+        monkeypatch.setattr(torch, "randn", stop)
     before = CacheState.is_enabled()
     modes_before = torch.overrides._get_current_function_mode_stack()
     try:
@@ -134,7 +138,11 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
         modes_after = torch.overrides._get_current_function_mode_stack()
         assert len(modes_before) == len(modes_after)
         assert all(a is b for a, b in zip(modes_before, modes_after))
-        assert events == ["registration", "disable" if entry["source_runtime"]["disable_cache"] else "clear", "factory"]
+        assert events == [
+            "registration",
+            "disable" if entry["source_runtime"]["disable_cache"] else "clear",
+            "inputs" if entry["source_runtime"].get("inputs_before_factory") else "factory",
+        ]
     finally:
         CacheState.enable() if before else CacheState.disable()
 
