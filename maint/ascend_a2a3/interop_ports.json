@@ -1001,6 +1001,32 @@
         "NPU_or_network_or_worker_or_distributed_numerical_executed": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/dispatch_combine/dispatch_combine_shmem.py",
+      "destination_path": "examples/ascend_a2a3/dispatch_combine/dispatch_combine_shmem.py",
+      "source_git_blob": "d50f26864a0f55aea653443408a17c4b72f2834b",
+      "source_sha256": "ad9f5c92e97fbf683cdd2755ecad70e106425e72ddbfc37ddfce91498c8211c3",
+      "destination_sha256": "1efebbed3ed0bb560171f4f0c6aba149a9b57909a9eec5a77988cd398f59b056",
+      "adaptations": [
+        "Preserve complete two factories/macros, worker, CPU init_input, original fixed16-rank/default/endpoint/reference/seed/tolerance/weak parent exit. Only private language and explicit real child imports; no arrays/status counts/algorithm changed to bypass original failures.",
+        "Defer clear/process work behind import/help/runtime checks and an explicit task-owned cache/memory scope; restore caller globals/raw flag/staging/CPU RNG/Python random state. Missing real shmem remains actionable, not installed or faked.",
+        "Classify all16 original default dispatch requests as TA/main same Flatten2D zero-buffer DivideByZero rejection before SDK. Independently enumerate actual original CPU expert_ids for16 conditional combine source requests; never substitute outputs to continue an actual worker."
+      ],
+      "validation": {
+        "all8_defs_and_full_original_main_AST_preserved": true,
+        "ON_host_and_source_contracts_passed": 39,
+        "actual_OFF_host_passed": 7,
+        "actual_OFF_native_source_skipped": 32,
+        "original_default_dispatch_same_source_rejections_per_framework": 16,
+        "independent_conditional_combine_public_SDK_ELF_adapter_per_framework": 16,
+        "extra_changed_final_source_raw_SDK_ELF_dlopen": 9,
+        "same_payload_sync_after_explicit_named_view_relocations_and_unused_int32_audit": true,
+        "final_source_7_exact_SDK_reuse_plus_9_actual_changed_source_compile": true,
+        "original_default_dispatch_or_distributed_numerical_pass": false,
+        "NPU_worker_network_executed": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
