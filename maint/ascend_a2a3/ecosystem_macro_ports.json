@@ -103,7 +103,7 @@
       ],
       "removed_hygienic_false_keywords": 7,
       "destination_sha256": "4a8641857b5615f1308f4ba30a4d72f575c61624c3a75c2bf3fd1f64a792e647",
-      "state": "source_SDK_and_default_CLI_device_verified",
+      "state": "source_SDK_default_and_full_matrix_CLI_device_verified",
       "adaptations": [
         "Private A2A3 language/layout imports.",
         "Use the supported ordinary eager @T.macro, per the migration scope decision; no complete legacy hygiene API is introduced.",
@@ -120,9 +120,15 @@
           "TA_main_actual_inputs_outputs_and_references_exact": true,
           "no_shape_seed_flags_or_tolerance_changes": true
         },
-        "pending_device_domains": [
-          "Original --all-cases18 matrix:16 additional unique inputs pending beyond the two verified defaults."
-        ]
+        "pending_device_domains": [],
+        "original_all_cases_CLI_device": {
+          "original_flag": "--all-cases",
+          "original_inputs_per_framework": 18,
+          "original_runtime_calls_and_assertions_per_framework": 54,
+          "TA_main_actual_inputs_outputs_and_references_exact": true,
+          "original_case_order_seed42_and_three_repetitions_preserved": true,
+          "no_cases_filtered_or_prior_outputs_substituted": true
+        }
       }
     },
     {
@@ -154,7 +160,7 @@
       45472,
       302432
     ],
-    "device_validation": "default_CLI_layer_only_passed; capture=True and full_xattention18 remain pending",
+    "device_validation": "default_CLI_and_original_xattention_full18_passed; v3_capture_True_remains_pending",
     "general_legacy_hygiene_support": "not_implemented; use supported ordinary eager form as reviewed for these assets",
     "source_stage_all25_macros_exercised_including_v3_capture_branch": true
   },
@@ -240,13 +246,41 @@
     "existing_source_factory_request_count_5_not_all_device_validated": true,
     "xattention_original_matrix_inputs": 18,
     "xattention_default_inputs_verified": 2,
-    "xattention_additional_unique_device_inputs_pending": 16,
     "v3_capture_True_device_validated": false,
     "kernel_tl_is_independent_CLI": false,
     "actual_bench_collector_pytest_CI_claim": false,
     "performance_claim": false,
     "evidence": "refactor_main/reports/p3_macro_defaults_083ce4/summary.json",
     "independent_archive_audit": "refactor_main/reports/p3_macro_defaults_083ce4/independent_archive_audit.json",
-    "report": "refactor_main/reports/p3_macro_defaults_device_completion.md"
+    "report": "refactor_main/reports/p3_macro_defaults_device_completion.md",
+    "xattention_additional_unique_inputs_outside_default_layer": 16
+  },
+  "xattention_full_matrix_device_validation": {
+    "ready_sha": "195748ee520201d8c7d7c64b6d2b85878d39512a",
+    "original_flag": "--all-cases",
+    "CLI_processes_TA_main": 2,
+    "original_inputs_per_framework": 18,
+    "original_runtime_calls_and_assertions_per_framework": 54,
+    "original_order_and_case_local_seed42_preserved": true,
+    "same_process_cross_case_state_retained": true,
+    "maximum_original_R_beams_S": [
+      2,
+      4096,
+      2048
+    ],
+    "original_rtol_and_atol": 0.01,
+    "actual_TA_Bisheng_commands": 18,
+    "actual_main_Bisheng_commands": 18,
+    "actual_inputs_output_reference_TA_main_tensors_exact": true,
+    "CPU_tensor_archives_stream_reloaded": 144,
+    "root_TA_native_Cython_PYX_source_freeze_identical": true,
+    "physical_NPU0_sync_health_and_release_confirmed": true,
+    "TA_native_fresh_rebuild_claim": false,
+    "v3_capture_True_device_validated": false,
+    "actual_bench_collector_pytest_CI_claim": false,
+    "performance_claim": false,
+    "evidence": "refactor_main/reports/p3_macro_XA_full_195748/summary.json",
+    "independent_stream_audit": "refactor_main/reports/p3_macro_XA_full_195748/independent_stream_archive_audit.json",
+    "root_review": "refactor_main/reports/p3_xattention_full_device_root_review.json"
   }
 }
