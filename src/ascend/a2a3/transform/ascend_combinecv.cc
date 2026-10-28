@@ -1249,6 +1249,10 @@ private:
 // read; neutral shared scalar programs otherwise retain their original form.
 class SplitRegionBindPruner : public StmtMutator {
 public:
+  // Separate from the foreign-read repair below: only proven dead pure loops
+  // in a real emitted counterpart may enter this path.
+  static Stmt ApplyPureControlLoops(const Stmt &region, const PrimFunc &source);
+
   static Stmt Apply(Stmt body, bool is_aiv) {
     bool foreign_read = false;
     bool opaque_names = false;
@@ -1289,9 +1293,17 @@ private:
 
   class Uses : public StmtExprVisitor {
   public:
-    explicit Uses(VarSet *vars) : vars_(vars) {}
+    explicit Uses(VarSet *vars, Optional<Stmt> excluded = std::nullopt)
+        : vars_(vars), excluded_(std::move(excluded)) {}
+
+    void IncludeMetadata(const Any &value) { VisitMetadata(value); }
 
   private:
+    void VisitStmt(const Stmt &stmt) final {
+      if (!excluded_.defined() || !stmt.same_as(excluded_.value())) {
+        StmtExprVisitor::VisitStmt(stmt);
+      }
+    }
     void VisitExpr_(const VarNode *op) final { vars_->insert(GetRef<Var>(op)); }
     void VisitBufferUse(const Buffer &buffer) final {
       vars_->insert(buffer->data);
@@ -1352,7 +1364,239 @@ private:
       }
     }
     VarSet *vars_;
+    Optional<Stmt> excluded_;
     std::unordered_set<ObjectRef, ObjectPtrHash, ObjectPtrEqual> metadata_;
+  };
+
+  // A typed operation has explicit operands. Unknown externs, even if marked
+  // pure or supplied a UB pointer, cannot prove that local names are unused.
+  static bool IsKnownTypedCall(const Call &call) {
+    if (call->op.same_as(builtin::tvm_access_ptr()) ||
+        call->op.same_as(Op::Get("tirx.type_annotation"))) {
+      return true;
+    }
+    if (call->op.same_as(ascend_src_code()) ||
+        call->op.same_as(a2a3_const_data())) {
+      return false;
+    }
+    std::string name;
+    if (call->op.same_as(builtin::call_extern())) {
+      if (call->args.empty()) {
+        return false;
+      }
+      const auto *callee = call->args[0].as<StringImmNode>();
+      if (callee == nullptr) {
+        return false;
+      }
+      name = NormalizeFunctionName(callee->value);
+    } else if (const auto *op = call->op.as<OpNode>()) {
+      name = op->name;
+    } else {
+      return false;
+    }
+    if (GetOperationConfig().count(name) == 0) {
+      return false;
+    }
+    std::string operation;
+    AscendResource resource = ResourceForCall(call, &operation);
+    return resource == AscendResource::kCube ||
+           resource == AscendResource::kVector;
+  }
+
+  class KernelSafety {
+  public:
+    bool Check(const Any &value) {
+      auto object = value.as<ObjectRef>();
+      if (!safe_ || !object || !object->defined() ||
+          !visited_.insert(*object).second) {
+        return safe_;
+      }
+      if (auto call = object->as<Call>()) {
+        safe_ &= IsKnownTypedCall(call.value());
+      } else if (const auto *attr = object->as<AttrStmtNode>()) {
+        safe_ &= attr->attr_key != "volatile_scope";
+      } else if (const auto *alloc = object->as<AllocBufferNode>()) {
+        safe_ &= alloc->annotations.count(tirx::attr::kVolatile) == 0;
+      }
+      if (auto array = object->as<ArrayObj>()) {
+        for (const Any &item : *array) {
+          Check(item);
+        }
+      } else if (auto map = object->as<MapObj>()) {
+        for (const auto &item : *map) {
+          if (auto key = item.first.as<String>()) {
+            safe_ &= key.value() != tirx::attr::kVolatile &&
+                     key.value() != "volatile" &&
+                     key.value() != "volatile_scope";
+          }
+          Check(item.first);
+          Check(item.second);
+        }
+      } else {
+        reflection::ForEachFieldInfo(
+            TVMFFIGetTypeInfo((*object)->type_index()),
+            [&](const TVMFFIFieldInfo *field) {
+              Check(reflection::FieldGetter(field)(*object));
+            });
+      }
+      return safe_;
+    }
+
+    bool HasTypedWork(const Stmt &body) const {
+      bool found = false;
+      PostOrderVisit(body, [&](const ObjectRef &node) {
+        if (auto call = node.as<Call>()) {
+          found |= IsKnownTypedCall(call.value()) &&
+                   !call.value()->op.same_as(builtin::tvm_access_ptr()) &&
+                   !call.value()->op.same_as(Op::Get("tirx.type_annotation"));
+        }
+      });
+      return found;
+    }
+
+  private:
+    bool safe_{true};
+    std::unordered_set<ObjectRef, ObjectPtrHash, ObjectPtrEqual> visited_;
+  };
+
+  class PureControl : public StmtExprVisitor {
+  public:
+    bool Check(const For &loop) {
+      (*this)(loop);
+      for (const Var &variable : definitions) {
+        pure_ &= descriptor_uses_.count(variable) == 0;
+      }
+      return pure_ && !definitions.empty();
+    }
+
+    VarSet definitions;
+
+  private:
+    void VisitStmt(const Stmt &stmt) final {
+      pure_ &= stmt.as<SeqStmtNode>() || stmt.as<ForNode>() ||
+               stmt.as<IfThenElseNode>() || stmt.as<BindNode>() ||
+               stmt.as<EvaluateNode>() || stmt.as<SBlockRealizeNode>();
+      if (pure_) {
+        StmtExprVisitor::VisitStmt(stmt);
+      }
+    }
+    void VisitStmt_(const ForNode *op) final {
+      pure_ &= op->kind == ForKind::kSerial && !op->thread_binding.defined() &&
+               op->annotations.empty();
+      StmtExprVisitor::VisitStmt_(op);
+    }
+    void VisitStmt_(const SBlockRealizeNode *op) final {
+      pure_ &= op->iter_values.empty() && is_one(op->predicate);
+      // Only a realized lexical block can enter; a bare SBlock statement
+      // remains outside this gate's statement whitelist.
+      VisitStmt_(op->block.get());
+    }
+    void VisitStmt_(const SBlockNode *op) final {
+      // A serial-loop builder can retain a lexical allocation/read/write
+      // wrapper after its hardware work was emitted to the other counterpart.
+      // Keep that entire shell and all descriptors, and reject any binding
+      // consumed by their metadata even when its arithmetic body is dead.
+      pure_ &= op->name_hint.empty() && op->iter_vars.empty() &&
+               !op->init.defined() && op->match_buffers.empty() &&
+               op->annotations.empty();
+      Uses uses(&descriptor_uses_);
+      uses.IncludeMetadata(op->reads);
+      uses.IncludeMetadata(op->writes);
+      uses.IncludeMetadata(op->alloc_buffers);
+      StmtExprVisitor::VisitStmt_(op);
+    }
+    void VisitBufferUse(const Buffer &buffer) final {
+      VisitBufferDef(buffer, false);
+    }
+    void VisitStmt_(const BindNode *op) final {
+      definitions.insert(op->var);
+      pure_ &= SideEffect(op->value) == CallEffectKind::kPure;
+      StmtExprVisitor::VisitStmt_(op);
+    }
+    void VisitStmt_(const EvaluateNode *op) final {
+      const auto *value = op->value.as<IntImmNode>();
+      pure_ &= value != nullptr && value->value == 0;
+      StmtExprVisitor::VisitStmt_(op);
+    }
+    void VisitExpr_(const CallNode *) final { pure_ = false; }
+    void VisitExpr_(const BufferLoadNode *) final { pure_ = false; }
+    VarSet descriptor_uses_;
+    bool pure_{true};
+  };
+
+  class SourceLoop : public StmtVisitor {
+  public:
+    explicit SourceLoop(Var variable) : variable_(std::move(variable)) {}
+    Optional<For> loop;
+    int matches{0};
+
+  private:
+    void VisitStmt_(const ForNode *op) final {
+      if (op->loop_var.same_as(variable_)) {
+        loop = GetRef<For>(op);
+        ++matches;
+      }
+      StmtVisitor::VisitStmt_(op);
+    }
+    Var variable_;
+  };
+
+  class PureLoops : public StmtMutator {
+  public:
+    explicit PureLoops(PrimFunc source) : source_(std::move(source)) {}
+
+  private:
+    Stmt VisitStmt_(const ForNode *op) final {
+      Stmt visited = StmtMutator::VisitStmt_(op);
+      For loop = Downcast<For>(visited);
+      PureControl candidate;
+      if (!candidate.Check(loop)) {
+        return visited;
+      }
+      // The emitter preserves each loop Var. Match its unique source loop by
+      // identity, never by name, since emitting a counterpart can clone For.
+      SourceLoop origin(loop->loop_var);
+      origin(source_->body);
+      if (origin.matches != 1) {
+        return visited;
+      }
+      if (origin.loop.value()->kind != ForKind::kSerial ||
+          origin.loop.value()->thread_binding.defined() ||
+          !origin.loop.value()->annotations.empty()) {
+        return visited;
+      }
+      VarSet external;
+      Uses uses(&external, origin.loop.value());
+      uses(source_->body);
+      uses.IncludeMetadata(source_->attrs);
+      uses.IncludeMetadata(source_->buffer_map);
+      for (const Var &variable : candidate.definitions) {
+        if (external.count(variable)) {
+          return visited;
+        }
+      }
+      // Do not call RemoveNoOp here: preserving the original For/If shells
+      // also preserves the Evaluate(0) step that old Let simplification left.
+      Stmt body = loop->body;
+      bool removed;
+      do {
+        SplitRegionBindPruner pruner;
+        body = pruner(body);
+        removed = pruner.removed_;
+      } while (removed);
+      bool has_bind = false;
+      PostOrderVisit(body, [&](const ObjectRef &node) {
+        has_bind |= node.as<BindNode>() != nullptr;
+      });
+      // An internal control use still makes a binding live. Leave this entire
+      // candidate alone instead of silently broadening into control DCE.
+      if (has_bind) {
+        return visited;
+      }
+      loop.CopyOnWrite()->body = body;
+      return loop;
+    }
+    PrimFunc source_;
   };
 
   Stmt VisitStmt(const Stmt &stmt) final {
@@ -1409,6 +1653,15 @@ private:
   VarSet live_;
   bool removed_{false};
 };
+
+Stmt SplitRegionBindPruner::ApplyPureControlLoops(const Stmt &region,
+                                                  const PrimFunc &source) {
+  KernelSafety safety;
+  if (!safety.Check(source) || !safety.HasTypedWork(source->body)) {
+    return region;
+  }
+  return PureLoops(source)(region);
+}
 
 class CVCombineEmitter : public StmtMutator {
 public:
@@ -1498,6 +1751,8 @@ public:
     substituter.is_auto_cross_core_sync_ =
         ctx->GetConfig<Bool>(ascendAutoCrossCoreSync, Bool(false)).value();
 
+    substituter.source_ = f;
+
     fptr->body = substituter.VisitStmt(f->body);
     return f;
   }
@@ -1515,6 +1770,11 @@ private:
       Stmt cube_code =
           SplitRegionBindPruner::Apply(cubeStmt(block->body), false);
       Stmt vec_code = SplitRegionBindPruner::Apply(vecStmt(block->body), true);
+
+      cube_code = SplitRegionBindPruner::ApplyPureControlLoops(cube_code,
+                                                               source_.value());
+      vec_code = SplitRegionBindPruner::ApplyPureControlLoops(vec_code,
+                                                              source_.value());
 
       if (is_auto_cross_core_sync_) {
         AutoInsertCrossCoreSync::AutoInsert(cube_code, vec_code);
@@ -1538,6 +1798,7 @@ private:
   }
 
   bool is_auto_cross_core_sync_{false};
+  Optional<PrimFunc> source_;
 };
 
 tvm::transform::Pass CombineCV() {
