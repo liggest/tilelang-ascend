@@ -884,6 +884,85 @@
       "runtime_factory": "_run_nsa_pipeline",
       "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
       "validation_scope": "26 original outer rows;21 positive complete factory source/SDK pairs each side plus same original BS7/6 forward constructor rejections. All original CPU preparation/mask/input bytes/RNG preserved; remaining payload/memory/sync tokens and complete allocation/capacity/alias maps equal after only actual core-name/declaration-order/bounded-pure-int separation. Original dtype runtime/Boundary/numerical/device/deadlock/performance pending."
+    },
+    {
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/dsa_sparse_finetune/example_indexer_bwd.py",
+      "source_git_blob": "1dd8a1e1aea71d34eed35d469282a833b3eac0cf",
+      "source_sha256": "592c3fdc0ebfb90c3c1b092449ad4fa7e23509ad60d8850f5857418195d58d8b",
+      "destination_sha256": "825e682663be53e2e662491a08e2a719eb1f56330bba1f03236a1e54c748d4d6",
+      "batch": "E5e",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "clear_count": 1,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language/sibling imports; import-safe delayed raw-stream registration, explicit actual runtime registration, owned backend cache guard.",
+        "Approved local cached-launcher modern4-field descriptor/shape-source adaptation and raw-pointer lifetime/storage-mutation validation fallback; original complete kernel/host dispatch/golden/matrices unchanged."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": false,
+      "original_AST_contract": {
+        "original_factories_decorators_config_dispatch_golden_thresholds_exact": true,
+        "authorized_exceptions": [
+          "CachedLauncher pointer/schema/lifetime guards and lazy raw-stream getter",
+          "test_kernel registration-only prologue",
+          "standalone runtime/cache wrapping with owned clear receiver"
+        ]
+      },
+      "runtime_factory": "indexer_bwd_interface",
+      "validation_scope": "Complete original standalone/test retained;7positive explicit source controls/14realSDK/8constructor asserts;CPU protocol and metadata only. Original runtime NPU autograd/numerical/precision/exit remains pending."
+    },
+    {
+      "source_path": "examples_experiment/dsa_sparse_finetune/test_example_indexer_bwd.py",
+      "destination_path": "examples_experiment/ascend_a2a3/dsa_sparse_finetune/test_example_indexer_bwd.py",
+      "source_git_blob": "c22c890a111ba4bfc86244b5608ff432272b47eb",
+      "source_sha256": "fc52836886263721a5de439ccc524aef04034f30bb00fb99fb94d9280b9f8b85",
+      "destination_sha256": "58873418ac30e106655db59ed310cca6265402af4d8ec723c0f876a0adbe9fd8",
+      "batch": "E5e",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language/sibling imports; import-safe delayed raw-stream registration, explicit actual runtime registration, owned backend cache guard.",
+        "Approved local cached-launcher modern4-field descriptor/shape-source adaptation and raw-pointer lifetime/storage-mutation validation fallback; original complete kernel/host dispatch/golden/matrices unchanged."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": false,
+      "original_AST_contract": {
+        "original_factories_decorators_config_dispatch_golden_thresholds_exact": true,
+        "authorized_exceptions": [
+          "CachedLauncher pointer/schema/lifetime guards and lazy raw-stream getter",
+          "test_kernel registration-only prologue",
+          "standalone runtime/cache wrapping with owned clear receiver"
+        ]
+      },
+      "source_request_owner": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "runtime_factory": "indexer_bwd_interface",
+      "validation_scope": "Complete original standalone/test retained;7positive explicit source controls/14realSDK/8constructor asserts;CPU protocol and metadata only. Original runtime NPU autograd/numerical/precision/exit remains pending."
     }
   ],
   "factory_requests": [
@@ -3751,6 +3830,214 @@
       "kwargs": {},
       "expected_frontend_error": "AssertionError",
       "id": "experiment_e5d_22"
+    },
+    {
+      "id": "experiment_e5e_0",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {
+        "grid_size": 24,
+        "layout": 0
+      },
+      "source_sampling_scope": "original runtime default fast0"
+    },
+    {
+      "id": "experiment_e5e_1",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {
+        "grid_size": 24,
+        "layout": 1
+      },
+      "source_sampling_scope": "additional original public fast_shared branch; no numerical execution"
+    },
+    {
+      "id": "experiment_e5e_2",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {
+        "grid_size": 20,
+        "layout": 0
+      },
+      "source_sampling_scope": "original runtime default fast0"
+    },
+    {
+      "id": "experiment_e5e_3",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {
+        "grid_size": 20,
+        "layout": 1
+      },
+      "source_sampling_scope": "additional original public fast_shared branch; no numerical execution"
+    },
+    {
+      "id": "experiment_e5e_4",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "tl_indexer_bwd_generic",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "source_sampling_scope": "additional original generic fallback factory; original default auto selects fast0"
+    },
+    {
+      "id": "experiment_e5e_5",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_dk_cast_impl",
+      "args": [
+        128
+      ],
+      "kwargs": {
+        "grid_size": 24
+      },
+      "source_sampling_scope": "original runtime trailing cast"
+    },
+    {
+      "id": "experiment_e5e_6",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_dk_cast_impl",
+      "args": [
+        128
+      ],
+      "kwargs": {
+        "grid_size": 20
+      },
+      "source_sampling_scope": "original runtime trailing cast"
+    },
+    {
+      "id": "experiment_e5e_7",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {
+        "layout": 2
+      },
+      "source_sampling_scope": "additional original constructor assertion boundary",
+      "expected_frontend_error": "AssertionError"
+    },
+    {
+      "id": "experiment_e5e_8",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "source_sampling_scope": "additional original constructor assertion boundary",
+      "expected_frontend_error": "AssertionError"
+    },
+    {
+      "id": "experiment_e5e_9",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        8,
+        128,
+        64
+      ],
+      "kwargs": {},
+      "source_sampling_scope": "additional original constructor assertion boundary",
+      "expected_frontend_error": "AssertionError"
+    },
+    {
+      "id": "experiment_e5e_10",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        130,
+        64
+      ],
+      "kwargs": {},
+      "source_sampling_scope": "additional original constructor assertion boundary",
+      "expected_frontend_error": "AssertionError"
+    },
+    {
+      "id": "experiment_e5e_11",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {
+        "T_BLOCK": 31
+      },
+      "source_sampling_scope": "additional original constructor assertion boundary",
+      "expected_frontend_error": "AssertionError"
+    },
+    {
+      "id": "experiment_e5e_12",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "_tl_indexer_bwd_fast_impl",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {
+        "TS": 1
+      },
+      "source_sampling_scope": "additional original constructor assertion boundary",
+      "expected_frontend_error": "AssertionError"
+    },
+    {
+      "id": "experiment_e5e_13",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "tl_indexer_bwd_generic",
+      "args": [
+        16,
+        128,
+        65
+      ],
+      "kwargs": {},
+      "source_sampling_scope": "additional original constructor assertion boundary",
+      "expected_frontend_error": "AssertionError"
+    },
+    {
+      "id": "experiment_e5e_14",
+      "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+      "factory": "tl_indexer_bwd_generic",
+      "args": [
+        16,
+        128,
+        64
+      ],
+      "kwargs": {
+        "block_I": 15
+      },
+      "source_sampling_scope": "additional original constructor assertion boundary",
+      "expected_frontend_error": "AssertionError"
     }
   ],
   "E1_original_runtime_cases": [
@@ -11396,5 +11683,255 @@
         "nsa_fwd": "experiment_e5d_22"
       }
     }
-  ]
+  ],
+  "E5e_original_entry_matrix": {
+    "original_entries": [
+      {
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "entry": "standalone __main__",
+        "shape": {
+          "S": 2048,
+          "H": 16,
+          "D": 128,
+          "topk": 64
+        },
+        "offsets": [
+          0,
+          1023,
+          2048
+        ],
+        "seed": 42,
+        "dispatch": "auto -> fast layout0 + cast",
+        "golden": "original standalone uses attn_score for index_score and prints; no numerical verdict executed"
+      },
+      {
+        "source_path": "examples_experiment/dsa_sparse_finetune/test_example_indexer_bwd.py",
+        "entry": "test_kernel defaults B1/S2048/H16/D128/topk64",
+        "offsets": [
+          0,
+          1023,
+          2048
+        ],
+        "seed": 42,
+        "dispatch": "auto -> fast layout0 + cast",
+        "golden": "original NPU autograd + bf16 dual gate untouched, pending device"
+      }
+    ],
+    "source_controls": {
+      "grid24": "historical actual physical2 cube_core_num24 in p3_NPU_physical_mapping_v3/mapping.json; explicit factory argument, no query performed",
+      "grid20": "original exception fallback/default constructor domain; no claimed actual default query",
+      "generic": "original seq_len grid, no hardware core query"
+    },
+    "requests": [
+      {
+        "id": "experiment_e5e_0",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {
+          "grid_size": 24,
+          "layout": 0
+        },
+        "source_sampling_scope": "original runtime default fast0"
+      },
+      {
+        "id": "experiment_e5e_1",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {
+          "grid_size": 24,
+          "layout": 1
+        },
+        "source_sampling_scope": "additional original public fast_shared branch; no numerical execution"
+      },
+      {
+        "id": "experiment_e5e_2",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {
+          "grid_size": 20,
+          "layout": 0
+        },
+        "source_sampling_scope": "original runtime default fast0"
+      },
+      {
+        "id": "experiment_e5e_3",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {
+          "grid_size": 20,
+          "layout": 1
+        },
+        "source_sampling_scope": "additional original public fast_shared branch; no numerical execution"
+      },
+      {
+        "id": "experiment_e5e_4",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "tl_indexer_bwd_generic",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {},
+        "source_sampling_scope": "additional original generic fallback factory; original default auto selects fast0"
+      },
+      {
+        "id": "experiment_e5e_5",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_dk_cast_impl",
+        "args": [
+          128
+        ],
+        "kwargs": {
+          "grid_size": 24
+        },
+        "source_sampling_scope": "original runtime trailing cast"
+      },
+      {
+        "id": "experiment_e5e_6",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_dk_cast_impl",
+        "args": [
+          128
+        ],
+        "kwargs": {
+          "grid_size": 20
+        },
+        "source_sampling_scope": "original runtime trailing cast"
+      },
+      {
+        "id": "experiment_e5e_7",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {
+          "layout": 2
+        },
+        "source_sampling_scope": "additional original constructor assertion boundary",
+        "expected_frontend_error": "AssertionError"
+      },
+      {
+        "id": "experiment_e5e_8",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          128,
+          128
+        ],
+        "kwargs": {},
+        "source_sampling_scope": "additional original constructor assertion boundary",
+        "expected_frontend_error": "AssertionError"
+      },
+      {
+        "id": "experiment_e5e_9",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          8,
+          128,
+          64
+        ],
+        "kwargs": {},
+        "source_sampling_scope": "additional original constructor assertion boundary",
+        "expected_frontend_error": "AssertionError"
+      },
+      {
+        "id": "experiment_e5e_10",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          130,
+          64
+        ],
+        "kwargs": {},
+        "source_sampling_scope": "additional original constructor assertion boundary",
+        "expected_frontend_error": "AssertionError"
+      },
+      {
+        "id": "experiment_e5e_11",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {
+          "T_BLOCK": 31
+        },
+        "source_sampling_scope": "additional original constructor assertion boundary",
+        "expected_frontend_error": "AssertionError"
+      },
+      {
+        "id": "experiment_e5e_12",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "_tl_indexer_bwd_fast_impl",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {
+          "TS": 1
+        },
+        "source_sampling_scope": "additional original constructor assertion boundary",
+        "expected_frontend_error": "AssertionError"
+      },
+      {
+        "id": "experiment_e5e_13",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "tl_indexer_bwd_generic",
+        "args": [
+          16,
+          128,
+          65
+        ],
+        "kwargs": {},
+        "source_sampling_scope": "additional original constructor assertion boundary",
+        "expected_frontend_error": "AssertionError"
+      },
+      {
+        "id": "experiment_e5e_14",
+        "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
+        "factory": "tl_indexer_bwd_generic",
+        "args": [
+          16,
+          128,
+          64
+        ],
+        "kwargs": {
+          "block_I": 15
+        },
+        "source_sampling_scope": "additional original constructor assertion boundary",
+        "expected_frontend_error": "AssertionError"
+      }
+    ],
+    "no_original_runtime_golden_or_NPU_execution": true
+  }
 }

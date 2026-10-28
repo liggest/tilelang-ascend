@@ -380,3 +380,26 @@ def test_nsa_bwd_original_host_checks_precede_mask_allocation(zero_sequence, mon
     message = "seq_len \\(T\\) must be >= 1" if zero_sequence else "Q shape"
     with pytest.raises(AssertionError, match=message):
         module._run_nsa_pipeline(q, kv, kv, q, None, None, 1, length, 1, 16, 32, 1, 32)
+
+
+def test_dsa_layered_uses_exact_private_sibling():
+    entry = next(e for e in ENTRIES if e["batch"] == "E5e" and "/test_" in e["source_path"])
+    module = _load(entry)
+    expected = ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]
+    assert Path(module._dsa_module.__file__).resolve() == expected.resolve()
+    assert module.indexer_bwd_interface is module._dsa_module.indexer_bwd_interface
+
+
+def test_dsa_core_query_and_original_exception_fallback_are_host_contracts(monkeypatch):
+    entry = next(e for e in ENTRIES if e["batch"] == "E5e" and "/test_" not in e["source_path"])
+    module = _load(entry)
+    # Controlled Python metadata objects only. No real device query or context.
+    fake = SimpleNamespace(
+        npu=SimpleNamespace(is_available=lambda: True, get_device_properties=lambda i: SimpleNamespace(cube_core_num=37))
+    )
+    monkeypatch.setattr(module, "torch", fake)
+    assert module._get_cube_core_num() == 37
+    fake.npu = SimpleNamespace(is_available=lambda: False)
+    assert module._get_cube_core_num() == 20
+    fake.npu = SimpleNamespace(is_available=lambda: True)
+    assert module._get_cube_core_num() == 20
