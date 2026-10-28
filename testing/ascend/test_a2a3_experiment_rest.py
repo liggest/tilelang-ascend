@@ -86,6 +86,8 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
     monkeypatch.setenv("TILELANG_CACHE_DIR", str(tmp_path / "owned"))
     monkeypatch.setitem(sys.modules, "torch_npu", ModuleType("torch_npu"))
     monkeypatch.setattr(torch, "manual_seed", lambda *args: None)
+    if entry["source_runtime"].get("host_core_count_probe"):
+        monkeypatch.setattr(module, "_get_core_num", lambda: 20)
     if (
         entry["source_runtime"]["set_default_device"]
         or entry["source_runtime"].get("host_availability_gate")
@@ -129,7 +131,7 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
         raise StopFactory
 
     request = next(r for r in REQUESTS if r["source_path"] == entry.get("source_request_owner", entry["source_path"]))
-    monkeypatch.setattr(module, request["factory"], stop)
+    monkeypatch.setattr(module, entry.get("runtime_factory", request["factory"]), stop)
     if entry["source_runtime"].get("inputs_before_factory"):
         # Preserve original input allocation before factory construction; fail
         # at the first input boundary without allocating any device tensor.
@@ -244,3 +246,46 @@ def test_mla_decode_lazy_indices_real_CPU_values(tmp_path):
     )
     assert result.returncode == 0, result.stdout + result.stderr
     assert "CPU indices exact, cached, RNG unchanged" in result.stdout
+
+
+@pytest.mark.parametrize(
+    "entry", [e for e in ENTRIES if e["batch"] == "E4b" and "/test_" in e["source_path"]], ids=lambda e: e["source_path"]
+)
+def test_mla_paged_layered_uses_exact_private_sibling(entry):
+    module = _load(entry)
+    assert Path(module._mla_module.__file__).resolve() == (ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]).resolve()
+    assert module.mla_decode_tilelang is module._mla_module.mla_decode_tilelang
+
+
+@pytest.mark.parametrize(
+    "entry", [e for e in ENTRIES if e["batch"] == "E4c" and "/test_" in e["source_path"]], ids=lambda e: e["source_path"]
+)
+def test_mla_persistent_layered_exact_sibling_and_core_query_fallback(entry, monkeypatch):
+    module = _load(entry)
+    assert Path(module._mla_module.__file__).resolve() == (ROOT / BY_SOURCE[entry["source_request_owner"]]["destination_path"]).resolve()
+
+    class MetadataOnlyTorch:
+        npu = SimpleNamespace(get_device_properties=lambda name: SimpleNamespace(cube_core_num=37))
+
+    monkeypatch.setattr(module, "torch", MetadataOnlyTorch())
+    assert module._get_core_num() == 37
+    MetadataOnlyTorch.npu = SimpleNamespace()
+    assert module._get_core_num() == 20
+
+
+@pytest.mark.parametrize("wrong_dtype,seqlen,message", [(True, 128, "q.dtype must be fp16"), (False, 65, "must be divisible by block_N")])
+def test_mla_persistent_original_host_metadata_negatives_without_tensor(wrong_dtype, seqlen, message, monkeypatch):
+    import torch
+
+    entry = next(e for e in ENTRIES if e["batch"] == "E4c" and "/test_" not in e["source_path"])
+    module = _load(entry)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("invalid original metadata reached constructor")
+
+    monkeypatch.setattr(module, "flashattn_mla_decode", forbidden)
+    dtype = torch.float32 if wrong_dtype else torch.float16
+    shapes = [(1, 64, 512), (1, 64, 64), (1, seqlen, 1, 512), (1, seqlen, 1, 64)]
+    metadata = [SimpleNamespace(shape=shape, ndim=len(shape), dtype=dtype, device=SimpleNamespace(type="npu")) for shape in shapes]
+    with pytest.raises(AssertionError, match=message):
+        module.run_mla_decode(*metadata, 64, 64, 20)

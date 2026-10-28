@@ -151,3 +151,68 @@ the large request additionally expresses those waits in fourteen-iteration
 empty wave loops. The recorded integer and loop domains are bounded. These
 real added waits remain in the compiled source, and are not described as
 numerical, deadlock or performance equivalence. All device validation is pending.
+
+## E4b: paged MLA decode and complete layered suite
+
+The full paged decode kernel and its original layered test module preserve the
+smoke entry, five L0, eleven L1, two L2 and five Boundary rows, including the
+original batch-128/8192-KV request. All original host paged-data preparation,
+block sorting, defensive index checks, pre-scaling, golden reference, precision
+dual gate, nonblocking levels and CLI exit logic remain. The original two L2
+runtime dtype/shape rejections remain device-pending; constructing their valid
+kernel does not validate those errors. Imports use the private language/layout
+and exact sibling module without changing caller search paths; explicit NPU
+registration occurs only in main.
+
+The 24 original entry rows produce fourteen distinct complete source pairs,
+all compiled by the real SDK. Raw source retains additional AIV reads of the
+independent read-only int32 block table and additional `PIPE_ALL` waits. The
+large request expands 832 added read declarations; these are real GM effects,
+with performance pending. Each original complete identity/sorted table, physical
+20-C/40-V grid, active-tile guards, expanded wave/chunk, actual index and scalar
+result is checked, including rejected blocks in the final wave. New AIV address
+and result sets equal the original C sets; the old AIV source did not read the
+table. These witnesses assume the original immutable, independent input and do
+not establish arbitrary external alias or mutation safety.
+
+Full physical allocation and original alias maps match. Comparison-only binding
+and lexical name normalization separates real added reads and wait-only control;
+the remaining payload and non-`PIPE_ALL` synchronization match, and all original
+`PIPE_ALL` anchors are retained. The compiled source is never rewritten for
+comparison. Numerical correctness, boundary verdicts, deadlock and performance
+validation remain pending.
+
+## E4c: persistent MLA decode and complete layered suite
+
+Both original files retain the complete unified kernel, host dtype/device/shape,
+contiguity and fractal/L0-budget validation, metadata-only views, references,
+optional einops fallback, seed and precision/exit rules. The original smoke,
+five L0, ten L1, two blocking L2 and four nonblocking Boundary entries remain.
+The full L2 metadata assertions can be checked without allocating device inputs;
+that is separate from running the original NPU tests or precision comparisons.
+
+The original runtime queries `torch.npu.get_device_properties("npu")` for its
+core count, with exception fallback 20 in the layered suite. That behavior stays
+unchanged. Initial source evidence used the original fallback 20 as a compiler control;
+that earlier evidence did not measure the real hardware default core count. The 22 original entry shapes/control paths yield
+eleven successful native requests in that control and two original early host
+metadata rejections. All eleven source pairs passed actual SDK compilation.
+A later read-only physical2/visible0 property capture reports 24 Cube and
+48 Vector cores. Eleven additional complete source pairs and real SDK compiles
+now cover the same original entry matrix with core 24. The fallback-20 evidence
+is preserved separately; neither source domain establishes a device verdict.
+
+Original default-device bodies use a scoped NPU context and restore the caller,
+while parsing, cache-disable timing and all original body/exit logic remain in
+order. Cache state restores on failure or `SystemExit`. Imports are tensor- and
+runtime-free, with private language/layout and exact sibling loading. Real core
+queries remain in actual runtime; host regression tests separately exercise an
+explicit fake property and the original fallback without selecting a device.
+
+Raw source retains four additional static `PIPE_ALL` waits and large unused
+scalar/control expansions. There are no added scalar `GetValue` reads in these
+pairs. Bounded dead integer/control regions, full physical allocation/alias maps,
+original wait anchors and remaining payload/non-`PIPE_ALL` synchronization are
+checked in the source control domain. Raw SDK inputs are unchanged. Device
+numerical verdicts, actual execution under the measured default, deadlock and
+performance remain pending.

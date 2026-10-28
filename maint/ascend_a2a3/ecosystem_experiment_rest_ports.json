@@ -449,6 +449,154 @@
       "source_request_owner": "examples_experiment/deepseek_mla/example_mla_decode/example_mla_decode.py",
       "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
       "validation_scope": "22 original entry rows;9 unique full source/SDK requests each side,2 original frontend AssertionError boundaries. Original L2 wrong-input-dtype runtime and all numerical/device/retry behavior pending."
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "source_git_blob": "91fcee0f0d09567736b492916fc88ce21cea90b5",
+      "source_sha256": "ba16de49b8aaab70b084787f1f2591efc04c24093dd6c6aae59711338576ff31",
+      "destination_sha256": "6ffae40a8b17f89bdd2db0b3f33e5086dc4a77617bde1bf478c772d5b604d2dd",
+      "batch": "E4b",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language/layout imports; exact sibling loading without sys.path mutation; explicit backend registration at main. Complete original functions/config/cases/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E4b/"
+      },
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "24 original rows ->14 native requests per side; runtime L2 dtype/shape and all numerical/boundary verdicts device-pending."
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "source_git_blob": "f7e06609be3aff9a0c17d9bc9cc2be5e0e64d300",
+      "source_sha256": "e08f7ed81676041d47b8afe7a5e285c0613f97fb8e1c023841181218ceb59765",
+      "destination_sha256": "2a3259fce3037045370e896e2e874be2f78b1b26cbdb60d6ad8b4a841ba35e31",
+      "batch": "E4b",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "tensor"
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language/layout imports; exact sibling loading without sys.path mutation; explicit backend registration at main. Complete original functions/config/cases/golden/verdict/exit retained."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E4b/"
+      },
+      "source_request_owner": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "validation_scope": "24 original rows ->14 native requests per side; runtime L2 dtype/shape and all numerical/boundary verdicts device-pending."
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "source_git_blob": "5a7df95a7d4f3d3157fe1404c5a18fef3ebcc28b",
+      "source_sha256": "81828c81fd43eee33106409dd399585f3c54ecf9edef360a0918a4dd092e714f",
+      "destination_sha256": "949a7fc241e11f2c783b62f611a87ef77fc8771b49da704e1a6b714c8fc99e0a",
+      "batch": "E4c",
+      "state": "source_SDK_fallback20_and_measured24_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "randn",
+        "host_core_count_probe": false
+      },
+      "runtime_factory": "flashattn_mla_decode",
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language/layout and exact sibling loader; explicit registration/cache restoration; complete original default-device body uses scoped NPU lifetime, original parsing/cache-disable order preserved. Real core-count query and exception fallback20 unchanged."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E4c/",
+        "measured_default_core_source_matrix": true,
+        "physical_default_core_device": false,
+        "core24_evidence": "refactor_main/reports/p3_experiment_rest/E4c24/"
+      },
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "source_validation_control": {
+        "core_num": 20,
+        "origin": "Original exception fallback, not measured hardware property. Actual product core query/fallback retained unchanged."
+      },
+      "validation_scope": "22 original rows in each of fallback20 and measured core24 controls,11 unique full source/SDK requests per side per control;2 metadata-only host assertions same. Actual physical default device/numerical/boundary/performance pending.",
+      "additional_source_validation_control": {
+        "core_num": 24,
+        "origin": "Actual physical2/visible0 masked Torch property captured read-only by owner; property-source SHA fixed in core24 evidence. Actual product core query/fallback20 unchanged."
+      }
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/test_mla_decode_persistent.py",
+      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode_persistent/test_mla_decode_persistent.py",
+      "source_git_blob": "b2ce5144305a9dcf5f700a512bd5bc73fca443be",
+      "source_sha256": "bd3acd36e5c4bf68bf4b7a8e5422b129ff5eedec23c5e87c8af26f5e51161459",
+      "destination_sha256": "a2053c474e77585617bf5a5aafdc57e579c06d40ee5fe41177b12606db543a88",
+      "batch": "E4c",
+      "state": "source_SDK_fallback20_and_measured24_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "randn",
+        "host_core_count_probe": true
+      },
+      "runtime_factory": "run_mla_decode",
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language/layout and exact sibling loader; explicit registration/cache restoration; complete original default-device body uses scoped NPU lifetime, original parsing/cache-disable order preserved. Real core-count query and exception fallback20 unchanged."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_experiment_rest/E4c/",
+        "measured_default_core_source_matrix": true,
+        "physical_default_core_device": false,
+        "core24_evidence": "refactor_main/reports/p3_experiment_rest/E4c24/"
+      },
+      "source_request_owner": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "whole_original_factory_helper_config_matrix_golden_AST_preserved_with_declared_adapters": true,
+      "source_validation_control": {
+        "core_num": 20,
+        "origin": "Original exception fallback, not measured hardware property. Actual product core query/fallback retained unchanged."
+      },
+      "validation_scope": "22 original rows in each of fallback20 and measured core24 controls,11 unique full source/SDK requests per side per control;2 metadata-only host assertions same. Actual physical default device/numerical/boundary/performance pending.",
+      "additional_source_validation_control": {
+        "core_num": 24,
+        "origin": "Actual physical2/visible0 masked Torch property captured read-only by owner; property-source SHA fixed in core24 evidence. Actual product core query/fallback20 unchanged."
+      }
     }
   ],
   "factory_requests": [
@@ -1557,6 +1705,638 @@
       },
       "expected_frontend_error": "AssertionError",
       "id": "experiment_e4a_10"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        1,
+        128,
+        1,
+        256,
+        512,
+        64,
+        256,
+        32,
+        256,
+        256,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_0"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        1,
+        128,
+        1,
+        256,
+        512,
+        64,
+        256,
+        32,
+        256,
+        128,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_1"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        2,
+        128,
+        1,
+        256,
+        512,
+        64,
+        256,
+        32,
+        256,
+        256,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_2"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        4,
+        128,
+        1,
+        512,
+        512,
+        64,
+        256,
+        32,
+        256,
+        512,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_3"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        4,
+        128,
+        1,
+        2048,
+        512,
+        64,
+        256,
+        32,
+        256,
+        2048,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_4"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        128,
+        128,
+        1,
+        8192,
+        512,
+        64,
+        256,
+        32,
+        256,
+        8192,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_5"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        1,
+        128,
+        1,
+        256,
+        512,
+        64,
+        256,
+        32,
+        256,
+        65,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_6"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        2,
+        128,
+        1,
+        256,
+        512,
+        64,
+        256,
+        32,
+        256,
+        160,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_7"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        1,
+        128,
+        1,
+        256,
+        512,
+        64,
+        256,
+        32,
+        256,
+        97,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_8"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        16,
+        128,
+        1,
+        512,
+        512,
+        64,
+        256,
+        32,
+        256,
+        512,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_9"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        4,
+        128,
+        1,
+        4096,
+        512,
+        64,
+        256,
+        32,
+        256,
+        4096,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_10"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        1,
+        128,
+        1,
+        512,
+        512,
+        64,
+        256,
+        32,
+        512,
+        512,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_11"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        1,
+        128,
+        1,
+        256,
+        512,
+        64,
+        256,
+        32,
+        256,
+        256,
+        20,
+        0.05
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_12"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "factory": "mla_decode_tilelang",
+      "args": [
+        1,
+        128,
+        1,
+        256,
+        512,
+        64,
+        256,
+        32,
+        256,
+        1,
+        20,
+        0.041666666666666664
+      ],
+      "kwargs": {},
+      "id": "experiment_e4b_13"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        512,
+        64,
+        128,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_0"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        512,
+        64,
+        64,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_1"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        2,
+        128,
+        256,
+        512,
+        64,
+        64,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_2"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        4,
+        128,
+        512,
+        512,
+        64,
+        64,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_3"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        128,
+        128,
+        8192,
+        512,
+        64,
+        128,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_4"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        64,
+        512,
+        64,
+        64,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_5"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        2,
+        64,
+        448,
+        512,
+        64,
+        64,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_6"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        8,
+        128,
+        128,
+        512,
+        64,
+        64,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_7"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        512,
+        64,
+        32,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_8"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        512,
+        64,
+        64,
+        32,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_9"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        256,
+        32,
+        64,
+        64,
+        20
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c_10"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        512,
+        64,
+        128,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_0"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        512,
+        64,
+        64,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_1"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        2,
+        128,
+        256,
+        512,
+        64,
+        64,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_2"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        4,
+        128,
+        512,
+        512,
+        64,
+        64,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_3"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        128,
+        128,
+        8192,
+        512,
+        64,
+        128,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_4"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        64,
+        512,
+        64,
+        64,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_5"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        2,
+        64,
+        448,
+        512,
+        64,
+        64,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_6"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        8,
+        128,
+        128,
+        512,
+        64,
+        64,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_7"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        512,
+        64,
+        32,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_8"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        512,
+        64,
+        64,
+        32,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_9"
+    },
+    {
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "factory": "flashattn_mla_decode",
+      "args": [
+        1,
+        64,
+        128,
+        256,
+        32,
+        64,
+        64,
+        24
+      ],
+      "kwargs": {},
+      "id": "experiment_e4c24_10"
     }
   ],
   "E1_original_runtime_cases": [
@@ -4200,6 +4980,2925 @@
       "request_index": 2,
       "nonblocking_original": true,
       "original_generator_AST": "gen_extreme_mix"
+    }
+  ],
+  "E4b_original_entry_matrix": [
+    {
+      "name": "kernel_smoke",
+      "kind": "original_kernel_smoke",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_seed": 42
+    },
+    {
+      "name": "l0_small_b1",
+      "kind": "original_l0",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        128,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 1,
+      "original_case_AST": "('l0_small_b1', 1, 128, 1, 128, 576, 512, 256, ['D-DTYPE-fp16', 'D-DTYPE-int32', 'D-SHAPE-ALIGNED', 'D-VALRANGE-M'])",
+      "original_generator_AST": null,
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l0_small_b2",
+      "kind": "original_l0",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        2,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 2,
+      "original_case_AST": "('l0_small_b2', 2, 128, 1, 256, 576, 512, 256, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-VALRANGE-M'])",
+      "original_generator_AST": null,
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l0_batch4",
+      "kind": "original_l0",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        4,
+        128,
+        1,
+        512,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 512,
+      "request_index": 3,
+      "original_case_AST": "('l0_batch4', 4, 128, 1, 512, 576, 512, 256, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-VALRANGE-M'])",
+      "original_generator_AST": null,
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l0_seq2048",
+      "kind": "original_l0",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        4,
+        128,
+        1,
+        2048,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 2048,
+      "request_index": 4,
+      "original_case_AST": "('l0_seq2048', 4, 128, 1, 2048, 576, 512, 256, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-VALRANGE-M'])",
+      "original_generator_AST": null,
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l0_golden",
+      "kind": "original_l0",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        128,
+        128,
+        1,
+        8192,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 8192,
+      "request_index": 5,
+      "original_case_AST": "('l0_golden', 128, 128, 1, 8192, 576, 512, 256, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-VALRANGE-M'])",
+      "original_generator_AST": null,
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_tail_1",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        65,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 6,
+      "original_case_AST": "('l1_tail_1', 1, 128, 1, 65, 576, 512, 256, None, None, ['D-DTYPE-fp16', 'D-SHAPE-TAIL-1', 'D-VALRANGE-M'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_tail_mid",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        2,
+        128,
+        1,
+        160,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 7,
+      "original_case_AST": "('l1_tail_mid', 2, 128, 1, 160, 576, 512, 256, None, None, ['D-DTYPE-fp16', 'D-SHAPE-TAIL-MID', 'D-VALRANGE-M'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_prime",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        97,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 8,
+      "original_case_AST": "('l1_prime', 1, 128, 1, 97, 576, 512, 256, None, None, ['D-DTYPE-fp16', 'D-SHAPE-PRIME', 'D-VALRANGE-M'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_edge",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_case_AST": "('l1_edge', 1, 128, 1, 256, 576, 512, 256, None, None, ['D-DTYPE-fp16', 'D-SHAPE-EDGE', 'D-SHAPE-ALIGNED', 'D-VALRANGE-M'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_batch16",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        16,
+        128,
+        1,
+        512,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 512,
+      "request_index": 9,
+      "original_case_AST": "('l1_batch16', 16, 128, 1, 512, 576, 512, 256, None, None, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-VALRANGE-M'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_seq4096",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        4,
+        128,
+        1,
+        4096,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 4096,
+      "request_index": 10,
+      "original_case_AST": "('l1_seq4096', 4, 128, 1, 4096, 576, 512, 256, lambda shape, dtype: torch.randn(*shape, dtype=dtype) * 16000.0, None, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-VALRANGE-L'])",
+      "original_generator_AST": "lambda shape, dtype: torch.randn(*shape, dtype=dtype) * 16000.0",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_param_bs512",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        512,
+        576,
+        512,
+        512
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 512,
+      "request_index": 11,
+      "original_case_AST": "('l1_param_bs512', 1, 128, 1, 512, 576, 512, 512, None, None, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-PARAM-block_size', 'D-VALRANGE-M'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_param_scale",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": 0.05,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 12,
+      "original_case_AST": "('l1_param_scale', 1, 128, 1, 256, 576, 512, 256, None, 0.05, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-PARAM-softmax_scale', 'D-VALRANGE-M'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_param_numsplit",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_case_AST": "('l1_param_numsplit', 1, 128, 1, 256, 576, 512, 256, None, None, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-PARAM-num_split', 'D-VALRANGE-M'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_valrange_s",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_case_AST": "('l1_valrange_s', 1, 128, 1, 256, 576, 512, 256, lambda shape, dtype: torch.randn(*shape, dtype=dtype) * 0.25, None, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-VALRANGE-S'])",
+      "original_generator_AST": "lambda shape, dtype: torch.randn(*shape, dtype=dtype) * 0.25",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "l1_valrange_asym",
+      "kind": "original_l1",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_case_AST": "('l1_valrange_asym', 1, 128, 1, 256, 576, 512, 256, lambda shape, dtype: torch.randn(*shape, dtype=dtype) * 3.75 + 2.5, None, ['D-DTYPE-fp16', 'D-SHAPE-ALIGNED', 'D-VALRANGE-ASYM'])",
+      "original_generator_AST": "lambda shape, dtype: torch.randn(*shape, dtype=dtype) * 3.75 + 2.5",
+      "original_seed": 42,
+      "nonblocking_original": false
+    },
+    {
+      "name": "b_zero",
+      "kind": "original_boundary",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_case_AST": "('b_zero', 1, 128, 1, 256, 576, 512, 256, lambda shape, dtype: torch.zeros(*shape, dtype=dtype), None, ['D-DTYPE-fp16', 'D-SPECIAL-ZERO'])",
+      "original_generator_AST": "lambda shape, dtype: torch.zeros(*shape, dtype=dtype)",
+      "original_seed": 42,
+      "nonblocking_original": true
+    },
+    {
+      "name": "b_dbound",
+      "kind": "original_boundary",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_case_AST": "('b_dbound', 1, 128, 1, 256, 576, 512, 256, lambda shape, dtype: (torch.randn(*shape, dtype=dtype) * 0.5 + 0.5).clamp_(-65504, 65504) * 60000, None, ['D-DTYPE-fp16', 'D-SPECIAL-DBOUND'])",
+      "original_generator_AST": "lambda shape, dtype: (torch.randn(*shape, dtype=dtype) * 0.5 + 0.5).clamp_(-65504, 65504) * 60000",
+      "original_seed": 42,
+      "nonblocking_original": true
+    },
+    {
+      "name": "b_inf",
+      "kind": "original_boundary",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_case_AST": "('b_inf', 1, 128, 1, 256, 576, 512, 256, lambda shape, dtype: torch.where(torch.rand(*shape) > 0.99, float('inf'), torch.randn(*shape, dtype=dtype)), None, ['D-DTYPE-fp16', 'D-SPECIAL-INF'])",
+      "original_generator_AST": "lambda shape, dtype: torch.where(torch.rand(*shape) > 0.99, float('inf'), torch.randn(*shape, dtype=dtype))",
+      "original_seed": 42,
+      "nonblocking_original": true
+    },
+    {
+      "name": "b_nan",
+      "kind": "original_boundary",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_case_AST": "('b_nan', 1, 128, 1, 256, 576, 512, 256, lambda shape, dtype: torch.where(torch.rand(*shape) > 0.99, float('nan'), torch.randn(*shape, dtype=dtype)), None, ['D-DTYPE-fp16', 'D-SPECIAL-NAN'])",
+      "original_generator_AST": "lambda shape, dtype: torch.where(torch.rand(*shape) > 0.99, float('nan'), torch.randn(*shape, dtype=dtype))",
+      "original_seed": 42,
+      "nonblocking_original": true
+    },
+    {
+      "name": "b_single_token",
+      "kind": "original_boundary",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        1,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 13,
+      "original_case_AST": "('b_single_token', 1, 128, 1, 1, 576, 512, 256, None, None, ['D-DTYPE-fp16', 'D-SHAPE-EDGE'])",
+      "original_generator_AST": "None",
+      "original_seed": 42,
+      "nonblocking_original": true
+    },
+    {
+      "name": "l2_wrong_dtype",
+      "kind": "original_l2",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_runtime_negative": "wrong_dtype",
+      "original_runtime_rejection_pending": true,
+      "original_seed": 42,
+      "original_tags": [
+        "D-EXC-DTYPE"
+      ],
+      "nonblocking_original": true
+    },
+    {
+      "name": "l2_wrong_shape",
+      "kind": "original_l2",
+      "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "original_values": [
+        1,
+        128,
+        1,
+        256,
+        576,
+        512,
+        256
+      ],
+      "original_softmax_override": null,
+      "derived_max_seqlen_pad": 256,
+      "request_index": 0,
+      "original_runtime_negative": "wrong_shape",
+      "original_runtime_rejection_pending": true,
+      "original_seed": 42,
+      "original_tags": [
+        "D-EXC-SHAPE"
+      ],
+      "nonblocking_original": true
+    }
+  ],
+  "E4c_original_entry_matrix": [
+    {
+      "kind": "original_kernel_smoke",
+      "name": "smoke",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 128,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 0,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_small_basic",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_small_basic",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-S"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_small_multibatch",
+      "original_shape": [
+        2,
+        128,
+        256,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 2,
+      "original_metadata_views": [
+        {
+          "from": [
+            2,
+            256,
+            1,
+            512
+          ],
+          "to": [
+            2,
+            256,
+            512
+          ]
+        },
+        {
+          "from": [
+            2,
+            256,
+            1,
+            64
+          ],
+          "to": [
+            2,
+            256,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_small_multibatch",
+        "shape": [
+          2,
+          128,
+          256,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-M"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_default_config",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_default_config",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-S"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_medium",
+      "original_shape": [
+        4,
+        128,
+        512,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 3,
+      "original_metadata_views": [
+        {
+          "from": [
+            4,
+            512,
+            1,
+            512
+          ],
+          "to": [
+            4,
+            512,
+            512
+          ]
+        },
+        {
+          "from": [
+            4,
+            512,
+            1,
+            64
+          ],
+          "to": [
+            4,
+            512,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_medium",
+        "shape": [
+          4,
+          128,
+          512,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-M"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_golden",
+      "original_shape": [
+        128,
+        128,
+        8192,
+        512,
+        64
+      ],
+      "block_N": 128,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 4,
+      "original_metadata_views": [
+        {
+          "from": [
+            128,
+            8192,
+            1,
+            512
+          ],
+          "to": [
+            128,
+            8192,
+            512
+          ]
+        },
+        {
+          "from": [
+            128,
+            8192,
+            1,
+            64
+          ],
+          "to": [
+            128,
+            8192,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_golden",
+        "shape": [
+          128,
+          128,
+          8192,
+          512,
+          64
+        ],
+        "block_N": 128,
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-L"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_edge_minimal",
+      "original_shape": [
+        1,
+        64,
+        64,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 5,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            64,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            64,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            64,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            64,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_edge_minimal",
+        "shape": [
+          1,
+          64,
+          64,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-EDGE",
+          "D-SHAPE-TAIL-1",
+          "D-VALRANGE-S"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_prime_seqlen",
+      "original_shape": [
+        2,
+        64,
+        448,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 6,
+      "original_metadata_views": [
+        {
+          "from": [
+            2,
+            448,
+            1,
+            512
+          ],
+          "to": [
+            2,
+            448,
+            512
+          ]
+        },
+        {
+          "from": [
+            2,
+            448,
+            1,
+            64
+          ],
+          "to": [
+            2,
+            448,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_prime_seqlen",
+        "shape": [
+          2,
+          64,
+          448,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-PRIME"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_tail_mid",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_tail_mid",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-TAIL-MID"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_large_batch",
+      "original_shape": [
+        8,
+        128,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 7,
+      "original_metadata_views": [
+        {
+          "from": [
+            8,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            8,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            8,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            8,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_large_batch",
+        "shape": [
+          8,
+          128,
+          128,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-VALRANGE-L"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_asym_positive",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "positive",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_asym_positive",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "input_gen": "positive",
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-VALRANGE-ASYM"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_small_values",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "small",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_small_values",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "input_gen": "small",
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-VALRANGE-S"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_large_values",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "large",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_large_values",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "input_gen": "large",
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-VALRANGE-L"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_param_block_n32",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 32,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 8,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_param_block_n32",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "block_N": 32,
+        "block_H": 64,
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-PARAM-block_N"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_param_block_h32",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 32,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 9,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_param_block_h32",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "block_N": 64,
+        "block_H": 32,
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-PARAM-block_H"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_param_dim256",
+      "original_shape": [
+        1,
+        64,
+        128,
+        256,
+        32
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 10,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            256
+          ],
+          "to": [
+            1,
+            128,
+            256
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            32
+          ],
+          "to": [
+            1,
+            128,
+            32
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_param_dim256",
+        "shape": [
+          1,
+          64,
+          128,
+          256,
+          32
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-PARAM-dim",
+          "D-PARAM-pe_dim"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l2",
+      "name": "l2_wrong_dtype",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float32",
+      "status": "original_host_rejected",
+      "error_type": "AssertionError",
+      "error": "q.dtype must be fp16, got float32"
+    },
+    {
+      "kind": "original_l2",
+      "name": "l2_bad_shape",
+      "original_shape": [
+        1,
+        64,
+        65,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "original_host_rejected",
+      "error_type": "AssertionError",
+      "error": "seqlen_kv (65) must be divisible by block_N (64)"
+    },
+    {
+      "kind": "original_boundary",
+      "name": "boundary_zeros",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "zeros",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "boundary_nan",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "nan",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "boundary_inf",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "inf",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "boundary_dbound",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 20,
+      "input_gen": "dbound",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "nonblocking_original": true
+    }
+  ],
+  "E4c24_original_entry_matrix": [
+    {
+      "kind": "original_kernel_smoke",
+      "name": "smoke",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 128,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 0,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_small_basic",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_small_basic",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-S"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_small_multibatch",
+      "original_shape": [
+        2,
+        128,
+        256,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 2,
+      "original_metadata_views": [
+        {
+          "from": [
+            2,
+            256,
+            1,
+            512
+          ],
+          "to": [
+            2,
+            256,
+            512
+          ]
+        },
+        {
+          "from": [
+            2,
+            256,
+            1,
+            64
+          ],
+          "to": [
+            2,
+            256,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_small_multibatch",
+        "shape": [
+          2,
+          128,
+          256,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-M"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_default_config",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_default_config",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-S"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_medium",
+      "original_shape": [
+        4,
+        128,
+        512,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 3,
+      "original_metadata_views": [
+        {
+          "from": [
+            4,
+            512,
+            1,
+            512
+          ],
+          "to": [
+            4,
+            512,
+            512
+          ]
+        },
+        {
+          "from": [
+            4,
+            512,
+            1,
+            64
+          ],
+          "to": [
+            4,
+            512,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_medium",
+        "shape": [
+          4,
+          128,
+          512,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-M"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l0",
+      "name": "l0_golden",
+      "original_shape": [
+        128,
+        128,
+        8192,
+        512,
+        64
+      ],
+      "block_N": 128,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 4,
+      "original_metadata_views": [
+        {
+          "from": [
+            128,
+            8192,
+            1,
+            512
+          ],
+          "to": [
+            128,
+            8192,
+            512
+          ]
+        },
+        {
+          "from": [
+            128,
+            8192,
+            1,
+            64
+          ],
+          "to": [
+            128,
+            8192,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l0_golden",
+        "shape": [
+          128,
+          128,
+          8192,
+          512,
+          64
+        ],
+        "block_N": 128,
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-ALIGNED",
+          "D-VALRANGE-L"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_edge_minimal",
+      "original_shape": [
+        1,
+        64,
+        64,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 5,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            64,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            64,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            64,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            64,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_edge_minimal",
+        "shape": [
+          1,
+          64,
+          64,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-EDGE",
+          "D-SHAPE-TAIL-1",
+          "D-VALRANGE-S"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_prime_seqlen",
+      "original_shape": [
+        2,
+        64,
+        448,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 6,
+      "original_metadata_views": [
+        {
+          "from": [
+            2,
+            448,
+            1,
+            512
+          ],
+          "to": [
+            2,
+            448,
+            512
+          ]
+        },
+        {
+          "from": [
+            2,
+            448,
+            1,
+            64
+          ],
+          "to": [
+            2,
+            448,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_prime_seqlen",
+        "shape": [
+          2,
+          64,
+          448,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-PRIME"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_tail_mid",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_tail_mid",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-SHAPE-TAIL-MID"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_large_batch",
+      "original_shape": [
+        8,
+        128,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 7,
+      "original_metadata_views": [
+        {
+          "from": [
+            8,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            8,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            8,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            8,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_large_batch",
+        "shape": [
+          8,
+          128,
+          128,
+          512,
+          64
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-VALRANGE-L"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_asym_positive",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "positive",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_asym_positive",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "input_gen": "positive",
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-VALRANGE-ASYM"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_small_values",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "small",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_small_values",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "input_gen": "small",
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-VALRANGE-S"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_large_values",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "large",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_large_values",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "input_gen": "large",
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-VALRANGE-L"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_param_block_n32",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 32,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 8,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_param_block_n32",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "block_N": 32,
+        "block_H": 64,
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-PARAM-block_N"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_param_block_h32",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 32,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 9,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_param_block_h32",
+        "shape": [
+          1,
+          64,
+          128,
+          512,
+          64
+        ],
+        "block_N": 64,
+        "block_H": 32,
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-PARAM-block_H"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l1",
+      "name": "l1_param_dim256",
+      "original_shape": [
+        1,
+        64,
+        128,
+        256,
+        32
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 10,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            256
+          ],
+          "to": [
+            1,
+            128,
+            256
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            32
+          ],
+          "to": [
+            1,
+            128,
+            32
+          ]
+        }
+      ],
+      "original_complete_config": {
+        "name": "l1_param_dim256",
+        "shape": [
+          1,
+          64,
+          128,
+          256,
+          32
+        ],
+        "tags": [
+          "D-DTYPE-fp16",
+          "D-PARAM-dim",
+          "D-PARAM-pe_dim"
+        ]
+      },
+      "original_seed": 42
+    },
+    {
+      "kind": "original_l2",
+      "name": "l2_wrong_dtype",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float32",
+      "status": "original_host_rejected",
+      "error_type": "AssertionError",
+      "error": "q.dtype must be fp16, got float32"
+    },
+    {
+      "kind": "original_l2",
+      "name": "l2_bad_shape",
+      "original_shape": [
+        1,
+        64,
+        65,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "randn",
+      "input_metadata_dtype": "float16",
+      "status": "original_host_rejected",
+      "error_type": "AssertionError",
+      "error": "seqlen_kv (65) must be divisible by block_N (64)"
+    },
+    {
+      "kind": "original_boundary",
+      "name": "boundary_zeros",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "zeros",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "boundary_nan",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "nan",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "boundary_inf",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "inf",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "nonblocking_original": true
+    },
+    {
+      "kind": "original_boundary",
+      "name": "boundary_dbound",
+      "original_shape": [
+        1,
+        64,
+        128,
+        512,
+        64
+      ],
+      "block_N": 64,
+      "block_H": 64,
+      "source_control_core": 24,
+      "input_gen": "dbound",
+      "input_metadata_dtype": "float16",
+      "status": "native_constructor_boundary",
+      "request_index": 1,
+      "original_metadata_views": [
+        {
+          "from": [
+            1,
+            128,
+            1,
+            512
+          ],
+          "to": [
+            1,
+            128,
+            512
+          ]
+        },
+        {
+          "from": [
+            1,
+            128,
+            1,
+            64
+          ],
+          "to": [
+            1,
+            128,
+            64
+          ]
+        }
+      ],
+      "nonblocking_original": true
     }
   ]
 }
