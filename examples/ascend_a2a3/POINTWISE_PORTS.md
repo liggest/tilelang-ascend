@@ -86,3 +86,36 @@ Offsets address set `0..8` as the original AIV path, with no C-core writes,
 flags or vector math. This difference is retained and does not establish a
 general segmented-shape, alias, numerical or performance guarantee. Source/SDK
 acceptance remains separate from the pending device matrix.
+
+## Dynamic quantization and int8 matrix multiplication
+
+Four complete sources retain thirteen original runtime requests:
+
+| Source | Complete original request set |
+|---|---|
+| `add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py` | All eight original shape/dtype rows, including all three unaligned shapes |
+| `dynamic_quant/dynamic_quant.py` | CLI `M=1024,N=512,dtype=float16`, using the original adaptive dispatcher |
+| `quant_batch_matmul/example_quant_batch_matmul.py` | `Batch=8,M=N=K=1024`, per-tensor fp16 and per-channel bf16 outputs |
+| `quant_batch_matmul/example_quant_matmul.py` | `M=N=K=1024`, per-tensor bf16 and per-channel fp16 outputs |
+
+All original tiling, padding, dtype maps, three-output and workspace decorators,
+references, precision checks and seed 0 remain. Add/RMS/dynamic-quant keeps
+original-shape GM tensors and both aligned and boundary algorithms. Its
+original catch-and-collect failure loop and nonzero exit remain intact.
+The dynamic-quant CLI keeps its original integer overflow/match-ratio check;
+its output values and scales are not replaced by a simpler reference.
+
+Five explicitly supplementary source probes complete the dynamic-quant
+three dispatch buckets with both CLI-supported dtypes. They use the original
+pure host dispatcher and complete kernel, and are not extra original runtime
+matrix rows or device validation. The same original pure `_get_tiling` result
+is used for all eight Add/RMS rows; no tile size is changed to pass compilation.
+
+Runtime and actual clears use the same explicit dedicated-cache contract.
+Quantized matrix entries preserve their original clear position inside the
+renamed original main. The complete source and actual SDK checks cover every
+request. Generated source keeps pure unused scalar/declaration-order differences;
+all named operands, actual buffer sizes and logical alias relationships are
+checked. Original intentional buffer reuse is preserved, rather than assuming
+that every allocation must be disjoint for the entire kernel. Numerical device
+and performance checks remain pending.

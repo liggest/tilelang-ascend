@@ -305,6 +305,162 @@
         "torch.manual_seed(0)"
       ],
       "modern_JIT_target_reader_exception": false
+    },
+    {
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py",
+      "destination_path": "examples/ascend_a2a3/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py",
+      "source_git_blob": "38c755db69a9c3357390cb377465e3cbec4b382a",
+      "source_sha256": "f501eb9f8510933dbb4e9ea1d45c2650a082674d18712d2a7a67dd9ef4d6dfec",
+      "destination_sha256": "90f87d2e315e1d43738222188f88965992a969275230828d9edc3d697eaf8761",
+      "batch": "Q3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve actual clear and original position with dedicated cache/resolved guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q3/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(y.cpu(), y_ref.cpu(), atol=2, rtol=0.02)",
+        "torch.testing.assert_close(xOut.cpu(), xOut_ref.cpu(), rtol=0.002, atol=0.002)",
+        "torch.testing.assert_close(scale.cpu(), scale_ref.cpu(), rtol=0.002, atol=0.002)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/dynamic_quant/dynamic_quant.py",
+      "destination_path": "examples/ascend_a2a3/dynamic_quant/dynamic_quant.py",
+      "source_git_blob": "4fd2024ac7bfe52c9403bd65f6c3f636d77635cd",
+      "source_sha256": "9142e37dda16d973b0ff498551d39f6cda956087035338eeb262efe5e072cf0e",
+      "destination_sha256": "98d1e3bbca3d2fb07949f6ffaa0687f8a579d2a43131115f69d3a3d419f93487",
+      "batch": "Q3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": false,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve actual clear and original position with dedicated cache/resolved guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q3/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(scale_out.cpu(), ref_scale, rtol=2 ** (-10), atol=2 ** (-16))"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/quant_batch_matmul/example_quant_batch_matmul.py",
+      "destination_path": "examples/ascend_a2a3/quant_batch_matmul/example_quant_batch_matmul.py",
+      "source_git_blob": "353ad40ed126a6876730e2c5d2013860717eb186",
+      "source_sha256": "26e9e301a3918fc241d09eac3449ae94874b1472ce62c6893ebbc934ee4b86d3",
+      "destination_sha256": "ff932896fd485661f49fbe88db392d4b261abddd0b28725dcb83d7ded0952934",
+      "batch": "Q3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randint"
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve actual clear and original position with dedicated cache/resolved guard.",
+        "Rename only original main entry to _original_main, preserving signature/body except declared cache API."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q3/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(C.cpu(), ref_C.cpu(), rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/quant_batch_matmul/example_quant_matmul.py",
+      "destination_path": "examples/ascend_a2a3/quant_batch_matmul/example_quant_matmul.py",
+      "source_git_blob": "6caa0df5c8171631a1e5d283bedbadce4cd96f15",
+      "source_sha256": "745aeed82fed026ce61ce018ae6c85eba1c5c802b7d309a9194194f66378ff74",
+      "destination_sha256": "4f751b086b736c074b0ac8b60e9d8a3c5e6f3c124d702d888a12e444ffa503b2",
+      "batch": "Q3",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false,
+        "inputs_before_factory": true,
+        "input_constructor": "randint"
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
+        "Move original top-level and __main__ runtime to explicit main with NPU registration.",
+        "Preserve actual clear and original position with dedicated cache/resolved guard.",
+        "Rename only original main entry to _original_main, preserving signature/body except declared cache API."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "evidence": "refactor_main/reports/p3_pointwise/Q3/"
+      },
+      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_adapters": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(C.cpu(), ref_C.cpu(), rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
     }
   ],
   "factory_requests": [
@@ -809,6 +965,428 @@
       "source_path": "examples/gemv/example_gemv_v.py",
       "jit_target_override": "pto",
       "scope_note": "Actual original/modern JIT object target set to pto only for source branch evidence; original CLI remains auto/AscendC, no numerical claim."
+    },
+    {
+      "factory": "_kernel_impl",
+      "args": [
+        256,
+        256,
+        256,
+        256,
+        32,
+        256,
+        1e-06,
+        "float16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        256,
+        256,
+        "float16"
+      ],
+      "original_pure_tiling_result": [
+        32,
+        256,
+        256,
+        256
+      ],
+      "id": "add_rms_norm_dynamic_quant_0",
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py"
+    },
+    {
+      "factory": "_kernel_impl",
+      "args": [
+        512,
+        512,
+        512,
+        512,
+        16,
+        512,
+        1e-06,
+        "float16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        512,
+        512,
+        "float16"
+      ],
+      "original_pure_tiling_result": [
+        16,
+        512,
+        512,
+        512
+      ],
+      "id": "add_rms_norm_dynamic_quant_1",
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py"
+    },
+    {
+      "factory": "_kernel_impl",
+      "args": [
+        1024,
+        2048,
+        1024,
+        2048,
+        16,
+        512,
+        1e-06,
+        "bfloat16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        1024,
+        2048,
+        "bfloat16"
+      ],
+      "original_pure_tiling_result": [
+        16,
+        512,
+        1024,
+        2048
+      ],
+      "id": "add_rms_norm_dynamic_quant_2",
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py"
+    },
+    {
+      "factory": "_kernel_impl",
+      "args": [
+        4096,
+        4096,
+        4096,
+        4096,
+        16,
+        512,
+        1e-06,
+        "bfloat16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        4096,
+        4096,
+        "bfloat16"
+      ],
+      "original_pure_tiling_result": [
+        16,
+        512,
+        4096,
+        4096
+      ],
+      "id": "add_rms_norm_dynamic_quant_3",
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py"
+    },
+    {
+      "factory": "_kernel_impl",
+      "args": [
+        8192,
+        2048,
+        8192,
+        2048,
+        16,
+        512,
+        1e-06,
+        "bfloat16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        8192,
+        2048,
+        "bfloat16"
+      ],
+      "original_pure_tiling_result": [
+        16,
+        512,
+        8192,
+        2048
+      ],
+      "id": "add_rms_norm_dynamic_quant_4",
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py"
+    },
+    {
+      "factory": "_kernel_impl",
+      "args": [
+        1021,
+        1023,
+        1024,
+        1024,
+        16,
+        512,
+        1e-06,
+        "bfloat16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        1021,
+        1023,
+        "bfloat16"
+      ],
+      "original_pure_tiling_result": [
+        16,
+        512,
+        1024,
+        1024
+      ],
+      "id": "add_rms_norm_dynamic_quant_5",
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py"
+    },
+    {
+      "factory": "_kernel_impl",
+      "args": [
+        4093,
+        4093,
+        4096,
+        4096,
+        16,
+        512,
+        1e-06,
+        "bfloat16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        4093,
+        4093,
+        "bfloat16"
+      ],
+      "original_pure_tiling_result": [
+        16,
+        512,
+        4096,
+        4096
+      ],
+      "id": "add_rms_norm_dynamic_quant_6",
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py"
+    },
+    {
+      "factory": "_kernel_impl",
+      "args": [
+        4093,
+        2053,
+        4096,
+        2560,
+        16,
+        512,
+        1e-06,
+        "float16"
+      ],
+      "kwargs": {},
+      "kind": "original_CLI_matrix",
+      "source_original_test": [
+        4093,
+        2053,
+        "float16"
+      ],
+      "original_pure_tiling_result": [
+        16,
+        512,
+        4096,
+        2560
+      ],
+      "id": "add_rms_norm_dynamic_quant_7",
+      "source_path": "examples/add_rms_norm_dynamic_quant/add_rms_norm_dynamic_quant.py"
+    },
+    {
+      "factory": "_dynamic_quant_kernel",
+      "args": [
+        1024,
+        512,
+        64,
+        512,
+        16
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "kind": "original_CLI_matrix",
+      "original_public_dispatch_request": {
+        "M": 1024,
+        "N": 512,
+        "dtype": "float16"
+      },
+      "id": "dynamic_quant_0",
+      "source_path": "examples/dynamic_quant/dynamic_quant.py"
+    },
+    {
+      "factory": "_dynamic_quant_kernel",
+      "args": [
+        1024,
+        128,
+        128,
+        128,
+        8
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "kind": "supplemental_original_dispatch_source_probe",
+      "original_public_dispatch_request": {
+        "M": 1024,
+        "N": 128,
+        "dtype": "float16"
+      },
+      "id": "dynamic_quant_1",
+      "source_path": "examples/dynamic_quant/dynamic_quant.py"
+    },
+    {
+      "factory": "_dynamic_quant_kernel",
+      "args": [
+        1024,
+        128,
+        128,
+        128,
+        8
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "kind": "supplemental_original_dispatch_source_probe",
+      "original_public_dispatch_request": {
+        "M": 1024,
+        "N": 128,
+        "dtype": "bfloat16"
+      },
+      "id": "dynamic_quant_2",
+      "source_path": "examples/dynamic_quant/dynamic_quant.py"
+    },
+    {
+      "factory": "_dynamic_quant_kernel",
+      "args": [
+        1024,
+        512,
+        64,
+        512,
+        16
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "kind": "supplemental_original_dispatch_source_probe",
+      "original_public_dispatch_request": {
+        "M": 1024,
+        "N": 512,
+        "dtype": "bfloat16"
+      },
+      "id": "dynamic_quant_3",
+      "source_path": "examples/dynamic_quant/dynamic_quant.py"
+    },
+    {
+      "factory": "_dynamic_quant_kernel",
+      "args": [
+        1024,
+        1024,
+        16,
+        1024,
+        64
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      },
+      "kind": "supplemental_original_dispatch_source_probe",
+      "original_public_dispatch_request": {
+        "M": 1024,
+        "N": 1024,
+        "dtype": "float16"
+      },
+      "id": "dynamic_quant_4",
+      "source_path": "examples/dynamic_quant/dynamic_quant.py"
+    },
+    {
+      "factory": "_dynamic_quant_kernel",
+      "args": [
+        1024,
+        1024,
+        16,
+        1024,
+        64
+      ],
+      "kwargs": {
+        "dtype": "bfloat16"
+      },
+      "kind": "supplemental_original_dispatch_source_probe",
+      "original_public_dispatch_request": {
+        "M": 1024,
+        "N": 1024,
+        "dtype": "bfloat16"
+      },
+      "id": "dynamic_quant_5",
+      "source_path": "examples/dynamic_quant/dynamic_quant.py"
+    },
+    {
+      "factory": "simple_quant_batch_matmul",
+      "args": [
+        8,
+        1024,
+        1024,
+        1024
+      ],
+      "kwargs": {
+        "scale_size": "1",
+        "block_M": 128,
+        "block_N": 256,
+        "block_K": 64
+      },
+      "kind": "original_CLI_matrix",
+      "id": "example_quant_batch_matmul_0",
+      "source_path": "examples/quant_batch_matmul/example_quant_batch_matmul.py"
+    },
+    {
+      "factory": "simple_quant_batch_matmul",
+      "args": [
+        8,
+        1024,
+        1024,
+        1024
+      ],
+      "kwargs": {
+        "scale_size": "N",
+        "block_M": 128,
+        "block_N": 256,
+        "block_K": 64,
+        "out_dtype": "bfloat16"
+      },
+      "kind": "original_CLI_matrix",
+      "id": "example_quant_batch_matmul_1",
+      "source_path": "examples/quant_batch_matmul/example_quant_batch_matmul.py"
+    },
+    {
+      "factory": "simple_quant_matmul",
+      "args": [
+        1024,
+        1024,
+        1024
+      ],
+      "kwargs": {
+        "scale_size": "1",
+        "block_M": 128,
+        "block_N": 256,
+        "block_K": 64,
+        "out_dtype": "bfloat16"
+      },
+      "kind": "original_CLI_matrix",
+      "id": "example_quant_matmul_0",
+      "source_path": "examples/quant_batch_matmul/example_quant_matmul.py"
+    },
+    {
+      "factory": "simple_quant_matmul",
+      "args": [
+        1024,
+        1024,
+        1024
+      ],
+      "kwargs": {
+        "scale_size": "N",
+        "block_M": 128,
+        "block_N": 256,
+        "block_K": 64
+      },
+      "kind": "original_CLI_matrix",
+      "id": "example_quant_matmul_1",
+      "source_path": "examples/quant_batch_matmul/example_quant_matmul.py"
     }
   ]
 }

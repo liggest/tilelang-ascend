@@ -114,7 +114,7 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
     monkeypatch.setattr(tilelang, "disable_cache", disable)
     monkeypatch.setattr(A2A3CythonKernelCache, "clear_cache", lambda *args: events.append("clear"))
 
-    class StopFactory(Exception):
+    class StopFactory(BaseException):
         pass
 
     def stop(*args, **kwargs):
@@ -127,7 +127,7 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
     if entry["source_runtime"].get("inputs_before_factory"):
         # Preserve original PTO allocations before factory construction; fail
         # at the first input boundary without allocating any device tensor.
-        monkeypatch.setattr(torch, "randn", stop)
+        monkeypatch.setattr(torch, entry["source_runtime"].get("input_constructor", "randn"), stop)
     before = CacheState.is_enabled()
     modes_before = torch.overrides._get_current_function_mode_stack()
     try:
