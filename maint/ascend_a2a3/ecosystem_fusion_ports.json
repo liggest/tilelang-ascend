@@ -1,0 +1,693 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "owner_scope": "F8 complete source assets, delivered in F1/F2/F3 components; candidate and source/SDK/device evidence remain separate.",
+  "entries": [
+    {
+      "source_path": "examples/simple_fusion/matmul_add.py",
+      "destination_path": "examples/ascend_a2a3/simple_fusion/matmul_add.py",
+      "source_sha256": "57290f8e4a576db50990f28e46eacc2b00358699c252679ac8ff94fea517c97c",
+      "destination_sha256": "4f95a9373d7f8ce445c4965207f1be8aa7ad7cbcd7c9c29a3413b41680ce7051",
+      "source_git_blob": "2d5c2725218316a4a1b1285648f59c5cb63fc12e",
+      "state": "implementation_candidate_source_and_SDK_verified_device_pending",
+      "original_factory_helper_decorator_AST_equal": true,
+      "adaptations": [
+        "Backend-private language import.",
+        "Original CLI/device/cache operations deferred to main; complete runtime loop and exit checks retained.",
+        "Original cache clear limited to explicit dedicated A2A3 cache after descriptor identity check; no global cache alias."
+      ],
+      "device_not_run": true
+    },
+    {
+      "source_path": "examples/simple_fusion/matmul_add_infer_scope.py",
+      "destination_path": "examples/ascend_a2a3/simple_fusion/matmul_add_infer_scope.py",
+      "source_sha256": "fb1b248f9d190ec5dab828b8763b6406ea4cd6d30f0980d6f409ed9a030d9858",
+      "destination_sha256": "ed1b7e7bacd7d2217ee2b6330d7cf9a4b22e3176d118de36f355f4eb58513af9",
+      "source_git_blob": "be6c4adbc3b53e213820be119936ccd2474d1a49",
+      "state": "implementation_candidate_source_and_SDK_verified_device_pending",
+      "original_factory_helper_decorator_AST_equal": true,
+      "adaptations": [
+        "Backend-private language import.",
+        "Original CLI/device/cache operations deferred to main; complete runtime loop and exit checks retained.",
+        "Original cache clear limited to explicit dedicated A2A3 cache after descriptor identity check; no global cache alias."
+      ],
+      "device_not_run": true
+    },
+    {
+      "source_path": "examples/tail_mask/example_tail_add.py",
+      "destination_path": "examples/ascend_a2a3/tail_mask/example_tail_add.py",
+      "source_sha256": "2172e10ecbb6f95d8a9ad1ba17d8cfbf15af20d8146429c97e0a4f249e1f8cd1",
+      "destination_sha256": "8e016863a5ef8d37691ea4061549a7aaf8d17f7386c679511aa3dcadd722f067",
+      "source_git_blob": "92a2968a0f7759cee83efa719d8d7799b3fa4bd8",
+      "state": "implementation_candidate_source_and_SDK_verified_device_pending",
+      "original_factory_helper_decorator_AST_equal": true,
+      "adaptations": [
+        "Backend-private language import.",
+        "Original CLI/device/cache operations deferred to main; complete runtime loop and exit checks retained.",
+        "Original cache clear limited to explicit dedicated A2A3 cache after descriptor identity check; no global cache alias."
+      ],
+      "device_not_run": true
+    },
+    {
+      "source_path": "examples/print/elementwise_print.py",
+      "destination_path": "examples/ascend_a2a3/print/elementwise_print.py",
+      "source_sha256": "82ca1a004aa67eb847129c74fb376e1cafce66a3c9a128797693f5ecb373f88d",
+      "destination_sha256": "8efbd0c5296bcbbfd07c537b99a08debd5c919694d87c754d1171bdce63e4962",
+      "source_git_blob": "ceb8b55816ded21699b1cbc4f15d76cbc55c0934",
+      "state": "implementation_candidate_source_and_SDK_verified_device_pending",
+      "original_factory_helper_decorator_AST_equal": true,
+      "adaptations": [
+        "Backend-private language import.",
+        "Original CLI/device/cache operations deferred to main; complete runtime loop and exit checks retained.",
+        "Original cache clear limited to explicit dedicated A2A3 cache after descriptor identity check; no global cache alias."
+      ],
+      "device_not_run": true
+    }
+  ],
+  "planned_unported_source_paths": [
+    "examples/mhc_post/example_mhc_post.py",
+    "examples/tile_kernels/mhc/head_compute_mix_kernel.py",
+    "examples/tile_kernels/moe/moe_aux_fi.py",
+    "examples/tile_kernels/moe/moe_topk_gate.py"
+  ],
+  "factory_requests": [
+    {
+      "id": "fusion_explicit_1024",
+      "source_path": "examples/simple_fusion/matmul_add.py",
+      "factory": "matmul_add",
+      "args": [
+        1024,
+        1024,
+        1024,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {}
+    },
+    {
+      "id": "fusion_infer_1024",
+      "source_path": "examples/simple_fusion/matmul_add_infer_scope.py",
+      "factory": "matmul_add",
+      "args": [
+        1024,
+        1024,
+        1024,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {}
+    },
+    {
+      "id": "tail_add_0",
+      "source_path": "examples/tail_mask/example_tail_add.py",
+      "factory": "tail_add",
+      "args": [
+        34,
+        130,
+        32,
+        32
+      ],
+      "kwargs": {
+        "dtype": "float"
+      }
+    },
+    {
+      "id": "tail_add_1",
+      "source_path": "examples/tail_mask/example_tail_add.py",
+      "factory": "tail_add",
+      "args": [
+        34,
+        130,
+        32,
+        32
+      ],
+      "kwargs": {
+        "dtype": "float16"
+      }
+    },
+    {
+      "id": "tail_add_2",
+      "source_path": "examples/tail_mask/example_tail_add.py",
+      "factory": "tail_add",
+      "args": [
+        100,
+        200,
+        64,
+        128
+      ],
+      "kwargs": {
+        "dtype": "float"
+      }
+    },
+    {
+      "id": "print_original_fixed_2_16",
+      "source_path": "examples/print/elementwise_print.py",
+      "factory": "bitwise_and",
+      "args": [
+        2,
+        16,
+        2,
+        16
+      ],
+      "kwargs": {}
+    }
+  ],
+  "validation": {
+    "F1_original_assets": 4,
+    "F1_original_CLI_factory_requests": 6,
+    "source_or_SDK_not_yet_verified": false,
+    "no_device_execution": true,
+    "print_example_has_original_final_bitwise_numeric_assertion": true,
+    "uninitialized_prewrite_dump_text_not_a_deterministic_golden": true,
+    "TA_complete_sources": 6,
+    "main_complete_sources": 6,
+    "TA_actual_Bisheng_compiles": 6,
+    "main_actual_Bisheng_compiles": 6,
+    "main_CompileConfig_schema": "full frozen dataclass",
+    "TA_compile_identity_schema": "legacy constructor target/platform/resolved flags; fixed process SDK/header/cwd context; actual argv separately archived",
+    "diagnostic_printf_escaping_difference_pending": false,
+    "main_actual_Bisheng_compiles_including_print_correction": 7,
+    "printf_escaping_fixed_by_required_dependency": "cd35c7a0",
+    "source_evidence_directory": "refactor_main/reports/p3_fusion_F1",
+    "corrected_print_source_SDK": "refactor_main/reports/p3_printf_contract/main_original_F1",
+    "focused_ON": "18 passed",
+    "actual_OFF": "12 passed, 6 skipped",
+    "device_gate": "pending separately authorized original four CLI/six input execution"
+  },
+  "source_contracts": [
+    {
+      "id": "fusion_explicit_1024",
+      "frontend_params": [
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "1024",
+            "1024"
+          ]
+        },
+        {
+          "name": "B_handle",
+          "dtype": "float16",
+          "shape": [
+            "1024",
+            "1024"
+          ]
+        },
+        {
+          "name": "C_handle",
+          "dtype": "float16",
+          "shape": [
+            "1024",
+            "1024"
+          ]
+        },
+        {
+          "name": "D_handle",
+          "dtype": "float16",
+          "shape": [
+            "1024",
+            "1024"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 21,
+        "tir.call_extern": 6,
+        "tl.ascend_pipe_barrier": 4,
+        "tl.ascend_gemm_v0": 2,
+        "tl.ascend_set_cross_flag": 1,
+        "tl.ascend_wait_cross_flag": 1,
+        "tl.ascend_set_mask_mode": 1,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_set_mask_payload": 1,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "A_L1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "0"
+        ],
+        [
+          "B_L1",
+          "ascend_l1",
+          "half",
+          "16384",
+          "16384"
+        ],
+        [
+          "C_L0",
+          "ascend_l0c",
+          "float",
+          "32768",
+          "0"
+        ],
+        [
+          "c_ub",
+          "ascend_ub",
+          "half",
+          "16384",
+          "0"
+        ],
+        [
+          "d_ub",
+          "ascend_ub",
+          "half",
+          "16384",
+          "32768"
+        ]
+      ],
+      "host_prototype": "uint8_t* A_handle, uint8_t* B_handle, uint8_t* C_handle, uint8_t* D_handle, aclrtStream stream",
+      "main_source_sha256": "cd6cce9236e5d939693a08762821dc18ecf20e95fb681aa64c5dad5fedef6c2d",
+      "TA_source_sha256": "6703ac457efed33986db17fe2e2d48566169f3df9d32d996ffeaa0b4e2886032",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {},
+      "main_effective_configs": {},
+      "original_compile_flags": null
+    },
+    {
+      "id": "fusion_infer_1024",
+      "frontend_params": [
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "1024",
+            "1024"
+          ]
+        },
+        {
+          "name": "B_handle",
+          "dtype": "float16",
+          "shape": [
+            "1024",
+            "1024"
+          ]
+        },
+        {
+          "name": "C_handle",
+          "dtype": "float16",
+          "shape": [
+            "1024",
+            "1024"
+          ]
+        },
+        {
+          "name": "D_handle",
+          "dtype": "float16",
+          "shape": [
+            "1024",
+            "1024"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 21,
+        "tir.call_extern": 6,
+        "tl.ascend_pipe_barrier": 4,
+        "tl.ascend_gemm_v0": 2,
+        "tl.ascend_set_cross_flag": 1,
+        "tl.ascend_wait_cross_flag": 1,
+        "tl.ascend_set_mask_mode": 1,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_set_mask_payload": 1,
+        "tl.ascend_add_raw": 1
+      },
+      "allocation_views": [
+        [
+          "A_L1",
+          "ascend_l1",
+          "half",
+          "8192",
+          "0"
+        ],
+        [
+          "B_L1",
+          "ascend_l1",
+          "half",
+          "16384",
+          "16384"
+        ],
+        [
+          "C_L0",
+          "ascend_l0c",
+          "float",
+          "32768",
+          "0"
+        ],
+        [
+          "c_ub",
+          "ascend_ub",
+          "half",
+          "16384",
+          "0"
+        ],
+        [
+          "d_ub",
+          "ascend_ub",
+          "half",
+          "16384",
+          "32768"
+        ]
+      ],
+      "host_prototype": "uint8_t* A_handle, uint8_t* B_handle, uint8_t* C_handle, uint8_t* D_handle, aclrtStream stream",
+      "main_source_sha256": "cd6cce9236e5d939693a08762821dc18ecf20e95fb681aa64c5dad5fedef6c2d",
+      "TA_source_sha256": "6703ac457efed33986db17fe2e2d48566169f3df9d32d996ffeaa0b4e2886032",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {},
+      "main_effective_configs": {},
+      "original_compile_flags": null
+    },
+    {
+      "id": "tail_add_0",
+      "frontend_params": [
+        {
+          "name": "A_handle",
+          "dtype": "float32",
+          "shape": [
+            "34",
+            "130"
+          ]
+        },
+        {
+          "name": "B_handle",
+          "dtype": "float32",
+          "shape": [
+            "34",
+            "130"
+          ]
+        },
+        {
+          "name": "C_handle",
+          "dtype": "float32",
+          "shape": [
+            "34",
+            "130"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tir.type_annotation": 9,
+        "tir.tvm_access_ptr": 9,
+        "tir.call_extern": 3,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 1,
+        "tir.large_uint_imm": 1,
+        "tl.ascend_set_mask_payload": 1,
+        "tl.ascend_tail_binary_composite": 1
+      },
+      "allocation_views": [
+        [
+          "a_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "0"
+        ],
+        [
+          "b_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "4096"
+        ],
+        [
+          "c_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "8192"
+        ]
+      ],
+      "host_prototype": "uint8_t* A_handle, uint8_t* B_handle, uint8_t* C_handle, aclrtStream stream",
+      "main_source_sha256": "ed1e923f5f1548974d3e1c422b7e464871eae286f1a85a5da8ee944d811c50f7",
+      "TA_source_sha256": "de7ff5ebcbc62a1f853100c22a1d042f787bc86d466e265db3a71003670add8a",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cross_core_sync": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cross_core_sync": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "tail_add_1",
+      "frontend_params": [
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "34",
+            "130"
+          ]
+        },
+        {
+          "name": "B_handle",
+          "dtype": "float16",
+          "shape": [
+            "34",
+            "130"
+          ]
+        },
+        {
+          "name": "C_handle",
+          "dtype": "float16",
+          "shape": [
+            "34",
+            "130"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tir.type_annotation": 9,
+        "tir.tvm_access_ptr": 9,
+        "tir.call_extern": 3,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 1,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_set_mask_payload": 1,
+        "tl.ascend_tail_binary_composite": 1
+      },
+      "allocation_views": [
+        [
+          "a_ub",
+          "ascend_ub",
+          "half",
+          "1024",
+          "0"
+        ],
+        [
+          "b_ub",
+          "ascend_ub",
+          "half",
+          "1024",
+          "2048"
+        ],
+        [
+          "c_ub",
+          "ascend_ub",
+          "half",
+          "1024",
+          "4096"
+        ]
+      ],
+      "host_prototype": "uint8_t* A_handle, uint8_t* B_handle, uint8_t* C_handle, aclrtStream stream",
+      "main_source_sha256": "f2d394d34581bc56d203fc96117f2e2a502e3d28f64670a4b0935870a81d612b",
+      "TA_source_sha256": "1433eff7cd80085632a9a0687c8d877889ff27545d14695148d93820a5000b23",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cross_core_sync": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cross_core_sync": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "tail_add_2",
+      "frontend_params": [
+        {
+          "name": "A_handle",
+          "dtype": "float32",
+          "shape": [
+            "100",
+            "200"
+          ]
+        },
+        {
+          "name": "B_handle",
+          "dtype": "float32",
+          "shape": [
+            "100",
+            "200"
+          ]
+        },
+        {
+          "name": "C_handle",
+          "dtype": "float32",
+          "shape": [
+            "100",
+            "200"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tir.type_annotation": 9,
+        "tir.tvm_access_ptr": 9,
+        "tir.call_extern": 3,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 1,
+        "tir.large_uint_imm": 1,
+        "tl.ascend_set_mask_payload": 1,
+        "tl.ascend_tail_binary_composite": 1
+      },
+      "allocation_views": [
+        [
+          "a_ub",
+          "ascend_ub",
+          "float",
+          "8192",
+          "0"
+        ],
+        [
+          "b_ub",
+          "ascend_ub",
+          "float",
+          "8192",
+          "32768"
+        ],
+        [
+          "c_ub",
+          "ascend_ub",
+          "float",
+          "8192",
+          "65536"
+        ]
+      ],
+      "host_prototype": "uint8_t* A_handle, uint8_t* B_handle, uint8_t* C_handle, aclrtStream stream",
+      "main_source_sha256": "6018561ccd8e26d1eedfd4d77c0cd326a71574a7d7e383a1693e4fa1b6e0e584",
+      "TA_source_sha256": "d13289a4757e76c16a448a952358176a41d898fef902c02e94f5269f14cddd11",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cross_core_sync": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cross_core_sync": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "print_original_fixed_2_16",
+      "frontend_params": [
+        {
+          "name": "A_handle",
+          "dtype": "int16",
+          "shape": [
+            "2",
+            "16"
+          ]
+        },
+        {
+          "name": "B_handle",
+          "dtype": "int16",
+          "shape": [
+            "2",
+            "16"
+          ]
+        },
+        {
+          "name": "C_handle",
+          "dtype": "int16",
+          "shape": [
+            "2",
+            "16"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_printf": 8,
+        "tir.type_annotation": 16,
+        "tir.tvm_access_ptr": 16,
+        "tl.ascend_dump_tensor": 7,
+        "tir.call_extern": 3,
+        "tl.ascend_pipe_barrier": 4,
+        "tl.ascend_set_mask_mode": 1,
+        "tl.ascend_set_mask_payload": 1,
+        "tl.ascend_bitwise_and_raw": 1
+      },
+      "allocation_views": [
+        [
+          "a_ub",
+          "ascend_ub",
+          "int16_t",
+          "16",
+          "32"
+        ],
+        [
+          "b_ub",
+          "ascend_ub",
+          "int16_t",
+          "16",
+          "64"
+        ],
+        [
+          "c_ub",
+          "ascend_ub",
+          "int16_t",
+          "16",
+          "0"
+        ]
+      ],
+      "host_prototype": "uint8_t* A_handle, uint8_t* B_handle, uint8_t* C_handle, aclrtStream stream",
+      "main_source_sha256": "def11a736ba841230c07f9f255e1730cbf172bcd089682b09304044303623300",
+      "TA_source_sha256": "a93e612b36b7830c75675f71f802cbfe1de526e7ed20212ac33b0981918c71a0",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {},
+      "main_effective_configs": {},
+      "original_compile_flags": [
+        "-D_DEBUG",
+        "--cce-enable-print"
+      ],
+      "main_pre_printf_fix_source_sha256": "ae8b78d125d537bc1a2f1a511b50ce1a8821c7e37cc5f11eec8b57625d37cff9",
+      "printf_source_lines_equal_TA_after_required_dependency": true
+    }
+  ],
+  "required_dependency_commits": {
+    "printf_private_StringImm_fix": "cd35c7a0"
+  }
+}
