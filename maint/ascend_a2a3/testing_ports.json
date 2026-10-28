@@ -540,6 +540,48 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/test_ascend_sync_insert.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_ascend_sync_insert.py",
+      "source_git_blob": "2199e20a1d17bb8364448f682c556ea22353855f",
+      "source_sha256": "adf950cd448b93602c5bfc823821d89286137c0c03273d6d26e3ea81ed193799",
+      "destination_sha256": "6f738832713cb3f003c70b4bf609d23c8a3a18b06ab0124d4578c0dd18a84bc0",
+      "adaptations": [
+        "Complete source module and all original cases/assertions preserved; explicit backend-private transform factory and adopted helper namespace.",
+        "Necessary raw TIRX fixture changes: nested true Allocate lifetime becomes reverse-order AllocBuffer lexical declarations; Let wrapper becomes same-scope Bind sequence; external address/size metadata uses equivalent typed IntImm values.",
+        "Equivalent c target dictionary replaces removed old CLI parser syntax; retain original raw-pass target fields and explicit A3 platform. No runtime/backend routing contract is changed."
+      ],
+      "validation": {
+        "ON_original_host_cases_across_package": 36,
+        "original_TA_host_cases_across_package": 36,
+        "OFF_original_native_skips_across_package": 36,
+        "all_original_expectations_retained": true,
+        "device_execution": false,
+        "SDK_compilation": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/language/test_ascend_sync_insert_one_trip.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_ascend_sync_insert_one_trip.py",
+      "source_git_blob": "9e342d4f42c1d07329f4b78adae74ea7868cfe33",
+      "source_sha256": "cbf6ed0ea77f39459068f8a53b31cdd08f08cc6ec7487783599b28459524b35c",
+      "destination_sha256": "771bd5cd48c390576f1f72b66474b590374b79db9dbdca6f2814a998c4848e4d",
+      "adaptations": [
+        "Complete source module and all original cases/assertions preserved; explicit backend-private transform factory and adopted helper namespace.",
+        "Necessary raw TIRX fixture changes: nested true Allocate lifetime becomes reverse-order AllocBuffer lexical declarations; Let wrapper becomes same-scope Bind sequence; external address/size metadata uses equivalent typed IntImm values.",
+        "Equivalent c target dictionary replaces removed old CLI parser syntax; retain original raw-pass target fields and explicit A3 platform. No runtime/backend routing contract is changed."
+      ],
+      "validation": {
+        "ON_original_host_cases_across_package": 36,
+        "original_TA_host_cases_across_package": 36,
+        "OFF_original_native_skips_across_package": 36,
+        "all_original_expectations_retained": true,
+        "device_execution": false,
+        "SDK_compilation": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
