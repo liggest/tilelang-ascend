@@ -358,7 +358,7 @@
       "source_sha256": "3b472be46e7a30ab155dac7650ac298b1fbbbe810f670124d0d9962edfd26c78",
       "source_git_blob": "ec088dd091cfca44b48b4c7872847b063afd5ab4",
       "destination_sha256": "ab51e27535743efd0e903ab4a422001179de92855ba35e007add75bf9bcbb3aa",
-      "state": "complete_composition_source_actual_SDK_verified_device_pending",
+      "state": "complete_composition_original_default_paired_device_verified",
       "original_definition_AST_sha256": {
         "ref_seq_gdn": "c7f34ecd2726bbcfd232602b2ed44db14f440669219db8be8fa079fedd32d871",
         "ref_chunk_gdn": "b0232054769bff8c3696eb574dfbfe54fc82dcf9fe816f6bee1ff9fe459659b3",
@@ -398,12 +398,42 @@
         "gdn.gdn_solve_tril",
         "gdn.gdn_wy_fast"
       ],
-      "device_not_run": true,
+      "device_not_run": false,
       "adaptations": [
         "exact sibling file imports under private nonregistered module names; no fallback to foreign gdn, no sys.path/sys.modules mutation",
         "complete original top-level CLI moved into inert state-restoring main with original single clear adapted to task-owned backend singleton",
         "source CRLF/tab formatting normalized without definition or CLI AST changes"
-      ]
+      ],
+      "paired_original_default_device_validation": {
+        "source_HEAD": "c05b72fa164bfc5e50fc1f6d999b0b389cb7b91c",
+        "selected_physical": 2,
+        "visible_device": 0,
+        "original_flags_seed_shapes_and_tolerances_unchanged": true,
+        "frameworks": [
+          "TA",
+          "main"
+        ],
+        "actual_SDK_each_framework": 6,
+        "actual_TileLang_runtime_each_framework": 6,
+        "rtol": 0.001,
+        "atol": 0.001,
+        "complete_original_default_CLI_passed_each_framework": true,
+        "paired_actual_CPU_inputs_outputs_references_raw_equal": true,
+        "independent_full_CPU_reference_passed": true,
+        "CPU_reference_adaptation": "Remove exactly three new-allocation .npu() transfers; full remaining original function AST and full default shapes preserved.",
+        "window_released_READY_consumed": true,
+        "root_review": {
+          "path": "refactor_main/reports/p3_GDN_root_runner_review/v3/root_device_review.json",
+          "sha256": "4af91d66e6093a09c88ff3a0cd910d0be0cd6860aa22f1c9bbd1c1ec916b6cd3"
+        },
+        "immutable_evidence_index": {
+          "path": "refactor_main/reports/p3_GDN_root_runner_review/v3/root_immutable_index.json",
+          "sha256": "5a17e4cbeac35fe33491b01b00a557625893bd559b9da7e1050daa0b1803951c"
+        },
+        "full_original_leaf_CLI_matrices_or_other_dispatches_tested": false,
+        "full_CI_or_performance_claim": false,
+        "original_assertions_each_framework": 2
+      }
     },
     {
       "component": "G4",
@@ -760,7 +790,7 @@
       "source_sha256": "970940e446222225a7ad6c8ba53358e8ac9cafa94da9c8e655bd0e27997774e7",
       "source_git_blob": "259812d229393a7d8cb94bcc35de0962c3f9c709",
       "destination_sha256": "efd760551ab7f779ecce1e4b43967ac7bcb446dd30bcfe6318957d1e74355b72",
-      "state": "complete_composition_source_actual_SDK_verified_device_pending",
+      "state": "complete_composition_original_default_paired_device_verified",
       "original_definition_AST_sha256": {
         "ref_seq_gdn": "c7f34ecd2726bbcfd232602b2ed44db14f440669219db8be8fa079fedd32d871"
       },
@@ -798,12 +828,42 @@
         "opt_gdn.opt_gdn_solve_tril",
         "opt_gdn.opt_gdn_wy_fast"
       ],
-      "device_not_run": true,
+      "device_not_run": false,
       "adaptations": [
         "exact sibling file imports under private nonregistered module names; no fallback to foreign gdn, no sys.path/sys.modules mutation",
         "complete original top-level CLI moved into inert state-restoring main with original single clear adapted to task-owned backend singleton",
         "source CRLF/tab formatting normalized without definition or CLI AST changes"
-      ]
+      ],
+      "paired_original_default_device_validation": {
+        "source_HEAD": "c05b72fa164bfc5e50fc1f6d999b0b389cb7b91c",
+        "selected_physical": 2,
+        "visible_device": 0,
+        "original_flags_seed_shapes_and_tolerances_unchanged": true,
+        "frameworks": [
+          "TA",
+          "main"
+        ],
+        "actual_SDK_each_framework": 6,
+        "actual_TileLang_runtime_each_framework": 6,
+        "rtol": 0.001,
+        "atol": 0.001,
+        "complete_original_default_CLI_passed_each_framework": true,
+        "paired_actual_CPU_inputs_outputs_references_raw_equal": true,
+        "independent_full_CPU_reference_passed": true,
+        "CPU_reference_adaptation": "Remove exactly three new-allocation .npu() transfers; full remaining original function AST and full default shapes preserved.",
+        "window_released_READY_consumed": true,
+        "root_review": {
+          "path": "refactor_main/reports/p3_GDN_root_runner_review/v3/root_device_review.json",
+          "sha256": "4af91d66e6093a09c88ff3a0cd910d0be0cd6860aa22f1c9bbd1c1ec916b6cd3"
+        },
+        "immutable_evidence_index": {
+          "path": "refactor_main/reports/p3_GDN_root_runner_review/v3/root_immutable_index.json",
+          "sha256": "5a17e4cbeac35fe33491b01b00a557625893bd559b9da7e1050daa0b1803951c"
+        },
+        "full_original_leaf_CLI_matrices_or_other_dispatches_tested": false,
+        "full_CI_or_performance_claim": false,
+        "original_assertions_each_framework": 1
+      }
     }
   ],
   "factory_requests": [
@@ -1279,7 +1339,7 @@
       "proof_of_original_TA_chunk_alpha_frontend_and_final_structural_equal": "refactor_main/reports/p3_gdn_G2_alpha/TA_proof/proof.json"
     },
     "standard_leaves_ported_candidate": 6,
-    "composed_standard_and_opt_GDN_pipeline_pending": true,
+    "composed_standard_and_opt_GDN_pipeline_pending": false,
     "G3": {
       "original_complete_composition_definitions": 3,
       "original_leaf_dependencies": 6,
@@ -1402,8 +1462,46 @@
       "source_SDK_repeated_during_host_followup": false
     },
     "all_sixteen_GDN_source_assets_complete_candidate": true,
-    "composed_standard_and_opt_GDN_pending_scope": "device/numerical validation only as of G6; all source assets and default source/SDK migrations are represented",
-    "all_original_GDN_device_validation_pending": true
+    "composed_standard_and_opt_GDN_pending_scope": "Both complete original default CLI compositions pass paired TA/main device validation. Remaining standalone leaf CLI matrices, optimized C32/C64 branches, full CI and performance are outside this result.",
+    "all_original_GDN_device_validation_pending": false,
+    "G1_through_G6_records_scope": "Historical source/SDK/host observations at each source-package delivery; later original-default device evidence is separately recorded on the two complete composition entries and in paired_composition_defaults.",
+    "all_original_GDN_device_validation_complete": false,
+    "paired_composition_defaults": {
+      "source_HEAD": "c05b72fa164bfc5e50fc1f6d999b0b389cb7b91c",
+      "selected_physical": 2,
+      "visible_device": 0,
+      "original_flags_seed_shapes_and_tolerances_unchanged": true,
+      "frameworks": [
+        "TA",
+        "main"
+      ],
+      "actual_SDK_each_framework": 12,
+      "actual_TileLang_runtime_each_framework": 12,
+      "rtol": 0.001,
+      "atol": 0.001,
+      "complete_original_default_CLI_passed_each_framework": true,
+      "paired_actual_CPU_inputs_outputs_references_raw_equal": true,
+      "independent_full_CPU_reference_passed": true,
+      "CPU_reference_adaptation": "Remove exactly three new-allocation .npu() transfers; full remaining original function AST and full default shapes preserved.",
+      "window_released_READY_consumed": true,
+      "root_review": {
+        "path": "refactor_main/reports/p3_GDN_root_runner_review/v3/root_device_review.json",
+        "sha256": "4af91d66e6093a09c88ff3a0cd910d0be0cd6860aa22f1c9bbd1c1ec916b6cd3"
+      },
+      "immutable_evidence_index": {
+        "path": "refactor_main/reports/p3_GDN_root_runner_review/v3/root_immutable_index.json",
+        "sha256": "5a17e4cbeac35fe33491b01b00a557625893bd559b9da7e1050daa0b1803951c"
+      },
+      "full_original_leaf_CLI_matrices_or_other_dispatches_tested": false,
+      "full_CI_or_performance_claim": false,
+      "original_complete_CLIs_each_framework": 2,
+      "original_assertions_each_framework": 3,
+      "independent_actual_CPU_tensors_reloaded": 30,
+      "raw_equal_paired_tensors": 15,
+      "independent_original_Torch_and_NumPy_gate_replays": 6,
+      "independent_full_CPU_reference_comparisons": 10,
+      "immutable_root_evidence_files": 247
+    }
   },
   "source_contracts": [
     {
