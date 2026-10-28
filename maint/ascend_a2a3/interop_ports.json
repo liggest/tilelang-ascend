@@ -199,6 +199,84 @@
         "TA parameter dtype reports torch.dtype spelling while main reports native dtype spelling; compare canonical names explicitly."
       ],
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/cann-bench/gru/gru.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/gru/gru.py",
+      "source_git_blob": "d302442e1f7a44ab7d987bb9f5b79e647c4e35df",
+      "source_sha256": "e38284b7b48f48361dd45a395520a78199bbcd329e5e8fbbdb6aff59103591aa",
+      "destination_sha256": "e6534f1c83ca0dc9ac53732e1da7a4d0359053a29914c45e06daba20f7abd4a6",
+      "adaptations": [
+        "Preserve both complete original GRU modules, all eight real factories, 42 original function/class definitions, build_inputs/golden/precision tables, all scalar/list optional inputs, L0 six/L1 twenty/Boundary nine, four original illegal inputs, three same-input repeats, original standalone and original CLI seed/disable_cache/blocking/exit rules. Use private A2/A3 language.",
+        "Load the actual sibling without caller sys.path mutation; per-level fixture uses a fresh complete real module namespace and restores aliases/caches. Defer genuine TorchNPU registration to explicit CLI after --help parsing; no import-time launch.",
+        "Source observation only: execute genuine public factories/SDK/JIT memo and intercept actual JITKernel void runtime entries with a dedicated sentinel. Only ignored source-driver Expr boundaries catch it; product algorithms have no catch/fake output. Keep original device tests pending."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_explicit_import_main_and_fixture_inverse": true,
+        "original_function_class_count": 22,
+        "original_source_entries_per_side": 36,
+        "original_factory_requests_per_side": 207,
+        "original_void_runtime_boundaries_observed_per_side": 211,
+        "actual_source_lower_and_ELF_groups_per_side": 127,
+        "original_decorator_memo_references_per_side": 80,
+        "all_eight_original_factories_covered": true,
+        "paired_host_prototypes_and_canonical_parameter_shapes_types_equal": true,
+        "all_1853_ordered_sync_tokens_owner_guards_payload_anchors_equal_per_side": true,
+        "all_allocation_dtype_count_offset_and_arena_capacity_fields_equal_and_in_capacity": true,
+        "added_unused_int32_declarations_proven_bounded": 624,
+        "added_unused_int32_largest_intermediate_under_declared_domains": 3184,
+        "original_negative_inputs_same_exact_type_message_before_compile": 4,
+        "source_host_companion_pytests_passed": 138,
+        "actual_OFF_pure_host_pytests_passed": 11,
+        "actual_OFF_native_device_pytests_skipped": 131,
+        "original_device_functions_deselected_in_ON_run": 4,
+        "TorchNPU_context_initialization_or_NPU_runtime_calls": false,
+        "original_device_numerics_deadlock_and_performance_validated": false
+      },
+      "source_differences": [
+        "Complete generated C++ differences retained: private include path, lexical loop binder naming, allocation-declaration reordering, and unused pure integer bindings. Device operations and their guards/ordered synchronization match after only justified For-binder alpha normalization.",
+        "127 JIT keys must remain distinct: one pair has identical C++ and compiler options but different retained Y_out logical parameter shape. Do not collapse the fixture to126 solely by source bytes."
+      ],
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/cann-bench/gru/test_gru.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/gru/test_gru.py",
+      "source_git_blob": "ea2e1cc8fd6d29eb77da4641697313428ae5f358",
+      "source_sha256": "c669ee790997921f4c9515b3ac36454c4430b5e08d478c6c0d39c052ca136e41",
+      "destination_sha256": "9af3a3b24f79f378f84117d68690c91de435f9f9b04b78159bffdd6183bbc700",
+      "adaptations": [
+        "Preserve both complete original GRU modules, all eight real factories, 42 original function/class definitions, build_inputs/golden/precision tables, all scalar/list optional inputs, L0 six/L1 twenty/Boundary nine, four original illegal inputs, three same-input repeats, original standalone and original CLI seed/disable_cache/blocking/exit rules. Use private A2/A3 language.",
+        "Load the actual sibling without caller sys.path mutation; per-level fixture uses a fresh complete real module namespace and restores aliases/caches. Defer genuine TorchNPU registration to explicit CLI after --help parsing; no import-time launch.",
+        "Source observation only: execute genuine public factories/SDK/JIT memo and intercept actual JITKernel void runtime entries with a dedicated sentinel. Only ignored source-driver Expr boundaries catch it; product algorithms have no catch/fake output. Keep original device tests pending."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_explicit_import_main_and_fixture_inverse": true,
+        "original_function_class_count": 20,
+        "original_source_entries_per_side": 36,
+        "original_factory_requests_per_side": 207,
+        "original_void_runtime_boundaries_observed_per_side": 211,
+        "actual_source_lower_and_ELF_groups_per_side": 127,
+        "original_decorator_memo_references_per_side": 80,
+        "all_eight_original_factories_covered": true,
+        "paired_host_prototypes_and_canonical_parameter_shapes_types_equal": true,
+        "all_1853_ordered_sync_tokens_owner_guards_payload_anchors_equal_per_side": true,
+        "all_allocation_dtype_count_offset_and_arena_capacity_fields_equal_and_in_capacity": true,
+        "added_unused_int32_declarations_proven_bounded": 624,
+        "added_unused_int32_largest_intermediate_under_declared_domains": 3184,
+        "original_negative_inputs_same_exact_type_message_before_compile": 4,
+        "source_host_companion_pytests_passed": 138,
+        "actual_OFF_pure_host_pytests_passed": 11,
+        "actual_OFF_native_device_pytests_skipped": 131,
+        "original_device_functions_deselected_in_ON_run": 4,
+        "TorchNPU_context_initialization_or_NPU_runtime_calls": false,
+        "original_device_numerics_deadlock_and_performance_validated": false
+      },
+      "source_differences": [
+        "Complete generated C++ differences retained: private include path, lexical loop binder naming, allocation-declaration reordering, and unused pure integer bindings. Device operations and their guards/ordered synchronization match after only justified For-binder alpha normalization.",
+        "127 JIT keys must remain distinct: one pair has identical C++ and compiler options but different retained Y_out logical parameter shape. Do not collapse the fixture to126 solely by source bytes."
+      ],
+      "all_original_cases_retained": true
     }
   ]
 }
