@@ -1,0 +1,436 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "owner_scope": "three complete regular sparse GQA default examples with inline reference; no external sfa_golden dependency",
+  "entries": [
+    {
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_gqa.py",
+      "destination_path": "examples/ascend_a2a3/sparse_flash_attention/example_sparse_flash_attn_gqa.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "4e41c7bdc619fa8deffcd338346c0c8f0cb035fa0720b88da5a4b1407c1a410c",
+      "source_git_blob": "fa2a15c5857fd984fa11bab1fe3448880a7eaeed",
+      "destination_sha256": "1e1ce4b8ed4ae8492e5fe9487a81711ed0e02230bc53d161a939d0fb89883a83",
+      "state": "complete_source_SDK_candidate_device_pending",
+      "original_definition_AST_sha256": {
+        "sparse_attention_fwd": "09b75f06ff90266bac863cf7dbbb14ea486daeb035204acafaea8f976f1d3d85",
+        "ref_sparse_attention_fwd_interface_gqa": "21bdbecc3dc6341bdf5d8301d856f4e13f926bf546509d4329397fbbc5db5091"
+      },
+      "original_executable_CLI_AST_sha256": "62fa7275feb7aeda0cefeda68eeb51914a47229ba8a791b6c7e3998eaafd13e0",
+      "device_setter_original_CLI_index": 0,
+      "original_full_CLI_default": {
+        "B": 2,
+        "S": 273,
+        "SKV": 44444,
+        "H_Q": 64,
+        "H_KV": 4,
+        "DIM": 128,
+        "topk": 2048,
+        "KV_stride": 1,
+        "q_start_s_index": 28672
+      },
+      "original_seed": 0,
+      "original_target": "auto",
+      "original_out_idx": [
+        3
+      ],
+      "original_workspace_idx": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "original_golden_tolerances": {
+        "rtol": 0.01,
+        "atol": 0.01
+      },
+      "original_runtime_calls": 1,
+      "original_golden_assertions": 1,
+      "original_success_marker": "Test Passed!",
+      "original_disable_cache_calls": 1,
+      "original_set_default_device": "npu",
+      "original_caller_zero_workspace_count": 0,
+      "original_unused_preallocated_output_preserved": false,
+      "original_factory": "sparse_attention_fwd",
+      "reference_free_CLI_globals": {
+        "sparse_attention_fwd": [],
+        "ref_sparse_attention_fwd_interface_gqa": []
+      },
+      "dynamic_symbol_names": [
+        "batch",
+        "seq_len",
+        "seq_len_kv"
+      ],
+      "expected_workspace_leading_dim": 2184,
+      "adaptations": [
+        "private A2A3 language import, exact original kernel/ref definitions unchanged",
+        "entire original top-level executable sequence moved to main preserving order; only global default-device setter becomes scoped torch.device(npu)",
+        "original disable_cache remains once; raw caller CacheState restored in finally; no clear/cache alias or new workspace allocation",
+        "public reference binding wraps original body/signature in q.device context to replace the original global default-device dependency"
+      ],
+      "device_not_run": true,
+      "actual_adapter_ABI": {
+        "C_abi": "uint8_t* Q_handle, uint8_t* KV_handle, uint8_t* Indices_handle, uint8_t* Output_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* workspace_3_handle, uint8_t* workspace_4_handle, int64_t batch, int64_t seq_len, int64_t seq_len_kv, aclrtStream stream",
+        "dynamic_symbolic_map": [
+          {
+            "symbol": "batch",
+            "source": [
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "symbol": "seq_len",
+            "source": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "symbol": "seq_len_kv",
+            "source": [
+              0,
+              1,
+              1,
+              1
+            ]
+          }
+        ],
+        "automatic_indices": [
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "workspace_idx": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "auto_gm_idx": []
+      }
+    },
+    {
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_gqa_pto.py",
+      "destination_path": "examples/ascend_a2a3/sparse_flash_attention/example_sparse_flash_attn_gqa_pto.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "165c2003a7319b8c5607258fafccb16076e5e39f617f34ce100809c11863dffa",
+      "source_git_blob": "02d9ca0b0ab0bb4f1e8849f6ec3acde3f5b51ae8",
+      "destination_sha256": "47396ceed7aec072c70843d41942c9921b1fbb12c204e6deba1a3366d0376d45",
+      "state": "complete_source_SDK_candidate_device_pending",
+      "original_definition_AST_sha256": {
+        "sparse_attention_fwd": "b656804e815479e2863f5b5650efca8ead9883fbe65d8c06c4e8be477fc8d32e",
+        "ref_sparse_attention_fwd_interface_gqa": "21bdbecc3dc6341bdf5d8301d856f4e13f926bf546509d4329397fbbc5db5091"
+      },
+      "original_executable_CLI_AST_sha256": "056a3942ff9f9e3e1b008dcb3189bf6f71f8244b1822ef87b286707333a158a1",
+      "device_setter_original_CLI_index": 0,
+      "original_full_CLI_default": {
+        "B": 2,
+        "S": 273,
+        "SKV": 44444,
+        "H_Q": 64,
+        "H_KV": 4,
+        "DIM": 128,
+        "topk": 2048,
+        "KV_stride": 1,
+        "q_start_s_index": 28672
+      },
+      "original_seed": 42,
+      "original_target": "pto",
+      "original_out_idx": [
+        3
+      ],
+      "original_workspace_idx": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "original_golden_tolerances": {
+        "rtol": 0.01,
+        "atol": 0.01
+      },
+      "original_runtime_calls": 1,
+      "original_golden_assertions": 1,
+      "original_success_marker": "Test Passed!",
+      "original_disable_cache_calls": 1,
+      "original_set_default_device": "npu",
+      "original_caller_zero_workspace_count": 0,
+      "original_unused_preallocated_output_preserved": false,
+      "original_factory": "sparse_attention_fwd",
+      "reference_free_CLI_globals": {
+        "sparse_attention_fwd": [],
+        "ref_sparse_attention_fwd_interface_gqa": []
+      },
+      "dynamic_symbol_names": [
+        "batch",
+        "seq_len",
+        "seq_len_kv"
+      ],
+      "expected_workspace_leading_dim": 2184,
+      "adaptations": [
+        "private A2A3 language import, exact original kernel/ref definitions unchanged",
+        "entire original top-level executable sequence moved to main preserving order; only global default-device setter becomes scoped torch.device(npu)",
+        "original disable_cache remains once; raw caller CacheState restored in finally; no clear/cache alias or new workspace allocation",
+        "public reference binding wraps original body/signature in q.device context to replace the original global default-device dependency"
+      ],
+      "device_not_run": true,
+      "actual_adapter_ABI": {
+        "C_abi": "uint8_t *Q_handle, uint8_t *KV_handle, uint8_t *Indices_handle, uint8_t *Output_handle, uint8_t *workspace_1_handle, uint8_t *workspace_2_handle, uint8_t *workspace_3_handle, uint8_t *workspace_4_handle, int64_t batch, int64_t seq_len, int64_t seq_len_kv, void *stream",
+        "dynamic_symbolic_map": [
+          {
+            "symbol": "batch",
+            "source": [
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "symbol": "seq_len",
+            "source": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "symbol": "seq_len_kv",
+            "source": [
+              0,
+              1,
+              1,
+              1
+            ]
+          }
+        ],
+        "automatic_indices": [
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "workspace_idx": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "auto_gm_idx": []
+      }
+    },
+    {
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_gqa_pto_developer.py",
+      "destination_path": "examples/ascend_a2a3/sparse_flash_attention/example_sparse_flash_attn_gqa_pto_developer.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "9881eb90dbcf19b229d4049e5bd4c0a26adc799e94dd8691ba1bef1a5ff72504",
+      "source_git_blob": "dace75d5a4673a475cd218b446939531342d86b3",
+      "destination_sha256": "128b167b445ecc70612850054285419da90d6dac459927e375578e1341f36499",
+      "state": "complete_source_SDK_candidate_device_pending",
+      "original_definition_AST_sha256": {
+        "sparse_attention_fwd": "6cb01c284ca7461079d9db2e5aab9b214013b9b1025c4c74d99f32b3503484f6",
+        "ref_sparse_attention_fwd_interface_gqa": "21bdbecc3dc6341bdf5d8301d856f4e13f926bf546509d4329397fbbc5db5091"
+      },
+      "original_executable_CLI_AST_sha256": "b2f0bade478879aad375fab4fdf3714b83dd068b835703c26315b9a4bd294791",
+      "device_setter_original_CLI_index": 0,
+      "original_full_CLI_default": {
+        "B": 2,
+        "S": 273,
+        "SKV": 44444,
+        "H_Q": 64,
+        "H_KV": 4,
+        "DIM": 128,
+        "topk": 2048,
+        "KV_stride": 1,
+        "q_start_s_index": 28672
+      },
+      "original_seed": 42,
+      "original_target": "pto",
+      "original_out_idx": [
+        3
+      ],
+      "original_workspace_idx": null,
+      "original_golden_tolerances": {
+        "rtol": 0.01,
+        "atol": 0.01
+      },
+      "original_runtime_calls": 1,
+      "original_golden_assertions": 1,
+      "original_success_marker": "Test Passed!",
+      "original_disable_cache_calls": 1,
+      "original_set_default_device": "npu",
+      "original_caller_zero_workspace_count": 4,
+      "original_unused_preallocated_output_preserved": true,
+      "original_factory": "sparse_attention_fwd",
+      "reference_free_CLI_globals": {
+        "sparse_attention_fwd": [],
+        "ref_sparse_attention_fwd_interface_gqa": []
+      },
+      "dynamic_symbol_names": [
+        "batch",
+        "seq_len",
+        "seq_len_kv",
+        "workspace_block_num"
+      ],
+      "expected_workspace_leading_dim": 2184,
+      "adaptations": [
+        "private A2A3 language import, exact original kernel/ref definitions unchanged",
+        "entire original top-level executable sequence moved to main preserving order; only global default-device setter becomes scoped torch.device(npu)",
+        "original disable_cache remains once; raw caller CacheState restored in finally; no clear/cache alias or new workspace allocation",
+        "public reference binding wraps original body/signature in q.device context to replace the original global default-device dependency"
+      ],
+      "device_not_run": true,
+      "actual_adapter_ABI": {
+        "C_abi": "uint8_t *Q_handle, uint8_t *KV_handle, uint8_t *Indices_handle, uint8_t *Output_handle, uint8_t *workspace_1_handle, uint8_t *workspace_2_handle, uint8_t *workspace_3_handle, uint8_t *workspace_4_handle, int64_t batch, int64_t seq_len, int64_t seq_len_kv, int64_t workspace_block_num, void *stream",
+        "dynamic_symbolic_map": [
+          {
+            "symbol": "batch",
+            "source": [
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "symbol": "seq_len",
+            "source": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "symbol": "seq_len_kv",
+            "source": [
+              0,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "symbol": "workspace_block_num",
+            "source": [
+              0,
+              4,
+              0,
+              1
+            ]
+          }
+        ],
+        "automatic_indices": [
+          3
+        ],
+        "workspace_idx": [],
+        "auto_gm_idx": []
+      }
+    }
+  ],
+  "factory_requests": [
+    {
+      "id": "example_sparse_flash_attn_gqa",
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_gqa.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "heads": 64,
+        "dim": 128,
+        "tail_dim": 0,
+        "topk": 2048,
+        "kv_stride": 1,
+        "kv_group": 4
+      },
+      "dialect": "ascendc",
+      "original_cli_shape": [
+        2,
+        273,
+        44444,
+        64,
+        4,
+        128,
+        2048
+      ],
+      "core_sampling": "none"
+    },
+    {
+      "id": "example_sparse_flash_attn_gqa_pto",
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_gqa_pto.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "heads": 64,
+        "dim": 128,
+        "tail_dim": 0,
+        "topk": 2048,
+        "kv_stride": 1,
+        "kv_group": 4,
+        "workspace_block_num": 2184
+      },
+      "dialect": "pto",
+      "original_cli_shape": [
+        2,
+        273,
+        44444,
+        64,
+        4,
+        128,
+        2048
+      ],
+      "core_sampling": "none"
+    },
+    {
+      "id": "example_sparse_flash_attn_gqa_pto_developer",
+      "source_path": "examples/sparse_flash_attention/example_sparse_flash_attn_gqa_pto_developer.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "heads": 64,
+        "dim": 128,
+        "tail_dim": 0,
+        "topk": 2048,
+        "kv_stride": 1,
+        "kv_group": 4
+      },
+      "dialect": "pto",
+      "original_cli_shape": [
+        2,
+        273,
+        44444,
+        64,
+        4,
+        128,
+        2048
+      ],
+      "core_sampling": "none"
+    }
+  ],
+  "validation": {
+    "original_assets": 3,
+    "original_top_level_definitions": 6,
+    "original_default_CLIs": 3,
+    "original_runtime_calls": 3,
+    "original_golden_assertions": 3,
+    "source_SDK_pending": false,
+    "device_not_run": true,
+    "actual_complete_source_requests_per_framework": 3,
+    "actual_Bisheng_invocations_per_framework": 3,
+    "host_ON_passed": 30,
+    "actual_OFF_passed": 27,
+    "actual_OFF_native_only_skipped": 3,
+    "original_device_runtime_calls_pending": 3,
+    "original_golden_assertions_pending": 3,
+    "real_library_Cython_adapter_restores_without_runtime": 3,
+    "no_fake_kernel_or_output": true,
+    "actual_adapter_runtime_invocations": 0
+  }
+}
