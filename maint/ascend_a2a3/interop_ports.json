@@ -469,6 +469,40 @@
         "Original T.symbolic API is retained and current deprecation warning recorded; no original algorithm or shape changed."
       ],
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/aclgraph/rms_rope_aclgraph.py",
+      "destination_path": "examples/ascend_a2a3/aclgraph/rms_rope_aclgraph.py",
+      "source_git_blob": "dc0fb8dd27fd01900326f145bcb744b324c2956e",
+      "source_sha256": "e4f6cfd5caa06eca394ca190ef2287455ce7c29ddefa0552790fc33955a65eaf",
+      "destination_sha256": "f631f63b7854dbc6b993713926d2f1c26a11ef39bae7e48a5610b526a4f5d23d",
+      "adaptations": [
+        "Preserve the complete original280-line graph asset,9 original definitions, both original factories/decorators, default16x64x512/rope256, seed42/fp16/eps1e-6, four pass-config keys, full golden and capture RMS->inplaceRoPE->one replay->assert_close rtol=atol1e-2. No warmup/precompile or graph scheduling change.",
+        "Private A2A3 language and safe import-time npu device token; main parses/help first, checks explicit owned cache equals active descriptor before backend registration, then reifies actual device. Retain original literal disable_cache inside original execution sequence.",
+        "Finally restore exact caller device token, raw CacheState and two real JIT memo dictionary identities/content; temporary replacement instead of clearing caller dictionaries. CPU fork_rng scopes original seed, without early NPU RNG/other-device queries. No shared stream/executor changes."
+      ],
+      "validation": {
+        "whole_original_module_AST_equal_after_explicit_adapter_inverse": true,
+        "original_definitions": 9,
+        "actual_original_default_factory_source_and_SDK_per_side": 2,
+        "host_ABI_and_canonical_params_equal": true,
+        "whole_other_generated_CPP_including_all_payload_control_and_sync_exact_after_recorded_changes": true,
+        "additional_unused_pure_signed32_declarations_bounded": 6,
+        "two_equal_8192byte_disjoint_UB_ranges_swap_in_rope": true,
+        "real_SDK_LocalTensor_descriptor_subview_ReinterpretCast_GetPhyAddr_evidence": true,
+        "host_source_companion_passed": 11,
+        "actual_OFF_pure_host_passed": 9,
+        "actual_OFF_native_skipped": 2,
+        "import_help_or_host_context_properties_NPU_tensor_or_graph_execution": false,
+        "original_graph_capture_replay_numerical_deadlock_performance_verified": false
+      },
+      "source_differences": [
+        "Generated C++ keeps private include, six additional unused bounded int32 declarations/two empty AIC resource guards, and an exact two8192B UB range permutation; raw full sources retained. Every other C++ byte, including all barriers/payloads/ReinterpretCast/control order, is equal after those explicit justified changes.",
+        "Shared TBuf dataLen write is acknowledged; accessor declaration order/counts unchanged, and local physical addresses track actual different offsets. No generated arena escapes; arbitrary SDK side-effect freedom or device equality is not inferred.",
+        "Current stream provider is an existing live getter, compatible by interface with the installed graph context side stream. This is read-only protocol evidence, not actual graph execution proof.",
+        "Original CLI seed can affect the actual NPU RNG when run; only CPU RNG restoration is scoped/proven here. No claim to have forked/restored all device RNG state."
+      ],
+      "all_original_cases_retained": true
     }
   ]
 }
