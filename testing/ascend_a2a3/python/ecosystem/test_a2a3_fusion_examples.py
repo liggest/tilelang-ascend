@@ -1,4 +1,4 @@
-"""Full original F1 factories and import/cache boundaries, without NPU execution."""
+"""Complete original fusion and MoE factories and import/cache boundaries, without NPU execution."""
 
 import argparse
 from collections import Counter
@@ -168,3 +168,67 @@ def test_mhc_cli_failure_restores_exact_caller_cache_state(enabled, monkeypatch)
         module.main()
     assert CacheState._enabled is enabled
     assert descriptor._forced_value is original_descriptor_override
+
+
+_MOE_AUX = next(entry for entry in ENTRIES if entry["source_path"].endswith("/moe_aux_fi.py"))
+_MOE_TOPK = next(entry for entry in ENTRIES if entry["source_path"].endswith("/moe_topk_gate.py"))
+
+
+@pytest.mark.parametrize("full", [False, True])
+def test_aux_complete_original_parameter_domains(full, monkeypatch):
+    if full:
+        monkeypatch.setenv("TK_FULL_TEST", "1")
+    else:
+        monkeypatch.delenv("TK_FULL_TEST", raising=False)
+    module = _load(_MOE_AUX)
+    expected = _MOE_AUX["original_pytest_matrix"]["full" if full else "default"]
+    actual = module.generate_test_params()
+    assert actual == expected["ordered_params"]
+    assert [module.make_param_id(params) for params in actual] == expected["ids"]
+    assert len(actual) == (158 if full else 24)
+    if full:
+        # The original num_aux_topk loop deliberately yields the zero case twice.
+        assert actual[0] == actual[1] and actual[0]["num_send_tokens"] == 0
+
+
+def test_topk_complete_original_forward_backward_parameter_domains():
+    module = _load(_MOE_TOPK)
+    expected = _MOE_TOPK["original_pytest_matrix"]
+    actual = module.generate_test_params()
+    assert actual == expected["ordered_params"]
+    assert [module.make_param_id(params) for params in actual] == expected["ids"]
+    assert len(actual) == 20
+    for name in expected["test_functions"]:
+        function = getattr(module, name)
+        mark = next(mark for mark in function.pytestmark if mark.name == "parametrize")
+        assert mark.args[0] == "params" and mark.args[1] == actual
+
+
+@pytest.mark.parametrize("entry", [_MOE_AUX, _MOE_TOPK], ids=lambda row: Path(row["source_path"]).stem)
+@pytest.mark.parametrize("exit_code", [0, 1, 2])
+def test_moe_original_pytest_CLI_exit_and_success_marker(entry, exit_code, monkeypatch, tmp_path, capsys):
+    from types import ModuleType
+
+    from tilelang import env
+    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+
+    module = _load(entry)
+    monkeypatch.setitem(sys.modules, "torch_npu", ModuleType("torch_npu"))
+    owned = tmp_path / "dedicated-cache"
+    monkeypatch.setenv("TILELANG_CACHE_DIR", str(owned))
+    monkeypatch.setattr(vars(type(env))["TILELANG_CACHE_DIR"], "_forced_value", str(owned))
+    clear_calls = []
+    monkeypatch.setattr(A2A3CythonKernelCache, "clear_cache", lambda self: clear_calls.append(True))
+    pytest_calls = []
+
+    def original_pytest_boundary(argv):
+        pytest_calls.append(argv)
+        return exit_code
+
+    monkeypatch.setattr(module.pytest, "main", original_pytest_boundary)
+    with pytest.raises(SystemExit) as result:
+        module.main()
+    assert result.value.code == exit_code
+    assert pytest_calls == [[module.__file__, "-v"]]
+    assert len(clear_calls) == int(entry["source_runtime"]["clear_cache"])
+    assert ("Kernel Output Match!" in capsys.readouterr().out) is (exit_code == 0)

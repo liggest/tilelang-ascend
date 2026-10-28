@@ -1,6 +1,6 @@
-# Original F1 fusion/tail/print sources
+# Original fusion, tail, print and MoE sources
 
-These four complete TA assets are migrated from
+These complete TA assets are migrated from
 `0deb8b93da11b7f0becbcded732d9633b7ca4e34`. The precise source/destination
 hashes and original factory requests are in
 `maint/ascend_a2a3/ecosystem_fusion_ports.json`. Device execution is pending.
@@ -55,6 +55,29 @@ restoration. Head keeps reshape-factor4, all partial gradient buffers and
 host reductions, and all original rtol/atol1e-4 checks. Module imports do not
 register torch_npu or execute either CLI.
 
-Both F2 assets still await device validation. The F3 `moe_aux_fi` and
-`moe_topk_gate` complete generators/default/full matrices remain planned
-separately, without source/SDK/device completion claims here.
+Both F2 assets still await device validation. F3 adds the complete
+`tile_kernels/moe/moe_aux_fi.py` and `moe_topk_gate.py` assets. Their original
+helpers, factories, forward/backward tests, references and exit messages are
+retained. Imports use the private A2/A3 language; actual pytest execution and
+cache clearing stay in `main()` and require a dedicated cache namespace.
+
+The auxiliary default pytest matrix has24 cases and its `TK_FULL_TEST` matrix
+has158, including both original zero-token entries. The benchmark generator's
+156 rows are also retained. Top-k keeps all20 parameter rows for each of the
+forward and backward tests (40 runtime cases). These are complete source
+assets; copying them does not mark any device case as passed.
+
+F3 source/SDK verification covers32 distinct default factories per framework:
+12 auxiliary and20 top-k. All32 TA/main public pipelines and64 actual Bisheng
+compiles pass. Host ABI, named buffer dtypes/capacities and operation inventory
+are checked. Named UB views can receive a different disjoint offset order;
+the recorded contiguous reserved union and captured per-view capacity remain
+equal. Source comparison separately records bounded prefetch simplification,
+float32 scalar aliases and unused scalar/control statements. This is not a
+claim that unnormalized generated C++ is identical.
+
+F3 device validation is pending for all64 default runtime cases. The additional
+auxiliary full158 source/SDK domain and its device cases remain pending;
+default-source coverage does not cover that full domain. The original top-k
+CLI success message is preserved verbatim, including its `rms_norm` wording.
+No new numerical golden or performance claim is introduced.
