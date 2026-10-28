@@ -1191,6 +1191,40 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/test_ascend_sync_insert_vs.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_ascend_sync_insert_vs.py",
+      "source_git_blob": "c218d0980480cc9f46d11f7a858a93aa1317c81a",
+      "source_sha256": "c2836655d652c6bdf2c58eb8e2e0f7dbbd55615d9710a1e0e5b0871118d15d7b",
+      "destination_sha256": "1830285b22bbb9ff6031472b050a706e9dd865936797701a20c87d2858075829",
+      "adaptations": [
+        "Private dialect/phase/mask-factory imports; raw A5 guard uses canonical keys/arch and only required neutral-launch prefix, retaining explicit npu_platform=A5.",
+        "Original real compile/source helper preserves actual-use auto resolution and folds explicit platform into model; no default A3 or source-specific environment fixture.",
+        "Original cache-disable mode is scoped per case and restores caller raw bit.",
+        "Two A5 public-compile cases preserve complete source and ci_skip but explicitly skip outside A2/A3; raw-native A5 guard still runs and claims no A5 codegen/device."
+      ],
+      "validation": {
+        "whole_module_AST_exact_except_declared_fixture_API_adaptations": true,
+        "all_64_original_functions_retained_62_exact_except_two_fixture_helpers": true,
+        "all_55_original_test_functions_and_priority_markers_retained": true,
+        "original_A2A3_source_and_raw_guard_cases_TA_main_each_passed": 99,
+        "outside_A5_public_compile_source_cases_retained_unexecuted_each": 2,
+        "actual_public_compile_Bisheng_ELF_pairs": 102,
+        "actual_compiled_CPP_getter_host_prototypes_and_requested_configs_equal": true,
+        "explicit_VS_False_controls_each": 4,
+        "explicit_memory_planning_False_controls_each": 2,
+        "explicit_CV_combine_False_controls_each": 1,
+        "raw_native_A5_guard_stages_paired": 4,
+        "raw_A5_mask_selection_and_legalizer_preserve_original_noop_assertions": true,
+        "main_compile_platforms_frozen_A3_from_runner_environment_without_fixture_default": true,
+        "TA_actual_probe_and_StorageRewrite_is_npu_true": true,
+        "actual_OFF_pure_parser_passed": 5,
+        "actual_OFF_native_cases_skipped": 101,
+        "external_actual_compile_cache_True_False_restoration_cases": 2,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
