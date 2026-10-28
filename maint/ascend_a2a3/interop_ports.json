@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "planned_source_assets": 39,
+  "entries": [
+    {
+      "source_path": "examples/gemm_aot/README.md",
+      "destination_path": "examples/ascend_a2a3/gemm_aot/README.md",
+      "source_git_blob": "c6eac05bfd8b796df812e1ab48454b6e59378982",
+      "source_sha256": "5aaf58f7190195baa8e17557fb05743f7c907d8bf7d59328f58c6df06bc06a5f",
+      "destination_sha256": "38feaff0437f78ed60e54fbe101e26cd10e7ad71a69fdb6e7b893e34c647e1af",
+      "adaptations": [
+        "Retain the complete original default 8192x1024x8192 GEMM and 128x256x64 tiling, raw AOT workflow, seed 42, ctypes call/reference/golden and rtol=atol=1e-2; make import and --help free of parsing, cache clearing, compilation and device work.",
+        "Use existing A2A3 CompileConfig/LibraryGenerator with one compiler request resolution, canonical model A2/A3 and dialect keys, preserving raw bare O2 separately from public JIT defaults. Require explicit dedicated cache matching the actual resolved descriptor before the real original clear; no legacy global clear alias.",
+        "Explicit original A5 selection is retained as outside-A2A3 diagnostic, not modern A5 execution. Numerical reader binds the actual void ABI with three static data pointers and an opaque stream; no device execution in this validation."
+      ],
+      "validation": {
+        "whole_factory_AST_equal_except_private_import": true,
+        "whole_seed_allocation_raw_call_reference_and_assert_sequence_AST_equal_except_parser_import_and_void_binding": true,
+        "shell_source_bytes_equal": true,
+        "complete_default_source_and_actual_Bisheng_cases_per_side": 6,
+        "positive_host_contract_tests": 14,
+        "actual_OFF_host_tests_passed": 8,
+        "actual_OFF_native_source_tests_skipped": 6,
+        "external_caller_cache_and_raw_bit_isolation_checks": 28,
+        "original_default_numerical_reader_run": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/gemm_aot/example_gemm.py",
+      "destination_path": "examples/ascend_a2a3/gemm_aot/example_gemm.py",
+      "source_git_blob": "78bc241e277c95e57842c01a8dc274b91df29a48",
+      "source_sha256": "7fb826ed942f0e25330ac8e89c91074eb66a03bfa72b2f5faa3a1a68b8fe25d8",
+      "destination_sha256": "d370af5ea0c00f2a0270bdf222763ed75b8cc5c588003fd58489614dc99c4e46",
+      "adaptations": [
+        "Retain the complete original default 8192x1024x8192 GEMM and 128x256x64 tiling, raw AOT workflow, seed 42, ctypes call/reference/golden and rtol=atol=1e-2; make import and --help free of parsing, cache clearing, compilation and device work.",
+        "Use existing A2A3 CompileConfig/LibraryGenerator with one compiler request resolution, canonical model A2/A3 and dialect keys, preserving raw bare O2 separately from public JIT defaults. Require explicit dedicated cache matching the actual resolved descriptor before the real original clear; no legacy global clear alias.",
+        "Explicit original A5 selection is retained as outside-A2A3 diagnostic, not modern A5 execution. Numerical reader binds the actual void ABI with three static data pointers and an opaque stream; no device execution in this validation."
+      ],
+      "validation": {
+        "whole_factory_AST_equal_except_private_import": true,
+        "whole_seed_allocation_raw_call_reference_and_assert_sequence_AST_equal_except_parser_import_and_void_binding": true,
+        "shell_source_bytes_equal": true,
+        "complete_default_source_and_actual_Bisheng_cases_per_side": 6,
+        "positive_host_contract_tests": 14,
+        "actual_OFF_host_tests_passed": 8,
+        "actual_OFF_native_source_tests_skipped": 6,
+        "external_caller_cache_and_raw_bit_isolation_checks": 28,
+        "original_default_numerical_reader_run": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/gemm_aot/run_example_gemm_aot.sh",
+      "destination_path": "examples/ascend_a2a3/gemm_aot/run_example_gemm_aot.sh",
+      "source_git_blob": "e0eb1df27c0a9e2ac1a715be239a9cb71feedc4a",
+      "source_sha256": "6332255e8815b2572717810c3bae1a043aa8b0f6cb9717f443b2ade8fe6672a4",
+      "destination_sha256": "6332255e8815b2572717810c3bae1a043aa8b0f6cb9717f443b2ade8fe6672a4",
+      "adaptations": [
+        "Retain the complete original default 8192x1024x8192 GEMM and 128x256x64 tiling, raw AOT workflow, seed 42, ctypes call/reference/golden and rtol=atol=1e-2; make import and --help free of parsing, cache clearing, compilation and device work.",
+        "Use existing A2A3 CompileConfig/LibraryGenerator with one compiler request resolution, canonical model A2/A3 and dialect keys, preserving raw bare O2 separately from public JIT defaults. Require explicit dedicated cache matching the actual resolved descriptor before the real original clear; no legacy global clear alias.",
+        "Explicit original A5 selection is retained as outside-A2A3 diagnostic, not modern A5 execution. Numerical reader binds the actual void ABI with three static data pointers and an opaque stream; no device execution in this validation.",
+        "Preserve shell bytes exactly; set executable mode 100755 from source 100644 as required by the current canonical shebang gate."
+      ],
+      "validation": {
+        "whole_factory_AST_equal_except_private_import": true,
+        "whole_seed_allocation_raw_call_reference_and_assert_sequence_AST_equal_except_parser_import_and_void_binding": true,
+        "shell_source_bytes_equal": true,
+        "complete_default_source_and_actual_Bisheng_cases_per_side": 6,
+        "positive_host_contract_tests": 14,
+        "actual_OFF_host_tests_passed": 8,
+        "actual_OFF_native_source_tests_skipped": 6,
+        "external_caller_cache_and_raw_bit_isolation_checks": 28,
+        "original_default_numerical_reader_run": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/gemm_aot/test_example_gemm.py",
+      "destination_path": "examples/ascend_a2a3/gemm_aot/test_example_gemm.py",
+      "source_git_blob": "4a7b139fdeef4d980fa943fb337d5fc9f9bf13b5",
+      "source_sha256": "3722d05e16e4800ea0a62f25c2ec69dad4c3f2c999cf100f66e591b0b51d5e31",
+      "destination_sha256": "0b74cc23b2dfaac28488d4221b12683025d90454b3cf6989e331356c0bb1f6fd",
+      "adaptations": [
+        "Retain the complete original default 8192x1024x8192 GEMM and 128x256x64 tiling, raw AOT workflow, seed 42, ctypes call/reference/golden and rtol=atol=1e-2; make import and --help free of parsing, cache clearing, compilation and device work.",
+        "Use existing A2A3 CompileConfig/LibraryGenerator with one compiler request resolution, canonical model A2/A3 and dialect keys, preserving raw bare O2 separately from public JIT defaults. Require explicit dedicated cache matching the actual resolved descriptor before the real original clear; no legacy global clear alias.",
+        "Explicit original A5 selection is retained as outside-A2A3 diagnostic, not modern A5 execution. Numerical reader binds the actual void ABI with three static data pointers and an opaque stream; no device execution in this validation."
+      ],
+      "validation": {
+        "whole_factory_AST_equal_except_private_import": true,
+        "whole_seed_allocation_raw_call_reference_and_assert_sequence_AST_equal_except_parser_import_and_void_binding": true,
+        "shell_source_bytes_equal": true,
+        "complete_default_source_and_actual_Bisheng_cases_per_side": 6,
+        "positive_host_contract_tests": 14,
+        "actual_OFF_host_tests_passed": 8,
+        "actual_OFF_native_source_tests_skipped": 6,
+        "external_caller_cache_and_raw_bit_isolation_checks": 28,
+        "original_default_numerical_reader_run": false
+      },
+      "all_original_cases_retained": true
+    }
+  ]
+}
