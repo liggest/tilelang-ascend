@@ -99,6 +99,38 @@
         "original_default_numerical_reader_run": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/exception_dump_test/example_exception_dump.py",
+      "destination_path": "examples/ascend_a2a3/exception_dump_test/example_exception_dump.py",
+      "source_git_blob": "e1d984f94b7132f117908836bd382a8dbf3dbcbd",
+      "source_sha256": "506cb334fdefc5da0f8f0727eba789d88ff8a2e97cf9b11356c3eed652095398",
+      "destination_sha256": "901e67ca91564c9c2bb4486a0f69917dc56dd47ada55f4728f79859f614a9d68",
+      "adaptations": [
+        "Preserve complete original 128x128 vec_add factory/decorator and all four exception-dump pass configs, default CLI, normal-run golden and full explicit null-output fault/exception-parser sequence. Move runtime initialization and original environment assignments/mkdir into explicit main, before heavy imports; use a cached real JIT factory with unchanged public signature.",
+        "Use existing private A2A3 language/parser/cache paths. Preserve actual cache clear with dedicated environment/resolved-descriptor guard; import/help are side-effect free. Keep original adapter.libpath, void ctypes four-pointer ABI, Tensor.data_ptr, Stream.npu_stream and synchronize access after auditing modern interfaces.",
+        "No SDK shim/header modification or fault execution. Original CANN9.1 exception dump template API rejection remains explicit and is not counted as successful SDK/numerical/dump recovery."
+      ],
+      "validation": {
+        "complete_factory_decorator_launcher_and_original_normal_fault_parse_sequence_AST_equal": true,
+        "full_default_source_requests_per_side": 1,
+        "host_contract_tests_passed": 6,
+        "actual_OFF_pure_host_tests_passed": 5,
+        "actual_OFF_native_tests_skipped": 1,
+        "external_caller_state_checks": 12,
+        "CLI_help_missing_cache_conflict_exit_codes": [
+          0,
+          1,
+          1
+        ],
+        "actual_TA_probe_True_and_StorageRewrite_True": true,
+        "actual_successful_SDK_compiles": 0,
+        "same_original_CANN_exception_dump_API_rejection_per_side": true,
+        "real_public_factory_compile_reaches_same_SDK_rejection": true,
+        "NPU_or_null_output_launch": false,
+        "dump_recovery_verified": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
