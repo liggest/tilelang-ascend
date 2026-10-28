@@ -509,6 +509,98 @@
         "The first candidate replaced _call_form_cache with a dict, and its mocked host fixture hid that error. This followup uses real constructor-created cache policies/fresh modules and exercises actual public factory cold/warm/SDK/adapter/runtime-entry paths; original candidate65 evidence retained as history."
       ],
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/compile_tl_op/__init__.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/compile_tl_op/__init__.py",
+      "source_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "adaptations": [
+        "Preserve all original public helper signatures, static B,S,H,D=(4,4096,16,128), source/library copies and messages; load the adjacent adopted original flash factory by file location with module memo reuse instead of mutating caller sys.path.",
+        "Use current JITImpl.func then JITFunc.__wrapped__ source protocol and current load_lib path tracking; retain the optional original wrapper callable but remove its import-time global monkeypatch.",
+        "Require explicit task-owned cache equal to the live descriptor before export/compilation; preserve original force_compile shared-cache-only bypass including warm decorator memo hits, restoring caller raw cache state on success/failure."
+      ],
+      "validation": {
+        "ON_host_and_actual_toolchain_tests_passed": 14,
+        "actual_OFF_host_tests_passed": 13,
+        "actual_OFF_toolchain_tests_skipped": 1,
+        "full_fixed_TA_and_main_actual_SDK_ELF": true,
+        "cold_and_independent_process_restore": true,
+        "actual_7_handle_plus_stream_ABI_equal": true,
+        "original_full_flash_factory_AST_equal": true,
+        "NPU_runtime_numerical_or_graph_run": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/compile_tl_op/flash_attention.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/compile_tl_op/flash_attention.py",
+      "source_git_blob": "72a3333a2a8a49f821dfe796bfd0b04bc9ea762a",
+      "source_sha256": "1382b1a02561daff5fd07f48423b8a3bb77c71e49b117a28e57a3eeabeef10f9",
+      "destination_sha256": "88873ea3f4e7374b228db3b3ed8ad8b51a0f150bde196f4d722a51902b8e2d72",
+      "adaptations": [
+        "Preserve all original public helper signatures, static B,S,H,D=(4,4096,16,128), source/library copies and messages; load the adjacent adopted original flash factory by file location with module memo reuse instead of mutating caller sys.path.",
+        "Use current JITImpl.func then JITFunc.__wrapped__ source protocol and current load_lib path tracking; retain the optional original wrapper callable but remove its import-time global monkeypatch.",
+        "Require explicit task-owned cache equal to the live descriptor before export/compilation; preserve original force_compile shared-cache-only bypass including warm decorator memo hits, restoring caller raw cache state on success/failure."
+      ],
+      "validation": {
+        "ON_host_and_actual_toolchain_tests_passed": 14,
+        "actual_OFF_host_tests_passed": 13,
+        "actual_OFF_toolchain_tests_skipped": 1,
+        "full_fixed_TA_and_main_actual_SDK_ELF": true,
+        "cold_and_independent_process_restore": true,
+        "actual_7_handle_plus_stream_ABI_equal": true,
+        "original_full_flash_factory_AST_equal": true,
+        "NPU_runtime_numerical_or_graph_run": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/compile_tl_op/util/__init__.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/compile_tl_op/util/__init__.py",
+      "source_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "adaptations": [
+        "Preserve all original public helper signatures, static B,S,H,D=(4,4096,16,128), source/library copies and messages; load the adjacent adopted original flash factory by file location with module memo reuse instead of mutating caller sys.path.",
+        "Use current JITImpl.func then JITFunc.__wrapped__ source protocol and current load_lib path tracking; retain the optional original wrapper callable but remove its import-time global monkeypatch.",
+        "Require explicit task-owned cache equal to the live descriptor before export/compilation; preserve original force_compile shared-cache-only bypass including warm decorator memo hits, restoring caller raw cache state on success/failure."
+      ],
+      "validation": {
+        "ON_host_and_actual_toolchain_tests_passed": 14,
+        "actual_OFF_host_tests_passed": 13,
+        "actual_OFF_toolchain_tests_skipped": 1,
+        "full_fixed_TA_and_main_actual_SDK_ELF": true,
+        "cold_and_independent_process_restore": true,
+        "actual_7_handle_plus_stream_ABI_equal": true,
+        "original_full_flash_factory_AST_equal": true,
+        "NPU_runtime_numerical_or_graph_run": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/torch_tl_ascend/compile_tl_op/util/wrap_libgen.py",
+      "destination_path": "examples/ascend_a2a3/torch_tl_ascend/compile_tl_op/util/wrap_libgen.py",
+      "source_git_blob": "bc7287fc4bd4a91b265698bce00bf2e76357c97e",
+      "source_sha256": "065ddbc5a9e413e545bcc6c64e315bb964b662f052048916e400e0d5f3a849fb",
+      "destination_sha256": "ef43b96a824db3fe226996c9c4e4b75a16262b390c3cd8aef03f1f598db9d265",
+      "adaptations": [
+        "Preserve all original public helper signatures, static B,S,H,D=(4,4096,16,128), source/library copies and messages; load the adjacent adopted original flash factory by file location with module memo reuse instead of mutating caller sys.path.",
+        "Use current JITImpl.func then JITFunc.__wrapped__ source protocol and current load_lib path tracking; retain the optional original wrapper callable but remove its import-time global monkeypatch.",
+        "Require explicit task-owned cache equal to the live descriptor before export/compilation; preserve original force_compile shared-cache-only bypass including warm decorator memo hits, restoring caller raw cache state on success/failure."
+      ],
+      "validation": {
+        "ON_host_and_actual_toolchain_tests_passed": 14,
+        "actual_OFF_host_tests_passed": 13,
+        "actual_OFF_toolchain_tests_skipped": 1,
+        "full_fixed_TA_and_main_actual_SDK_ELF": true,
+        "cold_and_independent_process_restore": true,
+        "actual_7_handle_plus_stream_ABI_equal": true,
+        "original_full_flash_factory_AST_equal": true,
+        "NPU_runtime_numerical_or_graph_run": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
