@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "main_base": "21e90a5fe7e289d1ca76a06ec720d58b77c75f82",
+  "scope": "Developer/pipeline/GEMM assets only, delivered as independent full-source batches. No A5-only FP8, unsafe h16, AOT or device execution.",
+  "entries": [
+    {
+      "source_path": "examples/developer_mode/gelu_mul_developer.py",
+      "destination_path": "examples/ascend_a2a3/developer_mode/gelu_mul_developer.py",
+      "source_git_blob": "65eb800bf8ddf58487dc598e4eeb34c0b0312304",
+      "source_sha256": "79d9141d07eb18f2941ebacc3d7e0ceab9e948737b2293d7883bfab78040cf99",
+      "destination_sha256": "f303e418c020bb3fbaff96b10509637868903afd49390e3e7683b830a8920741",
+      "batch": "A4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false
+      },
+      "adaptations": [
+        "Private A2A3 language import; whole factory/decorator/config/default CLI/matrix/golden/tolerance retained.",
+        "Move import-time runtime into main with explicit NPU registration.",
+        "Preserve actual clear with explicit dedicated cache env and resolved override conflict guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "batch_ON": "21 passed (16host+5source), actual Torch tensor allocation forbidden",
+        "batch_OFF": "16 passed/5 native-source skips, strict OFF maps",
+        "original_TA_real_external_A3_probe": true,
+        "whole_factory_decorator_host_config_AST_preserved": true,
+        "original_frontend_final_host_ABI_and_effective_configs_equal": true,
+        "raw_generated_source_differences_retained": "include relocation and witnessed unused scalar/index bindings only",
+        "kernel_source_or_print_is_not_numerical_pass": true
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(b.cpu(), ref_b.cpu(), rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/developer_mode/gemm_developer.py",
+      "destination_path": "examples/ascend_a2a3/developer_mode/gemm_developer.py",
+      "source_git_blob": "bf221e91fc693081af95b708320531f7750ddb2a",
+      "source_sha256": "55f994af77d4cedee4f90191a0a6c94959e7b75430783c740412f1da5082189f",
+      "destination_sha256": "fda7bfa4bc3974d93a6a7ae59fc06c49dddaa1a0bfeaeb727ed810b7d59e6908",
+      "batch": "A4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false,
+        "set_default_device": false
+      },
+      "adaptations": [
+        "Private A2A3 language import; whole factory/decorator/config/default CLI/matrix/golden/tolerance retained.",
+        "Move import-time runtime into main with explicit NPU registration.",
+        "Preserve actual clear with explicit dedicated cache env and resolved override conflict guard."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "batch_ON": "21 passed (16host+5source), actual Torch tensor allocation forbidden",
+        "batch_OFF": "16 passed/5 native-source skips, strict OFF maps",
+        "original_TA_real_external_A3_probe": true,
+        "whole_factory_decorator_host_config_AST_preserved": true,
+        "original_frontend_final_host_ABI_and_effective_configs_equal": true,
+        "raw_generated_source_differences_retained": "include relocation and witnessed unused scalar/index bindings only",
+        "kernel_source_or_print_is_not_numerical_pass": true
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/developer_mode/matmul_add_developer.py",
+      "destination_path": "examples/ascend_a2a3/developer_mode/matmul_add_developer.py",
+      "source_git_blob": "f04576a84414099abf4f9afb35853388c1015ca4",
+      "source_sha256": "bc0eec48aff9f7d92fb84b8e29621bc5e6054facd32cdcbed58b843cb44e93f0",
+      "destination_sha256": "c2390eefe631e4723f3e411c88fa59be4e01c9b9aaeaa3413bf81488d2eaecd2",
+      "batch": "A4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true,
+        "set_default_device": false
+      },
+      "adaptations": [
+        "Private A2A3 language import; whole factory/decorator/config/default CLI/matrix/golden/tolerance retained.",
+        "Move import-time runtime into main with explicit NPU registration.",
+        "Preserve disable-cache behavior during original runtime and restore caller CacheState on success/failure."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "batch_ON": "21 passed (16host+5source), actual Torch tensor allocation forbidden",
+        "batch_OFF": "16 passed/5 native-source skips, strict OFF maps",
+        "original_TA_real_external_A3_probe": true,
+        "whole_factory_decorator_host_config_AST_preserved": true,
+        "original_frontend_final_host_ABI_and_effective_configs_equal": true,
+        "raw_generated_source_differences_retained": "include relocation and witnessed unused scalar/index bindings only",
+        "kernel_source_or_print_is_not_numerical_pass": true
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    },
+    {
+      "source_path": "examples/developer_mode/matmul_add_developer_vec_cast.py",
+      "destination_path": "examples/ascend_a2a3/developer_mode/matmul_add_developer_vec_cast.py",
+      "source_git_blob": "2e19fb93a17a3bc241f6028b4567b25ae5761d22",
+      "source_sha256": "4ea1bc4601683fb68b32cf9f42fc624b52234e6014d5bb1a4a2647705b01274f",
+      "destination_sha256": "f6773f511ca09d0d354252008d52af687b803d13e6e761936686848fd4483d6d",
+      "batch": "A4",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true,
+        "set_default_device": false
+      },
+      "adaptations": [
+        "Private A2A3 language import; whole factory/decorator/config/default CLI/matrix/golden/tolerance retained.",
+        "Move import-time runtime into main with explicit NPU registration.",
+        "Preserve disable-cache behavior during original runtime and restore caller CacheState on success/failure."
+      ],
+      "all_original_cases_retained": true,
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false,
+        "batch_ON": "21 passed (16host+5source), actual Torch tensor allocation forbidden",
+        "batch_OFF": "16 passed/5 native-source skips, strict OFF maps",
+        "original_TA_real_external_A3_probe": true,
+        "whole_factory_decorator_host_config_AST_preserved": true,
+        "original_frontend_final_host_ABI_and_effective_configs_equal": true,
+        "raw_generated_source_differences_retained": "include relocation and witnessed unused scalar/index bindings only",
+        "kernel_source_or_print_is_not_numerical_pass": true
+      },
+      "factory_and_helper_AST_exact": true,
+      "whole_original_host_AST_preserved_with_declared_cache_adapter": true,
+      "original_precision_assertions": [
+        "torch.testing.assert_close(c, ref_c, rtol=0.01, atol=0.01)"
+      ],
+      "original_seed_calls": [
+        "torch.manual_seed(0)"
+      ]
+    }
+  ],
+  "factory_requests": [
+    {
+      "args": [
+        256,
+        256,
+        64,
+        64
+      ],
+      "kwargs": {},
+      "source_original_test_config": [
+        256,
+        256,
+        64,
+        64
+      ],
+      "id": "gelu_mul_developer_0",
+      "source_path": "examples/developer_mode/gelu_mul_developer.py",
+      "factory": "gelu_mul"
+    },
+    {
+      "args": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "source_original_test_config": [
+        1024,
+        1024,
+        128,
+        128
+      ],
+      "id": "gelu_mul_developer_1",
+      "source_path": "examples/developer_mode/gelu_mul_developer.py",
+      "factory": "gelu_mul"
+    },
+    {
+      "args": [
+        1024,
+        1024,
+        1024,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {},
+      "source_CLI_defaults": {
+        "m": 1024,
+        "n": 1024,
+        "k": 1024
+      },
+      "id": "gemm_developer_0",
+      "source_path": "examples/developer_mode/gemm_developer.py",
+      "factory": "matmul"
+    },
+    {
+      "args": [
+        1024,
+        1024,
+        1024,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {},
+      "source_CLI_defaults": {
+        "m": 1024,
+        "n": 1024,
+        "k": 1024
+      },
+      "id": "matmul_add_developer_0",
+      "source_path": "examples/developer_mode/matmul_add_developer.py",
+      "factory": "matmul_add"
+    },
+    {
+      "args": [
+        1024,
+        1024,
+        1024,
+        128,
+        256,
+        64
+      ],
+      "kwargs": {},
+      "source_CLI_defaults": {
+        "m": 1024,
+        "n": 1024,
+        "k": 1024
+      },
+      "id": "matmul_add_developer_vec_cast_0",
+      "source_path": "examples/developer_mode/matmul_add_developer_vec_cast.py",
+      "factory": "matmul_add"
+    }
+  ],
+  "batch_validation": {
+    "A4": {
+      "source_original_requests": 5,
+      "AscendC_requests": 4,
+      "PTO_requests": 1,
+      "TA_actual_SDK_commands": 5,
+      "main_actual_SDK_commands": 5,
+      "all10_actual_SDK_zero": true,
+      "ON": "21 passed",
+      "OFF": "16 passed/5 native skips",
+      "device_numerical": false,
+      "other_approved_batches_pending": true
+    }
+  }
+}
