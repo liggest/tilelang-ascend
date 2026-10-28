@@ -2,6 +2,7 @@ import torch
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import argparse
+import importlib.util
 import os
 from pathlib import Path
 
@@ -277,6 +278,15 @@ def _run_original(args):
     print("Kernel Output Match!")
 
 
+def _load_execution_factories():
+    # Use the real JITImpl constructor and its canonical cache policy. Caller
+    # memo objects can have custom types/capacities and must remain untouched.
+    spec = importlib.util.spec_from_file_location(__name__ + "_execution", __file__)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.rms_norm_kernel, module.rope_kernel_in_place
+
+
 def main(argv=None):
     args = parse_args(argv)
     requested_cache = os.environ.get("TILELANG_CACHE_DIR")
@@ -288,17 +298,12 @@ def main(argv=None):
     import torch_npu  # noqa: F401
     from tilelang.env import CacheState
 
-    global device
+    global device, rms_norm_kernel, rope_kernel_in_place
     caller_device = device
     caller_cache_state = CacheState._enabled
-    caller_memos = [
-        (factory, name, getattr(factory, name))
-        for factory in (rms_norm_kernel, rope_kernel_in_place)
-        for name in ("_kernel_cache", "_call_form_cache")
-    ]
+    caller_factories = rms_norm_kernel, rope_kernel_in_place
     try:
-        for factory, name, _ in caller_memos:
-            setattr(factory, name, {})
+        rms_norm_kernel, rope_kernel_in_place = _load_execution_factories()
         device = torch.device("npu")
         # Preserve caller CPU RNG without probing or forking other NPU devices.
         # Original manual_seed(42) remains inside the original execution body.
@@ -307,8 +312,7 @@ def main(argv=None):
     finally:
         device = caller_device
         CacheState._enabled = caller_cache_state
-        for factory, name, memo in caller_memos:
-            setattr(factory, name, memo)
+        rms_norm_kernel, rope_kernel_in_place = caller_factories
 
 
 if __name__ == "__main__":
