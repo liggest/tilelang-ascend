@@ -151,6 +151,8 @@ def test_original_cache_mode_and_registration_during_runtime_restore_caller_on_f
             expected.append("disable")
         elif entry["source_runtime"]["clear_cache"]:
             expected.extend(["clear"] * entry["source_runtime"]["clear_count"])
+        if entry["source_runtime"].get("additional_registration_after_disable"):
+            expected.append("registration")
         expected.append("inputs" if entry["source_runtime"].get("inputs_before_factory") else "factory")
         assert events == expected
     finally:

@@ -963,6 +963,71 @@
       "source_request_owner": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
       "runtime_factory": "indexer_bwd_interface",
       "validation_scope": "Complete original standalone/test retained;7positive explicit source controls/14realSDK/8constructor asserts;CPU protocol and metadata only. Original runtime NPU autograd/numerical/precision/exit remains pending."
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "destination_path": "examples/ascend_a2a3/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "source_git_blob": "7cf7a3c368e117869a89ef0907b5c950b94d4251",
+      "source_sha256": "0288869781ff45a6f64d2bbfdd60674900ea51b385575ae579b718700263b907",
+      "destination_sha256": "b1f12adfb1af675b07cd39164436e039fe70f5e59b37b3caa38e07757afd252d",
+      "batch": "E6_dependency",
+      "source_domain": "regular_examples_dependency_not_original_experiment33",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "randn"
+      },
+      "original_main_renamed": false,
+      "adaptations": [
+        "Private language/layout and exact namespaced sibling imports; complete original factory/decorator/manual synchronization/all matrices/reference/golden/CLI/marks/exit retained.",
+        "Explicit runtime registration; original default-device allocation body uses scoped torch.device and cache mode is restored on return/error. Actual pytest entries register only when called."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "source_request_owner": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "runtime_factory": "flashattn",
+      "validation_scope": "Complete26original standalone/layered/perf shape rows;17TA/main positive fullsource pairs+34actualSDK,3original ctor guard pairs;full reference/numerical/perf/exit pending device."
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/test_mha_sink_fwd_bhsd.py",
+      "destination_path": "examples/ascend_a2a3/mha_sink_fwd_bhsd/test_mha_sink_fwd_bhsd.py",
+      "source_git_blob": "5158e3e123b4618d621ea3bb6c767bcad8c073af",
+      "source_sha256": "0e14dfb25c2cbf15eb1d4e45a82d1f0c47f51623cc2715a5a2a7a2715186a443",
+      "destination_sha256": "d526b2615bd39ddb7233623cdafeea1655943b7ada346406fd3432811eb547b1",
+      "batch": "E6_dependency",
+      "source_domain": "regular_examples_dependency_not_original_experiment33",
+      "state": "source_SDK_verified_device_pending",
+      "source_runtime": {
+        "clear_cache": false,
+        "clear_count": 0,
+        "disable_cache": true,
+        "set_default_device": true,
+        "inputs_before_factory": true,
+        "input_constructor": "randn",
+        "additional_registration_after_disable": true
+      },
+      "original_main_renamed": true,
+      "adaptations": [
+        "Private language/layout and exact namespaced sibling imports; complete original factory/decorator/manual synchronization/all matrices/reference/golden/CLI/marks/exit retained.",
+        "Explicit runtime registration; original default-device allocation body uses scoped torch.device and cache mode is restored on return/error. Actual pytest entries register only when called."
+      ],
+      "validation": {
+        "host": true,
+        "source": true,
+        "SDK": true,
+        "device": false
+      },
+      "source_request_owner": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "runtime_factory": "flashattn",
+      "validation_scope": "Complete26original standalone/layered/perf shape rows;17TA/main positive fullsource pairs+34actualSDK,3original ctor guard pairs;full reference/numerical/perf/exit pending device."
     }
   ],
   "factory_requests": [
@@ -4038,6 +4103,376 @@
       },
       "source_sampling_scope": "additional original constructor assertion boundary",
       "expected_frontend_error": "AssertionError"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        1,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 128,
+        "real_seq_kv": 128
+      },
+      "id": "experiment_e6dep_0"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 256,
+        "real_seq_kv": 256
+      },
+      "id": "experiment_e6dep_1"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        2,
+        8,
+        512,
+        512,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 512,
+        "real_seq_kv": 512
+      },
+      "id": "experiment_e6dep_2"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 4096,
+        "real_seq_kv": 4096
+      },
+      "id": "experiment_e6dep_3"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": true,
+        "real_seq_q": 256,
+        "real_seq_kv": 256
+      },
+      "id": "experiment_e6dep_4"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 100,
+        "real_seq_kv": 100
+      },
+      "id": "experiment_e6dep_5"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        2,
+        4,
+        128,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 128,
+        "real_seq_kv": 256
+      },
+      "id": "experiment_e6dep_6"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        3,
+        8,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 200,
+        "real_seq_kv": 200
+      },
+      "id": "experiment_e6dep_7"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": true,
+        "real_seq_q": 200,
+        "real_seq_kv": 200
+      },
+      "id": "experiment_e6dep_8"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        4,
+        16,
+        512,
+        512,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 512,
+        "real_seq_kv": 512
+      },
+      "id": "experiment_e6dep_9"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        1,
+        256,
+        256,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 256,
+        "real_seq_kv": 256
+      },
+      "id": "experiment_e6dep_10"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        128,
+        4096,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 128,
+        "real_seq_kv": 4096
+      },
+      "id": "experiment_e6dep_11"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        4,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 128,
+        "real_seq_kv": 128
+      },
+      "id": "experiment_e6dep_12"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        8,
+        32,
+        512,
+        512,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 512,
+        "real_seq_kv": 512
+      },
+      "id": "experiment_e6dep_13"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        8,
+        32,
+        1024,
+        1024,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 1024,
+        "real_seq_kv": 1024
+      },
+      "id": "experiment_e6dep_14"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        8,
+        32,
+        2048,
+        2048,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": false,
+        "real_seq_q": 2048,
+        "real_seq_kv": 2048
+      },
+      "id": "experiment_e6dep_15"
+    },
+    {
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "kwargs": {
+        "block_M": 128,
+        "block_N": 128,
+        "has_window": true,
+        "real_seq_q": 4096,
+        "real_seq_kv": 4096
+      },
+      "id": "experiment_e6dep_16"
+    },
+    {
+      "id": "experiment_e6dep_17",
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        1,
+        129,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "expected_frontend_error": "AssertionError",
+      "source_sampling_scope": "additional original low-level constructor guard, not original runtime row"
+    },
+    {
+      "id": "experiment_e6dep_18",
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        1,
+        128,
+        129,
+        128
+      ],
+      "kwargs": {},
+      "expected_frontend_error": "AssertionError",
+      "source_sampling_scope": "additional original low-level constructor guard, not original runtime row"
+    },
+    {
+      "id": "experiment_e6dep_19",
+      "source_path": "examples/mha_sink_fwd_bhsd/mha_sink_fwd_bhsd.py",
+      "factory": "flashattn",
+      "args": [
+        1,
+        1,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {
+        "num_stages": 3
+      },
+      "expected_frontend_error": "AssertionError",
+      "source_sampling_scope": "additional original low-level constructor guard, not original runtime row"
     }
   ],
   "E1_original_runtime_cases": [
@@ -11933,5 +12368,397 @@
       }
     ],
     "no_original_runtime_golden_or_NPU_execution": true
-  }
+  },
+  "E6_dependency_original_entry_matrix": [
+    {
+      "label": "standalone_smoke",
+      "scope": "original standalone complete golden check",
+      "original_host_shape": [
+        1,
+        1,
+        128,
+        128,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_0"
+    },
+    {
+      "label": "l0_min_causal",
+      "scope": "original test_mha_sink_fwd_bhsd_l0",
+      "original_host_shape": [
+        1,
+        1,
+        128,
+        128,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_0"
+    },
+    {
+      "label": "l0_small_causal",
+      "scope": "original test_mha_sink_fwd_bhsd_l0",
+      "original_host_shape": [
+        1,
+        4,
+        256,
+        256,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_1"
+    },
+    {
+      "label": "l0_multi_batch",
+      "scope": "original test_mha_sink_fwd_bhsd_l0",
+      "original_host_shape": [
+        2,
+        8,
+        512,
+        512,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_2"
+    },
+    {
+      "label": "l0_default",
+      "scope": "original test_mha_sink_fwd_bhsd_l0",
+      "original_host_shape": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_3"
+    },
+    {
+      "label": "l0_window",
+      "scope": "original test_mha_sink_fwd_bhsd_l0",
+      "original_host_shape": [
+        1,
+        4,
+        256,
+        256,
+        128
+      ],
+      "window": 128,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_4"
+    },
+    {
+      "label": "l1_irregular_c",
+      "scope": "original test_mha_sink_fwd_bhsd_l1",
+      "original_host_shape": [
+        1,
+        4,
+        100,
+        100,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_5"
+    },
+    {
+      "label": "l1_q_short_k_c",
+      "scope": "original test_mha_sink_fwd_bhsd_l1",
+      "original_host_shape": [
+        2,
+        4,
+        128,
+        256,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_6"
+    },
+    {
+      "label": "l1_multi_irregular",
+      "scope": "original test_mha_sink_fwd_bhsd_l1",
+      "original_host_shape": [
+        3,
+        8,
+        200,
+        200,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_7"
+    },
+    {
+      "label": "l1_window_irregular",
+      "scope": "original test_mha_sink_fwd_bhsd_l1",
+      "original_host_shape": [
+        1,
+        4,
+        200,
+        200,
+        128
+      ],
+      "window": 128,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_8"
+    },
+    {
+      "label": "l1_large_c",
+      "scope": "original test_mha_sink_fwd_bhsd_l1",
+      "original_host_shape": [
+        4,
+        16,
+        512,
+        512,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_9"
+    },
+    {
+      "label": "l2_single_block",
+      "scope": "original test_mha_sink_fwd_bhsd_l2",
+      "original_host_shape": [
+        1,
+        1,
+        128,
+        128,
+        128
+      ],
+      "window": null,
+      "input_scale": 1.0,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_0"
+    },
+    {
+      "label": "l2_min_multi",
+      "scope": "original test_mha_sink_fwd_bhsd_l2",
+      "original_host_shape": [
+        1,
+        1,
+        256,
+        256,
+        128
+      ],
+      "window": null,
+      "input_scale": 1.0,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_10"
+    },
+    {
+      "label": "l2_large_offset",
+      "scope": "original test_mha_sink_fwd_bhsd_l2",
+      "original_host_shape": [
+        1,
+        4,
+        128,
+        4096,
+        128
+      ],
+      "window": null,
+      "input_scale": 1.0,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_11"
+    },
+    {
+      "label": "zero_input",
+      "scope": "original test_mha_sink_fwd_bhsd_boundary",
+      "original_host_shape": [
+        1,
+        4,
+        128,
+        128,
+        128
+      ],
+      "window": null,
+      "input_scale": 0.0,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_12"
+    },
+    {
+      "label": "large_input",
+      "scope": "original test_mha_sink_fwd_bhsd_boundary",
+      "original_host_shape": [
+        1,
+        4,
+        128,
+        128,
+        128
+      ],
+      "window": null,
+      "input_scale": 10.0,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_12"
+    },
+    {
+      "label": "perf_default",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_3"
+    },
+    {
+      "label": "perf_small",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        1,
+        4,
+        256,
+        256,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_1"
+    },
+    {
+      "label": "perf_sq512",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        512,
+        512,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_13"
+    },
+    {
+      "label": "perf_sq1024",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        1024,
+        1024,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_14"
+    },
+    {
+      "label": "perf_sq2048",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        2048,
+        2048,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_15"
+    },
+    {
+      "label": "perf_sq4096",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "window": null,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_3"
+    },
+    {
+      "label": "perf_window512",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "window": 512,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_16"
+    },
+    {
+      "label": "perf_window1024",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "window": 1024,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_16"
+    },
+    {
+      "label": "perf_window2048",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "window": 2048,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_16"
+    },
+    {
+      "label": "perf_window4096",
+      "scope": "original perf CLI branch; full host/bench retained, source only",
+      "original_host_shape": [
+        8,
+        32,
+        4096,
+        4096,
+        128
+      ],
+      "window": 4096,
+      "input_scale": 1,
+      "original_numerical_exit_not_executed": true,
+      "request_id": "experiment_e6dep_16"
+    }
+  ]
 }
