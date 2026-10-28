@@ -16,7 +16,11 @@
         "Original CLI/device/cache operations deferred to main; complete runtime loop and exit checks retained.",
         "Original cache clear limited to explicit dedicated A2A3 cache after descriptor identity check; no global cache alias."
       ],
-      "device_not_run": true
+      "device_not_run": true,
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false
+      }
     },
     {
       "source_path": "examples/simple_fusion/matmul_add_infer_scope.py",
@@ -31,7 +35,11 @@
         "Original CLI/device/cache operations deferred to main; complete runtime loop and exit checks retained.",
         "Original cache clear limited to explicit dedicated A2A3 cache after descriptor identity check; no global cache alias."
       ],
-      "device_not_run": true
+      "device_not_run": true,
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false
+      }
     },
     {
       "source_path": "examples/tail_mask/example_tail_add.py",
@@ -46,7 +54,11 @@
         "Original CLI/device/cache operations deferred to main; complete runtime loop and exit checks retained.",
         "Original cache clear limited to explicit dedicated A2A3 cache after descriptor identity check; no global cache alias."
       ],
-      "device_not_run": true
+      "device_not_run": true,
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false
+      }
     },
     {
       "source_path": "examples/print/elementwise_print.py",
@@ -61,12 +73,234 @@
         "Original CLI/device/cache operations deferred to main; complete runtime loop and exit checks retained.",
         "Original cache clear limited to explicit dedicated A2A3 cache after descriptor identity check; no global cache alias."
       ],
-      "device_not_run": true
+      "device_not_run": true,
+      "source_runtime": {
+        "clear_cache": true,
+        "disable_cache": false
+      }
+    },
+    {
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "destination_path": "examples/ascend_a2a3/mhc_post/example_mhc_post.py",
+      "source_sha256": "6c1d17814134fad8b50102c51e1441caa4e042e154dc1de99579c793142bfa1e",
+      "destination_sha256": "0eefb8121b9ec256b358520056f762dbf08de1ddacb6927340be548aae6ba561",
+      "source_git_blob": "7710249f93b12294e537c9ac86871dc669b4126c",
+      "state": "implementation_candidate_source_and_SDK_verified_device_pending",
+      "original_factory_helper_decorator_AST_equal": true,
+      "adaptations": [
+        "Backend-private language import; all original factory/helper/decorator bodies unchanged.",
+        "Original full CLI retained in main with lazy torch_npu registration.",
+        "Restore exact caller cache raw bit after original CLI disable_cache in finally."
+      ],
+      "device_not_run": true,
+      "original_CLI_cases": [
+        {
+          "n": 4,
+          "h": 128,
+          "hc": 4,
+          "h_blk": 512
+        },
+        {
+          "n": 8,
+          "h": 256,
+          "hc": 4,
+          "h_blk": 512
+        },
+        {
+          "n": 16,
+          "h": 512,
+          "hc": 4,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 1024,
+          "hc": 4,
+          "h_blk": 1024
+        },
+        {
+          "n": 4,
+          "h": 1280,
+          "hc": 4,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 2048,
+          "hc": 4,
+          "h_blk": 2048
+        },
+        {
+          "n": 4,
+          "h": 2560,
+          "hc": 4,
+          "h_blk": 2560
+        },
+        {
+          "n": 4,
+          "h": 3072,
+          "hc": 4,
+          "h_blk": 3072
+        },
+        {
+          "n": 4,
+          "h": 4096,
+          "hc": 4,
+          "h_blk": 2048
+        },
+        {
+          "n": 4,
+          "h": 7168,
+          "hc": 4,
+          "h_blk": 3584
+        },
+        {
+          "n": 4096,
+          "h": 2560,
+          "hc": 4,
+          "h_blk": 2560
+        },
+        {
+          "n": 4,
+          "h": 100,
+          "hc": 4,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 200,
+          "hc": 4,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 300,
+          "hc": 4,
+          "h_blk": 512
+        },
+        {
+          "n": 8,
+          "h": 500,
+          "hc": 4,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 128,
+          "hc": 1,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 128,
+          "hc": 2,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 128,
+          "hc": 3,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 128,
+          "hc": 8,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 100,
+          "hc": 8,
+          "h_blk": 512
+        },
+        {
+          "n": 4,
+          "h": 1280,
+          "hc": 8,
+          "h_blk": 512
+        },
+        {
+          "n": 16,
+          "h": 512,
+          "hc": 8,
+          "h_blk": 512
+        }
+      ],
+      "original_exit_contract": "test() catches AssertionError per case, prints FAILED and keeps exit0; Kernel Output Match! only if all22 original checks pass. Do not count exit0 alone as numeric pass.",
+      "benchmark_helper_not_called_by_main": {
+        "cases": [
+          [
+            512,
+            2560,
+            4
+          ],
+          [
+            4096,
+            2560,
+            4
+          ],
+          [
+            4096,
+            7168,
+            4
+          ]
+        ],
+        "warmup": 20,
+        "rep": 100,
+        "performance_executed": false
+      },
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": true
+      },
+      "original_output_observation_scope": "Kernel allocates [n,hc,pad_h], original mhc_post returns [:,:hc,:h]. Only original returned view/reference is a numerical golden; padded tail is not assumed initialized or compared bitwise."
+    },
+    {
+      "source_path": "examples/tile_kernels/mhc/head_compute_mix_kernel.py",
+      "destination_path": "examples/ascend_a2a3/tile_kernels/mhc/head_compute_mix_kernel.py",
+      "source_sha256": "1510de6bdc9f89b8ca872a1bc1639f2d4771621de975d49d51d3c4e18c2c1dac",
+      "destination_sha256": "ede36dab944579e35e872c46e6a5ed9db04d15e1048d5519988b54236fdb95a8",
+      "source_git_blob": "f3ef5bbb5b6c0f4177c6402565e9514b0c8260b6",
+      "state": "implementation_candidate_source_and_SDK_verified_device_pending",
+      "original_factory_helper_decorator_AST_equal": true,
+      "adaptations": [
+        "Backend-private language import; all original factory/helper/decorator bodies unchanged.",
+        "Original full CLI retained in main with lazy torch_npu registration."
+      ],
+      "device_not_run": true,
+      "original_CLI_cases": [
+        {
+          "phase": "fwd",
+          "n": 8192,
+          "mhc_mult": 4,
+          "reshape_factor": 4,
+          "reshaped_tokens": 2048,
+          "reshape_mhc_mult": 16,
+          "token_block_size": 128,
+          "mhc_pre_eps": 0.01,
+          "numeric_assertions": 1
+        },
+        {
+          "phase": "bwd",
+          "n": 8192,
+          "mhc_mult": 4,
+          "reshape_factor": 4,
+          "reshaped_tokens": 2048,
+          "reshape_mhc_mult": 16,
+          "token_block_size": 128,
+          "partial_size": 32,
+          "numeric_assertions": 3
+        }
+      ],
+      "original_exit_contract": "Run test_fwd then test_bwd; all four original assert_close rtol/atol1e-4 propagate failures; preserve all gradient buffers and host reductions.",
+      "source_runtime": {
+        "clear_cache": false,
+        "disable_cache": false
+      }
     }
   ],
   "planned_unported_source_paths": [
-    "examples/mhc_post/example_mhc_post.py",
-    "examples/tile_kernels/mhc/head_compute_mix_kernel.py",
     "examples/tile_kernels/moe/moe_aux_fi.py",
     "examples/tile_kernels/moe/moe_topk_gate.py"
   ],
@@ -152,6 +386,441 @@
         16
       ],
       "kwargs": {}
+    },
+    {
+      "id": "mhc_post_0",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        128
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_1",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        256
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 8,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_2",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        512
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 16,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_3",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        1024
+      ],
+      "kwargs": {
+        "h_blk": 1024
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_4",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        1280
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_5",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        2048
+      ],
+      "kwargs": {
+        "h_blk": 2048
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_6",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        2560
+      ],
+      "kwargs": {
+        "h_blk": 2560
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_7",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        3072
+      ],
+      "kwargs": {
+        "h_blk": 3072
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_8",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        4096
+      ],
+      "kwargs": {
+        "h_blk": 2048
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_9",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        7168
+      ],
+      "kwargs": {
+        "h_blk": 3584
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_10",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        2560
+      ],
+      "kwargs": {
+        "h_blk": 2560
+      },
+      "original_runtime_n": 4096,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_11",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        100
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_12",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        200
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_13",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        300
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_14",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        4,
+        500
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 8,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_15",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        1,
+        128
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_16",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        2,
+        128
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_17",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        3,
+        128
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_18",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        8,
+        128
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_19",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        8,
+        100
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_20",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        8,
+        1280
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 4,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "mhc_post_21",
+      "source_path": "examples/mhc_post/example_mhc_post.py",
+      "factory": "mhc_post_kernel",
+      "args": [
+        8,
+        512
+      ],
+      "kwargs": {
+        "h_blk": 512
+      },
+      "original_runtime_n": 16,
+      "pass_configs_attribute": "pass_configs",
+      "original_numeric_tolerance": {
+        "rtol": 0.01,
+        "atol": 0.2
+      }
+    },
+    {
+      "id": "head_mix_fwd_original",
+      "source_path": "examples/tile_kernels/mhc/head_compute_mix_kernel.py",
+      "factory": "_mhc_head_compute_mix_fwd",
+      "args": [
+        16,
+        0.01
+      ],
+      "kwargs": {
+        "reshape_factor": 4,
+        "token_block_size": 128
+      },
+      "pass_configs_attribute": "_FWD_PASS_CONFIGS",
+      "original_runtime_num_tokens": 2048,
+      "original_numeric_tolerance": {
+        "rtol": 0.0001,
+        "atol": 0.0001
+      }
+    },
+    {
+      "id": "head_mix_bwd_original",
+      "source_path": "examples/tile_kernels/mhc/head_compute_mix_kernel.py",
+      "factory": "_mhc_head_compute_mix_bwd",
+      "args": [
+        16
+      ],
+      "kwargs": {
+        "reshape_factor": 4,
+        "token_block_size": 128,
+        "partial_size": 32
+      },
+      "pass_configs_attribute": "_BWD_PASS_CONFIGS",
+      "original_runtime_num_tokens": 2048,
+      "original_numeric_assertions": 3,
+      "original_numeric_tolerance": {
+        "rtol": 0.0001,
+        "atol": 0.0001
+      }
     }
   ],
   "validation": {
@@ -169,12 +838,31 @@
     "TA_compile_identity_schema": "legacy constructor target/platform/resolved flags; fixed process SDK/header/cwd context; actual argv separately archived",
     "diagnostic_printf_escaping_difference_pending": false,
     "main_actual_Bisheng_compiles_including_print_correction": 7,
-    "printf_escaping_fixed_by_required_dependency": "cd35c7a0",
+    "printf_escaping_fixed_by_required_dependency": "fb95fb39515084622d40ee899b3d89e8387848e7",
     "source_evidence_directory": "refactor_main/reports/p3_fusion_F1",
     "corrected_print_source_SDK": "refactor_main/reports/p3_printf_contract/main_original_F1",
     "focused_ON": "18 passed",
     "actual_OFF": "12 passed, 6 skipped",
-    "device_gate": "pending separately authorized original four CLI/six input execution"
+    "device_gate": "pending separately authorized original four CLI/six input execution",
+    "F2": {
+      "original_assets": 2,
+      "original_CLI_mhc_cases": 22,
+      "original_CLI_head_phases": 2,
+      "original_CLI_numeric_assertions": 26,
+      "full_source_requests": 24,
+      "source_or_SDK_not_yet_verified": false,
+      "device_execution": false,
+      "TA_complete_sources": 24,
+      "main_complete_sources": 24,
+      "TA_actual_Bisheng_compiles": 23,
+      "main_actual_Bisheng_compiles": 23,
+      "exact_identity_reused_each": 1,
+      "focused_ON": "68 passed",
+      "actual_OFF": "38 passed,30 native source skipped",
+      "source_review": "24 complete C++ pairs byte exact after only explicit unused pure scalar/header/thread-name normalizations",
+      "SDK_independent_audit": "24 requests/23 actual compiles per framework,47 source/SO paths rehashed per framework",
+      "strict_native_source_provenance_refresh": "Both24-request reruns with strict native maps and hashes match every source/config/frontend contract exactly; existingSDK23+23 remains applicable. Paths: reports/p3_fusion_F2/{main_provenance_refresh,ta_provenance_refresh}/runtime_provenance.json"
+    }
   },
   "source_contracts": [
     {
@@ -685,9 +1373,3303 @@
       ],
       "main_pre_printf_fix_source_sha256": "ae8b78d125d537bc1a2f1a511b50ce1a8821c7e37cc5f11eec8b57625d37cff9",
       "printf_source_lines_equal_TA_after_required_dependency": true
+    },
+    {
+      "id": "mhc_post_0",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "128"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "128"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "22688"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "20640"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "10400"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "18592"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "8352"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "4f7f2ecff836f6cc79420ff48aa36f616f66d4d1aa851206ac33cc4728c07ddb",
+      "TA_source_sha256": "a4c88a3f35a0d14c14d51bd1d3ca737bccaa702e205f9a8582276775b407be18",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_1",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "256"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "256"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "22688"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "20640"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "10400"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "18592"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "8352"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "093fc588093f589a638f7c848c050a9058fe495654a6873234e6eb895effbb18",
+      "TA_source_sha256": "316b5a260ced41f7fd848b6af3b79c055465e5bf55b99c704b29e8a70d4a04d3",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_2",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "512"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "512"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "22688"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "20640"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "10400"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "18592"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "8352"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "2fba476a20c88d0de9850a8d58429f977cecd4dd567b18b1accaf9b63e32d3e0",
+      "TA_source_sha256": "75ab4aaa704f478b5fbfecb8ca5ff26aa43c21b1881546c4cb5e2d5c2a2bb176",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_3",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "1024"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "1024"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "1024"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "45216"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "1024",
+          "41120"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "4096",
+          "20640"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "1024",
+          "37024"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "16544"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "4717f948b72ff69ebb7d44f7599be66d631cf87ccd56ee062d6f88ffb45c5539",
+      "TA_source_sha256": "9060fb7fb756f64ec18e711539460ebe9fe01db90e559ea9217db1821d352999",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_4",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "1280"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "1280"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "1536"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 78,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 101,
+        "tir.call_extern": 11,
+        "tl.ascend_auto_set_flag": 9,
+        "tl.ascend_auto_wait_flag": 9,
+        "tl.ascend_set_mask_mode": 26,
+        "tl.ascend_set_mask_payload": 30,
+        "tl.ascend_cast_raw_counter": 18,
+        "tir.large_uint_imm": 60,
+        "tl.ascend_muls_raw": 12,
+        "tl.ascend_axpy_raw": 48
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "22688"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "20640"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "10400"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "18592"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "8352"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "53f7265bd684e8fd35d53f1138723aeeb26639245f499d556486ff32f9b63073",
+      "TA_source_sha256": "e440a7a065d766f24f6e04954246cb0519df844b1d7604d2dc4f1d704294d972",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_5",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "2048"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "2048"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "2048"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "90272"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "82080"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "8192",
+          "41120"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "16384",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "73888"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "32928"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "bcb01042d55790d7ea902254bf63fc4b228d0bbeea50f5495bd1cd0041e6bad8",
+      "TA_source_sha256": "f8ee184e35dbd6ece839482875bf1f7bebfec3b4ce3d7a4d3acb1f74d0739653",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_6",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "2560"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "2560"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "2560"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "10240",
+          "112800"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "2560",
+          "102560"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "10240",
+          "51360"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "20480",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "2560",
+          "92320"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "5120",
+          "41120"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "0a5e5eaf464993b3912acbae0b23aa5896d2d223e588ca3dc523d2f8d5b16d0a",
+      "TA_source_sha256": "9bd4b1b8955b9a8786a93784f08073e57d4132cd2694980c3921d0a71d332f76",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_7",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "3072"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "3072"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "3072"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "12288",
+          "135328"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "3072",
+          "123040"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "12288",
+          "61600"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "24576",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "3072",
+          "110752"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "6144",
+          "49312"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "30fa423a30c80849d24b2e69d13bc7ce916884ee865ed31f7655441a8979c674",
+      "TA_source_sha256": "55e6d90a8b13f670f3af95dca561dd0f7198d60f7dcd432d457b374ff7c6d3ea",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_8",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4096"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "4096"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "4096"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 52,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 66,
+        "tir.call_extern": 8,
+        "tl.ascend_auto_set_flag": 4,
+        "tl.ascend_auto_wait_flag": 4,
+        "tl.ascend_set_mask_mode": 17,
+        "tl.ascend_set_mask_payload": 20,
+        "tl.ascend_cast_raw_counter": 12,
+        "tir.large_uint_imm": 40,
+        "tl.ascend_muls_raw": 8,
+        "tl.ascend_axpy_raw": 32
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "90272"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "82080"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "8192",
+          "41120"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "16384",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "73888"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "32928"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "5c14ae586e73408c9da834521eef10e3bc21081810e4faf9512f9b7b608870ce",
+      "TA_source_sha256": "6a3d8688e2f2ba25ed04ed00b95da0dbfe010e666eb58e3ff697918e8d5a739b",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_9",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "7168"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "7168"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "7168"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 52,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 66,
+        "tir.call_extern": 8,
+        "tl.ascend_auto_set_flag": 4,
+        "tl.ascend_auto_wait_flag": 4,
+        "tl.ascend_set_mask_mode": 17,
+        "tl.ascend_set_mask_payload": 20,
+        "tl.ascend_cast_raw_counter": 12,
+        "tir.large_uint_imm": 40,
+        "tl.ascend_muls_raw": 8,
+        "tl.ascend_axpy_raw": 32
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "14336",
+          "157856"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "3584",
+          "143520"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "14336",
+          "71840"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "28672",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "3584",
+          "129184"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "7168",
+          "57504"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "02a9f5130c050309ca91ac8b8f69fa4ac03295c19351c995c262b22e5ed4ee43",
+      "TA_source_sha256": "9a8de48158e5f1c2cbd562642e949690e7c240cc3a3b956160707448113286c3",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_10",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "2560"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "2560"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "2560"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "10240",
+          "112800"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "2560",
+          "102560"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "10240",
+          "51360"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "20480",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "2560",
+          "92320"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "5120",
+          "41120"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "0a5e5eaf464993b3912acbae0b23aa5896d2d223e588ca3dc523d2f8d5b16d0a",
+      "TA_source_sha256": "9bd4b1b8955b9a8786a93784f08073e57d4132cd2694980c3921d0a71d332f76",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_11",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "100"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "100"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "22688"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "20640"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "10400"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "18592"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "8352"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "9eda9ac231b0b6b0fb2a3b158dc4e7be51b7edd3d44f11f9023de20b58e909d7",
+      "TA_source_sha256": "7756397f029af12abf4498842b72cc0776459b195cdb4e71bfde30720112740a",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_12",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "200"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "200"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "22688"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "20640"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "10400"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "18592"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "8352"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "d5a91aece0fbd6425f4e95b830b078a614caf460998dc4a8a15bf17507dbd086",
+      "TA_source_sha256": "42d480811c53edf073dec92168ff86b045f25dd6db440627e8a333dd754c008e",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_13",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "300"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "300"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "22688"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "20640"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "10400"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "18592"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "8352"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "d5ecdfad313d84170e05f60051c20004396b57dc9e863219a80d8683ec1293f7",
+      "TA_source_sha256": "0425fe7d95cc958963076a2b81f0f89476378bb5fdec18c007dd6dedfc05a292",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_14",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "500"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "4",
+            "4"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "500"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "4",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 26,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 39,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 9,
+        "tl.ascend_set_mask_payload": 10,
+        "tl.ascend_cast_raw_counter": 6,
+        "tir.large_uint_imm": 20,
+        "tl.ascend_muls_raw": 4,
+        "tl.ascend_axpy_raw": 16
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "32",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "22688"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "20640"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "4",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "2048",
+          "10400"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "160"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "18592"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "8352"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "844a60ae812a264a8f48574f2456f8676a01941ecfc2afc93af72b618deb93d3",
+      "TA_source_sha256": "db9c47cc1fec7e745c6581b31ed71a3d38fa2c4d67867fa60904e958c7f711c0",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_15",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "128"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "1"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "1",
+            "128"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "1",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 5,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 21,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 3,
+        "tl.ascend_set_mask_payload": 3,
+        "tl.ascend_cast_raw_counter": 3,
+        "tir.large_uint_imm": 2,
+        "tl.ascend_muls_raw": 1,
+        "tl.ascend_axpy_raw": 1
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "8",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "512",
+          "10304"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "8256"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "1",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "4160"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "64"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "6208"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "2112"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "fef88546567e8150ceed39473b3b6853451170cea91dc60859a7f3286ef08900",
+      "TA_source_sha256": "4f32c89c4302134c5b41a8e83d437a66d8271ca7e0960d71cdec43e9e99812c5",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_16",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "128"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "2"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "2",
+            "2"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "2",
+            "128"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "2",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 10,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 25,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 5,
+        "tl.ascend_set_mask_payload": 6,
+        "tl.ascend_cast_raw_counter": 4,
+        "tir.large_uint_imm": 6,
+        "tl.ascend_muls_raw": 2,
+        "tl.ascend_axpy_raw": 4
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "16",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "14432"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "12384"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "2",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "1024",
+          "6240"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "2048",
+          "96"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "10336"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "4192"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "8ea24fe680cbcf209da197e502ce08761d1cc82d390cab94086b624658d41990",
+      "TA_source_sha256": "7a05e65d513d83bcfb9aa6fa12325231d4450012b79161775000b524ebef3841",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_17",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "128"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "3"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "3",
+            "3"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "3",
+            "128"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "3",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 17,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 31,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 7,
+        "tl.ascend_set_mask_payload": 8,
+        "tl.ascend_cast_raw_counter": 5,
+        "tir.large_uint_imm": 12,
+        "tl.ascend_muls_raw": 3,
+        "tl.ascend_axpy_raw": 9
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "24",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "1536",
+          "18560"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "16512"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "3",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "1536",
+          "8320"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "3072",
+          "128"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "14464"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "6272"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "e95eb087aed5024f2c0f9ebe11f91ca674d2952bb33f7401b18c57971a53658a",
+      "TA_source_sha256": "066e4ef641a3b42ebfa0b415ba46269e7617ee5a63c74b5f702f9d9f8cb40267",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_18",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "128"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "8"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "8",
+            "8"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "8",
+            "128"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "8",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 82,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 91,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 17,
+        "tl.ascend_set_mask_payload": 18,
+        "tl.ascend_cast_raw_counter": 10,
+        "tir.large_uint_imm": 72,
+        "tl.ascend_muls_raw": 8,
+        "tl.ascend_axpy_raw": 64
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "64",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "39200"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "37152"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "8",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "4096",
+          "18720"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "288"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "35104"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "16672"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "66097ccf579dc27c13097fec20ca726a7e52e4950103a718187629da4548bc7f",
+      "TA_source_sha256": "61ee05483a59ca80d95a797d611d1bcbdd3471cf0620ac37914a51616c766660",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_19",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "100"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "8"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "8",
+            "8"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "8",
+            "100"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "8",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 82,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 91,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 17,
+        "tl.ascend_set_mask_payload": 18,
+        "tl.ascend_cast_raw_counter": 10,
+        "tir.large_uint_imm": 72,
+        "tl.ascend_muls_raw": 8,
+        "tl.ascend_axpy_raw": 64
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "64",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "39200"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "37152"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "8",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "4096",
+          "18720"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "288"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "35104"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "16672"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "ad49dcd43be9aa676a61bf442d147e1ec41076d965c84b2630c0be01601c64a9",
+      "TA_source_sha256": "244edbb2194af1ad92f9cb586c696ee282f727fcbe54d301ff6ccdbfea09ac6a",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_20",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "1280"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "8"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "8",
+            "8"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "8",
+            "1280"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "8",
+            "1536"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 246,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 257,
+        "tir.call_extern": 11,
+        "tl.ascend_auto_set_flag": 9,
+        "tl.ascend_auto_wait_flag": 9,
+        "tl.ascend_set_mask_mode": 50,
+        "tl.ascend_set_mask_payload": 54,
+        "tl.ascend_cast_raw_counter": 30,
+        "tir.large_uint_imm": 216,
+        "tl.ascend_muls_raw": 24,
+        "tl.ascend_axpy_raw": 192
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "64",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "39200"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "37152"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "8",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "4096",
+          "18720"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "288"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "35104"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "16672"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "4317725efd75fd8ee1f717b1d42cdcb085fbd71451f51a31f2c88c69ad413b72",
+      "TA_source_sha256": "a3e6a066d1dfc7816553912c5faed61b03950303fca7af21f9367c63d3338422",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "mhc_post_21",
+      "frontend_params": [
+        {
+          "name": "x_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "512"
+          ]
+        },
+        {
+          "name": "post_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "8"
+          ]
+        },
+        {
+          "name": "comb_handle",
+          "dtype": "float32",
+          "shape": [
+            "n",
+            "8",
+            "8"
+          ]
+        },
+        {
+          "name": "residual_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "8",
+            "512"
+          ]
+        },
+        {
+          "name": "output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "n",
+            "8",
+            "512"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_auto_barrier": 82,
+        "tir.type_annotation": 21,
+        "tir.tvm_access_ptr": 91,
+        "tir.call_extern": 5,
+        "tl.ascend_auto_set_flag": 2,
+        "tl.ascend_auto_wait_flag": 2,
+        "tl.ascend_set_mask_mode": 17,
+        "tl.ascend_set_mask_payload": 18,
+        "tl.ascend_cast_raw_counter": 10,
+        "tir.large_uint_imm": 72,
+        "tl.ascend_muls_raw": 8,
+        "tl.ascend_axpy_raw": 64
+      },
+      "allocation_views": [
+        [
+          "comb_fp32",
+          "ascend_ub",
+          "float",
+          "64",
+          "32"
+        ],
+        [
+          "out_bf16",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "39200"
+        ],
+        [
+          "out_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "37152"
+        ],
+        [
+          "post_fp32",
+          "ascend_ub",
+          "float",
+          "8",
+          "0"
+        ],
+        [
+          "res_fp32",
+          "ascend_ub",
+          "float",
+          "4096",
+          "18720"
+        ],
+        [
+          "res_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "288"
+        ],
+        [
+          "x_fp32",
+          "ascend_ub",
+          "float",
+          "512",
+          "35104"
+        ],
+        [
+          "x_ub",
+          "ascend_ub",
+          "bfloat16_t",
+          "1024",
+          "16672"
+        ]
+      ],
+      "host_prototype": "uint8_t* x_handle, uint8_t* post_handle, uint8_t* comb_handle, uint8_t* residual_handle, uint8_t* output_handle, int64_t n, aclrtStream stream",
+      "main_source_sha256": "d10ead21929dceef1d1c18bb65005d6b96c9e13a59d3266099cb047f2ddcfb7e",
+      "TA_source_sha256": "0a89ecbb2bc6513daa54109197aa92586b9a2e80fa5a8508baf30bd701b317dc",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_sync": true,
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_tail_mask": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "head_mix_fwd_original",
+      "frontend_params": [
+        {
+          "name": "input_mix_handle",
+          "dtype": "float32",
+          "shape": [
+            "num_tokens",
+            "16"
+          ]
+        },
+        {
+          "name": "mhc_scale_handle",
+          "dtype": "float32",
+          "shape": [
+            "1"
+          ]
+        },
+        {
+          "name": "mhc_base_handle",
+          "dtype": "float32",
+          "shape": [
+            "4"
+          ]
+        },
+        {
+          "name": "output_mix_handle",
+          "dtype": "float32",
+          "shape": [
+            "num_tokens",
+            "16"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_set_flag": 4,
+        "tl.ascend_wait_flag": 4,
+        "tir.type_annotation": 18,
+        "tir.tvm_access_ptr": 18,
+        "tir.call_extern": 4,
+        "tl.ascend_set_mask_mode": 2,
+        "tir.large_uint_imm": 3,
+        "tl.ascend_set_mask_payload": 2,
+        "tl.ascend_broadcast_advanced_composite": 1,
+        "tl.ascend_axpy_raw": 1,
+        "tl.ascend_sigmoid_self_contained_normal_full": 1,
+        "tl.ascend_adds_raw": 1
+      },
+      "allocation_views": [
+        [
+          "base_ub",
+          "ascend_ub",
+          "float",
+          "16",
+          "4128"
+        ],
+        [
+          "bcast_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "8288"
+        ],
+        [
+          "in_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "0"
+        ],
+        [
+          "out_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "12384"
+        ],
+        [
+          "scale_ub",
+          "ascend_ub",
+          "float",
+          "1",
+          "4096"
+        ],
+        [
+          "tmp_ub",
+          "ascend_ub",
+          "uint8_t",
+          "4096",
+          "4192"
+        ]
+      ],
+      "host_prototype": "uint8_t* input_mix_handle, uint8_t* mhc_scale_handle, uint8_t* mhc_base_handle, uint8_t* output_mix_handle, int64_t num_tokens, aclrtStream stream",
+      "main_source_sha256": "89c6755cb475e5a4e39dfb418ce4957864a623ae0d88d4be7e7219eedb2dd289",
+      "TA_source_sha256": "b12103b219976bad6fe13c3804f07149f21ef4b6530d84825eb54f730bdce5a0",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": false,
+        "tl.ascend_memory_planning": true
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": false,
+        "tl.ascend_memory_planning": true
+      },
+      "original_compile_flags": null
+    },
+    {
+      "id": "head_mix_bwd_original",
+      "frontend_params": [
+        {
+          "name": "output_mix_grad_handle",
+          "dtype": "float32",
+          "shape": [
+            "num_tokens",
+            "16"
+          ]
+        },
+        {
+          "name": "input_mix_handle",
+          "dtype": "float32",
+          "shape": [
+            "num_tokens",
+            "16"
+          ]
+        },
+        {
+          "name": "mhc_scale_handle",
+          "dtype": "float32",
+          "shape": [
+            "1"
+          ]
+        },
+        {
+          "name": "mhc_base_handle",
+          "dtype": "float32",
+          "shape": [
+            "4"
+          ]
+        },
+        {
+          "name": "input_mix_grad_handle",
+          "dtype": "float32",
+          "shape": [
+            "num_tokens",
+            "16"
+          ]
+        },
+        {
+          "name": "mhc_scale_grad_partial_handle",
+          "dtype": "float32",
+          "shape": [
+            "32",
+            "16"
+          ]
+        },
+        {
+          "name": "mhc_base_grad_partial_handle",
+          "dtype": "float32",
+          "shape": [
+            "32",
+            "16"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_set_mask_mode": 7,
+        "tl.ascend_set_mask_payload": 8,
+        "tir.type_annotation": 52,
+        "tir.tvm_access_ptr": 52,
+        "tl.ascend_fill_raw_counter": 3,
+        "tl.ascend_set_flag": 4,
+        "tl.ascend_wait_flag": 4,
+        "tir.call_extern": 7,
+        "tir.large_uint_imm": 7,
+        "tl.ascend_broadcast_advanced_composite": 1,
+        "tl.ascend_axpy_raw": 1,
+        "tl.ascend_sigmoid_self_contained_normal_full": 1,
+        "tl.ascend_sub_raw": 1,
+        "tl.ascend_mul_raw": 3,
+        "tl.ascend_reduce_advanced_composite": 2,
+        "tl.ascend_add_raw": 2,
+        "tl.ascend_muls_raw": 1
+      },
+      "allocation_views": [
+        [
+          "base_grad_ub",
+          "ascend_ub",
+          "float",
+          "16",
+          "0"
+        ],
+        [
+          "base_ub",
+          "ascend_ub",
+          "float",
+          "16",
+          "8352"
+        ],
+        [
+          "bcast_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "8416"
+        ],
+        [
+          "buf_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "4224"
+        ],
+        [
+          "in_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "128"
+        ],
+        [
+          "reduce_col_ub",
+          "ascend_ub",
+          "float",
+          "16",
+          "24800"
+        ],
+        [
+          "scale_grad_ub",
+          "ascend_ub",
+          "float",
+          "16",
+          "64"
+        ],
+        [
+          "scale_ub",
+          "ascend_ub",
+          "float",
+          "1",
+          "8320"
+        ],
+        [
+          "sig_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "16608"
+        ],
+        [
+          "tmp_ub",
+          "ascend_ub",
+          "uint8_t",
+          "4096",
+          "12512"
+        ],
+        [
+          "val_ub",
+          "ascend_ub",
+          "float",
+          "1024",
+          "20704"
+        ]
+      ],
+      "host_prototype": "uint8_t* output_mix_grad_handle, uint8_t* input_mix_handle, uint8_t* mhc_scale_handle, uint8_t* mhc_base_handle, uint8_t* input_mix_grad_handle, uint8_t* mhc_scale_grad_partial_handle, uint8_t* mhc_base_grad_partial_handle, int64_t num_tokens, aclrtStream stream",
+      "main_source_sha256": "005a92ff3772911b7a96d8eca9be6250746798e118188c6847dea759302bf639",
+      "TA_source_sha256": "fa8d629c4c6e9b10c4b8def30c69c33acf632507f56630f6b29be4c4379fc07e",
+      "TA_main_ABI_and_named_allocations_equal": true,
+      "original_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": false,
+        "tl.ascend_memory_planning": false
+      },
+      "main_effective_configs": {
+        "tl.ascend_auto_cv_combine": true,
+        "tl.ascend_auto_sync": false,
+        "tl.ascend_memory_planning": false
+      },
+      "original_compile_flags": null
     }
   ],
   "required_dependency_commits": {
-    "printf_private_StringImm_fix": "cd35c7a0"
+    "printf_private_StringImm_fix": "fb95fb39515084622d40ee899b3d89e8387848e7"
   }
 }

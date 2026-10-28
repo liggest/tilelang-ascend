@@ -35,7 +35,26 @@ import/cache safety, complete original public lowering, parameter order,
 operation inventory, named allocations and host ABI. These host/source checks
 are distinct from the original device golden and from an actual CI bench run.
 
-The remaining F8 assets (`mhc_post`, `head_compute_mix_kernel`, `moe_aux_fi`,
-`moe_topk_gate`) remain planned separately. Their whole generators/full
-matrices are retained in inventory; this four-asset component does not claim
-their source, SDK or device coverage.
+F2 adds the complete `mhc_post/example_mhc_post.py` and
+`tile_kernels/mhc/head_compute_mix_kernel.py` assets. Their original CLI
+matrices remain:22 mhc shapes and the original n8192 forward/backward head
+tests (one forward and three gradient assertions). All24 complete factory
+requests pass TA/main source lowering and real SDK compilation, with23 exact
+source/config/ABI identities per framework. The dynamic mhc n4/n4096 cases
+share one identity; this does not remove either original runtime case.
+
+Mhc keeps its original BF16/FP32 golden and rtol1e-2/atol0.2. Its original
+`test()` catches assertion failures, prints `FAILED` and may still exit0;
+device validation must inspect all22 actual assertions and the original
+success/failure text. The separate three-shape benchmark helper is retained
+with warmup20/rep100 but is not called by the original CLI and has not run.
+The kernel's padded h tail is cropped by the original host wrapper; that
+padded allocation is not an initialized numerical golden.
+Its original CLI `disable_cache()` is scoped with exact caller-state
+restoration. Head keeps reshape-factor4, all partial gradient buffers and
+host reductions, and all original rtol/atol1e-4 checks. Module imports do not
+register torch_npu or execute either CLI.
+
+Both F2 assets still await device validation. The F3 `moe_aux_fi` and
+`moe_topk_gate` complete generators/default/full matrices remain planned
+separately, without source/SDK/device completion claims here.
