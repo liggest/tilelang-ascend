@@ -1,0 +1,1774 @@
+{
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "scope": "five complete source inputs from original factories; not device or all-shape proof",
+  "rows": [
+    {
+      "case": "fa2_default",
+      "source_path": "examples/flash_attention/fa_opt/expert_v2/kernel.py",
+      "factory": "flash_attention_fwd",
+      "kwargs": {
+        "batch": 1,
+        "seq_len": 4096,
+        "heads_q": 12,
+        "heads_kv": 1,
+        "dim": 128
+      },
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "12",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "Output_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "12",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "ws_sp_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "3",
+            "256",
+            "1024"
+          ]
+        },
+        {
+          "name": "ws_op_handle",
+          "dtype": "float32",
+          "shape": [
+            "24",
+            "3",
+            "256",
+            "128"
+          ]
+        },
+        {
+          "name": "ws_oa_handle",
+          "dtype": "float32",
+          "shape": [
+            "24",
+            "256",
+            "128"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_set_flag": 40,
+        "tl.ascend_wait_cross_flag": 2,
+        "tl.ascend_wait_flag": 41,
+        "tir.type_annotation": 95,
+        "tir.tvm_access_ptr": 127,
+        "tir.call_extern": 17,
+        "tl.ascend_mma": 2,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_copy_ub_to_ub_selected": 7,
+        "tl.ascend_pipe_barrier": 17,
+        "tl.ascend_set_mask_mode": 4,
+        "tir.large_uint_imm": 9,
+        "tl.ascend_set_mask_payload": 5,
+        "tl.ascend_row_expand_mul_experiment_raw_normal": 2,
+        "tl.ascend_add_raw": 2,
+        "tl.ascend_row_expand_div_experiment_raw_normal": 1,
+        "tl.ascend_fill_raw_counter": 2,
+        "tl.ascend_muls_raw": 1,
+        "tl.ascend_reduce_fp32_v2": 2,
+        "tl.ascend_brcb_experiment_payload_full": 3,
+        "tl.ascend_row_expand_sub_experiment_raw_normal": 16,
+        "tl.ascend_exp_raw": 2,
+        "tl.ascend_sub_raw": 1,
+        "tl.ascend_mul_raw": 1
+      },
+      "allocation_views": [
+        [
+          "a_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "262144"
+        ],
+        [
+          "kv_l1",
+          "ascend_l1",
+          "half",
+          "131072",
+          "0"
+        ],
+        [
+          "l0a",
+          "ascend_l0a",
+          "half",
+          "32768",
+          "0"
+        ],
+        [
+          "l0b",
+          "ascend_l0b",
+          "half",
+          "32768",
+          "0"
+        ],
+        [
+          "l0c",
+          "ascend_l0c",
+          "float",
+          "32768",
+          "0"
+        ],
+        [
+          "l_panel",
+          "ascend_ub",
+          "float",
+          "128",
+          "168960"
+        ],
+        [
+          "l_stats_ring",
+          "ascend_ub",
+          "float",
+          "2048",
+          "159744"
+        ],
+        [
+          "ld_o_acc",
+          "ascend_ub",
+          "float",
+          "8192",
+          "81920"
+        ],
+        [
+          "ld_o_partial",
+          "ascend_ub",
+          "float",
+          "8192",
+          "114688"
+        ],
+        [
+          "ld_score",
+          "ascend_ub",
+          "half",
+          "8192",
+          "81920"
+        ],
+        [
+          "m_prev",
+          "ascend_ub",
+          "float",
+          "128",
+          "168448"
+        ],
+        [
+          "m_stats",
+          "ascend_ub",
+          "float",
+          "128",
+          "167936"
+        ],
+        [
+          "row_expand_scalars",
+          "ascend_ub",
+          "float",
+          "512",
+          "0"
+        ],
+        [
+          "scale_ring",
+          "ascend_ub",
+          "float",
+          "3072",
+          "147456"
+        ],
+        [
+          "score_local",
+          "ascend_ub",
+          "float",
+          "8192",
+          "0"
+        ],
+        [
+          "sfm_brcb",
+          "ascend_ub",
+          "float",
+          "64",
+          "181952"
+        ],
+        [
+          "sfm_tmp",
+          "ascend_ub",
+          "uint8_t",
+          "8384",
+          "173568"
+        ],
+        [
+          "st_o_acc",
+          "ascend_ub",
+          "float",
+          "8192",
+          "49152"
+        ],
+        [
+          "st_o_norm",
+          "ascend_ub",
+          "half",
+          "8192",
+          "32768"
+        ],
+        [
+          "st_prob",
+          "ascend_ub",
+          "half",
+          "8192",
+          "49152"
+        ],
+        [
+          "sum_brcb",
+          "ascend_ub",
+          "float",
+          "1024",
+          "169472"
+        ]
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* Output_handle, uint8_t* ws_sp_handle, uint8_t* ws_op_handle, uint8_t* ws_oa_handle, aclrtStream stream",
+      "TA_complete_source_sha256": "24def841dc45c7564e5d60b17be21f931c96e5d40e0f4355c73c3fadf4a7dd73",
+      "original_pass_configs": {
+        "PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE": false,
+        "PassConfigKey.TL_ASCEND_AUTO_CV_SYNC": false,
+        "PassConfigKey.TL_ASCEND_MEMORY_PLANNING": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC_VS": false
+      }
+    },
+    {
+      "case": "fa3_default",
+      "source_path": "examples/flash_attention/fa_opt/expert_v3/kernel.py",
+      "factory": "make_primfunc",
+      "kwargs": {
+        "batch": 1,
+        "seq_len": 4096,
+        "heads_q": 12,
+        "heads_kv": 1,
+        "dim": 128,
+        "kernel_name": "main_kernel",
+        "capture": false
+      },
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "12",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "Output_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "12",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "SP_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "3",
+            "256",
+            "512"
+          ]
+        },
+        {
+          "name": "OP_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "3",
+            "256",
+            "128"
+          ]
+        },
+        {
+          "name": "Trace_handle",
+          "dtype": "float32",
+          "shape": [
+            "1",
+            "1"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_set_flag": 82,
+        "tl.ascend_wait_flag": 82,
+        "tir.type_annotation": 142,
+        "tir.tvm_access_ptr": 271,
+        "tir.call_extern": 45,
+        "tl.ascend_wait_cross_flag": 4,
+        "tl.ascend_mma": 16,
+        "tl.ascend_set_cross_flag": 4,
+        "tl.ascend_pipe_barrier": 1,
+        "tl.ascend_copy_ub_to_ub_selected": 6,
+        "tl.ascend_brcb_experiment_payload_full": 6,
+        "tl.ascend_mul_add_dst_self_contained_normal_full": 2,
+        "tir.large_uint_imm": 138,
+        "tl.ascend_block_reduce_max_raw_normal": 128,
+        "tl.ascend_row_expand_mul_experiment_raw_normal": 4,
+        "tl.ascend_set_mask_mode": 13,
+        "tl.ascend_set_mask_payload": 17,
+        "tl.ascend_cast_raw_counter": 6,
+        "tl.ascend_axpy_raw": 2,
+        "tl.ascend_row_expand_div_experiment_raw_normal": 4,
+        "tl.ascend_reduce_fp32_v2": 2,
+        "tl.ascend_muls_raw": 5,
+        "tl.ascend_max_raw": 1,
+        "tl.ascend_fill_raw_counter": 1,
+        "tl.ascend_sub_raw": 1,
+        "tl.ascend_exp_raw": 3,
+        "tl.ascend_row_expand_sub_experiment_raw_normal": 16
+      },
+      "allocation_views": [
+        [
+          "a_l0",
+          "ascend_l0a",
+          "half",
+          "32768",
+          "0"
+        ],
+        [
+          "affine_tmp",
+          "ascend_ub",
+          "float",
+          "4096",
+          "163840"
+        ],
+        [
+          "alpha",
+          "ascend_ub",
+          "float",
+          "384",
+          "186496"
+        ],
+        [
+          "aux",
+          "ascend_ub",
+          "float",
+          "128",
+          "191616"
+        ],
+        [
+          "b_l0",
+          "ascend_l0b",
+          "half",
+          "32768",
+          "0"
+        ],
+        [
+          "c_wide",
+          "ascend_l0c",
+          "float",
+          "32768",
+          "0"
+        ],
+        [
+          "coeff",
+          "ascend_ub",
+          "float",
+          "512",
+          "189568"
+        ],
+        [
+          "coeff_hi",
+          "ascend_ub",
+          "float",
+          "128",
+          "190720"
+        ],
+        [
+          "coeff_lo",
+          "ascend_ub",
+          "float",
+          "128",
+          "189952"
+        ],
+        [
+          "input_ub",
+          "ascend_ub",
+          "half",
+          "16384",
+          "65536"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "65536"
+        ],
+        [
+          "l",
+          "ascend_ub",
+          "float",
+          "128",
+          "185984"
+        ],
+        [
+          "m",
+          "ascend_ub",
+          "float",
+          "128",
+          "185472"
+        ],
+        [
+          "m_tile",
+          "ascend_ub",
+          "float",
+          "16",
+          "192128"
+        ],
+        [
+          "o0_flat",
+          "ascend_ub",
+          "float",
+          "8192",
+          "32768"
+        ],
+        [
+          "o1_flat",
+          "ascend_ub",
+          "float",
+          "8192",
+          "131072"
+        ],
+        [
+          "output_ub",
+          "ascend_ub",
+          "half",
+          "16384",
+          "98304"
+        ],
+        [
+          "p_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "131072"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "0"
+        ],
+        [
+          "reduce_tmp",
+          "ascend_ub",
+          "uint8_t",
+          "5248",
+          "180224"
+        ],
+        [
+          "score_flat",
+          "ascend_ub",
+          "float",
+          "8192",
+          "0"
+        ],
+        [
+          "sums",
+          "ascend_ub",
+          "float",
+          "384",
+          "188032"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "196608"
+        ]
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* Output_handle, uint8_t* SP_handle, uint8_t* OP_handle, uint8_t* Trace_handle, aclrtStream stream",
+      "TA_complete_source_sha256": "396c755798625b5d3faef3e0f0f76f27784fb041d316eaae225af0c701a0f38a",
+      "original_pass_configs": {
+        "PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE": false,
+        "PassConfigKey.TL_ASCEND_AUTO_CV_SYNC": false,
+        "PassConfigKey.TL_ASCEND_MEMORY_PLANNING": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC_VS": false
+      }
+    },
+    {
+      "case": "fa3_capture",
+      "source_path": "examples/flash_attention/fa_opt/expert_v3/kernel.py",
+      "factory": "make_primfunc",
+      "kwargs": {
+        "batch": 1,
+        "seq_len": 4096,
+        "heads_q": 12,
+        "heads_kv": 1,
+        "dim": 128,
+        "kernel_name": "main_kernel",
+        "capture": true
+      },
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "12",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "Output_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "12",
+            "4096",
+            "128"
+          ]
+        },
+        {
+          "name": "SP_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "3",
+            "256",
+            "512"
+          ]
+        },
+        {
+          "name": "OP_handle",
+          "dtype": "float16",
+          "shape": [
+            "24",
+            "3",
+            "256",
+            "128"
+          ]
+        },
+        {
+          "name": "Trace_handle",
+          "dtype": "float32",
+          "shape": [
+            "1536",
+            "66560"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_set_flag": 103,
+        "tl.ascend_wait_flag": 103,
+        "tir.type_annotation": 164,
+        "tir.tvm_access_ptr": 293,
+        "tir.call_extern": 54,
+        "tl.ascend_wait_cross_flag": 4,
+        "tl.ascend_mma": 16,
+        "tl.ascend_set_cross_flag": 4,
+        "tl.ascend_pipe_barrier": 1,
+        "tl.ascend_copy_ub_to_ub_selected": 6,
+        "tl.ascend_brcb_experiment_payload_full": 6,
+        "tl.ascend_mul_add_dst_self_contained_normal_full": 2,
+        "tir.large_uint_imm": 138,
+        "tl.ascend_block_reduce_max_raw_normal": 128,
+        "tl.ascend_row_expand_mul_experiment_raw_normal": 4,
+        "tl.ascend_set_mask_mode": 13,
+        "tl.ascend_set_mask_payload": 17,
+        "tl.ascend_cast_raw_counter": 8,
+        "tl.ascend_axpy_raw": 2,
+        "tl.ascend_row_expand_div_experiment_raw_normal": 4,
+        "tl.ascend_reduce_fp32_v2": 2,
+        "tl.ascend_muls_raw": 5,
+        "tl.ascend_max_raw": 1,
+        "tl.ascend_fill_raw_counter": 1,
+        "tl.ascend_sub_raw": 1,
+        "tl.ascend_exp_raw": 3,
+        "tl.ascend_row_expand_sub_experiment_raw_normal": 16
+      },
+      "allocation_views": [
+        [
+          "a_l0",
+          "ascend_l0a",
+          "half",
+          "32768",
+          "0"
+        ],
+        [
+          "affine_tmp",
+          "ascend_ub",
+          "float",
+          "4096",
+          "163840"
+        ],
+        [
+          "alpha",
+          "ascend_ub",
+          "float",
+          "384",
+          "186496"
+        ],
+        [
+          "aux",
+          "ascend_ub",
+          "float",
+          "128",
+          "191616"
+        ],
+        [
+          "b_l0",
+          "ascend_l0b",
+          "half",
+          "32768",
+          "0"
+        ],
+        [
+          "c_wide",
+          "ascend_l0c",
+          "float",
+          "32768",
+          "0"
+        ],
+        [
+          "coeff",
+          "ascend_ub",
+          "float",
+          "512",
+          "189568"
+        ],
+        [
+          "coeff_hi",
+          "ascend_ub",
+          "float",
+          "128",
+          "190720"
+        ],
+        [
+          "coeff_lo",
+          "ascend_ub",
+          "float",
+          "128",
+          "189952"
+        ],
+        [
+          "input_ub",
+          "ascend_ub",
+          "half",
+          "16384",
+          "65536"
+        ],
+        [
+          "k_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "65536"
+        ],
+        [
+          "l",
+          "ascend_ub",
+          "float",
+          "128",
+          "185984"
+        ],
+        [
+          "m",
+          "ascend_ub",
+          "float",
+          "128",
+          "185472"
+        ],
+        [
+          "m_tile",
+          "ascend_ub",
+          "float",
+          "16",
+          "192128"
+        ],
+        [
+          "o0_flat",
+          "ascend_ub",
+          "float",
+          "8192",
+          "32768"
+        ],
+        [
+          "o1_flat",
+          "ascend_ub",
+          "float",
+          "8192",
+          "131072"
+        ],
+        [
+          "output_ub",
+          "ascend_ub",
+          "half",
+          "16384",
+          "98304"
+        ],
+        [
+          "p_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "131072"
+        ],
+        [
+          "q_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "0"
+        ],
+        [
+          "reduce_tmp",
+          "ascend_ub",
+          "uint8_t",
+          "5248",
+          "180224"
+        ],
+        [
+          "score_flat",
+          "ascend_ub",
+          "float",
+          "8192",
+          "0"
+        ],
+        [
+          "sums",
+          "ascend_ub",
+          "float",
+          "384",
+          "188032"
+        ],
+        [
+          "v_l1",
+          "ascend_l1",
+          "half",
+          "32768",
+          "196608"
+        ]
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* Output_handle, uint8_t* SP_handle, uint8_t* OP_handle, uint8_t* Trace_handle, aclrtStream stream",
+      "TA_complete_source_sha256": "06f6fa4d9850d83b34cef6b89e9d7c2608329ec377a1fd1c46831f90b2c95e6a",
+      "original_pass_configs": {
+        "PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE": false,
+        "PassConfigKey.TL_ASCEND_AUTO_CV_SYNC": false,
+        "PassConfigKey.TL_ASCEND_MEMORY_PLANNING": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC_VS": false
+      }
+    },
+    {
+      "case": "xa2_default_1",
+      "source_path": "examples/xattention/expert_v2/kernel.py",
+      "factory": "flash_attention_xattn_fwd",
+      "kwargs": {
+        "request_num": 1,
+        "bpr": 128,
+        "kv_heads": 8,
+        "group_size": 4,
+        "kv_seq": 1024,
+        "decode_step": 2,
+        "dim": 128
+      },
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "128",
+            "32",
+            "128"
+          ]
+        },
+        {
+          "name": "K_shared_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "1024",
+            "8",
+            "128"
+          ]
+        },
+        {
+          "name": "V_shared_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "1024",
+            "8",
+            "128"
+          ]
+        },
+        {
+          "name": "unshared_key_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "128",
+            "8",
+            "2",
+            "128"
+          ]
+        },
+        {
+          "name": "unshared_value_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "128",
+            "8",
+            "2",
+            "128"
+          ]
+        },
+        {
+          "name": "Output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "128",
+            "32",
+            "128"
+          ]
+        },
+        {
+          "name": "ws_sp_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "24",
+            "2",
+            "256",
+            "1024"
+          ]
+        },
+        {
+          "name": "ws_op_handle",
+          "dtype": "float32",
+          "shape": [
+            "24",
+            "2",
+            "256",
+            "128"
+          ]
+        },
+        {
+          "name": "ws_oa_handle",
+          "dtype": "float32",
+          "shape": [
+            "24",
+            "256",
+            "128"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_set_flag": 49,
+        "tl.ascend_wait_cross_flag": 2,
+        "tl.ascend_wait_flag": 49,
+        "tir.type_annotation": 276,
+        "tir.tvm_access_ptr": 306,
+        "tir.call_extern": 19,
+        "tl.ascend_mma": 2,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_copy_ub_to_ub_selected": 17,
+        "tl.ascend_pipe_barrier": 72,
+        "tir.large_uint_imm": 51,
+        "tl.ascend_mul_raw": 10,
+        "tl.ascend_reduce_fp32_v2": 4,
+        "tl.ascend_set_mask_mode": 20,
+        "tl.ascend_set_mask_payload": 19,
+        "tl.ascend_muls_raw": 3,
+        "tl.ascend_max_raw": 5,
+        "tl.ascend_sub_raw": 10,
+        "tl.ascend_exp_raw": 11,
+        "tl.ascend_brcb_experiment_payload_full": 9,
+        "tl.ascend_add_raw": 10,
+        "tl.ascend_mul_add_dst_self_contained_normal_full": 2,
+        "tl.ascend_div_raw": 4,
+        "tl.ascend_row_expand_mul_experiment_raw_normal": 4,
+        "tl.ascend_fill_raw_counter": 2,
+        "tl.ascend_row_expand_sub_experiment_raw_normal": 16
+      },
+      "allocation_views": [
+        [
+          "a_l1",
+          "ascend_l1",
+          "bfloat16_t",
+          "32768",
+          "262144"
+        ],
+        [
+          "cor_s_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "30208"
+        ],
+        [
+          "cor_u_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "31232"
+        ],
+        [
+          "gl_mrg_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "29184"
+        ],
+        [
+          "gl_u_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "28160"
+        ],
+        [
+          "gm_mrg_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "29184"
+        ],
+        [
+          "gm_u",
+          "ascend_ub",
+          "float",
+          "32",
+          "24832"
+        ],
+        [
+          "gm_u_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "27136"
+        ],
+        [
+          "ku_ld",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "81920"
+        ],
+        [
+          "kv_f32",
+          "ascend_ub",
+          "float",
+          "4096",
+          "131072"
+        ],
+        [
+          "kv_f32_3",
+          "ascend_ub",
+          "float",
+          "8192",
+          "114688"
+        ],
+        [
+          "kv_f32_flat",
+          "ascend_ub",
+          "float",
+          "8192",
+          "114688"
+        ],
+        [
+          "kv_l1",
+          "ascend_l1",
+          "bfloat16_t",
+          "131072",
+          "0"
+        ],
+        [
+          "l0a",
+          "ascend_l0a",
+          "bfloat16_t",
+          "32768",
+          "0"
+        ],
+        [
+          "l0b",
+          "ascend_l0b",
+          "bfloat16_t",
+          "32768",
+          "0"
+        ],
+        [
+          "l0c",
+          "ascend_l0c",
+          "float",
+          "32768",
+          "0"
+        ],
+        [
+          "l_panel",
+          "ascend_ub",
+          "float",
+          "128",
+          "184320"
+        ],
+        [
+          "l_stats_ring",
+          "ascend_ub",
+          "float",
+          "3072",
+          "167936"
+        ],
+        [
+          "ld_o_partial",
+          "ascend_ub",
+          "float",
+          "8192",
+          "114688"
+        ],
+        [
+          "ld_score",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "81920"
+        ],
+        [
+          "m_prev",
+          "ascend_ub",
+          "float",
+          "1024",
+          "180224"
+        ],
+        [
+          "m_stats_ring",
+          "ascend_ub",
+          "float",
+          "3072",
+          "155648"
+        ],
+        [
+          "o_st",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "32768"
+        ],
+        [
+          "o_u",
+          "ascend_ub",
+          "float",
+          "4096",
+          "0"
+        ],
+        [
+          "os_half",
+          "ascend_ub",
+          "float",
+          "8192",
+          "49152"
+        ],
+        [
+          "q_bf",
+          "ascend_ub",
+          "float",
+          "4096",
+          "114688"
+        ],
+        [
+          "q_ld",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "147456"
+        ],
+        [
+          "scale_s0_r0",
+          "ascend_ub",
+          "float",
+          "512",
+          "184832"
+        ],
+        [
+          "scale_s0_r1",
+          "ascend_ub",
+          "float",
+          "512",
+          "188928"
+        ],
+        [
+          "scale_s1_r0",
+          "ascend_ub",
+          "float",
+          "512",
+          "190976"
+        ],
+        [
+          "scale_s1_r1",
+          "ascend_ub",
+          "float",
+          "512",
+          "193024"
+        ],
+        [
+          "score_buf",
+          "ascend_ub",
+          "float",
+          "64",
+          "24576"
+        ],
+        [
+          "score_flat",
+          "ascend_ub",
+          "float",
+          "64",
+          "24576"
+        ],
+        [
+          "score_local",
+          "ascend_ub",
+          "float",
+          "8192",
+          "0"
+        ],
+        [
+          "sfm_brcb",
+          "ascend_ub",
+          "float",
+          "64",
+          "73952"
+        ],
+        [
+          "sfm_row",
+          "ascend_ub",
+          "float",
+          "8",
+          "73920"
+        ],
+        [
+          "sfm_tmp",
+          "ascend_ub",
+          "uint8_t",
+          "8384",
+          "65536"
+        ],
+        [
+          "st_o_acc",
+          "ascend_ub",
+          "float",
+          "8192",
+          "49152"
+        ],
+        [
+          "st_prob",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "49152"
+        ],
+        [
+          "sum_brcb",
+          "ascend_ub",
+          "float",
+          "512",
+          "186880"
+        ],
+        [
+          "ured",
+          "ascend_ub",
+          "uint8_t",
+          "8192",
+          "16384"
+        ],
+        [
+          "vu_ld",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "98304"
+        ],
+        [
+          "vu_ld_flat",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "98304"
+        ],
+        [
+          "w_blk",
+          "ascend_ub",
+          "float",
+          "512",
+          "25088"
+        ],
+        [
+          "w_blk_flat",
+          "ascend_ub",
+          "float",
+          "512",
+          "25088"
+        ],
+        [
+          "w_u",
+          "ascend_ub",
+          "float",
+          "32",
+          "24960"
+        ]
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_shared_handle, uint8_t* V_shared_handle, uint8_t* unshared_key_handle, uint8_t* unshared_value_handle, uint8_t* Output_handle, uint8_t* ws_sp_handle, uint8_t* ws_op_handle, uint8_t* ws_oa_handle, aclrtStream stream",
+      "TA_complete_source_sha256": "d043299aed80a6c348b8db12112fe8fb6c492673c0cdb888b9c2a67b4687459c",
+      "original_pass_configs": {
+        "PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE": false,
+        "PassConfigKey.TL_ASCEND_AUTO_CV_SYNC": false,
+        "PassConfigKey.TL_ASCEND_MEMORY_PLANNING": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC_VS": false
+      }
+    },
+    {
+      "case": "xa2_default_2",
+      "source_path": "examples/xattention/expert_v2/kernel.py",
+      "factory": "flash_attention_xattn_fwd",
+      "kwargs": {
+        "request_num": 2,
+        "bpr": 256,
+        "kv_heads": 8,
+        "group_size": 4,
+        "kv_seq": 2048,
+        "decode_step": 2,
+        "dim": 128
+      },
+      "frontend_params": [
+        {
+          "name": "Q_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "512",
+            "32",
+            "128"
+          ]
+        },
+        {
+          "name": "K_shared_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "4096",
+            "8",
+            "128"
+          ]
+        },
+        {
+          "name": "V_shared_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "4096",
+            "8",
+            "128"
+          ]
+        },
+        {
+          "name": "unshared_key_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "512",
+            "8",
+            "2",
+            "128"
+          ]
+        },
+        {
+          "name": "unshared_value_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "512",
+            "8",
+            "2",
+            "128"
+          ]
+        },
+        {
+          "name": "Output_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "512",
+            "32",
+            "128"
+          ]
+        },
+        {
+          "name": "ws_sp_handle",
+          "dtype": "bfloat16",
+          "shape": [
+            "24",
+            "2",
+            "256",
+            "1024"
+          ]
+        },
+        {
+          "name": "ws_op_handle",
+          "dtype": "float32",
+          "shape": [
+            "24",
+            "2",
+            "256",
+            "128"
+          ]
+        },
+        {
+          "name": "ws_oa_handle",
+          "dtype": "float32",
+          "shape": [
+            "24",
+            "256",
+            "128"
+          ]
+        }
+      ],
+      "final_op_calls": {
+        "tl.ascend_set_flag": 51,
+        "tl.ascend_wait_cross_flag": 2,
+        "tl.ascend_wait_flag": 52,
+        "tir.type_annotation": 291,
+        "tir.tvm_access_ptr": 321,
+        "tir.call_extern": 22,
+        "tl.ascend_mma": 2,
+        "tl.ascend_set_cross_flag": 3,
+        "tl.ascend_copy_ub_to_ub_selected": 17,
+        "tl.ascend_set_mask_mode": 23,
+        "tir.large_uint_imm": 54,
+        "tl.ascend_set_mask_payload": 22,
+        "tl.ascend_row_expand_mul_experiment_raw_normal": 6,
+        "tl.ascend_pipe_barrier": 73,
+        "tl.ascend_add_raw": 11,
+        "tl.ascend_mul_raw": 10,
+        "tl.ascend_reduce_fp32_v2": 4,
+        "tl.ascend_muls_raw": 3,
+        "tl.ascend_max_raw": 5,
+        "tl.ascend_sub_raw": 10,
+        "tl.ascend_exp_raw": 11,
+        "tl.ascend_brcb_experiment_payload_full": 9,
+        "tl.ascend_mul_add_dst_self_contained_normal_full": 2,
+        "tl.ascend_div_raw": 4,
+        "tl.ascend_fill_raw_counter": 2,
+        "tl.ascend_row_expand_sub_experiment_raw_normal": 16
+      },
+      "allocation_views": [
+        [
+          "a_l1",
+          "ascend_l1",
+          "bfloat16_t",
+          "32768",
+          "262144"
+        ],
+        [
+          "cor_s_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "30208"
+        ],
+        [
+          "cor_u_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "31232"
+        ],
+        [
+          "gl_mrg_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "29184"
+        ],
+        [
+          "gl_u_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "28160"
+        ],
+        [
+          "gm_mrg_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "29184"
+        ],
+        [
+          "gm_u",
+          "ascend_ub",
+          "float",
+          "32",
+          "24832"
+        ],
+        [
+          "gm_u_b",
+          "ascend_ub",
+          "float",
+          "256",
+          "27136"
+        ],
+        [
+          "ku_ld",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "81920"
+        ],
+        [
+          "kv_f32",
+          "ascend_ub",
+          "float",
+          "4096",
+          "131072"
+        ],
+        [
+          "kv_f32_3",
+          "ascend_ub",
+          "float",
+          "8192",
+          "114688"
+        ],
+        [
+          "kv_f32_flat",
+          "ascend_ub",
+          "float",
+          "8192",
+          "114688"
+        ],
+        [
+          "kv_l1",
+          "ascend_l1",
+          "bfloat16_t",
+          "131072",
+          "0"
+        ],
+        [
+          "l0a",
+          "ascend_l0a",
+          "bfloat16_t",
+          "32768",
+          "0"
+        ],
+        [
+          "l0b",
+          "ascend_l0b",
+          "bfloat16_t",
+          "32768",
+          "0"
+        ],
+        [
+          "l0c",
+          "ascend_l0c",
+          "float",
+          "32768",
+          "0"
+        ],
+        [
+          "l_panel",
+          "ascend_ub",
+          "float",
+          "128",
+          "180224"
+        ],
+        [
+          "l_stats_ring",
+          "ascend_ub",
+          "float",
+          "2048",
+          "167936"
+        ],
+        [
+          "ld_o_acc",
+          "ascend_ub",
+          "float",
+          "8192",
+          "81920"
+        ],
+        [
+          "ld_o_partial",
+          "ascend_ub",
+          "float",
+          "8192",
+          "114688"
+        ],
+        [
+          "ld_score",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "81920"
+        ],
+        [
+          "m_prev",
+          "ascend_ub",
+          "float",
+          "1024",
+          "176128"
+        ],
+        [
+          "m_stats_ring",
+          "ascend_ub",
+          "float",
+          "2048",
+          "159744"
+        ],
+        [
+          "o_st",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "32768"
+        ],
+        [
+          "o_u",
+          "ascend_ub",
+          "float",
+          "4096",
+          "0"
+        ],
+        [
+          "os_half",
+          "ascend_ub",
+          "float",
+          "8192",
+          "49152"
+        ],
+        [
+          "q_bf",
+          "ascend_ub",
+          "float",
+          "4096",
+          "114688"
+        ],
+        [
+          "q_ld",
+          "ascend_ub",
+          "bfloat16_t",
+          "4096",
+          "147456"
+        ],
+        [
+          "scale_s0_r0",
+          "ascend_ub",
+          "float",
+          "512",
+          "180736"
+        ],
+        [
+          "scale_s0_r1",
+          "ascend_ub",
+          "float",
+          "512",
+          "184832"
+        ],
+        [
+          "scale_s1_r0",
+          "ascend_ub",
+          "float",
+          "512",
+          "155648"
+        ],
+        [
+          "scale_s1_r1",
+          "ascend_ub",
+          "float",
+          "512",
+          "157696"
+        ],
+        [
+          "score_buf",
+          "ascend_ub",
+          "float",
+          "64",
+          "24576"
+        ],
+        [
+          "score_flat",
+          "ascend_ub",
+          "float",
+          "64",
+          "24576"
+        ],
+        [
+          "score_local",
+          "ascend_ub",
+          "float",
+          "8192",
+          "0"
+        ],
+        [
+          "sfm_brcb",
+          "ascend_ub",
+          "float",
+          "64",
+          "73952"
+        ],
+        [
+          "sfm_row",
+          "ascend_ub",
+          "float",
+          "8",
+          "73920"
+        ],
+        [
+          "sfm_tmp",
+          "ascend_ub",
+          "uint8_t",
+          "8384",
+          "65536"
+        ],
+        [
+          "st_o_acc",
+          "ascend_ub",
+          "float",
+          "8192",
+          "49152"
+        ],
+        [
+          "st_prob",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "49152"
+        ],
+        [
+          "sum_brcb",
+          "ascend_ub",
+          "float",
+          "512",
+          "182784"
+        ],
+        [
+          "ured",
+          "ascend_ub",
+          "uint8_t",
+          "8192",
+          "16384"
+        ],
+        [
+          "vu_ld",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "98304"
+        ],
+        [
+          "vu_ld_flat",
+          "ascend_ub",
+          "bfloat16_t",
+          "8192",
+          "98304"
+        ],
+        [
+          "w_blk",
+          "ascend_ub",
+          "float",
+          "512",
+          "25088"
+        ],
+        [
+          "w_blk_flat",
+          "ascend_ub",
+          "float",
+          "512",
+          "25088"
+        ],
+        [
+          "w_u",
+          "ascend_ub",
+          "float",
+          "32",
+          "24960"
+        ]
+      ],
+      "host_prototype": "uint8_t* Q_handle, uint8_t* K_shared_handle, uint8_t* V_shared_handle, uint8_t* unshared_key_handle, uint8_t* unshared_value_handle, uint8_t* Output_handle, uint8_t* ws_sp_handle, uint8_t* ws_op_handle, uint8_t* ws_oa_handle, aclrtStream stream",
+      "TA_complete_source_sha256": "c91436196ce8789fc10e230be7d5b82d122556097af438e5569e77cdf5798cb1",
+      "original_pass_configs": {
+        "PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE": false,
+        "PassConfigKey.TL_ASCEND_AUTO_CV_SYNC": false,
+        "PassConfigKey.TL_ASCEND_MEMORY_PLANNING": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC": false,
+        "PassConfigKey.TL_ASCEND_AUTO_SYNC_VS": false
+      }
+    }
+  ]
+}
