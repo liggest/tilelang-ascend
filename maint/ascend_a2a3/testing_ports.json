@@ -747,6 +747,32 @@
       "all_original_cases_retained": true
     },
     {
+      "source_path": "testing/python/language/test_ascend_memory_planning.py",
+      "destination_path": "testing/ascend_a2a3/python/language/test_ascend_memory_planning.py",
+      "source_git_blob": "159d263e04c7d3c031402b177fe6ebe0911a3737",
+      "source_sha256": "86985c52dbf51fa7936a56767ae64d09a89de00aeaac1618df050f27d4977e8f",
+      "destination_sha256": "2d7ed84f7e7589e36293f81cb6719542f685eee15d991b0bec2f31a5c6c85cbf",
+      "adaptations": [
+        "Explicit backend-private dialect; retain the complete original 905-line module, every nested kernel, all offset/alias/liveness assertions, both dialects and original seven NPU test bodies.",
+        "Scoped raw CacheState fixture replaces leaking session-wide disable; source host requests use explicit A3, actual device requests retain real-device resolution.",
+        "Per-case native/device markers replace import-time NPU availability and skipif; all 29 non-cache-fixture function ASTs unchanged."
+      ],
+      "validation": {
+        "original_TA_host_cases_passed": 25,
+        "main_original_host_cases_passed": 25,
+        "same_input_source_requests_each": 26,
+        "real_SDK_ELF_libraries_each": 24,
+        "exact_host_prototypes_equal": 26,
+        "exact_allocation_offset_maps_equal": 26,
+        "actual_OFF_pure_host_passed": 5,
+        "actual_OFF_native_device_skipped": 32,
+        "original_device_cases": 7,
+        "device_execution": false,
+        "source_function_AST_preserved": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
       "source_path": "testing/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "destination_path": "testing/ascend_a2a3/python/language/test_tilelang_ascend_language_alloc_codegen.py",
       "source_git_blob": "f2de5c34ad08267c21c4ff940d19f92824040934",
