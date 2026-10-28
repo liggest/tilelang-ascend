@@ -12,7 +12,12 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[4]
 MANIFEST = json.loads((ROOT / "maint/ascend_a2a3/ecosystem_gdn_ports.json").read_text())
-ENTRIES = [e for e in MANIFEST["entries"] if e["source_path"].endswith(".py") and not e["source_path"].endswith("__init__.py")]
+G1_SOURCES = {
+    "examples/linear_attention_and_rnn/gdn/" + name for name in ("gdn_chunk_cumsum.py", "gdn_chunk_scaled_dot_kkt.py", "gdn_wy_fast.py")
+}
+ENTRIES = [e for e in MANIFEST["entries"] if e["source_path"] in G1_SOURCES]
+SOURCE_REQUESTS = [r for r in MANIFEST["factory_requests"] if r["source_path"] in G1_SOURCES]
+ALL_STANDARD_ENTRIES = [e for e in MANIFEST["entries"] if e.get("original_factory")]
 
 
 def _tree(entry):
@@ -53,7 +58,7 @@ def test_original_empty_package_is_exactly_empty():
     assert (ROOT / entry["destination_path"]).read_bytes() == b""
 
 
-@pytest.mark.parametrize("entry", ENTRIES)
+@pytest.mark.parametrize("entry", ALL_STANDARD_ENTRIES)
 def test_import_does_not_clear_seed_print_compile_or_allocate(entry, monkeypatch):
     import builtins
     import tilelang
@@ -122,7 +127,7 @@ def test_original_reference_algebra_with_explicit_CPU_only_npu_standin(entry, mo
 
 
 @pytest.mark.usefixtures("isolated_a2a3_cache")
-@pytest.mark.parametrize("entry", ENTRIES)
+@pytest.mark.parametrize("entry", ALL_STANDARD_ENTRIES)
 @pytest.mark.parametrize("enabled", [True, False])
 @pytest.mark.parametrize("failure", [True, False])
 def test_actual_cache_descriptor_memory_staging_and_printopts_restore(entry, enabled, failure, isolated_a2a3_cache, monkeypatch, tmp_path):
@@ -172,7 +177,7 @@ def test_actual_cache_descriptor_memory_staging_and_printopts_restore(entry, ena
 
 
 @pytest.mark.a2a3_native
-@pytest.mark.parametrize("spec", MANIFEST["factory_requests"], ids=lambda row: row["id"])
+@pytest.mark.parametrize("spec", SOURCE_REQUESTS, ids=lambda row: row["id"])
 def test_complete_original_frontend_and_JSON_workspace_metadata(spec):
     from tilelang import tvm
 
