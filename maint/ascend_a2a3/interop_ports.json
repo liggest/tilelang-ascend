@@ -359,6 +359,116 @@
         "Additional unused arithmetic and allocation declaration order retained in full sources. Every device payload, guard and ordered sync record agrees after the recorded binder correspondence.204 JIT requests remain distinct despite200 source/compiler groups; do not collapse retained logical metadata by C++ bytes."
       ],
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/cann-bench/sparse_flash_attention/sparse_flash_attention.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/sparse_flash_attention/sparse_flash_attention.py",
+      "source_git_blob": "bd202d3ac83bd339a99298111ccc030f18fa98c4",
+      "source_sha256": "cd586e2cf0a60b7b445c61c9b7be9ab0217d422a2d3d03e0d73ff2e81f406e7a",
+      "destination_sha256": "45cab3b6dbeeb7ea7f62c386b1255229072a0878f021d372011c15a68b75b9f2",
+      "adaptations": [
+        "Preserve both complete original Sparse FlashAttention modules,23 original definitions and all three JIT factories, original shape/dtype/layout/causal/special-value/precision/seed/defaultCLI/blocking/exit and cache/query/except20 algorithms. Use private A2/A3 language/Layout helper paths only.",
+        "Import-safe standalone/main, genuine TorchNPU registration after parsing, sibling loading without sys.path mutation and isolated complete per-level real namespace.",
+        "Source sampling only: actual original CPU make_input/argsort/objects; remove only explicit H2D in ignored source driver, fixed original-supported core24 in driver only. Stop at real compiled Kernel runtime boundary with BaseException, no fake output/golden continuation. The original five dense failures and actual broad fallback to v3 are preserved, not bypassed by flags/Scope edits."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_explicit_import_main_and_fixture_inverse": true,
+        "working_source_bytes_match_fixed_git_blob": true,
+        "original_function_class_count": 10,
+        "original_entry_boundaries_per_side": 21,
+        "positive_factory_names": [
+          "sparse_flash_attention_fwd",
+          "sparse_flash_attention_fwd_v3"
+        ],
+        "actual_positive_lower_SDK_ELF_groups_per_side": 18,
+        "dense_actual_frontend_native_rejections_per_side": 5,
+        "dense_failure_pass": "CombineCV",
+        "dense_same_diagnostic_payload": "Ascend hardware operation must be inside T.Scope(\"C\") or T.Scope(\"V\"); enable tl.ascend_auto_cv_combine or scope it explicitly: tl.ascend_pipe_barrier",
+        "original_wrapper_broad_fallback_to_v3_observed": true,
+        "all_positive_host_ABI_and_canonical_parameter_shapes_types_equal": true,
+        "all_21_CPU_input_bytes_shapes_types_and_within_call_alias_relations_equal": true,
+        "all_actual_ordered_sync_token_owner_and_guard_records_per_side": 613,
+        "all_actual_ordered_sync_token_owner_guard_fields_equal": true,
+        "unequal_raw_payload_anchor_links_to_separate_source_proofs": 91,
+        "source_payload_parameter_differences_proven_integer_add_mul": 25,
+        "source_payload_parameter_differences_proven_exact_float32_cast_inlining": 5,
+        "source_payload_parameter_differences_exhaustively_checked_CPP_clamps": 8,
+        "unused_added_int32_declarations_signed32_bounded": 320,
+        "parameter_envelope_derived_from_original_CPU_inputs": true,
+        "allocation_relocated_request_pairs": 13,
+        "allocation_dtype_count_arena_capacities_equal": true,
+        "all_allocation_ranges_in_capacity_32B_aligned_and_pairwise_disjoint": true,
+        "original_invalid_inputs_exact_type_and_message_before_compile": 4,
+        "permanent_source_host_boundary_companion_passed": 36,
+        "actual_OFF_pure_host_companion_passed": 13,
+        "actual_OFF_native_device_skipped": 27,
+        "original_device_level_functions_deselected_ON": 4,
+        "TorchNPU_context_initialized_NPU_transfer_or_kernel_run": false,
+        "bitmap_scatter_or_actual_device_cache_semantics_verified": false,
+        "original_device_numerics_deadlock_and_performance_verified": false
+      },
+      "source_differences": [
+        "Dense is a preserved source/native failure boundary under both actually loaded native libraries; do not claim third factory SDK success or bitmap/scatter/cache validation. TA native loaded hashes are recorded separately, not claimed a fresh build of the source pin.",
+        "Positive C++ retains physical UB relocation and extra pure integer/conditional bindings. Full lexical conditions/two arms establish conditional temporary correspondence; remaining add-order/cast/clamp differences have explicit separate bounded source proofs. Raw before/after payload anchor text remains recorded, not called byte-identical.",
+        "Source-only CPU data pointers and allocator/weakref histories are not NPU cache behavior. Two original same-q/indices source probes retain those exact CPU objects and S2 order, but dense rejects before bitmap creation; that bitmap-cache semantic branch remains unverified.",
+        "Original T.symbolic API is retained and current deprecation warning recorded; no original algorithm or shape changed."
+      ],
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/cann-bench/sparse_flash_attention/test_sparse_flash_attention.py",
+      "destination_path": "examples/ascend_a2a3/cann-bench/sparse_flash_attention/test_sparse_flash_attention.py",
+      "source_git_blob": "f43faaf25a6cb81e0910fc4067abb6287b6a2373",
+      "source_sha256": "a4413aecf753de67d2790fb5278e36376c3abd51143c7e6099cdcf0f9f83207a",
+      "destination_sha256": "e06873b6c3fc1646c7666859813a9db8dcaeba135c5664273d5c20c92f097041",
+      "adaptations": [
+        "Preserve both complete original Sparse FlashAttention modules,23 original definitions and all three JIT factories, original shape/dtype/layout/causal/special-value/precision/seed/defaultCLI/blocking/exit and cache/query/except20 algorithms. Use private A2/A3 language/Layout helper paths only.",
+        "Import-safe standalone/main, genuine TorchNPU registration after parsing, sibling loading without sys.path mutation and isolated complete per-level real namespace.",
+        "Source sampling only: actual original CPU make_input/argsort/objects; remove only explicit H2D in ignored source driver, fixed original-supported core24 in driver only. Stop at real compiled Kernel runtime boundary with BaseException, no fake output/golden continuation. The original five dense failures and actual broad fallback to v3 are preserved, not bypassed by flags/Scope edits."
+      ],
+      "validation": {
+        "whole_module_AST_equal_after_explicit_import_main_and_fixture_inverse": true,
+        "working_source_bytes_match_fixed_git_blob": true,
+        "original_function_class_count": 13,
+        "original_entry_boundaries_per_side": 21,
+        "positive_factory_names": [
+          "sparse_flash_attention_fwd",
+          "sparse_flash_attention_fwd_v3"
+        ],
+        "actual_positive_lower_SDK_ELF_groups_per_side": 18,
+        "dense_actual_frontend_native_rejections_per_side": 5,
+        "dense_failure_pass": "CombineCV",
+        "dense_same_diagnostic_payload": "Ascend hardware operation must be inside T.Scope(\"C\") or T.Scope(\"V\"); enable tl.ascend_auto_cv_combine or scope it explicitly: tl.ascend_pipe_barrier",
+        "original_wrapper_broad_fallback_to_v3_observed": true,
+        "all_positive_host_ABI_and_canonical_parameter_shapes_types_equal": true,
+        "all_21_CPU_input_bytes_shapes_types_and_within_call_alias_relations_equal": true,
+        "all_actual_ordered_sync_token_owner_and_guard_records_per_side": 613,
+        "all_actual_ordered_sync_token_owner_guard_fields_equal": true,
+        "unequal_raw_payload_anchor_links_to_separate_source_proofs": 91,
+        "source_payload_parameter_differences_proven_integer_add_mul": 25,
+        "source_payload_parameter_differences_proven_exact_float32_cast_inlining": 5,
+        "source_payload_parameter_differences_exhaustively_checked_CPP_clamps": 8,
+        "unused_added_int32_declarations_signed32_bounded": 320,
+        "parameter_envelope_derived_from_original_CPU_inputs": true,
+        "allocation_relocated_request_pairs": 13,
+        "allocation_dtype_count_arena_capacities_equal": true,
+        "all_allocation_ranges_in_capacity_32B_aligned_and_pairwise_disjoint": true,
+        "original_invalid_inputs_exact_type_and_message_before_compile": 4,
+        "permanent_source_host_boundary_companion_passed": 36,
+        "actual_OFF_pure_host_companion_passed": 13,
+        "actual_OFF_native_device_skipped": 27,
+        "original_device_level_functions_deselected_ON": 4,
+        "TorchNPU_context_initialized_NPU_transfer_or_kernel_run": false,
+        "bitmap_scatter_or_actual_device_cache_semantics_verified": false,
+        "original_device_numerics_deadlock_and_performance_verified": false
+      },
+      "source_differences": [
+        "Dense is a preserved source/native failure boundary under both actually loaded native libraries; do not claim third factory SDK success or bitmap/scatter/cache validation. TA native loaded hashes are recorded separately, not claimed a fresh build of the source pin.",
+        "Positive C++ retains physical UB relocation and extra pure integer/conditional bindings. Full lexical conditions/two arms establish conditional temporary correspondence; remaining add-order/cast/clamp differences have explicit separate bounded source proofs. Raw before/after payload anchor text remains recorded, not called byte-identical.",
+        "Source-only CPU data pointers and allocator/weakref histories are not NPU cache behavior. Two original same-q/indices source probes retain those exact CPU objects and S2 order, but dense rejects before bitmap creation; that bitmap-cache semantic branch remains unverified.",
+        "Original T.symbolic API is retained and current deprecation warning recorded; no original algorithm or shape changed."
+      ],
+      "all_original_cases_retained": true
     }
   ]
 }
