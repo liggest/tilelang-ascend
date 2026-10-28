@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
-  "owner_scope": "six standard leaves + standard full composition + first three optimized GDN leaves; remaining optimized leaves/composition pending",
+  "owner_scope": "all six complete standard leaves + standard full composition + all six complete optimized leaves; optimized composition pending",
   "entries": [
     {
       "source_path": "examples/linear_attention_and_rnn/gdn/gdn_chunk_cumsum.py",
@@ -573,6 +573,185 @@
       "original_definition_AST_sha256": {},
       "original_runtime_calls": 0,
       "original_golden_assertions": 0
+    },
+    {
+      "component": "G5",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_h.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_h.py",
+      "source_sha256": "23a596f862ce70e5b590d6668dd915fe11c6f90fbc04dc0d7a95e8fce24e55bf",
+      "source_git_blob": "997de97c5136fe21a8e598901025873c96d307a9",
+      "destination_sha256": "026b53006e1ff1a92b18ced1a3bc46b0e39a1470cef3b29dd7e1a3ad30b4ff96",
+      "state": "complete_leaf_source_actual_SDK_verified_device_pending",
+      "device_not_run": true,
+      "original_definition_AST_sha256": {
+        "chunk_h_ker": "3cd5ba68188b77aad56e49898571a412cd4bc794fc306976c8e13a58d6abab27",
+        "chunk_h": "52aa36f1de0a3584dc54395abf4997807cee81c3629e3aabe5d38aeeaf32fe90",
+        "ref_chunk_h": "e73eddb7aca5be75d33dd52e01dc09dbccd0232faf89b4af59811b015600c3e5",
+        "ref_chunk_cumsum": "6c9dbb3262c8bb9e4460881839b7952d1e0e62b5b9e5fd410aed82dad293db00"
+      },
+      "original_CLI_AST_sha256": "fa20e31501bd426ca01c44c3b4097bbf4fe1cccb0cab7485a84eca43a745f8eb",
+      "original_factory": "chunk_h_ker",
+      "original_all_factories": [
+        "chunk_h_ker"
+      ],
+      "original_test_configs": [
+        [
+          2,
+          16,
+          16384,
+          128,
+          128,
+          128
+        ]
+      ],
+      "original_seed": 0,
+      "original_clear_cache_calls": 1,
+      "original_printoptions": {
+        "threshold": "inf",
+        "sci_mode": true
+      },
+      "original_golden_tolerances": {
+        "rtol": 1e-05,
+        "atol": 1e-05
+      },
+      "original_golden_assertions": 3,
+      "original_runtime_calls": 1,
+      "original_success_marker": "Kernel Output Match!",
+      "original_raw_target": "auto",
+      "out_idx": [
+        -2,
+        -1
+      ],
+      "workspace_idx": [
+        -7,
+        -6,
+        -4
+      ],
+      "adaptations": [
+        "private A2A3 language import",
+        "complete original CLI moved into task-owned cache and print-state restoring main, one original cache clear via backend singleton",
+        "only source CRLF/tab formatting normalized, no original definitions or matrix removed",
+        "scope-aware outer chunk-loop lexical alpha only, inner Parallel/serial i binders unchanged; original first eager scope failure and actual TA frontend/final proof archived"
+      ],
+      "adapted_definition_AST_sha256": {
+        "chunk_h_ker": "06b324b6fd87de9e3e65ba5feb2ba17320466618213b2771691c2f81fb7602b3"
+      }
+    },
+    {
+      "component": "G5",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_o.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_o.py",
+      "source_sha256": "c0eaca1a4d3d440744da22c3761070966e4f3d6f90ae423eabe5e0d07189385c",
+      "source_git_blob": "55e9e52906a637af46df1692a0f5958c51673da3",
+      "destination_sha256": "659998520e40d2b094417799fedbc34feb798b60d62d1790271d158ff5b3911a",
+      "state": "complete_leaf_source_actual_SDK_verified_device_pending",
+      "device_not_run": true,
+      "original_definition_AST_sha256": {
+        "chunk_o_ker": "f67779fb34302448d764a730282225fdf7a46f611e534732f886cb727dd5392f",
+        "chunk_o": "ccfc6e75eacc5e2dee9956cf57b40b71fcdaeabdf3888698e5703e4e45076a16",
+        "ref_chunk_o": "60e1f58e4e9c20504611812069808324bef4f39bb5b7cf012407a9d79c552539"
+      },
+      "original_CLI_AST_sha256": "b0ca46d60dad59c40c1b7f81bf5db820e9ae4c11c0ddec7a02767c797fe60b8f",
+      "original_factory": "chunk_o_ker",
+      "original_all_factories": [
+        "chunk_o_ker"
+      ],
+      "original_test_configs": [
+        [
+          2,
+          16,
+          16384,
+          128,
+          128,
+          128
+        ]
+      ],
+      "original_seed": 0,
+      "original_clear_cache_calls": 1,
+      "original_printoptions": {
+        "threshold": "inf",
+        "sci_mode": true
+      },
+      "original_golden_tolerances": {
+        "rtol": 1e-05,
+        "atol": 1e-05
+      },
+      "original_golden_assertions": 1,
+      "original_runtime_calls": 1,
+      "original_success_marker": "Kernel Output Match!",
+      "original_raw_target": "auto",
+      "out_idx": [
+        -1
+      ],
+      "workspace_idx": [
+        -4,
+        -3,
+        -2
+      ],
+      "adaptations": [
+        "private A2A3 language import",
+        "complete original CLI moved into task-owned cache and print-state restoring main, one original cache clear via backend singleton",
+        "only source CRLF/tab formatting normalized, no original definitions or matrix removed"
+      ]
+    },
+    {
+      "component": "G5",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_solve_tril.py",
+      "destination_path": "examples/ascend_a2a3/linear_attention_and_rnn/opt_gdn/opt_gdn_solve_tril.py",
+      "source_sha256": "411f0659e8fe13ebd2aac75646adf69cc8a88ad03b23d2908d35c66964847cc8",
+      "source_git_blob": "7797d7acbd493dabcd476f18f242c5d55ea6d5ee",
+      "destination_sha256": "ce9d0a0af785357fe4382b7e0a99ec0350209f12e6d49cdad4ed00fb1e0b19bd",
+      "state": "complete_leaf_source_actual_SDK_verified_device_pending",
+      "device_not_run": true,
+      "original_definition_AST_sha256": {
+        "solve_tril_ker": "7f15be9e4b56e8d7870cfe24efbbd8957d00ca6cb07955dc86a2b8a35dcfbfee",
+        "solve_tril_64_ker": "b2088eb7ad31b173d3a1ca3115499f3dcb3d850ed41dbb8bd56cd9ac7bbbaabf",
+        "solve_tril_128_ker": "a143e9a52d0b4885b0e7a00a487fc2c06e86855d337b50e755d1ab9c286db233",
+        "solve_tril": "baa8843431f172750293355450e071cc042e8b615f16789747dd0199498f6a64",
+        "solve_triangular": "68cb335b36b31facf42f76893751d5240f1a951c4565f249342321674e50af7d",
+        "ref_solve_tril": "3a9b439353b7e49e1fb4e1227d127d8326f4ef2b152c8f638a1af15a012512be",
+        "ref_chunk_cumsum": "6c9dbb3262c8bb9e4460881839b7952d1e0e62b5b9e5fd410aed82dad293db00",
+        "ref_kkt": "0819e0797263bf404e1de4c42dc58733dabdb55c99b50e490a26693fd5754eb5"
+      },
+      "original_CLI_AST_sha256": "785b8d5a3cfed56169ee8d96b346ff802d92754983097ef887682e5d9ef2329f",
+      "original_factory": "solve_tril_128_ker",
+      "original_all_factories": [
+        "solve_tril_ker",
+        "solve_tril_64_ker",
+        "solve_tril_128_ker"
+      ],
+      "original_test_configs": [
+        [
+          1,
+          1,
+          128,
+          128,
+          128
+        ]
+      ],
+      "original_seed": 0,
+      "original_clear_cache_calls": 1,
+      "original_printoptions": {
+        "threshold": "inf",
+        "sci_mode": true
+      },
+      "original_golden_tolerances": {
+        "rtol": 0.001,
+        "atol": 0.001
+      },
+      "original_golden_assertions": 1,
+      "original_runtime_calls": 1,
+      "original_success_marker": "Kernel Output Match!",
+      "original_raw_target": "auto",
+      "out_idx": [
+        -1
+      ],
+      "workspace_idx": null,
+      "adaptations": [
+        "private A2A3 language import",
+        "complete original CLI moved into task-owned cache and print-state restoring main, one original cache clear via backend singleton",
+        "only source CRLF/tab formatting normalized, no original definitions or matrix removed"
+      ]
     }
   ],
   "factory_requests": [
@@ -819,6 +998,78 @@
       "kwargs": {},
       "core_sampling": "none",
       "component": "G4"
+    },
+    {
+      "id": "opt_gdn_chunk_h",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_h.py",
+      "factory": "chunk_h_ker",
+      "args": [
+        2,
+        16,
+        16384,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "component": "G5",
+      "evidence_scope": "original_default_CLI"
+    },
+    {
+      "id": "opt_gdn_chunk_o",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_chunk_o.py",
+      "factory": "chunk_o_ker",
+      "args": [
+        2,
+        16,
+        16384,
+        128,
+        128,
+        128
+      ],
+      "kwargs": {},
+      "component": "G5",
+      "evidence_scope": "original_default_CLI"
+    },
+    {
+      "id": "opt_gdn_solve_tril_128",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_solve_tril.py",
+      "factory": "solve_tril_128_ker",
+      "args": [
+        1,
+        1,
+        128
+      ],
+      "kwargs": {},
+      "component": "G5",
+      "evidence_scope": "original_default_CLI_C128"
+    },
+    {
+      "id": "opt_gdn_solve_tril_32_API",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_solve_tril.py",
+      "factory": "solve_tril_ker",
+      "args": [
+        1,
+        2,
+        128,
+        32
+      ],
+      "kwargs": {},
+      "component": "G5",
+      "evidence_scope": "additional_positive_source_only_API_nonCLI_H2_required_by_original_H_floor_div2"
+    },
+    {
+      "id": "opt_gdn_solve_tril_64_API",
+      "source_path": "examples/linear_attention_and_rnn/opt_gdn/opt_gdn_solve_tril.py",
+      "factory": "solve_tril_64_ker",
+      "args": [
+        1,
+        1,
+        128
+      ],
+      "kwargs": {},
+      "component": "G5",
+      "evidence_scope": "additional_positive_source_only_API_nonCLI"
     }
   ],
   "validation": {
@@ -931,6 +1182,35 @@
       "source_SDK_repeated_during_host_followup": false,
       "source_defaults_not_hardware_properties": true,
       "G3_redundant_mirror_test_removed": true
+    },
+    "G5": {
+      "original_top_level_definitions": 15,
+      "original_leaf_CLIs": 3,
+      "original_runtime_calls": 3,
+      "original_golden_assertions": 5,
+      "complete_Solve_factories_retained": 3,
+      "original_Solve_CLI_only_C128": true,
+      "additional_source_only_API_C32_C64_not_original_CLI_or_device": true,
+      "source_SDK_pending": false,
+      "device_not_run": true,
+      "unchanged_original_definitions": 14,
+      "lexical_alpha_factory_definitions": 1,
+      "TA_complete_source": 5,
+      "main_complete_source": 5,
+      "TA_actual_SDK": 5,
+      "main_actual_SDK": 5,
+      "actual_original_CLI_source_requests": 3,
+      "additional_API_source_requests_not_CLI": 2,
+      "actual_properties_context_or_NPU_tensor_or_launch": false,
+      "actual_driver_availability": true,
+      "actual_driver_count": 16,
+      "existing_TA_native_not_fresh": true,
+      "TA_actual_alpha_frontend_and_final_structural_equal": true,
+      "combined_G1_through_G5_host_ON_passed": 126,
+      "combined_G1_through_G5_actual_OFF_passed": 106,
+      "combined_G1_through_G5_actual_OFF_native_only_skipped": 20,
+      "all_thirteen_CLIs_state_restore_checked": true,
+      "source_SDK_repeated_during_host_followup": false
     }
   },
   "source_contracts": [
@@ -6891,6 +7171,2611 @@
       "proof_scope": "original leaf default request only; not composed GDN or arbitrary overrides; SDK success is not numerical evidence",
       "device_not_run": true,
       "cid_range_scope": "post-source mapping conservative logical cid domain; emitted same original AIV cid/2 is preserved in KKT, no claimed device coverage or real properties"
+    }
+  ],
+  "source_contracts_G5": [
+    {
+      "id": "opt_gdn_chunk_h",
+      "evidence_scope": "original_default_CLI",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/ta/opt_gdn_chunk_h/kernel.cc",
+        "sha256": "5c3e1e5da629648939f16630531711eacc8b852e922e4932ea5f4016ce5dabdc",
+        "size": 11995
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5_alpha/main/opt_gdn_chunk_h/kernel.cc",
+        "sha256": "8b73f68bedbfcaa95006c0e8b2b633625866152c6667b79dc026a10225354ff4",
+        "size": 12187
+      },
+      "launch_grid": 32,
+      "host_ABI": "uint8_t* K_handle, uint8_t* W_handle, uint8_t* U_handle, uint8_t* G_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* workspace_3_handle, uint8_t* workspace_4_handle, uint8_t* S_handle, uint8_t* V_handle, uint8_t* FS_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "by",
+          "expression": "(cid % 16)",
+          "minimum": 0,
+          "maximum": 15,
+          "logical_cid": [
+            0,
+            31
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "(cid / 16)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            31
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "(cid % 16)",
+          "minimum": 0,
+          "maximum": 15,
+          "logical_cid": [
+            0,
+            31
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "(cid / 16)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            31
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [
+        [
+          "i",
+          "chunk_i"
+        ],
+        [
+          "i_1",
+          "chunk_i_1"
+        ],
+        [
+          "i_2",
+          "i"
+        ]
+      ],
+      "named_views": {
+        "ta": [
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "w_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "ws_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 0,
+            "end_bytes": 256
+          },
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 256,
+            "end_bytes": 33024
+          },
+          {
+            "name": "k_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 33024,
+            "end_bytes": 49408
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 49408,
+            "end_bytes": 49920
+          },
+          {
+            "name": "s_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 165120,
+            "end_bytes": 181504
+          },
+          {
+            "name": "u_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 66304
+          },
+          {
+            "name": "k_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 66304,
+            "end_bytes": 99072
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 99072,
+            "end_bytes": 99328
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 99328,
+            "end_bytes": 99584
+          },
+          {
+            "name": "u_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 99584,
+            "end_bytes": 132352
+          },
+          {
+            "name": "ws_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 132352,
+            "end_bytes": 165120
+          },
+          {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 82688
+          }
+        ],
+        "main": [
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "w_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "ws_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "zero_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 0,
+            "end_bytes": 256
+          },
+          {
+            "name": "s_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 256,
+            "end_bytes": 33024
+          },
+          {
+            "name": "k_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 33024,
+            "end_bytes": 49408
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 49408,
+            "end_bytes": 49920
+          },
+          {
+            "name": "s_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 165120,
+            "end_bytes": 181504
+          },
+          {
+            "name": "u_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 66304
+          },
+          {
+            "name": "k_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 66304,
+            "end_bytes": 99072
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 99072,
+            "end_bytes": 99328
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 99328,
+            "end_bytes": 99584
+          },
+          {
+            "name": "u_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 99584,
+            "end_bytes": 132352
+          },
+          {
+            "name": "ws_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 132352,
+            "end_bytes": 165120
+          },
+          {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 82688
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [
+          {
+            "names": [
+              "k_ub",
+              "kv_ub"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              66304,
+              82688
+            ]
+          },
+          {
+            "names": [
+              "kv_ub",
+              "u_ub_half"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              49920,
+              66304
+            ]
+          }
+        ],
+        "main": [
+          {
+            "names": [
+              "k_ub",
+              "kv_ub"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              66304,
+              82688
+            ]
+          },
+          {
+            "names": [
+              "kv_ub",
+              "u_ub_half"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              49920,
+              66304
+            ]
+          }
+        ]
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l0c": {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          "ascend_l1": {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          "ascend_ub": {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 82688
+          }
+        },
+        "main": {
+          "ascend_l0c": {
+            "name": "kv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          "ascend_l1": {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          "ascend_ub": {
+            "name": "kv_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 49920,
+            "end_bytes": 82688
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": null,
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "16384",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "W_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "16384",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "U_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "16384",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "2",
+            "16",
+            "16384"
+          ],
+          "elements": 524288,
+          "bytes": 2097152
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "32",
+            "128",
+            "128"
+          ],
+          "elements": 524288,
+          "bytes": 1048576
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "32",
+            "128",
+            "128"
+          ],
+          "elements": 524288,
+          "bytes": 1048576
+        },
+        {
+          "name": "workspace_3_handle",
+          "dtype": "float16",
+          "shape": [
+            "32",
+            "128",
+            "128"
+          ],
+          "elements": 524288,
+          "bytes": 1048576
+        },
+        {
+          "name": "workspace_4_handle",
+          "dtype": "float16",
+          "shape": [
+            "32",
+            "128",
+            "128"
+          ],
+          "elements": 524288,
+          "bytes": 1048576
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "128",
+            "128",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "16384",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "FS_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "128",
+            "128"
+          ],
+          "elements": 524288,
+          "bytes": 1048576
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_chunk_o",
+      "evidence_scope": "original_default_CLI",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/ta/opt_gdn_chunk_o/kernel.cc",
+        "sha256": "c65be634639c940149993a98028851b1035c15220c10c964edd44fec3a7ce8e5",
+        "size": 11586
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/main/opt_gdn_chunk_o/kernel.cc",
+        "sha256": "6fe79d5f67b04d7e7c9c023ba152f51363810333139e6770e56afaba5cb489fc",
+        "size": 11804
+      },
+      "launch_grid": 4096,
+      "host_ABI": "uint8_t* Q_handle, uint8_t* K_handle, uint8_t* V_handle, uint8_t* S_handle, uint8_t* G_handle, uint8_t* Msk_handle, uint8_t* workspace_1_handle, uint8_t* workspace_2_handle, uint8_t* workspace_3_handle, uint8_t* O_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_memory_planning": true,
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "bx",
+          "expression": "(cid % 128)",
+          "minimum": 0,
+          "maximum": 127,
+          "logical_cid": [
+            0,
+            4095
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by",
+          "expression": "((cid % 2048) / 128)",
+          "minimum": 0,
+          "maximum": 15,
+          "logical_cid": [
+            0,
+            4095
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "(cid / 2048)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            4095
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "(cid % 128)",
+          "minimum": 0,
+          "maximum": 127,
+          "logical_cid": [
+            0,
+            4095
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "by_1",
+          "expression": "((cid % 2048) / 128)",
+          "minimum": 0,
+          "maximum": 15,
+          "logical_cid": [
+            0,
+            4095
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "(cid / 2048)",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            4095
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [],
+      "named_views": {
+        "ta": [
+          {
+            "name": "q_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "qk_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "qs_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "qk_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 131072,
+            "end_bytes": 163840
+          },
+          {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 0,
+            "end_bytes": 512
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          },
+          {
+            "name": "qk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 33280,
+            "end_bytes": 66048
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 66048,
+            "end_bytes": 66304
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 66304,
+            "end_bytes": 99072
+          },
+          {
+            "name": "qk_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 99072,
+            "end_bytes": 115456
+          },
+          {
+            "name": "qs_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 115456,
+            "end_bytes": 131840
+          },
+          {
+            "name": "qs_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 131840,
+            "end_bytes": 164608
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 164608,
+            "end_bytes": 180992
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          }
+        ],
+        "main": [
+          {
+            "name": "q_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 32768
+          },
+          {
+            "name": "qk_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "qs_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 131072
+          },
+          {
+            "name": "qk_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 98304,
+            "end_bytes": 131072
+          },
+          {
+            "name": "k_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 32768,
+            "end_bytes": 65536
+          },
+          {
+            "name": "s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 65536,
+            "end_bytes": 98304
+          },
+          {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 131072,
+            "end_bytes": 163840
+          },
+          {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          {
+            "name": "g_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 128,
+            "offset_bytes": 0,
+            "end_bytes": 512
+          },
+          {
+            "name": "msk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          },
+          {
+            "name": "qk_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 33280,
+            "end_bytes": 66048
+          },
+          {
+            "name": "g_v_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 64,
+            "offset_bytes": 66048,
+            "end_bytes": 66304
+          },
+          {
+            "name": "coeff_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 66304,
+            "end_bytes": 99072
+          },
+          {
+            "name": "qk_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 99072,
+            "end_bytes": 115456
+          },
+          {
+            "name": "qs_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 115456,
+            "end_bytes": 131840
+          },
+          {
+            "name": "qs_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 131840,
+            "end_bytes": 164608
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 8192,
+            "offset_bytes": 164608,
+            "end_bytes": 180992
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [
+          {
+            "names": [
+              "msk_ub",
+              "o_ub"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              512,
+              33280
+            ]
+          },
+          {
+            "names": [
+              "qk_l0",
+              "qkv_l0"
+            ],
+            "pool": "ascend_l0c",
+            "intersection": [
+              0,
+              65536
+            ]
+          }
+        ],
+        "main": [
+          {
+            "names": [
+              "msk_ub",
+              "o_ub"
+            ],
+            "pool": "ascend_ub",
+            "intersection": [
+              512,
+              33280
+            ]
+          },
+          {
+            "names": [
+              "qk_l0",
+              "qkv_l0"
+            ],
+            "pool": "ascend_l0c",
+            "intersection": [
+              0,
+              65536
+            ]
+          }
+        ]
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l0c": {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          "ascend_l1": {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 131072,
+            "end_bytes": 163840
+          },
+          "ascend_ub": {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          }
+        },
+        "main": {
+          "ascend_l0c": {
+            "name": "qkv_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 16384,
+            "offset_bytes": 0,
+            "end_bytes": 65536
+          },
+          "ascend_l1": {
+            "name": "v_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 16384,
+            "offset_bytes": 131072,
+            "end_bytes": 163840
+          },
+          "ascend_ub": {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 8192,
+            "offset_bytes": 512,
+            "end_bytes": 33280
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": {
+        "declaration_order_only": true,
+        "all_named_addresses_and_copied_sizes_unchanged": true,
+        "all_last_per_pool_descriptors_unchanged": true,
+        "original_alias_maps_and_all_lifetime_payload_sync_preserved": true
+      },
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "Q_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "16384",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "K_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "16384",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "V_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "16384",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "S_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "128",
+            "128",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "G_handle",
+          "dtype": "float32",
+          "shape": [
+            "2",
+            "16",
+            "16384"
+          ],
+          "elements": 524288,
+          "bytes": 2097152
+        },
+        {
+          "name": "Msk_handle",
+          "dtype": "float32",
+          "shape": [
+            "128",
+            "128"
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        },
+        {
+          "name": "workspace_1_handle",
+          "dtype": "float16",
+          "shape": [
+            "4096",
+            "128",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "workspace_2_handle",
+          "dtype": "float16",
+          "shape": [
+            "4096",
+            "128",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "workspace_3_handle",
+          "dtype": "float16",
+          "shape": [
+            "4096",
+            "128",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "2",
+            "16",
+            "16384",
+            "128"
+          ],
+          "elements": 67108864,
+          "bytes": 134217728
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_solve_tril_128",
+      "evidence_scope": "original_default_CLI_C128",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/ta/opt_gdn_solve_tril_128/kernel.cc",
+        "sha256": "bf2ecfa1bccecbb3e78441e531641cb01e98f994eef20e70bca5ae7a49802589",
+        "size": 10106
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/main/opt_gdn_solve_tril_128/kernel.cc",
+        "sha256": "25913bf83e4dafc96e29860222bfcbed30dce46e63bdcb55b189755a976ea6f3",
+        "size": 10115
+      },
+      "launch_grid": 1,
+      "host_ABI": "uint8_t* A_handle, uint8_t* I_handle, uint8_t* O_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [],
+      "review_only_identifier_correspondence": [
+        [
+          "cid",
+          "bz"
+        ]
+      ],
+      "named_views": {
+        "ta": [
+          {
+            "name": "a21_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 0,
+            "end_bytes": 8192
+          },
+          {
+            "name": "a21_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 8192,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o11_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 12288
+          },
+          {
+            "name": "mult_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "o22_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 12288,
+            "end_bytes": 14336
+          },
+          {
+            "name": "mult_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 14336,
+            "end_bytes": 16384
+          },
+          {
+            "name": "final_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "o11_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 16384,
+            "end_bytes": 24576
+          },
+          {
+            "name": "mult_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 8192,
+            "end_bytes": 24576
+          },
+          {
+            "name": "o22_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 32768
+          },
+          {
+            "name": "mult_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 32768,
+            "end_bytes": 40960
+          },
+          {
+            "name": "final_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 40960
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "fat_o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 8192
+          },
+          {
+            "name": "fat_zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 8192,
+            "end_bytes": 12288
+          },
+          {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 12288,
+            "end_bytes": 16384
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 16384,
+            "end_bytes": 20480
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 20480,
+            "end_bytes": 24576
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 24576,
+            "end_bytes": 28672
+          },
+          {
+            "name": "o_row_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 28672,
+            "end_bytes": 28800
+          },
+          {
+            "name": "o_row_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 28800,
+            "end_bytes": 32896
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 32896,
+            "end_bytes": 34944
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 34944,
+            "end_bytes": 35072
+          }
+        ],
+        "main": [
+          {
+            "name": "a21_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 0,
+            "end_bytes": 8192
+          },
+          {
+            "name": "a21_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 8192,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o11_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 12288
+          },
+          {
+            "name": "mult_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "o22_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 12288,
+            "end_bytes": 14336
+          },
+          {
+            "name": "mult_s_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 14336,
+            "end_bytes": 16384
+          },
+          {
+            "name": "final_s_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "o11_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 16384,
+            "end_bytes": 24576
+          },
+          {
+            "name": "mult_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 8192,
+            "end_bytes": 24576
+          },
+          {
+            "name": "o22_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 32768
+          },
+          {
+            "name": "mult_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 32768,
+            "end_bytes": 40960
+          },
+          {
+            "name": "final_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 40960
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "fat_o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 8192
+          },
+          {
+            "name": "fat_zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 8192,
+            "end_bytes": 12288
+          },
+          {
+            "name": "a_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 2048,
+            "offset_bytes": 12288,
+            "end_bytes": 16384
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 16384,
+            "end_bytes": 20480
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 20480,
+            "end_bytes": 24576
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 24576,
+            "end_bytes": 28672
+          },
+          {
+            "name": "o_row_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 28672,
+            "end_bytes": 28800
+          },
+          {
+            "name": "o_row_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 28800,
+            "end_bytes": 32896
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 32896,
+            "end_bytes": 34944
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 34944,
+            "end_bytes": 35072
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l0c": {
+            "name": "final_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 40960
+          },
+          "ascend_l1": {
+            "name": "mult_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 32768,
+            "end_bytes": 40960
+          },
+          "ascend_ub": {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 34944,
+            "end_bytes": 35072
+          }
+        },
+        "main": {
+          "ascend_l0c": {
+            "name": "final_l_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 4096,
+            "offset_bytes": 24576,
+            "end_bytes": 40960
+          },
+          "ascend_l1": {
+            "name": "mult_l_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 4096,
+            "offset_bytes": 32768,
+            "end_bytes": 40960
+          },
+          "ascend_ub": {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 34944,
+            "end_bytes": 35072
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": null,
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "128",
+            "128"
+          ],
+          "elements": 16384,
+          "bytes": 32768
+        },
+        {
+          "name": "I_handle",
+          "dtype": "float32",
+          "shape": [
+            "128",
+            "128"
+          ],
+          "elements": 16384,
+          "bytes": 65536
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "128",
+            "128"
+          ],
+          "elements": 16384,
+          "bytes": 32768
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_solve_tril_32_API",
+      "evidence_scope": "additional_positive_source_only_API_nonCLI_H2_required_by_original_H_floor_div2",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/ta/opt_gdn_solve_tril_32_API/kernel.cc",
+        "sha256": "96a59a66147671fa11d13ec937b5fbea9bd19681347164cab7d27f89c57d5913",
+        "size": 4433
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/main/opt_gdn_solve_tril_32_API/kernel.cc",
+        "sha256": "4d1b59659ebf7a40349c43d7bdf7566189345a2c0d86676af3de8baf40f1793f",
+        "size": 4555
+      },
+      "launch_grid": 4,
+      "host_ABI": "uint8_t* A_handle, uint8_t* I_handle, uint8_t* O_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "bx",
+          "expression": "cid",
+          "minimum": 0,
+          "maximum": 3,
+          "logical_cid": [
+            0,
+            3
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            3
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "cid",
+          "minimum": 0,
+          "maximum": 3,
+          "logical_cid": [
+            0,
+            3
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            3
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [
+        [
+          "vid",
+          "by"
+        ]
+      ],
+      "named_views": {
+        "ta": [
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 14336
+          },
+          {
+            "name": "o_row_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 14336,
+            "end_bytes": 14464
+          },
+          {
+            "name": "o_row_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 14464,
+            "end_bytes": 18560
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 18560,
+            "end_bytes": 20608
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 20608,
+            "end_bytes": 20736
+          }
+        ],
+        "main": [
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 14336
+          },
+          {
+            "name": "o_row_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 14336,
+            "end_bytes": 14464
+          },
+          {
+            "name": "o_row_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 14464,
+            "end_bytes": 18560
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 18560,
+            "end_bytes": 20608
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 20608,
+            "end_bytes": 20736
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_ub": {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 20608,
+            "end_bytes": 20736
+          }
+        },
+        "main": {
+          "ascend_ub": {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 20608,
+            "end_bytes": 20736
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": null,
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "128",
+            "32"
+          ],
+          "elements": 8192,
+          "bytes": 16384
+        },
+        {
+          "name": "I_handle",
+          "dtype": "float32",
+          "shape": [
+            "32",
+            "32"
+          ],
+          "elements": 1024,
+          "bytes": 4096
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "2",
+            "128",
+            "32"
+          ],
+          "elements": 8192,
+          "bytes": 16384
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
+    },
+    {
+      "id": "opt_gdn_solve_tril_64_API",
+      "evidence_scope": "additional_positive_source_only_API_nonCLI",
+      "TA_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/ta/opt_gdn_solve_tril_64_API/kernel.cc",
+        "sha256": "eddaf234c1973ab99b9160c42aa6259933fe05dff04c1c315c6cb5aea2e6bdc4",
+        "size": 7204
+      },
+      "main_source": {
+        "path": "/workspace/baitian/tilelang/refactor_main/reports/p3_gdn_G5/main/opt_gdn_solve_tril_64_API/kernel.cc",
+        "sha256": "7e54b573ce365b7244ecb33f9eda2fe4f1880eb794e37ce9aaf994f2dd1a592d",
+        "size": 7304
+      },
+      "launch_grid": 2,
+      "host_ABI": "uint8_t* A_handle, uint8_t* I_handle, uint8_t* O_handle, aclrtStream stream",
+      "frontend_params_equal": true,
+      "configs": {
+        "tl.ascend_auto_sync": false
+      },
+      "unused_pure_scalars": [
+        {
+          "name": "bx",
+          "expression": "cid",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            1
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            1
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bx_1",
+          "expression": "cid",
+          "minimum": 0,
+          "maximum": 1,
+          "logical_cid": [
+            0,
+            1
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        },
+        {
+          "name": "bz_1",
+          "expression": "0",
+          "minimum": 0,
+          "maximum": 0,
+          "logical_cid": [
+            0,
+            1
+          ],
+          "vid_or_its_by_alias": [
+            0,
+            1
+          ],
+          "pure_no_memory_read": true
+        }
+      ],
+      "review_only_identifier_correspondence": [],
+      "named_views": {
+        "ta": [
+          {
+            "name": "a21_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "o11_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 4096
+          },
+          {
+            "name": "o22_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 6144
+          },
+          {
+            "name": "mult_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "mult_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 8192
+          },
+          {
+            "name": "final_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 14336
+          },
+          {
+            "name": "o_row_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 14336,
+            "end_bytes": 14464
+          },
+          {
+            "name": "o_row_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 14464,
+            "end_bytes": 18560
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 18560,
+            "end_bytes": 20608
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 20608,
+            "end_bytes": 20736
+          },
+          {
+            "name": "zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 20736,
+            "end_bytes": 22784
+          }
+        ],
+        "main": [
+          {
+            "name": "a21_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "o11_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 4096
+          },
+          {
+            "name": "o22_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 6144
+          },
+          {
+            "name": "mult_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 4096
+          },
+          {
+            "name": "mult_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 8192
+          },
+          {
+            "name": "final_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          {
+            "name": "o_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 0,
+            "end_bytes": 2048
+          },
+          {
+            "name": "i_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 2048,
+            "end_bytes": 6144
+          },
+          {
+            "name": "mul_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 10240
+          },
+          {
+            "name": "o_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 10240,
+            "end_bytes": 14336
+          },
+          {
+            "name": "zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 14336,
+            "end_bytes": 16384
+          },
+          {
+            "name": "o_row_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 16384,
+            "end_bytes": 16512
+          },
+          {
+            "name": "o_row_2d_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 16512,
+            "end_bytes": 20608
+          },
+          {
+            "name": "tmp_ub",
+            "pool": "ascend_ub",
+            "dtype": "uint8_t",
+            "count": 2048,
+            "offset_bytes": 20608,
+            "end_bytes": 22656
+          },
+          {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 22656,
+            "end_bytes": 22784
+          }
+        ]
+      },
+      "capacities": {
+        "ascend_l0a": 65536,
+        "ascend_l0b": 65536,
+        "ascend_l1": 524032,
+        "ascend_l0c": 131072,
+        "ascend_ub": 196352
+      },
+      "aliases": {
+        "ta": [],
+        "main": []
+      },
+      "last_descriptor_per_pool": {
+        "ta": {
+          "ascend_l0c": {
+            "name": "final_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          "ascend_l1": {
+            "name": "mult_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 8192
+          },
+          "ascend_ub": {
+            "name": "zero_ub_half",
+            "pool": "ascend_ub",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 20736,
+            "end_bytes": 22784
+          }
+        },
+        "main": {
+          "ascend_l0c": {
+            "name": "final_l0",
+            "pool": "ascend_l0c",
+            "dtype": "float",
+            "count": 1024,
+            "offset_bytes": 4096,
+            "end_bytes": 8192
+          },
+          "ascend_l1": {
+            "name": "mult_l1",
+            "pool": "ascend_l1",
+            "dtype": "half",
+            "count": 1024,
+            "offset_bytes": 6144,
+            "end_bytes": 8192
+          },
+          "ascend_ub": {
+            "name": "red_ub",
+            "pool": "ascend_ub",
+            "dtype": "float",
+            "count": 32,
+            "offset_bytes": 22656,
+            "end_bytes": 22784
+          }
+        }
+      },
+      "explicit_descriptor_or_order_change": {
+        "pool": "ascend_ub",
+        "old_intervals": [
+          [
+            14336,
+            14464
+          ],
+          [
+            14464,
+            18560
+          ],
+          [
+            18560,
+            20608
+          ],
+          [
+            20608,
+            20736
+          ],
+          [
+            20736,
+            22784
+          ]
+        ],
+        "new_intervals": [
+          [
+            14336,
+            16384
+          ],
+          [
+            16384,
+            16512
+          ],
+          [
+            16512,
+            20608
+          ],
+          [
+            20608,
+            22656
+          ],
+          [
+            22656,
+            22784
+          ]
+        ],
+        "same_exact_union": [
+          14336,
+          22784
+        ],
+        "all_named_dtype_and_element_counts_preserved": true,
+        "no_aliases": true,
+        "each_moved_offset_remains_multiple_of_128": true,
+        "final_shared_TBuf_dataLen_bytes": {
+          "ta": 2048,
+          "main": 128
+        },
+        "shared_metadata_not_equal": true,
+        "per_LocalTensor_GetSize_contract": "copied address_.dataLen; each original count unchanged, actual fixed SDK header evidence from G4",
+        "emitted_raw_UB_consumers": {
+          "ta": {
+            "raw_TBuf_references_after_last_UB_view": 0,
+            "LocalTensor_workspace_consumers": [
+              "tl::ascend::Broadcast<float, 2, 1, false>(o_row_2d_ub[0],o_row_ub[0],tmp_ub[0],(uint32_t[]){32, 32}, (uint32_t[]){32, 1});",
+              "tl::ascend::reduce_sum<float,  32,  32,  0>(red_ub[0], mul_ub[0], tmp_ub[0], true);"
+            ]
+          },
+          "main": {
+            "raw_TBuf_references_after_last_UB_view": 0,
+            "LocalTensor_workspace_consumers": [
+              "tl::ascend::Broadcast<float, 2, 1, false>(o_row_2d_ub[0],o_row_ub[0],tmp_ub[0],(uint32_t[]){32, 32}, (uint32_t[]){32, 1});",
+              "tl::ascend::reduce_sum<float,  32,  32,  0>(red_ub[0], mul_ub[0], tmp_ub[0], true);"
+            ]
+          }
+        },
+        "claim_scope": "raw emitted source has no later original TBuf reference and named tensor consumers remain byte-exact; no general side-effect-free or device-numerical claim"
+      },
+      "complete_remaining_payload_control_and_sync_byte_equal": true,
+      "buffer_capacities": [
+        {
+          "name": "A_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "128",
+            "64"
+          ],
+          "elements": 8192,
+          "bytes": 16384
+        },
+        {
+          "name": "I_handle",
+          "dtype": "float32",
+          "shape": [
+            "64",
+            "64"
+          ],
+          "elements": 4096,
+          "bytes": 16384
+        },
+        {
+          "name": "O_handle",
+          "dtype": "float16",
+          "shape": [
+            "1",
+            "1",
+            "128",
+            "64"
+          ],
+          "elements": 8192,
+          "bytes": 16384
+        }
+      ],
+      "numerical_result": "pending; extra API requests are not original CLI cases"
     }
   ]
 }
