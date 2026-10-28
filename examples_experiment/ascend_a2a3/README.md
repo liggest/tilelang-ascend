@@ -7,8 +7,10 @@ thresholds remain intact. These examples do not depend on Carver.
 
 The full original pytest domain contains 28 items: one CPU unpack test and
 27 NPU tests. Source and SDK checks cover all 93 original CI factory/config
-mappings. Device validation is pending; source or compilation success does not
-establish numerical correctness.
+mappings. All 27 original NPU items passed on A3 and the CPU unpack item passed. The
+convolution tuner retained all 12 candidates per scenario, with its original
+25 warmup and 100 repeat iterations. Source or compilation evidence remains
+separate from these numerical results.
 
 ```bash
 python -m pytest examples_experiment/ascend_a2a3/
@@ -29,3 +31,9 @@ are not counted as successful configurations. No candidate was silently removed.
 
 Pinned source/destination hashes and the validation scope are recorded in
 `maint/ascend_a2a3/ecosystem_ports.json`.
+
+The numerical run preserved 10 earlier successes, then completed the remaining
+18 original items after adapting the example configuration callback to the main
+autotuner calling convention. The original failed attempt and same-input TA
+diagnostic remain recorded. CLI shapes outside the original CI matrix and the
+invalid standalone tuning candidates are not counted as additional passes.

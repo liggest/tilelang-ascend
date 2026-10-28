@@ -3,7 +3,7 @@
   "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
   "validated_main_native_checkpoint": "03d12088987a47256c58afb745a764344541985a",
   "validation_date_utc": "2026-10-27",
-  "scope": "Fifty-six reviewed owner assets. Experimental D10 are source/SDK verified with the original device matrix pending; they are not counted as numerical passes. Prior B2-C preserves the exact source-known GQA warning.",
+  "scope": "Fifty-six reviewed owner assets. Experimental D10 completed their full original CI matrix: 27 A3 device cases and one CPU unpack case. Original invalid standalone tuning candidates are retained separately; prior B2-C preserves its exact source-known GQA warning rather than counting it as a numerical pass.",
   "entries": [
     {
       "source_path": "examples/gemm/example_gemm.py",
@@ -1500,10 +1500,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1528,10 +1531,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1556,10 +1562,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1584,10 +1593,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1613,11 +1625,14 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
+        "device_status": "completed_original_CI_matrix_on_A3",
         "all_original_cases_retained": true,
-        "first_device_attempt": "10 original prior cases passed; this original autotune entry exposed callback arity mismatch before its kernel compilation. Same-input original TA passed all12 candidates; current adapter numerical continuation pending."
+        "first_device_attempt": "Historical83cdf callback arity failure preserved; same-input TA diagnostic passed. Continuation601f completed all18 remaining items after the local adapter.",
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1642,10 +1657,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1670,10 +1688,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1698,10 +1719,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1726,10 +1750,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     },
     {
@@ -1754,10 +1781,13 @@
         "original_CPU_unpack_passed": true,
         "actual_OFF_CPU_passed": 1,
         "actual_OFF_device_skipped": 27,
-        "device_status": "pending_root_frozen_window",
-        "all_original_cases_retained": true
+        "device_status": "completed_original_CI_matrix_on_A3",
+        "all_original_cases_retained": true,
+        "validation_scope": "D package aggregate; original CI matrix only, not arbitrary CLI inputs or standalone invalid tuner candidates",
+        "actual_A3_original_device_items_passed": 27,
+        "all_original_CI_cases_passed": true
       },
-      "state": "reviewed_source_SDK_device_pending",
+      "state": "reviewed_original_CI_matrix_numerically_validated_A3",
       "all_original_cases_retained": true
     }
   ],
@@ -1773,14 +1803,14 @@
   },
   "active_operator_progress": {
     "original_active_entries": 24,
-    "reviewed_and_actual_A3_PR_validated_entries": 19,
+    "reviewed_and_actual_A3_PR_validated_entries": 24,
     "positional_original_cases": 17,
     "xllm_moe_quant_original_PR_cases": 90,
     "xllm_moe_quant_original_full_cases": 380,
-    "pending_original_entries": 5,
+    "pending_original_entries": 0,
     "original_manifest_statuses_changed": false,
     "full_nightly_290_cases_preserved_for_final_regression": true,
-    "source_SDK_verified_device_pending_entries": 5
+    "source_SDK_verified_device_pending_entries": 0
   },
   "example_namespace_scope_validation": {
     "prior_cache_states": [
@@ -1837,7 +1867,7 @@
     "evidence": "refactor_main/reports/p3_ecosystem_batch2/C_device/device_contracts.json"
   },
   "batch_B2_D_validation": {
-    "state": "source_SDK_verified_device_pending",
+    "state": "original_CI_matrix_numerically_validated_on_A3",
     "original_active_entries": 5,
     "original_assets": 10,
     "original_pytest_items": 28,
@@ -1861,8 +1891,28 @@
       "blocked_original_case": "convolution_autotune[perfect_alignment]",
       "reason": "main callback invocation positional args vs original helper tuple contract",
       "same_input_TA_passed_with_original12_candidates": true,
-      "remaining_original_items_pending": 18
+      "status": "historical_failed_callback_attempt_before_adapter",
+      "remaining_original_items_pending_at_checkpoint": 18
     },
-    "device_matrix_complete": false
+    "device_matrix_complete": true,
+    "remaining_original_items_pending": 0,
+    "actual_device_validation": {
+      "prior_READY": "83cdfbe305e81c1a91ce28c67badfb387aeac373",
+      "continuation_READY": "601f5f011de4026de5d79980d53e0fcd0263a715",
+      "original_items_passed": 28,
+      "original_device_items_passed": 27,
+      "original_CPU_items_passed": 1,
+      "prior_passed_items_preserved_without_rerun": 10,
+      "continuation_items_passed": 18,
+      "actual_runtime_compilations": 93,
+      "original_tuner_precision_checks_passed": 72,
+      "original_final_torch_assertions_passed": 27,
+      "original_benchmark_calls": 78,
+      "original_benchmark_warmup_iterations": 25,
+      "original_benchmark_repeat_iterations": 100,
+      "extra_performance_runs": false,
+      "root_independent_combined_audit": "refactor_main/reports/p3_experimental_D_combined_device_root_review.json",
+      "standalone_invalid_extra_configs_not_counted_as_success": true
+    }
   }
 }
