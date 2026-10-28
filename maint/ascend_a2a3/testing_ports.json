@@ -1718,6 +1718,115 @@
         "original_device_cases_run": 0
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/cache/README.md",
+      "destination_path": "testing/ascend_a2a3/python/cache/README.md",
+      "source_git_blob": "6484d65af6f51796c855463247dadbce2f5e98ac",
+      "source_sha256": "28c34e28aeffa0be4d7b6a7f9c2c92a42475a3508646bc6039bdf57c9c3dd5b0",
+      "destination_sha256": "c692d09d28c8951d5e638940e1958f3e5dcd6edd7943a47bf5145422d54a1399",
+      "adaptations": [
+        "Retain all original source scenario IDs and filesystem/failure inputs, replacing retired stdlib-helper/standalone tuner-cache/mock-module APIs with actual current shared/A2A3 transaction and loader interfaces. No product or shared backend semantics change.",
+        "Document modern default-umask mode, shared loader warning/remove/miss versus strict A2 tuning error propagation, metadata read and save try-inside/outside outcome differences; do not claim whole-file AST or behavior equality.",
+        "Keep original publication rationale and scope, list each original recovery scenario with current API/outcome mapping, dependency/bootstrap/test commands and explicit non-numerical limitations."
+      ],
+      "validation": {
+        "source_scenarios_documented": 41,
+        "whole_AST_or_behavior_equality_claimed": false,
+        "original_source_blob_traceable": true
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/cache/test_atomic_copy.py",
+      "destination_path": "testing/ascend_a2a3/python/cache/test_atomic_copy.py",
+      "source_git_blob": "192725e25910632cab8f540589ddc942d456ac90",
+      "source_sha256": "6328f93d4b1590e72b2677373ba332c35cf7bcc5db2c1c46fe33c623fd8ccd21",
+      "destination_sha256": "ed27a7d11a58b40ed2f73ee8edc28878a99a3d0dc932ce158c0039b0b1f1e434",
+      "adaptations": [
+        "Retain all original source scenario IDs and filesystem/failure inputs, replacing retired stdlib-helper/standalone tuner-cache/mock-module APIs with actual current shared/A2A3 transaction and loader interfaces. No product or shared backend semantics change.",
+        "Document modern default-umask mode, shared loader warning/remove/miss versus strict A2 tuning error propagation, metadata read and save try-inside/outside outcome differences; do not claim whole-file AST or behavior equality.",
+        "Run all nine original publication scenarios on both independently implemented real _safe_write_file writers, including original byte widths, four processes/40 writes, old descriptors/mmap and real CPU-cc SO17->29 subprocess readers. Test-local write operation matches actual byte publishers; actual writer owns fsync/replace/cleanup.",
+        "OFF child processes explicitly repeat the actual OFF ctypes bootstrap because the parent mapped library is not inherited across exec; no ON fallback."
+      ],
+      "validation": {
+        "original_scenario_IDs": [
+          "TestAtomicCopy.test_concurrent_processes_publish_complete_files",
+          "TestAtomicCopy.test_copy_failure_keeps_old_file_and_cleans_temporary",
+          "TestAtomicCopy.test_destination_unchanged_during_copy",
+          "TestAtomicCopy.test_first_publication",
+          "TestAtomicCopy.test_loaded_shared_library_survives_republication",
+          "TestAtomicCopy.test_preserves_existing_mapping",
+          "TestAtomicCopy.test_preserves_source_permissions",
+          "TestAtomicCopy.test_replace_failure_keeps_old_file_and_cleans_temporary",
+          "TestAtomicCopy.test_same_source_and_destination"
+        ],
+        "modern_two_writer_cases_passed": 18,
+        "actual_OFF_publication_cases_passed": 18,
+        "original_permission_750_input_retained_modern_umask_expected": true,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
+    },
+    {
+      "source_path": "testing/python/cache/test_cache_recovery.py",
+      "destination_path": "testing/ascend_a2a3/python/cache/test_cache_recovery.py",
+      "source_git_blob": "7949d1e77e59712a95a9b0bc16f5e797ae47b2fe",
+      "source_sha256": "97aff2c8efee15e18b95de010094a57a49bea48e8c222561ed9354e5b8434536",
+      "destination_sha256": "195ff5d0735c86c910db6fdac0f86969a5fab778e3f43dc9220492eea65af2f1",
+      "adaptations": [
+        "Retain all original source scenario IDs and filesystem/failure inputs, replacing retired stdlib-helper/standalone tuner-cache/mock-module APIs with actual current shared/A2A3 transaction and loader interfaces. No product or shared backend semantics change.",
+        "Document modern default-umask mode, shared loader warning/remove/miss versus strict A2 tuning error propagation, metadata read and save try-inside/outside outcome differences; do not claim whole-file AST or behavior equality.",
+        "Real typed PrimFunc/KernelParam JSON, BackendContext, required files and manifest replace fake compiler modules and params.pkl/auto_gm_idx.pkl. Loader-boundary placeholder files are explicitly not compiled/ABI evidence.",
+        "Keep all 32 source cases distinct, additionally exercise real current AutoTuner cold/save/memory/disk orchestration with compile/benchmark/loader stubs and no device. Strict missing/ELF recovery runs each dialect; four actual-kind dependent cases skip individually on OFF.",
+        "Scope and exactly restore descriptor forced values including both global-disable flags, singleton identities, memory dictionaries, staging stamp, raw CacheState and logger level.",
+        "Scope the actual tuner to a test-owned real stream logger and initialization flag; preserve caller cwd autotuner.log and original logger/handler identities/order, while retaining real fault logging and closing only the owned handler."
+      ],
+      "validation": {
+        "original_scenario_IDs": [
+          "TestAutotuneResultRecovery.test_load_from_disk_metadata_deleted_returns_none",
+          "TestAutotuneResultRecovery.test_recovers_when_library_deleted_before_load",
+          "TestAutotuneResultRecovery.test_save_to_disk_makedirs_deletion_skips_save",
+          "TestAutotuneResultRecovery.test_save_to_disk_makedirs_permission_error_propagates",
+          "TestAutotuneResultRecovery.test_save_to_disk_serialization_error_propagates",
+          "TestAutotuneResultRecovery.test_save_to_disk_survives_cache_deletion",
+          "TestAutotuneResultRecovery.test_unloadable_library_is_not_a_miss",
+          "TestErrorReportsMissingPath.test_dependency_name_containing_target_is_not_reported",
+          "TestErrorReportsMissingPath.test_real_missing_target_is_reported",
+          "TestErrorReportsMissingPath.test_real_truncated_library_is_not_reported",
+          "TestErrorReportsMissingPath.test_same_basename_in_other_directory_is_not_reported",
+          "TestIsFileMissing.test_existing_entry_is_not_missing",
+          "TestIsFileMissing.test_missing_entry_is_missing",
+          "TestIsFileMissing.test_not_a_directory_is_not_missing",
+          "TestIsFileMissing.test_permission_error_is_not_missing",
+          "TestKernelCacheRecovery.test_cold_and_hot_cache_do_not_reload",
+          "TestKernelCacheRecovery.test_dependency_error_with_deletion_is_not_a_miss",
+          "TestKernelCacheRecovery.test_disk_hot_cache_does_not_compile",
+          "TestKernelCacheRecovery.test_makedirs_failure_still_returns_result",
+          "TestKernelCacheRecovery.test_makedirs_permission_error_propagates",
+          "TestKernelCacheRecovery.test_miss_compiles_and_returns_result",
+          "TestKernelCacheRecovery.test_missing_entry_directory_returns_none",
+          "TestKernelCacheRecovery.test_oserror_without_errno_is_recovered",
+          "TestKernelCacheRecovery.test_permission_error_is_not_a_miss",
+          "TestKernelCacheRecovery.test_permission_error_with_deletion_is_not_a_miss",
+          "TestKernelCacheRecovery.test_recovers_when_library_deleted_before_load",
+          "TestKernelCacheRecovery.test_recreated_library_after_deletion_reraises",
+          "TestKernelCacheRecovery.test_truncated_library_with_deletion_is_not_a_miss",
+          "TestKernelCacheRecovery.test_unloadable_library_is_not_a_miss",
+          "TestTunerCacheRecovery.test_full_control_flow",
+          "TestTunerCacheRecovery.test_recovers_when_library_deleted_before_load",
+          "TestTunerCacheRecovery.test_unloadable_library_is_not_a_miss"
+        ],
+        "modern_cases_passed": 32,
+        "actual_OFF_cases_passed": 28,
+        "actual_OFF_strict_kind_cases_skipped": 4,
+        "external_caller_isolation_cases_passed": 65,
+        "modern_atomic_shared_neighbor_cases_passed": 8,
+        "actual_public_tuner_own_library_repair_Bisheng_cases_passed": 1,
+        "benchmark_explicit_constant_stub_no_numerical_claim": true,
+        "NPU_execution": false
+      },
+      "all_original_cases_retained": true
     }
   ],
   "dependencies": [
