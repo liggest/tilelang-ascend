@@ -154,3 +154,43 @@ cross-entropy index promotion are checked within the original shape/index
 domains; all original allocations and aliases remain. These bounded source
 witnesses do not establish arbitrary-shape/alias or device correctness.
 Numerical device and timing validation remain pending.
+
+## Cumulative minimum, gather and group normalization
+
+Three complete sources retain all sixty original runtime cases:
+
+| Source | Complete original matrix |
+|---|---|
+| `cann-bench/cummin/example_cummin.py` | All twenty `_CASES`, original input recipes, dtype/axis/tiling dispatch and value/index reference checks |
+| `cann-bench/gather/gather.py` | All twenty original cases, including int64 low/high decomposition and recursive axis chunking |
+| `cann-bench/group_norm/example_group_norm.py` | All twenty original cases, including serial/pipeline selection, padding and special floating-point inputs |
+
+The original seeds are 0 for cumulative minimum and 42 for gather/group norm.
+The sixty runtime cases produce sixty-two distinct native constructor requests:
+20 cumulative-minimum, 22 gather and 20 group-norm. Gather's original dictionary
+cache, recursion and int64 decomposition produce 51 kernel invocations across
+its twenty cases. The source-only trace records shapes and control flow; its
+placeholder outputs are never used to run or pass a golden comparison.
+
+Cumulative minimum's data-dependent NaN dispatch is obtained from the complete
+original CPU input generator with seed 0 and all twenty cases in order. Only
+case 14 has a NaN. CPU RNG hashes and input dtype/shape/byte counts are recorded separately; this trace
+is not a device run or a numerical kernel check. All original NaN/Inf behavior,
+references, tolerances and exit conditions stay intact. Gather retains its
+original printed failure summary without introducing a failing exit code.
+Cumulative minimum and group norm retain their original nonzero failure exits.
+
+Group norm uses four explicit scalar-buffer loads in fill arguments:
+`total[0]`/`std_val[0]` for the serial and pipeline factories. Actual old and new
+frontend IR verifies the same allocated buffer/data identity, shape `[1]` and
+index 0 for each of the twenty requests. This adapts the old parser's implicit
+scalar load to eager construction without changing the language API or kernel
+algorithm. The initial unsupported bare-buffer errors remain in the evidence.
+
+All sixty-two native requests passed complete lowering and SDK compilation on
+both sides. Emitted C++ retains unused pure scalar bindings, core-variable naming
+and allocation-order differences. Full remaining payload, operands, loops,
+synchronization, host launches and logical allocation overlap relations match
+within these requests. Additional unused integer expressions are checked within
+the actual launch/constant-loop bounds. The raw source is preserved and compiled
+as generated. Device numerical and performance validation remains pending.
