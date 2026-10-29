@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "owner_scope": "PA1 two complete API leaves; no invented CLI. Real bench4-version consumer pending separate package",
+  "entries": [
+    {
+      "source_path": "examples/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_baseline.py",
+      "destination_path": "examples/ascend_a2a3/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_baseline.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "e4027a5a1562269ba12bf261f48ff85324f78de70395aaaaccddf25573c5c481",
+      "source_git_blob": "c747165853e17f281bb9f6258a267be3304fef4c",
+      "destination_sha256": "b0093d8ad609dadb7acb64d0d4d877ccba161f08a4fceb3ad0418629595b64bb",
+      "state": "complete_source_SDK_host_OFF_verified_device_pending",
+      "original_definition_AST_sha256": {
+        "init_test": "f10d3298f461e797100134bd57e6f1fa1386505e900e2e2c3eb912045435ea57",
+        "sparse_attention_fwd": "cf2c1f48b1d11e1ba60f1bc2333f8b46ef524c6948e039f1f6492e485059eb69",
+        "sparse_attn_tilelang": "1797dbc8b0c53f2a7da0bd724947e7fd9b528d229f20365a6150cab8a348b698"
+      },
+      "original_public_initializer_side_effects": [
+        "torch.set_default_device(npu)",
+        "torch.manual_seed(42)",
+        "tilelang.disable_cache()"
+      ],
+      "original_standalone_CLI": false,
+      "original_numeric_assertions_in_leaf": 0,
+      "original_runtime_consumer": "examples/sparse_flash_attention/bench_sfa/bench_sfa.py --file sparse_flash_attn_pa_baseline",
+      "original_out_idx": [
+        3
+      ],
+      "original_workspace_idx": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "original_core_num": 24,
+      "core_num_is_original_default_constant_not_actual_property": true,
+      "layout_helper": null,
+      "adaptations": [
+        "private A2A3 dialect import",
+        "remove import-time unused parent_dir/sys.path append; explicit init_test function is unchanged",
+        "NoCV uses already migrated backend-local make_zn_layout; complete formula/5 shapes separately compared"
+      ],
+      "device_not_run": true,
+      "original_target": "auto",
+      "retained_original_module_constants_AST": [
+        "pass_configs = {tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True, tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_SYNC: True, tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True, tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True}"
+      ]
+    },
+    {
+      "source_path": "examples/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_no_cv_pipeline.py",
+      "destination_path": "examples/ascend_a2a3/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_no_cv_pipeline.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "2f17ec5f851c351e56307731980e9550e98baa4a9b31138bc6ea8b2284fed03f",
+      "source_git_blob": "4beb12f2baa409014b299c6c6c33528ed806156d",
+      "destination_sha256": "5ede86fd626ec491ef846e8ab8b84b2e14a0703446d17b116b0f632eaf92ffff",
+      "state": "complete_source_SDK_host_OFF_verified_device_pending",
+      "original_definition_AST_sha256": {
+        "init_test": "f10d3298f461e797100134bd57e6f1fa1386505e900e2e2c3eb912045435ea57",
+        "sparse_attention_fwd": "7651fc7a73d7464c6f5eca777e38f498ff86afeabb6833c1521ac6936a0e6a8b",
+        "sparse_attn_tilelang": "cd291c6af36852321f16d1beba937f8e6219023f142e5ee174fc34f2cdc1b485"
+      },
+      "original_public_initializer_side_effects": [
+        "torch.set_default_device(npu)",
+        "torch.manual_seed(42)",
+        "tilelang.disable_cache()"
+      ],
+      "original_standalone_CLI": false,
+      "original_numeric_assertions_in_leaf": 0,
+      "original_runtime_consumer": "examples/sparse_flash_attention/bench_sfa/bench_sfa.py --file sparse_flash_attn_pa_no_cv_pipeline",
+      "original_out_idx": [
+        3
+      ],
+      "original_workspace_idx": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "original_core_num": 24,
+      "core_num_is_original_default_constant_not_actual_property": true,
+      "layout_helper": "make_zn_layout",
+      "adaptations": [
+        "private A2A3 dialect import",
+        "remove import-time unused parent_dir/sys.path append; explicit init_test function is unchanged",
+        "NoCV uses already migrated backend-local make_zn_layout; complete formula/5 shapes separately compared"
+      ],
+      "device_not_run": true,
+      "original_target": "auto",
+      "retained_original_module_constants_AST": [
+        "pass_configs = {tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True, tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_SYNC: True, tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True}",
+        "core_num = 24",
+        "block_num = 20",
+        "block_size = 128"
+      ]
+    }
+  ],
+  "factory_requests": [
+    {
+      "id": "sparse_flash_attn_pa_baseline",
+      "source_path": "examples/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_baseline.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "q_heads": 128,
+        "dim": 512,
+        "rope_dim": 64,
+        "topk": 2048,
+        "scale": 0.5,
+        "core_num": 24,
+        "block_size": 128
+      },
+      "dialect": "ascendc",
+      "core_sampling": "none",
+      "original_consumer_default_requests": [
+        {
+          "T": 1,
+          "B": 1,
+          "KV_S": 2560,
+          "Q_N": 128,
+          "KV_N": 1,
+          "D": 512,
+          "D_rope": 64,
+          "topk": 2048,
+          "act_kv_s": 2560
+        },
+        {
+          "T": 1,
+          "B": 1,
+          "KV_S": 6400,
+          "Q_N": 128,
+          "KV_N": 1,
+          "D": 512,
+          "D_rope": 64,
+          "topk": 2048,
+          "act_kv_s": 2560
+        },
+        {
+          "T": 1,
+          "B": 1,
+          "KV_S": 48000,
+          "Q_N": 128,
+          "KV_N": 1,
+          "D": 512,
+          "D_rope": 64,
+          "topk": 2048,
+          "act_kv_s": 2560
+        }
+      ]
+    },
+    {
+      "id": "sparse_flash_attn_pa_no_cv_pipeline",
+      "source_path": "examples/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_no_cv_pipeline.py",
+      "factory": "sparse_attention_fwd",
+      "args": [],
+      "kwargs": {
+        "q_heads": 128,
+        "dim": 512,
+        "rope_dim": 64,
+        "topk": 2048,
+        "scale": 0.5,
+        "core_num": 24,
+        "block_size": 128
+      },
+      "dialect": "ascendc",
+      "core_sampling": "none",
+      "original_consumer_default_requests": [
+        {
+          "T": 1,
+          "B": 1,
+          "KV_S": 2560,
+          "Q_N": 128,
+          "KV_N": 1,
+          "D": 512,
+          "D_rope": 64,
+          "topk": 2048,
+          "act_kv_s": 2560
+        },
+        {
+          "T": 1,
+          "B": 1,
+          "KV_S": 6400,
+          "Q_N": 128,
+          "KV_N": 1,
+          "D": 512,
+          "D_rope": 64,
+          "topk": 2048,
+          "act_kv_s": 2560
+        },
+        {
+          "T": 1,
+          "B": 1,
+          "KV_S": 48000,
+          "Q_N": 128,
+          "KV_N": 1,
+          "D": 512,
+          "D_rope": 64,
+          "topk": 2048,
+          "act_kv_s": 2560
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "original_assets": 2,
+    "original_definitions": 6,
+    "original_leaf_CLI_and_numeric_assertions": 0,
+    "full_source_per_framework": 2,
+    "actual_SDK_per_framework": 2,
+    "host_ON_passed": 8,
+    "actual_OFF_passed": 6,
+    "actual_OFF_native_only_skipped": 2,
+    "source_SDK_host_OFF_pending": false,
+    "device_not_run": true,
+    "consumer_bench_full_matrix_pending": true,
+    "original_consumer_requests_per_leaf": 3,
+    "unique_dynamic_specialization_per_leaf": 1,
+    "original_default_core24_not_actual_property": true,
+    "original_initializer_explicit_global_side_effects_preserved": true,
+    "JSON_roundtrip_layout_free_iterator_alpha_mapping": true
+  }
+}
