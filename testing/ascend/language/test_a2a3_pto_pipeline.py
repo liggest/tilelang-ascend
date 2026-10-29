@@ -50,11 +50,74 @@ class _Trace:
     def __init__(self):
         self.names = []
         self.prefix = None
+        self.entries = []
+        self.stack = []
 
     def run_before_pass(self, mod, info):
-        self.names.append(info.name)
-        if info.name == "tl.A2A3InferAllocScope":
+        name = str(info.name)
+        self.names.append(name)
+        index = len(self.entries)
+        parent = self.stack[-1] if self.stack else None
+        self.entries.append({"name": name, "parent": parent, "children": []})
+        if parent is not None:
+            self.entries[parent]["children"].append(index)
+        self.stack.append(index)
+        if name == "tl.A2A3InferAllocScope":
             self.prefix = mod
+
+    def run_after_pass(self, mod, info):
+        assert self.entries[self.stack.pop()]["name"] == str(info.name)
+
+
+def _assert_compat_children(trace):
+    assert not trace.stack
+    for entry in trace.entries:
+        children = [trace.entries[index]["name"] for index in entry["children"]]
+        if entry["name"] == "tl.A2A3Simplify":
+            assert children == ["tirx.Simplify"]
+        elif entry["name"] == "tl.A2A3RemoveNoOp":
+            # Fixed-point iterations depend on the actual dead-binding chain.
+            # Every round must call the genuine configured shared pass.
+            assert children and children == ["tirx.RemoveNoOp"] * len(children)
+
+
+def _assert_complete_pto_trace(trace):
+    compat = {"tl.A2A3Simplify", "tl.A2A3RemoveNoOp"}
+    native = [name.removeprefix("tl.A2A3") for name in trace.names if name.startswith("tl.A2A3") and name not in compat]
+    assert native == _TA_PASSES
+
+    # Keep the original shared phase boundaries as well as all 27 TA native
+    # factories. This rejects moving a wrapper within a native-to-native gap.
+    before = {
+        "HostLegalize": ["tirx.BindTarget"],
+        "CrossCorePipeline": ["s_tir.PlanAndUpdateBufferAllocationLocation"],
+        "PipelinePlanning": ["s_tir.PlanAndUpdateBufferAllocationLocation"],
+        "ConfigIndexBitwidth": ["tirx.NarrowDataType"],
+        "AscendMemoryPlanning": [
+            "tirx.UnrollLoop",
+            "s_tir.RenormalizeSplitPattern",
+            "tl.A2A3Simplify",
+            "tl.A2A3RemoveNoOp",
+            "s_tir.RewriteUnsafeSelect",
+            "s_tir.HoistIfThenElse",
+        ],
+    }
+    after = {
+        "HostLegalize": ["tl.A2A3Simplify"],
+        "LegalizeSafeMemoryAccess": ["tl.A2A3Simplify"],
+        "FlattenBuffer": ["tl.A2A3Simplify"],
+    }
+    expected = []
+    for name in _TA_PASSES:
+        expected.extend(before.get(name, []))
+        expected.append("tl.A2A3" + name)
+        expected.extend(after.get(name, []))
+    top_level = [entry["name"] for entry in trace.entries if entry["parent"] is None]
+    original_start = top_level.index("tl.A2A3InferAllocScope")
+    assert top_level[original_start:] == expected
+    assert top_level.count("tl.A2A3Simplify") == 4
+    assert top_level.count("tl.A2A3RemoveNoOp") == 1
+    _assert_compat_children(trace)
 
 
 def _context(platform="A3"):
@@ -87,8 +150,7 @@ def test_source_factories_run_the_complete_pto_pass_sequence(factory, args, conf
     with tvm.transform.PassContext(opt_level=3, config=effective, instruments=[trace]):
         lowered = pipeline._lower_pto(tvm.IRModule.from_expr(original), context.target)
     func = pipeline.get_device_kernel(lowered)
-    names = [name.removeprefix("tl.A2A3") for name in trace.names if name.startswith("tl.A2A3")]
-    assert names == _TA_PASSES
+    _assert_complete_pto_trace(trace)
     assert func.attrs["npu_platform"] == "A3"
     assert "pto" in func.attrs["target"].keys
     assert "address_map" in func.attrs and "size_map" in func.attrs
@@ -138,7 +200,9 @@ def test_real_launch_forms_and_pto_codegen_tail(threads, platform, discard_vid):
     trace = _Trace()
     with tvm.transform.PassContext(instruments=[trace]):
         prepared = codegen._prepare_pto_codegen(lowered, context.target)
-    assert trace.names == ["tirx.Simplify"]
+    assert trace.names == ["tl.A2A3Simplify", "tirx.Simplify"]
+    assert [entry["name"] for entry in trace.entries if entry["parent"] is None] == ["tl.A2A3Simplify"]
+    _assert_compat_children(trace)
     assert pipeline.get_device_kernel(prepared).attrs["npu_platform"] == platform
 
 

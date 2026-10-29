@@ -124,3 +124,13 @@ def AscendVectorMaskLegalize(target, platform):
 
 def HostProcesser():
     return tvm.ffi.get_global_func("tl.transform.A2A3HostLegalize")()
+
+
+def RemoveNoOp():
+    """Preserve pinned TA dead-binding/effect cleanup on TIRX."""
+    return tvm.ffi.get_global_func("tl.transform.A2A3RemoveNoOp")()
+
+
+def AscendSimplify():
+    """Preserve pinned TA eligible dead-Let cleanup at Simplify stages."""
+    return tvm.ffi.get_global_func("tl.transform.A2A3Simplify")()

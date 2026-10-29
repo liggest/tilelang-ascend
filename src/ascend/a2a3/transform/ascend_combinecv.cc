@@ -33,6 +33,7 @@
 #include "../op/ascend.h"
 #include "../op/builtin.h"
 #include "./common/ascend_vector_mask.h"
+#include "./common/binding_cleanup.h"
 #include "./common/operation_config.h"
 
 namespace tvm {
@@ -1247,7 +1248,7 @@ private:
 // splitting.  TIRX Bind is flat, and TVM RemoveNoOp deliberately leaves unused
 // binds intact.  Repair only split regions with a leftover foreign-resource
 // read; neutral shared scalar programs otherwise retain their original form.
-class SplitRegionBindPruner : public StmtMutator {
+class SplitRegionBindPruner : public binding_cleanup::BackwardBindings {
 public:
   // Separate from the foreign-read repair below: only proven dead pure loops
   // in a real emitted counterpart may enter this path.
@@ -1291,82 +1292,7 @@ public:
 private:
   using VarSet = std::unordered_set<Var, ObjectPtrHash, ObjectPtrEqual>;
 
-  class Uses : public StmtExprVisitor {
-  public:
-    explicit Uses(VarSet *vars, Optional<Stmt> excluded = std::nullopt)
-        : vars_(vars), excluded_(std::move(excluded)) {}
-
-    void IncludeMetadata(const Any &value) { VisitMetadata(value); }
-
-  private:
-    void VisitStmt(const Stmt &stmt) final {
-      if (!excluded_.defined() || !stmt.same_as(excluded_.value())) {
-        StmtExprVisitor::VisitStmt(stmt);
-      }
-    }
-    void VisitExpr_(const VarNode *op) final { vars_->insert(GetRef<Var>(op)); }
-    void VisitBufferUse(const Buffer &buffer) final {
-      vars_->insert(buffer->data);
-      // A descriptor can carry a scalar shape/stride use without a nearby
-      // DeclBuffer.  Counting it conservatively cannot discard a needed bind.
-      VisitBufferDef(buffer, false);
-    }
-    void VisitExpr_(const BufferLoadNode *op) final {
-      StmtExprVisitor::VisitExpr_(op);
-      if (op->predicate.defined()) {
-        VisitExpr(op->predicate.value());
-      }
-    }
-    void VisitStmt_(const BufferStoreNode *op) final {
-      StmtExprVisitor::VisitStmt_(op);
-      if (op->predicate.defined()) {
-        VisitExpr(op->predicate.value());
-      }
-    }
-    void VisitStmt_(const ForNode *op) final {
-      StmtExprVisitor::VisitStmt_(op);
-      VisitMetadata(op->annotations);
-    }
-    void VisitStmt_(const SBlockNode *op) final {
-      StmtExprVisitor::VisitStmt_(op);
-      VisitMetadata(op->annotations);
-    }
-    void VisitStmt_(const AttrStmtNode *op) final {
-      StmtExprVisitor::VisitStmt_(op);
-      VisitMetadata(op->node);
-    }
-    void VisitExpr_(const CallNode *op) final {
-      StmtExprVisitor::VisitExpr_(op);
-      VisitMetadata(op->annotations);
-    }
-    void VisitMetadata(const Any &value) {
-      auto object = value.as<ObjectRef>();
-      if (!object || !object->defined() || !metadata_.insert(*object).second) {
-        return;
-      }
-      if (auto expr = object->as<PrimExpr>()) {
-        VisitExpr(expr.value());
-      } else if (auto array = object->as<ArrayObj>()) {
-        for (const Any &item : *array) {
-          VisitMetadata(item);
-        }
-      } else if (auto map = object->as<MapObj>()) {
-        for (const auto &item : *map) {
-          VisitMetadata(item.first);
-          VisitMetadata(item.second);
-        }
-      } else {
-        reflection::ForEachFieldInfo(
-            TVMFFIGetTypeInfo((*object)->type_index()),
-            [&](const TVMFFIFieldInfo *field) {
-              VisitMetadata(reflection::FieldGetter(field)(*object));
-            });
-      }
-    }
-    VarSet *vars_;
-    Optional<Stmt> excluded_;
-    std::unordered_set<ObjectRef, ObjectPtrHash, ObjectPtrEqual> metadata_;
-  };
+  using Uses = binding_cleanup::Uses;
 
   // A typed operation has explicit operands. Unknown externs, even if marked
   // pure or supplied a UB pointer, cannot prove that local names are unused.
@@ -1598,60 +1524,6 @@ private:
     }
     PrimFunc source_;
   };
-
-  Stmt VisitStmt(const Stmt &stmt) final {
-    VarSet live_out = live_;
-    // Branches and nested scopes may consume an ancestor bind.  Seed their
-    // complete use set before mutating children, then recompute after empty
-    // controls disappear on the next fixed-point iteration.
-    if (!stmt.as<SeqStmtNode>() && !stmt.as<BindNode>()) {
-      Uses{&live_}(stmt);
-    }
-    Stmt result = StmtMutator::VisitStmt(stmt);
-    if (!stmt.as<BindNode>()) {
-      live_ = std::move(live_out);
-      Uses{&live_}(result);
-    }
-    return result;
-  }
-
-  Stmt VisitStmt_(const SeqStmtNode *op) final {
-    Array<Stmt> reversed;
-    for (auto it = op->seq.rbegin(); it != op->seq.rend(); ++it) {
-      reversed.push_back(VisitStmt(*it));
-    }
-    Array<Stmt> statements;
-    for (auto it = reversed.rbegin(); it != reversed.rend(); ++it) {
-      statements.push_back(*it);
-    }
-    return SeqStmt::Flatten(statements);
-  }
-
-  static bool CanDiscard(const PrimExpr &value) {
-    bool discard = SideEffect(value) <= CallEffectKind::kReadState;
-    PostOrderVisit(value, [&](const ObjectRef &node) {
-      if (const auto *load = node.as<BufferLoadNode>();
-          load && load->predicate.defined()) {
-        discard &= CanDiscard(load->predicate.value());
-      }
-    });
-    return discard;
-  }
-
-  Stmt VisitStmt_(const BindNode *op) final {
-    // Match original TA RemoveNoOp::HasSideEffect: pure and ordinary reads
-    // may disappear; update/opaque calls (including const_data) may not.
-    if (!live_.count(op->var) && CanDiscard(op->value)) {
-      removed_ = true;
-      return Evaluate(0);
-    }
-    live_.erase(op->var);
-    Uses{&live_}(op->value);
-    return GetRef<Stmt>(op);
-  }
-
-  VarSet live_;
-  bool removed_{false};
 };
 
 Stmt SplitRegionBindPruner::ApplyPureControlLoops(const Stmt &region,

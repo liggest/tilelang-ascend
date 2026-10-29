@@ -43,7 +43,9 @@ def _build_pto(mod, target):
 def _prepare_pto_codegen(mod, _target):
     # TA engine/lower.py device_codegen performs this extra Simplify for PTO,
     # without the shared LowerIntrin or HoistBroadcastValues preparation.
-    return tvm.tirx.transform.Simplify()(mod)
+    from .transform import AscendSimplify
+
+    return AscendSimplify()(mod)
 
 
 # The TA native builder emits source. The shared Cython execution backend compiles

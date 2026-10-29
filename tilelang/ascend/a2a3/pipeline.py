@@ -56,6 +56,8 @@ _REQUIRED_NATIVE_FACTORIES = (
     "tl.transform.A2A3BufferShapeCollector",
     "tl.transform.A2A3CollectBufferShapes",
     "tl.transform.A2A3CombineCV",
+    "tl.transform.A2A3RemoveNoOp",
+    "tl.transform.A2A3Simplify",
     "tl.transform.A2A3ConfigIndexBitwidth",
     "tl.transform.A2A3CrossCorePipeline",
     "tl.transform.A2A3Flatten2DBuffer",
@@ -139,7 +141,7 @@ def LowerAndLegalize(mod, target):
     mod = ascend_transform.BufferShapeCollector()(mod)
     mod = tirx.transform.BindTarget(target)(mod)
     mod = ascend_transform.HostProcesser()(mod)
-    mod = tirx.transform.Simplify()(mod)
+    mod = ascend_transform.AscendSimplify()(mod)
     mod = ascend_transform.AscendLowerParallelToVector()(mod)
     mod = ascend_transform.LayoutInference()(mod)
     mod = ascend_transform.CollectBufferShapes()(mod)
@@ -149,7 +151,7 @@ def LowerAndLegalize(mod, target):
     mod = ascend_transform.AscendWorkspaceReduction()(mod)
     mod = ascend_transform.LegalizeVectorizedLoop()(mod)
     mod = ascend_transform.LegalizeSafeMemoryAccess()(mod)
-    mod = tirx.transform.Simplify()(mod)
+    mod = ascend_transform.AscendSimplify()(mod)
     return mod
 
 
@@ -168,22 +170,22 @@ def OptimizeForTarget(mod, target, platform):
     mod = ascend_transform.ConfigIndexBitwidth()(mod)
     mod = ascend_transform.Flatten2DBuffer()(mod)
     mod = ascend_transform.FlattenBuffer()(mod)
-    mod = tirx.transform.Simplify()(mod)
+    mod = ascend_transform.AscendSimplify()(mod)
     mod = ascend_transform.VectorizeLoop(enable_vectorize=allow_vectorize(pass_ctx=pass_ctx))(mod)
     # NPU storage semantics follow this resolved target variant, not the host's
     # optional torch.npu availability or simulator state.
     mod = ascend_transform.AscendStorageRewrite(is_npu=True)(mod)
     mod = tirx.transform.UnrollLoop()(mod)
     mod = s_tir.transform.RenormalizeSplitPattern()(mod)
-    mod = tirx.transform.Simplify()(mod)
-    mod = tirx.transform.RemoveNoOp()(mod)
+    mod = ascend_transform.AscendSimplify()(mod)
+    mod = ascend_transform.RemoveNoOp()(mod)
     mod = s_tir.transform.RewriteUnsafeSelect()(mod)
     mod = s_tir.transform.HoistIfThenElse()(mod)
     mod = ascend_transform.AscendMemoryPlanning()(mod)
     mod = ascend_transform.AscendSyncInsert(target, platform)(mod)
     mod = ascend_transform.AscendSyncInsertVS(target, platform)(mod)
     if managed_vector_mask:
-        mod = tirx.transform.Simplify()(mod)
+        mod = ascend_transform.AscendSimplify()(mod)
     mod = ascend_transform.AscendResourceScopeVerify()(mod)
     if managed_vector_mask:
         mod = ascend_transform.AscendVectorInstructionSelection(target, platform)(mod)
