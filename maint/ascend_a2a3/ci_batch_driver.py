@@ -249,6 +249,7 @@ def build_plan(root: Path, python: Path, output: Path, visible: str) -> dict:
         "bench_counts": jobs["counts"],
         "operator_files": operators,
         "pytest_target": targets,
+        "testing_pythonpath": str(root / targets[0]) + os.pathsep + str(root),
         "pytest_node_count": "discovered by real pytest; new refactor tests are additional to original TA CI",
         "daily_marker": "not ci_skip",
         "low_priority_included": True,
@@ -352,6 +353,10 @@ def execute(plan: dict, grant_path: Path, owned_dir: Path) -> int:
                     TMPDIR=str(folder / "tmp"),
                     TA_CI_PYTEST_OBSERVATIONS=str(folder / "observations"),
                 )
+                if name == "testing":
+                    # Original testing runs inside bench's helper-path export;
+                    # the separate workflow operator step does not inherit it.
+                    child_env["PYTHONPATH"] = plan["testing_pythonpath"]
                 for key, inherited in plan["operator_parent_environment"].items():
                     if name in ("bench", "testing"):
                         child_env[key] = "4"
