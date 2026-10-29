@@ -256,6 +256,7 @@ def build_plan(root: Path, python: Path, output: Path, visible: str) -> dict:
         "daily_marker": "not ci_skip",
         "low_priority_included": True,
         "commands": commands,
+        "stage_cwd": {"bench": str(root / "examples"), "testing": str(root / "examples/ascend_a2a3"), "operator": str(root / "examples")},
         "frozen_native": frozen,
         "original_CI_controls": {
             "bench_MAX_JOBS": 8,
@@ -322,10 +323,10 @@ def execute(plan: dict, grant_path: Path, owned_dir: Path) -> int:
     def persist():
         write(output / "result.json", record)
 
-    def run(command, folder, timeout, child_env):
+    def run(command, folder, timeout, child_env, cwd=None):
         folder.mkdir(parents=True, exist_ok=False)
         with (folder / "stdout.log").open("w") as stdout, (folder / "stderr.log").open("w") as stderr:
-            process = subprocess.Popen(command, cwd=root, env=child_env, stdout=stdout, stderr=stderr, start_new_session=True)
+            process = subprocess.Popen(command, cwd=cwd or root, env=child_env, stdout=stdout, stderr=stderr, start_new_session=True)
             try:
                 return process.wait(timeout=timeout)
             finally:
@@ -370,13 +371,14 @@ def execute(plan: dict, grant_path: Path, owned_dir: Path) -> int:
                 scratch = output / (name + "_scratch")
                 scratch.mkdir()
                 child_env["TMPDIR"] = str(scratch)
-                row = {"stage": name, "argv": plan["commands"][name], "started_ns": time.time_ns()}
+                row = {"stage": name, "argv": plan["commands"][name], "cwd": plan["stage_cwd"][name], "started_ns": time.time_ns()}
                 record["stages"].append(row)
                 persist()
                 remaining = deadline - time.monotonic()
                 if remaining <= 0:
                     raise TimeoutError("original full CI overall 360-minute budget exhausted")
-                code = run(plan["commands"][name], folder, remaining, child_env)
+                child_env["PWD"] = plan["stage_cwd"][name]
+                code = run(plan["commands"][name], folder, remaining, child_env, cwd=Path(plan["stage_cwd"][name]))
                 row.update(exit_code=code, finished_ns=time.time_ns())
                 if name != "bench":
                     try:
