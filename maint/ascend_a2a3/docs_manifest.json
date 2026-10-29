@@ -4659,5 +4659,35 @@
     "old_0deb_complete_sources_and_archives_retained": true,
     "stage3_accepted": false,
     "profiling_executed": false
+  },
+  "historical_scope_annotations": {
+    "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+    "fields_retained_without_rewriting": [
+      "source_scope",
+      "validation_scope",
+      "sphinx_followup",
+      "active_skill_contract_review"
+    ],
+    "meaning": "The 225 mappings/21 skills/34 original archives in these fields describe the completed original0deb review snapshot. They are retained evidence, not current total counts after the463 increment."
+  },
+  "current_versioned_documentation_scope": {
+    "current_source_mappings": 231,
+    "current_TA_skills": 22,
+    "current_original_archives": 41,
+    "current_records_by_pin": {
+      "0deb8b93da11b7f0becbcded732d9633b7ca4e34": 224,
+      "463c234ce3087205c092e931207ca87b4cd5494c": 7
+    },
+    "historical_0deb_guide_versions": 1,
+    "complete_0deb_source_records_including_history": 225,
+    "protected_existing_main_skills": 22,
+    "new_profiling_assets": 6,
+    "source_integrity_and_static_CSV_review": "passed six CPU tests; perf_summary full AST equals official463 source",
+    "not_claimed": [
+      "external Agent evals",
+      "msprof profiling",
+      "NPU/performance validation",
+      "whole stage3 acceptance"
+    ]
   }
 }
