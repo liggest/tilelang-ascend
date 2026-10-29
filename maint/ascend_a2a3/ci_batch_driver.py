@@ -260,6 +260,10 @@ def build_plan(root: Path, python: Path, output: Path, visible: str) -> dict:
             "pytest_forked": True,
             "TILELANG_AUTO_TUNING_CPU_COUNTS": 4,
             "TILELANG_AUTO_TUNING_MAX_CPU_COUNT": 4,
+            "autotuner_values_apply_to": "bench and testing only",
+        },
+        "operator_parent_environment": {
+            name: os.environ.get(name) for name in ["TILELANG_AUTO_TUNING_CPU_COUNTS", "TILELANG_AUTO_TUNING_MAX_CPU_COUNT"]
         },
         "host_limits": {
             name: os.environ.get(name) for name in ["OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS"]
@@ -278,7 +282,7 @@ def build_plan(root: Path, python: Path, output: Path, visible: str) -> dict:
         "failure_policy": "Ordinary task/pytest nonzero does not stop later tasks or stages. Stop only on timeout, health/exclusivity failure, cancellation or provenance failure.",
         "overall_timeout_seconds": 21600,
         "individual_node_timeout_seconds": None,
-        "execution_equivalence": "The public bench entry can still run --pytest-markers normally. This driver splits bench --skip-pytest, identical full testing, then original operator registry into three commands solely to retain independent exits; both pytest stages inherit the bench's two autotuner CPU=4 exports.",
+        "execution_equivalence": "The public bench entry can still run --pytest-markers normally. This driver splits bench --skip-pytest, identical full testing, then original operator registry into three commands solely to retain independent exits; testing inherits the bench's two autotuner CPU=4 exports; operator inherits the frozen original parent environment, because the original bench child cannot export back to its workflow parent.",
         "original_CI_reference": "approximately 57min plus additional migrated refactor scope",
         "task_execution_started": False,
         "stage3_accepted": False,
@@ -308,8 +312,6 @@ def execute(plan: dict, grant_path: Path, owned_dir: Path) -> int:
     env.pop("TVM_IMPORT_PYTHON_PATH", None)
     env.pop("TL_TEMPLATE_PATH", None)
     env["ASCEND_RT_VISIBLE_DEVICES"] = plan["physical_visible_ids"]
-    env["TILELANG_AUTO_TUNING_CPU_COUNTS"] = "4"
-    env["TILELANG_AUTO_TUNING_MAX_CPU_COUNT"] = "4"
     physical = [int(value) for value in plan["physical_visible_ids"].split(",")]
     assert physical and len(set(physical)) == len(physical) and min(physical) >= 0
     record = {"stage3_accepted": False, "status": "started", "stages": [], "grant": fact(grant_path)}
@@ -350,6 +352,13 @@ def execute(plan: dict, grant_path: Path, owned_dir: Path) -> int:
                     TMPDIR=str(folder / "tmp"),
                     TA_CI_PYTEST_OBSERVATIONS=str(folder / "observations"),
                 )
+                for key, inherited in plan["operator_parent_environment"].items():
+                    if name in ("bench", "testing"):
+                        child_env[key] = "4"
+                    elif inherited is None:
+                        child_env.pop(key, None)
+                    else:
+                        child_env[key] = inherited
                 # Parent owns these roots; run() creates the stage directory.
                 scratch = output / (name + "_scratch")
                 scratch.mkdir()
