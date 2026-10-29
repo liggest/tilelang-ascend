@@ -16,14 +16,16 @@
 
 | 编号 | 事项 | 当前状态 | 核对与留痕 |
 | --- | --- | --- | --- |
-| 3.1-01 | 两仓分支文件去向、修改、新增、删除和旧副本对比 | 审查工具与固定基线报告已生成，正在补核历史 retirement 中的活动 owner 映射 | 完整 Git 树、来源→目标 diff、CSV/离线 HTML；保留 0deb/68bf/fef 快照，不随分支移动改写历史 |
+| 3.1-01 | 两仓分支文件去向、修改、新增、删除和旧副本对比 | 固定旧基线审查包已完成并独立复核，含活动 owner 映射和完整开发分支视图 | 完整 Git 树、来源→目标 diff、CSV/离线 HTML；保留 0deb/68bf/fef 快照，不随分支移动改写历史 |
 | 3.1-02 | 核验原 TA CI 跑法、迁移后路径与实际结果 | 原控制流与局部结果已核，完整 CI 队列未运行 | 原 bench 177→174 任务；另 24 operator pytest 文件；原 pytest 已用 forked，增量 n4、全量 n8；局部串行节点不当全量 |
 | 3.1-03 | 维护 TileLang `refactor_main` HEAD | 持续执行 | 子 Agent 实现，统筹 Agent 审查、测试、集成；沿用 `[Ascend][A2A3]` 阶段提交 |
-| 3.1-04 | 两仓阶段 HEAD 同步，完整 TA 组装后置 | 已确认范围，待保存旧 TA 组装快照并同步 | 不覆盖用户工作区或 venv；保留旧 fef 历史和引用变动记录 |
-| 3.1-05 | 审计最新 `ascendc_pto` 的新增提交 | 已获取 7 个提交，逐项核查中 | 文件/算法/pass/codegen/CI 影响与当前主开发线覆盖情况分别登记 |
+| 3.1-04 | 两仓阶段 HEAD 同步，完整 TA 组装后置 | 已保存旧 fef 组装快照，两仓阶段 HEAD 已同步；后续持续维护 | 两仓已在 a9863036 同步；旧 fef 保于 refactor_main_ta_adoption_snapshot_20261029；用户 TVM 修改与 venv 保留 |
+| 3.1-05 | 审计最新 `ascendc_pto` 的新增提交 | 已获取 7 个提交；确认 23 新增 / 6 修改 / 0 删除，17 项生态资产与 6 项 skill 资产 | 文件/算法/pass/codegen/CI 影响与当前主开发线覆盖情况分别登记 |
 | 3.1-06 | 补迁新增代码、例子、测试和 skill | 待逐包实现和验收 | W4A4 正确性修复优先；保持新上游原算法、完整原测试矩阵和失败边界 |
 
-最新来源增量为：Dilation2D（2f22c6ac）、situ_glu（43b0b697）、Chunk Scaled Dot KKT（cf640944）、W4A4 GEMM 正确性（9da73cd3）、GLM-5.3 kpool compress（f2e4658c）、depthwise conv2d（24b69276）、op-profiling skill（463c234c）。W4A4 修复涉及两个 codegen、AscendC template 和 memory planning，当前主开发线尚未等价覆盖；这是旧来源之后的上游新增修复，须单独迁入并验证。
+最新来源增量为：Dilation2D（2f22c6ac）、situ_glu（43b0b697）、Chunk Scaled Dot KKT（cf640944）、W4A4 GEMM 正确性（9da73cd3）、GLM-5.3 kpool compress（f2e4658c）、depthwise conv2d（24b69276）、op-profiling skill（463c234c）。W4A4 修复涉及两个 codegen、AscendC template 和 memory planning，当前主开发线尚未等价覆盖；这是旧来源之后的上游新增修复，须单独迁入并验证。新增源生态共 17 项，使来源清单从 394 增至 411；这 17 项与新增 skill 尚未计为已迁移或已验收。
+
+最新上游 operator 登记从 143 变为 145：新增 depthwise、kpool、situ，原 simple_fusion 两登记被合并成源树不存在的 example_simple_fusion.py 登记。该上游登记不一致需留痕核对，不能在迁移中凭空创造算子或把未运行项目计为通过。当前固定基线审查包仍保留旧 0deb/68bf/fef 对照，供追溯；不是最新来源已完成迁移的证明。
 
 ## 阶段 3 尚待验收的范围
 
