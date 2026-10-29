@@ -34,13 +34,17 @@
 
 原 TA 最新来源已用 `install_ascend.sh` 重新构建并验证加载。原 TA W4A4 的 15 个设备节点及默认 CLI 通过；主线首次尝试停在 dtype wrapper，尚未发 kernel。主线 runtime 修复后的 Cython/native 身份和设备结果须另报，不能把源码、SDK、CPU reference 或原 TA 的通过写成主线设备通过。
 
-此前 I1/I3/I6 的 19-case/端最小 L0 方案仅保留为未执行的历史参考。用户已批准本轮目录调整、等效入口准备及完整 CI 四步工作；当前正在准备新目录与受控 harness，完整设备批跑尚未启动。随后按已批准范围运行迁移队列的 180 个 bench 任务、27 个 operator pytest 文件以及原 TA testing 范围，不再以 L0 子集代替这项完整验收。执行时固定新 HEAD，保持原 CLI/pytest、并发、marker、case、golden 和退出判定；设备窗口、独立 cache 和 owned-process 清理由统筹控制。
+此前 I1/I3/I6 的 19-case/端最小 L0 方案仅保留为未执行的历史参考。用户已批准本轮目录调整、等效入口准备及完整 CI 四步工作。61 个实验资产已恢复 `examples_experiment/` 原层级；92 个 A2/A3 专属测试及配套资产已移到 `testing/ascend_a2a3/python/refactor/`，原子目录保留，原 `testing/ascend/` 的 108 个主线文件在本轮搬移中未改动。完整批跑入口已集成并完成 5 项真实 shell/host 检查。
+
+批跑范围是 180 个 bench 任务、27 个 operator pytest 文件，以及整个 `testing/ascend_a2a3/python/`。后者包括原 TA 测试和新增迁移适配测试，报告分别统计来源。保持原 `--forked -n 8 -m 'not ci_skip'`，包含 low_priority，保留原参数、golden 和成功判定。驱动按 bench、testing、operator 顺序分开留存退出码和完整日志；普通失败继续后续队列，总时间预算沿用原 daily/manual 的 360 分钟。
+
+启动前实际 `npu-smi` 显示当前 16 个 NPU 均有外部进程，显存占用约 97%，因此尚未启动完整设备批跑。所需现代环境已补齐 xdist、execnet、einops、scipy，既有 55 个分发包版本保持。设备释放后由统筹复核空闲状态并启动；不将准备、host 检查或设备占用停止计作完整 CI 通过。
 
 ## TA CI 的原跑法与迁移后路径
 
 本轮原 TA legacy bench 登记为 177→183，新增六个脚本任务；active operator source/test 对为 24→27，新增 `depthwise_conv_2d`、`kpool`、`situ_glu`。原始最新 145 项 registry 及其差异保存在 `maint/ascend_a2a3/upstream_463c234c/`，属于受控来源数据，尚未激活成当前主线 workflow。保留 TA 原 runner、容器、benchmark 收集和测试控制流；迁移后的安装方式和文件路径按主线适配，完整 TA 组装后置。
 
-当前主仓尚无 TA 的 `ci_cd.yml`、`bench_test.sh` 和 `resolve_operator_tests.py` 活动入口。独立算子 CLI/pytest 已可按迁移路径调用；完整批跑还需准备并核对等效入口，不能引用旧 fef 组装路径冒充已集成。用户已批准准备并执行完整 TA CI 等效流程；当前等效入口仍在准备，完整设备批跑尚未启动，不再等待重复确认。新增六个 legacy 任务分别为 Dilation 源脚本和测试脚本、SiTU bench、W4A4 源脚本、KKT 源脚本和测试脚本；完整源路径列于中央 manifest。
+当前主仓已具备 `examples/bench_test.sh`、`scripts/ci/{path_layout,ci_scope,resolve_operator_tests}.py`、`ci/pytest-ascend.ini` 和最新 145 项 operator registry。本地全量入口为 `maint/ascend_a2a3/ci_batch_driver.py`；其 plan 模式仅收集清单，执行模式需要统筹核验冻结 HEAD、实际环境及空闲设备。主线 workflow 保持原样，完整 TA 组装仍后置。用户已批准完整流程，当前等待可用设备，不再等待重复执行确认。新增六个 legacy 任务分别为 Dilation 源脚本和测试脚本、SiTU bench、W4A4 源脚本、KKT 源脚本和测试脚本；完整源路径列于中央 manifest。
 
 - legacy bench 按 `bench_test.sh` 的原脚本枚举、CLI、退出码和成功标志运行，路径映到 `examples/ascend_a2a3/`、`examples_experiment/`。Dilation 保持原 legacy CLI 路由；KKT 保持默认 L0、`run_*` 非 pytest 协议。
 - active operator 保持原 source/test 配对及 `pytest --forked` 的 n4 增量/n8 全量范围。Depthwise 保留四个原 pytest 聚合节点，不把单个 L0 结果扩写成全文件通过。
