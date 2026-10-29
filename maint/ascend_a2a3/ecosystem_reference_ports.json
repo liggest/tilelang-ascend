@@ -16,6 +16,20 @@
       "modern_A5_interface": false,
       "A5_device_validation": false,
       "original_non_A5_success_marker_is_skip": true
+    },
+    {
+      "source_path": "examples/gemm/example_gemm_fp8_pto.py",
+      "destination_path": "maint/ascend_a2a3/reference/legacy_a5/gemm/example_gemm_fp8_pto.py.txt",
+      "source_git_blob": "d2c3b5ffe8cd70561c74af91ddc0cea4f9fc2e2b",
+      "source_sha256": "8ff403eb509735350cfac2ca243a0ec0460859e1c2e6bac84bdc098aab6a0c7a",
+      "destination_sha256": "8ff403eb509735350cfac2ca243a0ec0460859e1c2e6bac84bdc098aab6a0c7a",
+      "state": "original_A5_only_inactive_source_reference",
+      "byte_count": 3020,
+      "active_A2A3_examples": false,
+      "active_A2A3_CI": false,
+      "modern_A5_interface": false,
+      "A5_device_validation": false,
+      "original_non_A5_success_marker_is_skip": true
     }
   ]
 }
