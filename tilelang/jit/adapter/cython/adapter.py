@@ -385,7 +385,13 @@ class CythonKernelAdapter(BaseKernelAdapter):
             if param in buffer_map:
                 buffer = buffer_map[param]
                 name, dtype = buffer.name, buffer.dtype
-                buffer_dtype_map[name] = (i, dtype.as_torch())
+                if self._a2a3_runtime:
+                    from tilelang.ascend.a2a3.runtime import as_torch_dtype
+
+                    torch_dtype = as_torch_dtype(dtype)
+                else:
+                    torch_dtype = dtype.as_torch()
+                buffer_dtype_map[name] = (i, torch_dtype)
         return buffer_dtype_map
 
     def _process_ptr_map(self) -> dict[int, str]:

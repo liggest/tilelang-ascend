@@ -12,6 +12,19 @@ from tilelang import tvm
 from tvm import tirx
 
 
+def as_torch_dtype(dtype):
+    """Keep TA's logical int4 tensor dtype instead of main's int8 storage view."""
+    import torch
+    from tilelang.language.dtypes import dtype as TileLangDType
+
+    if str(dtype) == "int4":
+        torch_int4 = getattr(torch, "int4", None)
+        if torch_int4 is None:
+            raise RuntimeError("A2A3 int4 tensors require a matching PyTorch/TorchNPU build exposing torch.int4")
+        return torch_int4
+    return TileLangDType(dtype).as_torch()
+
+
 def normalize_memory_indices(indices: list[int] | int | None, num_params: int, name: str) -> list[int]:
     """Apply TA's None/int/list and negative-index rules without mutating callers."""
     if indices is None:

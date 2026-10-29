@@ -64,11 +64,12 @@ cdef class CythonKernelWrapper:
     def set_a2a3_runtime(self, workspace_idx, auto_gm_idx):
         # Opt in only from the A2A3 adapter. Other targets retain their existing
         # output allocation, validation and status-return calling convention.
-        from tilelang.ascend.a2a3.runtime import resolve_allocation_shape
+        from tilelang.ascend.a2a3.runtime import as_torch_dtype, resolve_allocation_shape
         self.workspace_idx = list(workspace_idx)
         self.auto_gm_idx = list(auto_gm_idx)
         self.allocation_idx = sorted(set(self.result_idx + self.workspace_idx + self.auto_gm_idx))
         self.a2a3_runtime = True
+        self.param_dtypes = [as_torch_dtype(param.dtype) for param in self.params]
         self.allocation_shape_resolver = resolve_allocation_shape
         return self
 

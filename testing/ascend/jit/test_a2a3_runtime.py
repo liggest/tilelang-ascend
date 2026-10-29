@@ -267,3 +267,11 @@ def test_a2a3_stream_uses_current_device_and_shared_uses_input_device():
     shared = _wrapper(_params((4,), (4,)), [1], providers=providers, a2a3=False)
     assert shared.forward([source]).device == source.device
     assert observed == [source.device]
+
+
+def test_shared_default_int4_output_still_uses_int8_storage():
+    # The shared constructor retains its storage policy without A2A3 opt-in.
+    wrapper = _wrapper(_params((2, 18), (2, 18), dtype="int4"), [1], a2a3=False)
+    output = wrapper.forward([torch.empty((2, 18), dtype=torch.int8)], stream=0)
+    assert output.dtype == torch.int8
+    assert output.shape == (2, 18) and output.stride() == (18, 1)

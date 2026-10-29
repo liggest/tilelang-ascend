@@ -254,3 +254,75 @@ print('A2A3_RESTORE_CAPTURE='+json.dumps({'shape_order':[str(var) for var in ada
         "platform": "A3",
         "run_mode": "npu",
     }
+
+
+@pytest.mark.skipif(not hasattr(torch, "int4"), reason="TA int4 tensors require torch.int4")
+def test_int4_restored_adapter_preserves_packed_prefix_and_logical_tensor_contract(monkeypatch, tmp_path):
+    snapshot = _snapshot(monkeypatch, tmp_path)
+    path = _library(
+        tmp_path,
+        """
+        #include <stdint.h>
+        extern "C" void call(const uint8_t *input, uint8_t *output, void *stream) {
+          // 2x18 logical int4 values occupy an 18-byte packed prefix in TA.
+          for (int i = 0; i < 18; ++i) output[i] = input[i];
+        }
+        """,
+    )
+    buffers = [tir.decl_buffer((2, 18), "int4", name=name) for name in ("input", "output")]
+    func = tir.PrimFunc([b.data for b in buffers], tir.Evaluate(0), buffer_map={b.data: b for b in buffers})
+    func = func.with_attr("global_symbol", "main")
+    # Exercise the on-disk cache signature/parameter reflection too: int4's
+    # logical DLPack datatype must retain signed code 0, four bits, one lane.
+    final = load_runtime_signature(dump_runtime_signature(func))
+    params = extrac_params(final)
+    assert [(p.dtype.type_code, p.dtype.bits, p.dtype.lanes) for p in params] == [(0, 4, 1), (0, 4, 1)]
+    adapter = CythonKernelAdapter.from_database(
+        params=params,
+        result_idx=1,
+        target=tvm.target.Target(_TARGET),
+        func_or_mod=final,
+        host_kernel_source=CachedTextSource(text="host-only packed-prefix ABI test"),
+        device_kernel_source=CachedTextSource(text="no NPU kernel"),
+        kernel_lib_path=str(path),
+        compile_config=snapshot,
+    )
+    # The fixture supplies CPU providers; keep the real dtype and contiguity
+    # maps from the adapter and direct only the device check to these CPU tensors.
+    adapter.cython_wrapper.set_buffer_device_map({"input": (0, torch.device("cpu")), "output": (1, torch.device("cpu"))})
+    assert adapter.buffer_dtype_map == {"input": (0, torch.int4), "output": (1, torch.int4)}
+    source = torch.empty((2, 18), dtype=torch.int4)
+    assert source.element_size() == 1 and source.nbytes == 36
+    # Low nibble first, including negative signed values; CPU tensor storage
+    # stays logical-sized while the launcher reads only its packed prefix.
+    packed = torch.tensor([0xF8, 0x70, 0x21, 0x43, 0x65, 0x87, 0xA9, 0xCB, 0xED] * 2, dtype=torch.uint8)
+    source.view(torch.uint8).flatten()[:18].copy_(packed)
+    output = adapter(source, stream=0)
+    assert output.dtype == torch.int4
+    assert output.shape == source.shape == (2, 18)
+    assert output.stride() == source.stride() == (18, 1)
+    assert output.nbytes == source.nbytes == 36
+    torch.testing.assert_close(output.view(torch.uint8).flatten()[:18], packed, rtol=0, atol=0)
+    with pytest.raises(ValueError, match="expected torch.int4, got torch.int8"):
+        adapter(torch.empty((2, 18), dtype=torch.int8), stream=0)
+    with pytest.raises(ValueError, match="contiguous"):
+        adapter(source.t(), stream=0)
+    # Shared CUDA/A5/default validation retains the original int8 storage dtype.
+    adapter._a2a3_runtime = False
+    assert adapter._process_buffer_dtype() == {"input": (0, torch.int8), "output": (1, torch.int8)}
+
+
+def test_int4_runtime_missing_torch_dtype_has_an_actionable_diagnostic(monkeypatch):
+    from tilelang.ascend.a2a3.runtime import as_torch_dtype
+
+    monkeypatch.delattr(torch, "int4", raising=False)
+    with pytest.raises(RuntimeError, match="PyTorch/TorchNPU build exposing torch.int4"):
+        as_torch_dtype(tvm.DataType("int4"))
+
+
+@pytest.mark.parametrize("dtype", ["float16", "float32", "int8", "int32", "uint8"])
+def test_non_int4_a2a3_and_shared_torch_dtype_mapping_is_unchanged(dtype):
+    from tilelang.ascend.a2a3.runtime import as_torch_dtype
+    from tilelang.language.dtypes import dtype as TileLangDType
+
+    assert as_torch_dtype(tvm.DataType(dtype)) == TileLangDType(dtype).as_torch()
