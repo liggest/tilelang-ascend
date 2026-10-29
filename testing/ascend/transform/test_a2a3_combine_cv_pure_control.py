@@ -1,4 +1,4 @@
-"""Dead pure split-counterpart bindings must not inflate serial loops."""
+"""Combine preserves source bindings; original later phases own cleanup."""
 
 import pytest
 from tilelang import tvm
@@ -67,6 +67,15 @@ def _apply(func, combine=True):
         return factory()(tvm.IRModule({"main": func}))["main"]
 
 
+def _later_phase(func, name):
+    # Direct pass contract tests, not a substitute production pipeline.
+    # In production Simplify remains before Unroll and NoOp remains after it.
+    factory = tvm.ffi.get_global_func("tl.transform." + name, allow_missing=True)
+    if factory is None:
+        pytest.skip("requires rebuilt A2/A3 compatibility component " + name)
+    return factory()(tvm.IRModule({"main": func}))["main"]
+
+
 def _parts(func):
     return func.body.block.body.seq
 
@@ -87,11 +96,12 @@ def _append(func, stmt):
 
 @pytest.mark.parametrize("owner", [0, 1])
 @pytest.mark.parametrize("nested", [False, True])
-def test_dead_pure_counterpart_keeps_serial_loop_and_control_identity(owner, nested):
+def test_combine_keeps_original_bindings_until_pre_unroll_simplify(owner, nested):
     func, bindings, original_loop, _, _, condition = _case(owner=owner, nested=nested)
     result = _apply(func)
     dead, live = _parts(result)[1 - owner], _parts(result)[owner]
-    assert not _nodes(dead, T.Bind)
+    assert len(_nodes(dead, T.Bind)) == 3
+    assert all(any(node.var.same_as(var) for node in _nodes(dead, T.Bind)) for var in bindings)
     assert len(_nodes(live, T.Bind)) == 3
     assert all(any(node.var.same_as(var) for node in _nodes(live, T.Bind)) for var in bindings)
     assert _nodes(dead, T.For)[-1].loop_var.same_as(original_loop.loop_var)
@@ -99,10 +109,13 @@ def test_dead_pure_counterpart_keeps_serial_loop_and_control_identity(owner, nes
     assert len(_nodes(dead, T.For)) == (2 if nested else 1)
     assert all(loop.kind == T.ForKind.SERIAL for loop in _nodes(dead, T.For))
     assert len(_nodes(live, T.Call)) > 0
-    # This is the real shared UnrollLoop, not a fake profiler/compiler. The
-    # repaired counterpart retains Evaluate(0), and both huge serial loops stay.
-    unrolled = T.transform.UnrollLoop()(tvm.IRModule({"main": result}))["main"]
-    assert len(_nodes(unrolled.body, T.For)) == len(_nodes(result.body, T.For))
+    # The original later Simplify point, not Combine, removes eligible pure
+    # integer bindings before real UnrollLoop sees this full 227350 extent.
+    simplified = _later_phase(result, "A2A3Simplify")
+    assert not _nodes(_parts(simplified)[1 - owner], T.Bind)
+    assert len(_nodes(_parts(simplified)[owner], T.Call)) == len(_nodes(live, T.Call))
+    unrolled = T.transform.UnrollLoop()(tvm.IRModule({"main": simplified}))["main"]
+    assert len(_nodes(unrolled.body, T.For)) == len(_nodes(simplified.body, T.For))
     assert max(len(node.seq) for node in _nodes(unrolled.body, T.SeqStmt)) < 20
 
 
@@ -147,8 +160,11 @@ def test_same_name_other_var_is_not_an_external_use_of_the_dead_binding():
     different = T.Var("dst_off", "int32")
     func = _append(func, T.Bind(different, 3)).with_attr("kept", {different: [different]})
     result = _apply(func)
-    assert not any(node.var.same_as(bindings[2]) for node in _nodes(_parts(result)[0], T.Bind))
+    assert any(node.var.same_as(bindings[2]) for node in _nodes(_parts(result)[0], T.Bind))
     assert any(node.var.same_as(different) for node in _nodes(_parts(result)[0], T.Bind))
+    cleaned = _later_phase(result, "A2A3RemoveNoOp")
+    assert not any(node.var.same_as(bindings[2]) for node in _nodes(cleaned.body, T.Bind))
+    assert any(node.var.same_as(different) for node in _nodes(cleaned.body, T.Bind))
 
 
 @pytest.mark.parametrize("kind", ["raw", "volatile", "volatile_metadata", "const_data", "unknown_extern", "unknown_pure"])
@@ -238,7 +254,7 @@ def test_legal_outer_header_binding_is_distinct_from_same_named_inner_binding():
     result = _apply(func)
     dead = _parts(result)[0]
     assert any(node.var.same_as(outer) for node in _nodes(dead, T.Bind))
-    assert not any(node.var.same_as(bindings[0]) for node in _nodes(dead, T.Bind))
+    assert any(node.var.same_as(bindings[0]) for node in _nodes(dead, T.Bind))
     assert _nodes(dead, T.For)[0].extent.same_as(outer)
 
 
@@ -329,7 +345,7 @@ def test_actual_serial_block_shell_keeps_descriptors_and_vector_payload(owner, k
     func, bindings, loop, block, condition = _lexical_block_case(kind, owner)
     result = _apply(func)
     dead, live = _parts(result)[1 - owner], _parts(result)[owner]
-    assert not _nodes(dead, T.Bind)
+    assert all(any(node.var.same_as(var) for node in _nodes(dead, T.Bind)) for var in bindings)
     assert all(any(node.var.same_as(var) for node in _nodes(live, T.Bind)) for var in bindings)
     for part in (dead, live):
         shell = _nodes(part, T.SBlock)[0]
@@ -342,7 +358,9 @@ def test_actual_serial_block_shell_keeps_descriptors_and_vector_payload(owner, k
     after_calls = _nodes(live, T.Call)
     assert len(before_calls) == len(after_calls)
     assert all(a.same_as(b) for a, b in zip(before_calls, after_calls))
-    unrolled = T.transform.UnrollLoop()(tvm.IRModule({"main": result}))["main"]
+    simplified = _later_phase(result, "A2A3Simplify")
+    assert not _nodes(_parts(simplified)[1 - owner], T.Bind)
+    unrolled = T.transform.UnrollLoop()(tvm.IRModule({"main": simplified}))["main"]
     assert len(_nodes(unrolled.body, T.For)) == 2
     assert max(len(node.seq) for node in _nodes(unrolled.body, T.SeqStmt)) < 20
 

@@ -3,6 +3,7 @@
 import pytest
 
 from tilelang import tvm
+from tvm import s_tir
 from tilelang.ascend.a2a3 import transform
 
 
@@ -32,10 +33,23 @@ def _apply(func, *, verify=False, combine=True, sync=False):
         return factory()(tvm.IRModule({"main": func}))["main"]
 
 
+def _at_noop_phase(func):
+    # Unit-test the later compatibility pass independently. Production keeps
+    # its original full pipeline ordering; this does not move NoOp earlier.
+    return transform.RemoveNoOp()(tvm.IRModule({"main": func}))["main"]
+
+
 def _nodes(body, cls):
     result = []
     tir.stmt_functor.post_order_visit(body, lambda node: result.append(node) if isinstance(node, cls) else None)
     return result
+
+
+def _owner_nodes(func, owner, cls):
+    # Later NoOp may remove an entirely empty resource_scope. Do not require
+    # the original two-element Combine Seq to survive that separate phase.
+    parts = [node.body for node in _nodes(func.body, tir.AttrStmt) if node.attr_key == "resource_scope" and int(node.value) == owner]
+    return [node for part in parts for node in _nodes(part, cls)]
 
 
 def _parts(func):
@@ -236,7 +250,7 @@ def test_cross_sync_integer_annotation_representations_match(interval):
 
 
 @pytest.mark.parametrize("chain", [False, True])
-def test_split_removes_dead_foreign_read_and_dependent_empty_control(chain):
+def test_split_preserves_foreign_read_until_original_noop_phase(chain):
     ub = tir.decl_buffer((16,), "int32", name="ub", scope="shared.ub")
     scalar, derived, unused = (tir.Var(name, "int32") for name in ("scalar", "derived", "unused"))
     body = _seq(
@@ -252,9 +266,12 @@ def test_split_removes_dead_foreign_read_and_dependent_empty_control(chain):
             tir.BufferStore(ub, tir.const(1), [0]),
         )
     result = _apply(_root(body, [ub]))
-    assert not _nodes(_parts(result)[0], tir.BufferLoad)
+    assert len(_nodes(_parts(result)[0], tir.BufferLoad)) == 1
     assert _stores(_parts(result)[1]) == ["ub"]
-    _apply(result, verify=True)
+    cleaned = _at_noop_phase(result)
+    assert not _owner_nodes(cleaned, 0, tir.BufferLoad)
+    assert [node.buffer.name for node in _owner_nodes(cleaned, 1, tir.BufferStore)] == ["ub"]
+    _apply(cleaned, verify=True)
 
 
 def test_live_cube_consumer_of_ub_bind_remains_invalid():
@@ -266,6 +283,10 @@ def test_live_cube_consumer_of_ub_bind_remains_invalid():
     assert _nodes(_parts(result)[0], tir.Bind)[0].var.same_as(scalar)
     with pytest.raises(tvm.error.InternalError, match="Vector operation.*Scope"):
         _apply(result, verify=True)
+    cleaned = _at_noop_phase(result)
+    assert _owner_nodes(cleaned, 0, tir.Bind)[0].var.same_as(scalar)
+    with pytest.raises(tvm.error.InternalError, match="Vector operation.*Scope"):
+        _apply(cleaned, verify=True)
     with pytest.raises(tvm.error.InternalError, match="Vector operation.*Scope"):
         _apply(_root(_scope(0, read), [ub]))
 
@@ -289,7 +310,12 @@ def test_foreign_read_cleanup_preserves_shared_gm_scalar_consumed_by_both_sides(
     )
     for part in _parts(result):
         assert any(bind.var.same_as(common) for bind in _nodes(part, tir.Bind))
-    _apply(result, verify=True)
+        assert any(bind.var.same_as(dead) for bind in _nodes(part, tir.Bind))
+    cleaned = _at_noop_phase(result)
+    for part in _parts(cleaned):
+        assert any(bind.var.same_as(common) for bind in _nodes(part, tir.Bind))
+        assert not any(bind.var.same_as(dead) for bind in _nodes(part, tir.Bind))
+    _apply(cleaned, verify=True)
 
 
 def test_foreign_read_cleanup_keeps_effectful_binding():
@@ -311,7 +337,12 @@ def test_foreign_read_cleanup_keeps_effectful_binding():
     calls = _nodes(_parts(result)[0], tir.Call)
     assert any(call.op.name == "tirx.call_extern" and call.args[0].value == "side_effect" for call in calls)
     assert any(call.op.name == "tl.a2a3_const_data" for call in calls)
-    assert not _nodes(_parts(result)[0], tir.BufferLoad)
+    assert len(_nodes(_parts(result)[0], tir.BufferLoad)) == 1
+    cleaned = _at_noop_phase(result)
+    calls = _owner_nodes(cleaned, 0, tir.Call)
+    assert any(call.op.name == "tirx.call_extern" and call.args[0].value == "side_effect" for call in calls)
+    assert any(call.op.name == "tl.a2a3_const_data" for call in calls)
+    assert not _owner_nodes(cleaned, 0, tir.BufferLoad)
 
 
 @pytest.mark.parametrize("volatile", [False, True])
@@ -332,3 +363,71 @@ def test_raw_nested_consumer_or_volatile_read_blocks_visible_ancestor_cleanup(vo
     # raw C++ names must never be inferred from an absent explicit Var use.
     with pytest.raises(tvm.error.InternalError, match="Vector operation.*Scope"):
         _apply(result, verify=True)
+
+
+def test_second_allocation_plan_sees_all_four_source_scalar_reads_in_both_domains():
+    # Source-derived VL1 schema: two scalar UB views in work_i, then two in t.
+    # Early C-read removal makes these shared descriptors appear Vector-only.
+    # This is an IR phase test, not an initialized tensor/numerical execution.
+    names = ["scalar_fp32", "softplus_val", "scalar2_fp32", "norm_val"]
+    scalars = [tir.decl_buffer((1,), "float32", name=name, scope="shared.ub") for name in names]
+    destination = tir.decl_buffer((1,), "float32", name="destination", scope="shared.ub")
+    values = [tir.Var("value_" + name, "float32") for name in names]
+    work_i, t = tir.Var("work_i", "int32"), tir.Var("t", "int32")
+    inner = tir.SBlock(
+        [],
+        [],
+        [],
+        "",
+        _seq(tir.Bind(values[2], scalars[2][0]), tir.Bind(values[3], scalars[3][0]), tir.BufferStore(destination, sum(values), [0])),
+        alloc_buffers=scalars[2:],
+    )
+    outer = tir.SBlock(
+        [],
+        [],
+        [],
+        "",
+        _seq(
+            tir.Bind(values[0], scalars[0][0]),
+            tir.Bind(values[1], scalars[1][0]),
+            tir.For(t, 0, 2, tir.ForKind.SERIAL, tir.SBlockRealize([], True, inner)),
+        ),
+        alloc_buffers=scalars[:2],
+    )
+    source = _root(tir.For(work_i, 0, 3, tir.ForKind.SERIAL, tir.SBlockRealize([], True, outer)), [destination])
+    combined = _apply(source)
+    for part in _parts(combined):
+        loads = _nodes(part, tir.BufferLoad)
+        assert {load.buffer.name for load in loads} == set(names)
+        assert all(any(load.buffer.same_as(buffer) for load in loads) for buffer in scalars)
+    planned = s_tir.transform.PlanAndUpdateBufferAllocationLocation()(tvm.IRModule({"main": combined}))["main"]
+    allocations = {}
+
+    def walk(stmt, owner=-1):
+        if isinstance(stmt, tir.AttrStmt):
+            if stmt.attr_key == "resource_scope":
+                owner = int(stmt.value)
+            walk(stmt.body, owner)
+        elif isinstance(stmt, tir.SeqStmt):
+            for child in stmt.seq:
+                walk(child, owner)
+        elif isinstance(stmt, tir.SBlockRealize):
+            walk(stmt.block, owner)
+        elif isinstance(stmt, tir.SBlock):
+            for buffer in stmt.alloc_buffers:
+                if buffer.name in names:
+                    allocations.setdefault(buffer.name, []).append((owner, buffer))
+            if stmt.init is not None:
+                walk(stmt.init, owner)
+            walk(stmt.body, owner)
+        elif isinstance(stmt, tir.AllocBuffer):
+            if stmt.buffer.name in names:
+                allocations.setdefault(stmt.buffer.name, []).append((owner, stmt.buffer))
+        elif hasattr(stmt, "body"):
+            walk(stmt.body, owner)
+
+    walk(planned.body)
+    assert set(allocations) == set(names)
+    for buffer in scalars:
+        assert allocations[buffer.name]
+        assert all(owner == -1 and actual.same_as(buffer) for owner, actual in allocations[buffer.name])
