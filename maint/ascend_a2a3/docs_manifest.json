@@ -2666,9 +2666,9 @@
     {
       "source_path": "docs/TileLang-Ascend Programming Guide.md",
       "destination": "docs/ascend_a2a3/TileLang-Ascend Programming Guide.md",
-      "source_blob": "0023c0c6ffb49598e810e7b155a6b934ff2837b2",
-      "source_sha256": "485c0dcfce1026ff5199a7ec868404c5d6c04d2dca7a516d3a322ec1890e15f3",
-      "status": "a2a3-documentation-adapted-static-review",
+      "source_blob": "549297bd14e4d84fe905b05e278073d49c461f47",
+      "source_sha256": "340d2e806ae04b22001297515933b40c2f4bcbdea9241c7aedd343224d6bfc10",
+      "status": "stage3.1_source_asset_migrated_runtime_or_profiling_not_executed",
       "adaptations": [
         {
           "kind": "path",
@@ -2684,14 +2684,60 @@
           "kind": "python-api",
           "source": "tilelang.language",
           "target": "tilelang.ascend.a2a3.language"
+        },
+        {
+          "kind": "upstream-source-increment",
+          "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+          "note": "Only upstream int4 contract added atop existing modern A2/A3 guide; prior0deb full original retained in source_history archive."
         }
       ],
       "source_mode": "100644",
-      "destination_sha256": "97b57f7f6aec6d12695e4ccb5202a4b5cece6f6d0784693b70930d51e0a1c967",
-      "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/TileLang-Ascend Programming Guide.md",
+      "destination_sha256": "b82b2b2f09f8b4befe09cfce7a0729ee244ead34ddc46b8e3cdc9d93b5bf2839",
+      "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/docs/TileLang-Ascend Programming Guide.md",
       "destination_mode": "100644",
-      "original_archive": "docs/ascend_a2a3/_source_config/archives/source-485c0dcfce1026ff5199a7ec868404c5d6c04d2dca7a516d3a322ec1890e15f3.gz",
-      "archive_sha256": "076e09bd44236337f2ea093ff84437b3609eb0716736ee9be65607f7ed48195d"
+      "original_archive": "docs/ascend_a2a3/_source_config/archives/source-340d2e806ae04b22001297515933b40c2f4bcbdea9241c7aedd343224d6bfc10.gz",
+      "archive_sha256": "02095fe769c1f90407dc5ab705438e10efd193541fc6bcf7dfdaa4e018d38261",
+      "source_history": [
+        {
+          "source_path": "docs/TileLang-Ascend Programming Guide.md",
+          "destination": "docs/ascend_a2a3/TileLang-Ascend Programming Guide.md",
+          "source_blob": "0023c0c6ffb49598e810e7b155a6b934ff2837b2",
+          "source_sha256": "485c0dcfce1026ff5199a7ec868404c5d6c04d2dca7a516d3a322ec1890e15f3",
+          "status": "a2a3-documentation-adapted-static-review",
+          "adaptations": [
+            {
+              "kind": "path",
+              "source": "examples/",
+              "target": "examples/ascend_a2a3/"
+            },
+            {
+              "kind": "python-api",
+              "source": "import tilelang.language as T",
+              "target": "import tilelang.ascend.a2a3.language as T"
+            },
+            {
+              "kind": "python-api",
+              "source": "tilelang.language",
+              "target": "tilelang.ascend.a2a3.language"
+            }
+          ],
+          "source_mode": "100644",
+          "destination_sha256": "97b57f7f6aec6d12695e4ccb5202a4b5cece6f6d0784693b70930d51e0a1c967",
+          "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/TileLang-Ascend Programming Guide.md",
+          "destination_mode": "100644",
+          "original_archive": "docs/ascend_a2a3/_source_config/archives/source-485c0dcfce1026ff5199a7ec868404c5d6c04d2dca7a516d3a322ec1890e15f3.gz",
+          "archive_sha256": "076e09bd44236337f2ea093ff84437b3609eb0716736ee9be65607f7ed48195d",
+          "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34"
+        }
+      ],
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "validation": {
+        "fixed_source_and_full_original_archive": true,
+        "static_doc_source_audit": true,
+        "protected_main_skills": 22,
+        "synthetic_CSV_parser_source_and_target_pair_passed": false,
+        "profiler_SDK_device_or_agent_evals_executed": false
+      }
     },
     {
       "source_path": "docs/_static/img/LayoutInference.png",
@@ -4071,6 +4117,168 @@
       "destination_sha256": "76eced5cbffd4c11cb98203a32b861dfed444f01a1eb274c2ba04b92a66e1473",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/docs/tutorials/writing_kernels_with_tilelibrary.md",
       "destination_mode": "100644"
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": ".agents/skills/tilelang-op-profiling/SKILL.md",
+      "destination": ".agents/skills/tilelang-op-profiling/SKILL.md",
+      "source_blob": "f0a9df300bdc6c8b121935a7734fb5d3a4dab225",
+      "source_sha256": "21070ef80f0d3580ffd48c21bc028a4698b01adfbffe1791ce0d9b0b3ae4d989",
+      "source_mode": "100644",
+      "destination_mode": "100644",
+      "destination_sha256": "a28c00d26e613bbf0a6ee8c8201af8d545b8c677f79890de2089ef4a621317db",
+      "original_archive": "docs/ascend_a2a3/_source_config/archives/source-21070ef80f0d3580ffd48c21bc028a4698b01adfbffe1791ce0d9b0b3ae4d989.gz",
+      "archive_sha256": "22160ce2745255888354fa0d63ef6aa0ed9e7ed6accea2592bbd0dacd44bfba5",
+      "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/.agents/skills/tilelang-op-profiling/SKILL.md",
+      "status": "stage3.1_source_asset_migrated_runtime_or_profiling_not_executed",
+      "adaptations": [
+        {
+          "kind": "scope-and-path",
+          "note": "A2/A3 namespace and explicit user-task execution scope; complete original CSV parser AST unchanged; no profiler/SDK/device execution."
+        }
+      ],
+      "validation": {
+        "fixed_source_and_full_original_archive": true,
+        "static_doc_source_audit": true,
+        "protected_main_skills": 22,
+        "synthetic_CSV_parser_source_and_target_pair_passed": true,
+        "profiler_SDK_device_or_agent_evals_executed": false
+      }
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": ".agents/skills/tilelang-op-profiling/references/optimization_quickref.md",
+      "destination": ".agents/skills/tilelang-op-profiling/references/optimization_quickref.md",
+      "source_blob": "4914988de218a4f0a5eb6c86cffd61fe5fa63255",
+      "source_sha256": "18d957f5febb101887b300a1c63e25b9cec0cc8fff620a1f6d3f00ccd46c1f5f",
+      "source_mode": "100644",
+      "destination_mode": "100644",
+      "destination_sha256": "2a79bb02ee24840b7106ca9a4f11ac5aeca799fc1e82d5c54143129fff585875",
+      "original_archive": "docs/ascend_a2a3/_source_config/archives/source-18d957f5febb101887b300a1c63e25b9cec0cc8fff620a1f6d3f00ccd46c1f5f.gz",
+      "archive_sha256": "96e07dd9b7b4f4cdfa3eab5bc1593625c507accabcfd5120901e933ed3691020",
+      "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/.agents/skills/tilelang-op-profiling/references/optimization_quickref.md",
+      "status": "stage3.1_source_asset_migrated_runtime_or_profiling_not_executed",
+      "adaptations": [
+        {
+          "kind": "scope-and-path",
+          "note": "A2/A3 namespace and explicit user-task execution scope; complete original CSV parser AST unchanged; no profiler/SDK/device execution."
+        }
+      ],
+      "validation": {
+        "fixed_source_and_full_original_archive": true,
+        "static_doc_source_audit": true,
+        "protected_main_skills": 22,
+        "synthetic_CSV_parser_source_and_target_pair_passed": true,
+        "profiler_SDK_device_or_agent_evals_executed": false
+      }
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": ".agents/skills/tilelang-op-profiling/references/csv_fields_reference.md",
+      "destination": ".agents/skills/tilelang-op-profiling/references/csv_fields_reference.md",
+      "source_blob": "615d6ce7a256cd40dde27812ac4352f595c123ed",
+      "source_sha256": "873920f49e042bbae9d3284a1ee755da446b9d3e801e9b2c73e9d450443d37cf",
+      "source_mode": "100644",
+      "destination_mode": "100644",
+      "destination_sha256": "873920f49e042bbae9d3284a1ee755da446b9d3e801e9b2c73e9d450443d37cf",
+      "original_archive": "docs/ascend_a2a3/_source_config/archives/source-873920f49e042bbae9d3284a1ee755da446b9d3e801e9b2c73e9d450443d37cf.gz",
+      "archive_sha256": "13fda6686bc818496cd048acbf1f2e9a483d7fcfe5486bd75b6f08d4bada87d5",
+      "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/.agents/skills/tilelang-op-profiling/references/csv_fields_reference.md",
+      "status": "stage3.1_source_asset_migrated_runtime_or_profiling_not_executed",
+      "adaptations": [
+        {
+          "kind": "scope-and-path",
+          "note": "A2/A3 namespace and explicit user-task execution scope; complete original CSV parser AST unchanged; no profiler/SDK/device execution."
+        }
+      ],
+      "validation": {
+        "fixed_source_and_full_original_archive": true,
+        "static_doc_source_audit": true,
+        "protected_main_skills": 22,
+        "synthetic_CSV_parser_source_and_target_pair_passed": true,
+        "profiler_SDK_device_or_agent_evals_executed": false
+      }
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": ".agents/skills/tilelang-op-profiling/references/kernel-chain-measurement.md",
+      "destination": ".agents/skills/tilelang-op-profiling/references/kernel-chain-measurement.md",
+      "source_blob": "f4956c4d91d53e9a22e632c37fdb41f47ce64977",
+      "source_sha256": "5a195699ccdb37f09121cb3cb9404e50e4f6218bdbc0815eeb1a81686aa18cd4",
+      "source_mode": "100644",
+      "destination_mode": "100644",
+      "destination_sha256": "5a195699ccdb37f09121cb3cb9404e50e4f6218bdbc0815eeb1a81686aa18cd4",
+      "original_archive": "docs/ascend_a2a3/_source_config/archives/source-5a195699ccdb37f09121cb3cb9404e50e4f6218bdbc0815eeb1a81686aa18cd4.gz",
+      "archive_sha256": "10143ae8f3fb700c7185933601ada113cd42d1812dc6bb777ce41e54af0b1edb",
+      "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/.agents/skills/tilelang-op-profiling/references/kernel-chain-measurement.md",
+      "status": "stage3.1_source_asset_migrated_runtime_or_profiling_not_executed",
+      "adaptations": [
+        {
+          "kind": "scope-and-path",
+          "note": "A2/A3 namespace and explicit user-task execution scope; complete original CSV parser AST unchanged; no profiler/SDK/device execution."
+        }
+      ],
+      "validation": {
+        "fixed_source_and_full_original_archive": true,
+        "static_doc_source_audit": true,
+        "protected_main_skills": 22,
+        "synthetic_CSV_parser_source_and_target_pair_passed": true,
+        "profiler_SDK_device_or_agent_evals_executed": false
+      }
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": ".agents/skills/tilelang-op-profiling/scripts/perf_summary.py",
+      "destination": ".agents/skills/tilelang-op-profiling/scripts/perf_summary.py",
+      "source_blob": "d98d669598c11ac9670e96367e3d160a5ef2c9f7",
+      "source_sha256": "f769864808076c69bbfc8d0f09ccaa4e9136659c9b75956cb431b791dd38f1a7",
+      "source_mode": "100644",
+      "destination_mode": "100644",
+      "destination_sha256": "f769864808076c69bbfc8d0f09ccaa4e9136659c9b75956cb431b791dd38f1a7",
+      "original_archive": "docs/ascend_a2a3/_source_config/archives/source-f769864808076c69bbfc8d0f09ccaa4e9136659c9b75956cb431b791dd38f1a7.gz",
+      "archive_sha256": "5cc30a529e2c25ae1aded7957ab02b3c28106d85dcfd5981643bd162d3f069c2",
+      "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/.agents/skills/tilelang-op-profiling/scripts/perf_summary.py",
+      "status": "stage3.1_source_asset_migrated_runtime_or_profiling_not_executed",
+      "adaptations": [
+        {
+          "kind": "scope-and-path",
+          "note": "A2/A3 namespace and explicit user-task execution scope; complete original CSV parser AST unchanged; no profiler/SDK/device execution."
+        }
+      ],
+      "validation": {
+        "fixed_source_and_full_original_archive": true,
+        "static_doc_source_audit": true,
+        "protected_main_skills": 22,
+        "synthetic_CSV_parser_source_and_target_pair_passed": true,
+        "profiler_SDK_device_or_agent_evals_executed": false
+      }
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": ".agents/skills/tilelang-op-profiling/evals/evals.json",
+      "destination": ".agents/skills/tilelang-op-profiling/evals/evals.json",
+      "source_blob": "2b4d85f78994d289c86cde913fc886acfb70a417",
+      "source_sha256": "4675f9c2d6707fcde3b514cd11a2ffbe048db41acdf2186b1179bdb70ab27134",
+      "source_mode": "100644",
+      "destination_mode": "100644",
+      "destination_sha256": "d4ea47196e49152a16a5160c074d5e8eb8e4086daf9a7f39e5228e05398f8b42",
+      "original_archive": "docs/ascend_a2a3/_source_config/archives/source-4675f9c2d6707fcde3b514cd11a2ffbe048db41acdf2186b1179bdb70ab27134.gz",
+      "archive_sha256": "1af877a496b535028319e01f583a473240de3723e058a30c907922882614b4df",
+      "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/.agents/skills/tilelang-op-profiling/evals/evals.json",
+      "status": "stage3.1_source_asset_migrated_runtime_or_profiling_not_executed",
+      "adaptations": [
+        {
+          "kind": "scope-and-path",
+          "note": "A2/A3 namespace and explicit user-task execution scope; complete original CSV parser AST unchanged; no profiler/SDK/device execution."
+        }
+      ],
+      "validation": {
+        "fixed_source_and_full_original_archive": true,
+        "static_doc_source_audit": true,
+        "protected_main_skills": 22,
+        "synthetic_CSV_parser_source_and_target_pair_passed": true,
+        "profiler_SDK_device_or_agent_evals_executed": false
+      }
     }
   ],
   "main_skill_sha256": {
@@ -4100,9 +4308,9 @@
   "source_agents_sha256": "f329cf1fb0f3a57e897f6af58b79817d11479d1ef31dd1d5bddf3c9968c42efe",
   "source_counts": {
     "docs": 98,
-    ".agents": 122,
+    ".agents": 128,
     ".opencode": 5,
-    "skills": 21
+    "skills": 22
   },
   "status": "documentation-static-audit-and-canonical-format-validated-candidate",
   "dependencies": [],
@@ -4443,5 +4651,13 @@
     "opencode_assets": 5,
     "scope": "Inline code paths, commands, macro ownership and source-only vs executable references; not external agent evaluation.",
     "original_archives_unchanged": 34
+  },
+  "upstream_463c234c_documentation_increment": {
+    "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+    "new_assets": 6,
+    "updated_guide": 1,
+    "old_0deb_complete_sources_and_archives_retained": true,
+    "stage3_accepted": false,
+    "profiling_executed": false
   }
 }
