@@ -1,0 +1,446 @@
+{
+  "schema_version": 1,
+  "ta_commit": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "entries": [
+    {
+      "source_path": "examples/deepseek_v4/sparse_flash_mla/sparse_flash_mla_api.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/sparse_flash_mla/sparse_flash_mla_api.py",
+      "ta_commit": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_git_blob": "4cc689119d4c7544d5e2f3deb816a2da64e231f9",
+      "source_sha256": "134b56fb4336f89f8829d5d53bbfcfdb23f4c374ad86c8f8544b6a90f9fda7af",
+      "destination_sha256": "08b669c471458d4dcf4ff116210fec9fe6a16d0ea1e2ea2acb1e5a22a8cb6142",
+      "original_complete_function_AST_sha256": {
+        "_torch_to_tilelang_dtype": "fd40dc58c128c70b25a198f104a82daa2b102095dea2abcddb1d58f6445901f9",
+        "_get_kernel": "64f3e8b824441e04fef4ddbff578b036c6229497fa8ede6ca8b6d2903f9082ea",
+        "sparse_flash_mla": "b2208e3a7b69dd1b2de2c4c9173af1d27c8319b1a3503df2860fd20011190f1b"
+      },
+      "original_global_assignments_AST_sha256": [
+        "c79e5ddc5951e9352872841dea5df4bff96b07619b4d56acde7a52ea206b04de"
+      ],
+      "original_normalized_CLI_body_AST_sha256": "bec7660ab7782052e28574456665578710951905ae2cc345ea782113ad1e21ce",
+      "status": "complete_source_and_SDK_verified_device_pending",
+      "adaptations": [
+        "package/direct-file sibling import",
+        "original import-time cache disable moved to two explicit CLI scopes with caller raw cache state restored; public constructors respect caller state"
+      ]
+    },
+    {
+      "source_path": "examples/deepseek_v4/sparse_flash_mla/sparse_flash_mla_golden.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/sparse_flash_mla/sparse_flash_mla_golden.py",
+      "ta_commit": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_git_blob": "a2f0011fa4a605cb45a614b867728d0c28b31dcd",
+      "source_sha256": "2f9f5a610b55f9b421795a86f835c19dae2a8dffdbbd63fb5b87d417c80f8d50",
+      "destination_sha256": "2f9f5a610b55f9b421795a86f835c19dae2a8dffdbbd63fb5b87d417c80f8d50",
+      "original_complete_function_AST_sha256": {
+        "_gather_cmp_kv_tokens": "463c6db77c5ad22b794e9ce6f0a032a3c8ad2c470fd318b939480aef1177041c",
+        "sparse_flash_mla_golden_bnsd": "9110f000a72fa8f3a0993123c4676e6e52b80af54c22d988db6232cfa3835c29",
+        "sinks_softmax_reference": "2bd460fab6f837d5a65dc8c207e8b08a96e06a6863aefc61a5058f9d56eeac0b",
+        "unpack_paged_kv": "1e945c08a3e42fcb939b8be701a69c5307fb89e459d57a209cd27ca8547c767b",
+        "tnd_to_bnsd_q": "fc90409ec15812782a7d39d4b66c59cde009415e7514162d561809c196be5e30",
+        "bnsd_to_tnd_out": "f38e65cfaeb3948e412d395854d9f6e66ac639d042ba5c255c25e050cb4611df",
+        "bnsd_to_tnd_lse": "071ec144901360f733270939a2d586f59594b10127768c82342b98c5711aac57",
+        "gen_ori_kv_paged": "149cb06b332771f621e82dfb71c54a6dcd296efc50a814b1f9413d401e94154c",
+        "gen_cmp_kv_paged": "d729a4080ce65a05be7416fad6ba417e9bba384fba80f6315953646cd23e3866",
+        "gen_cmp_sparse_indices_bsnd": "b249f2097070fb8ba48fcc6ccf12a93d16c84d25b5bf30cfabb734a4e8efa960",
+        "gen_cmp_sparse_indices_tnd": "a440bbd1d4764a392c87e618313ca7f230f4c6eeb9f91f9abb95a656e30cd873",
+        "build_case": "b2a7de7a32a023ba042064e63420610760b8f1be4e8bdb19cfe4f0817180a6b1",
+        "check_result": "8993bf301d0d7d304ba2aeded98207e4130433edd8601ae64360898a927a6497",
+        "check_lse": "91e03a97e7a81dd04bdfb69099f8550ec8b13fbfac2c49b468f808365381ad47",
+        "run_case": "3b1cdfa952cfb5c5835da01586dbdb3849b8f23337717cf4389842c4e55fd187"
+      },
+      "original_global_assignments_AST_sha256": [
+        "3688bfa167ccb0bfd7ebab81fec14e868cec1cafdb91b09f6bf0922f691bdcea",
+        "e59b2f7e33671ed5f5c4e666a0c97887cd72d7c1affab8a0234f3b949d624bb5"
+      ],
+      "original_normalized_CLI_body_AST_sha256": null,
+      "status": "complete_source_and_SDK_verified_device_pending",
+      "adaptations": [
+        "unchanged original golden algorithms",
+        "no CLI or device work added"
+      ]
+    },
+    {
+      "source_path": "examples/deepseek_v4/sparse_flash_mla/sparse_flash_mla_kernel.py",
+      "destination_path": "examples/ascend_a2a3/deepseek_v4/sparse_flash_mla/sparse_flash_mla_kernel.py",
+      "ta_commit": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_git_blob": "d59829b40eb049c8c0c8d2481ad844f15d43b21a",
+      "source_sha256": "faa30dd2ca40d850aa530d5cede4ad91aed4b3a67ae440a30ff935c2bfe3bbcd",
+      "destination_sha256": "48625fdf17acc60b6f5b5ce9ff5d04cd081e50f5b07a95b7fea91a6a505aceb1",
+      "original_complete_function_AST_sha256": {
+        "build_sparse_flash_mla": "ad253eeb1a00aa0c79f5c3c40a2fea89bf6d60b9561af8124cc8524f6d745f66",
+        "_build_hca": "c1bfcfdd9f3782ca1fd0eb9da532bea04ef4e790620a54692d620ec84af52e0a",
+        "_build_csa": "7d6623549296ec87f64f039572c7ed8a619f2ddd54a1d6258d51ff99ed9cce36",
+        "_build_swa": "fc275b1f5303b26de8cf3ddabd6873e5e33c1966e47f12b6d69888d43d80e031"
+      },
+      "original_global_assignments_AST_sha256": [
+        "5aeda7779e2ddb28a9ddc1d8fa353040528f9c648fb002058ff41b8240b6a7c6",
+        "8b10401f5f7ff673e5758603bae1b4d39df0ba7293659baa24321e09734d349b"
+      ],
+      "original_normalized_CLI_body_AST_sha256": "1f5a53462103c8d38d7d5b26ecb4a20218cd10389e300da83c92e071b9eb9ef0",
+      "status": "complete_source_and_SDK_verified_device_pending",
+      "adaptations": [
+        "private A2A3 language and existing tirx.Select import",
+        "original import-time cache disable moved to two explicit CLI scopes with caller raw cache state restored; public constructors respect caller state"
+      ]
+    }
+  ],
+  "factory_requests": [
+    {
+      "id": "sparse_mla_swa_bf16",
+      "factory": "build_sparse_flash_mla",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "max_seq": 1024,
+        "total_tokens": 1024,
+        "ori_block_num": 10,
+        "ori_block_size": 128,
+        "ori_table_len": 8,
+        "cmp_block_num": 1,
+        "cmp_block_size": 1,
+        "cmp_table_len": 1,
+        "n_heads": 64,
+        "n_kv_heads": 1,
+        "head_dim": 512,
+        "topk_cmp": 0,
+        "cmp_ratio": 4,
+        "scenario": 1,
+        "ori_win_left": 127,
+        "softmax_scale": 0.04419417,
+        "dtype": "bfloat16",
+        "core_num": 24
+      },
+      "origin": "original FAST_SCENARIOS bfloat16 actual CPU API prefix",
+      "original_cfg": {
+        "scenario": 1,
+        "layout_q": "TND",
+        "B": 1,
+        "S1": 1024,
+        "T1": 1024,
+        "N1": 64,
+        "N2": 1,
+        "D": 512,
+        "K": 0,
+        "block_num1": 10,
+        "block_num2": 1,
+        "block_size1": 128,
+        "block_size2": 1,
+        "cu_seqlens_q": [
+          0,
+          1024
+        ],
+        "seqused_kv": [
+          1024
+        ],
+        "softmax_scale": 0.04419417,
+        "cmp_ratio": 4,
+        "ori_win_left": 127,
+        "ori_win_right": 0,
+        "ori_mask_mode": 4,
+        "cmp_mask_mode": 3
+      },
+      "CPU_trace_sha256": "57048b61348319ed4dab2701e20ea16af8314234cb411b2b699d9cb8fe7e8bdc"
+    },
+    {
+      "id": "sparse_mla_hca_bf16",
+      "factory": "build_sparse_flash_mla",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "max_seq": 1024,
+        "total_tokens": 1024,
+        "ori_block_num": 10,
+        "ori_block_size": 128,
+        "ori_table_len": 8,
+        "cmp_block_num": 2,
+        "cmp_block_size": 128,
+        "cmp_table_len": 1,
+        "n_heads": 64,
+        "n_kv_heads": 1,
+        "head_dim": 512,
+        "topk_cmp": 128,
+        "cmp_ratio": 128,
+        "scenario": 2,
+        "ori_win_left": 127,
+        "softmax_scale": 0.04419417,
+        "dtype": "bfloat16",
+        "core_num": 24
+      },
+      "origin": "original FAST_SCENARIOS bfloat16 actual CPU API prefix",
+      "original_cfg": {
+        "scenario": 2,
+        "layout_q": "TND",
+        "B": 1,
+        "S1": 1024,
+        "T1": 1024,
+        "N1": 64,
+        "N2": 1,
+        "D": 512,
+        "K": 512,
+        "block_num1": 10,
+        "block_num2": 2,
+        "block_size1": 128,
+        "block_size2": 128,
+        "cu_seqlens_q": [
+          0,
+          1024
+        ],
+        "seqused_kv": [
+          1024
+        ],
+        "softmax_scale": 0.04419417,
+        "cmp_ratio": 128,
+        "ori_win_left": 127,
+        "ori_win_right": 0,
+        "ori_mask_mode": 4,
+        "cmp_mask_mode": 3
+      },
+      "CPU_trace_sha256": "57048b61348319ed4dab2701e20ea16af8314234cb411b2b699d9cb8fe7e8bdc"
+    },
+    {
+      "id": "sparse_mla_csa_bf16",
+      "factory": "build_sparse_flash_mla",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "max_seq": 1024,
+        "total_tokens": 1024,
+        "ori_block_num": 10,
+        "ori_block_size": 128,
+        "ori_table_len": 8,
+        "cmp_block_num": 3,
+        "cmp_block_size": 128,
+        "cmp_table_len": 2,
+        "n_heads": 64,
+        "n_kv_heads": 1,
+        "head_dim": 512,
+        "topk_cmp": 512,
+        "cmp_ratio": 4,
+        "scenario": 3,
+        "ori_win_left": 127,
+        "softmax_scale": 0.04419417,
+        "dtype": "bfloat16",
+        "core_num": 24
+      },
+      "origin": "original FAST_SCENARIOS bfloat16 actual CPU API prefix",
+      "original_cfg": {
+        "scenario": 3,
+        "layout_q": "TND",
+        "B": 1,
+        "S1": 1024,
+        "T1": 1024,
+        "N1": 64,
+        "N2": 1,
+        "D": 512,
+        "K": 512,
+        "block_num1": 10,
+        "block_num2": 3,
+        "block_size1": 128,
+        "block_size2": 128,
+        "cu_seqlens_q": [
+          0,
+          1024
+        ],
+        "seqused_kv": [
+          1024
+        ],
+        "softmax_scale": 0.04419417,
+        "cmp_ratio": 4,
+        "ori_win_left": 127,
+        "ori_win_right": 0,
+        "ori_mask_mode": 4,
+        "cmp_mask_mode": 3
+      },
+      "CPU_trace_sha256": "57048b61348319ed4dab2701e20ea16af8314234cb411b2b699d9cb8fe7e8bdc"
+    },
+    {
+      "id": "sparse_mla_swa_fp16_supplement",
+      "factory": "build_sparse_flash_mla",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "max_seq": 1024,
+        "total_tokens": 1024,
+        "ori_block_num": 10,
+        "ori_block_size": 128,
+        "ori_table_len": 8,
+        "cmp_block_num": 1,
+        "cmp_block_size": 1,
+        "cmp_table_len": 1,
+        "n_heads": 64,
+        "n_kv_heads": 1,
+        "head_dim": 512,
+        "topk_cmp": 0,
+        "cmp_ratio": 4,
+        "scenario": 1,
+        "ori_win_left": 127,
+        "softmax_scale": 0.04419417,
+        "dtype": "float16",
+        "core_num": 24
+      },
+      "origin": "supplementary source-only dtype accepted by complete original public API; not original bf16 CLI row",
+      "original_cfg": {
+        "scenario": 1,
+        "layout_q": "TND",
+        "B": 1,
+        "S1": 1024,
+        "T1": 1024,
+        "N1": 64,
+        "N2": 1,
+        "D": 512,
+        "K": 0,
+        "block_num1": 10,
+        "block_num2": 1,
+        "block_size1": 128,
+        "block_size2": 1,
+        "cu_seqlens_q": [
+          0,
+          1024
+        ],
+        "seqused_kv": [
+          1024
+        ],
+        "softmax_scale": 0.04419417,
+        "cmp_ratio": 4,
+        "ori_win_left": 127,
+        "ori_win_right": 0,
+        "ori_mask_mode": 4,
+        "cmp_mask_mode": 3
+      },
+      "CPU_trace_sha256": "57048b61348319ed4dab2701e20ea16af8314234cb411b2b699d9cb8fe7e8bdc"
+    },
+    {
+      "id": "sparse_mla_hca_fp16_supplement",
+      "factory": "build_sparse_flash_mla",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "max_seq": 1024,
+        "total_tokens": 1024,
+        "ori_block_num": 10,
+        "ori_block_size": 128,
+        "ori_table_len": 8,
+        "cmp_block_num": 2,
+        "cmp_block_size": 128,
+        "cmp_table_len": 1,
+        "n_heads": 64,
+        "n_kv_heads": 1,
+        "head_dim": 512,
+        "topk_cmp": 128,
+        "cmp_ratio": 128,
+        "scenario": 2,
+        "ori_win_left": 127,
+        "softmax_scale": 0.04419417,
+        "dtype": "float16",
+        "core_num": 24
+      },
+      "origin": "supplementary source-only dtype accepted by complete original public API; not original bf16 CLI row",
+      "original_cfg": {
+        "scenario": 2,
+        "layout_q": "TND",
+        "B": 1,
+        "S1": 1024,
+        "T1": 1024,
+        "N1": 64,
+        "N2": 1,
+        "D": 512,
+        "K": 512,
+        "block_num1": 10,
+        "block_num2": 2,
+        "block_size1": 128,
+        "block_size2": 128,
+        "cu_seqlens_q": [
+          0,
+          1024
+        ],
+        "seqused_kv": [
+          1024
+        ],
+        "softmax_scale": 0.04419417,
+        "cmp_ratio": 128,
+        "ori_win_left": 127,
+        "ori_win_right": 0,
+        "ori_mask_mode": 4,
+        "cmp_mask_mode": 3
+      },
+      "CPU_trace_sha256": "57048b61348319ed4dab2701e20ea16af8314234cb411b2b699d9cb8fe7e8bdc"
+    },
+    {
+      "id": "sparse_mla_csa_fp16_supplement",
+      "factory": "build_sparse_flash_mla",
+      "args": [],
+      "kwargs": {
+        "batch": 1,
+        "max_seq": 1024,
+        "total_tokens": 1024,
+        "ori_block_num": 10,
+        "ori_block_size": 128,
+        "ori_table_len": 8,
+        "cmp_block_num": 3,
+        "cmp_block_size": 128,
+        "cmp_table_len": 2,
+        "n_heads": 64,
+        "n_kv_heads": 1,
+        "head_dim": 512,
+        "topk_cmp": 512,
+        "cmp_ratio": 4,
+        "scenario": 3,
+        "ori_win_left": 127,
+        "softmax_scale": 0.04419417,
+        "dtype": "float16",
+        "core_num": 24
+      },
+      "origin": "supplementary source-only dtype accepted by complete original public API; not original bf16 CLI row",
+      "original_cfg": {
+        "scenario": 3,
+        "layout_q": "TND",
+        "B": 1,
+        "S1": 1024,
+        "T1": 1024,
+        "N1": 64,
+        "N2": 1,
+        "D": 512,
+        "K": 512,
+        "block_num1": 10,
+        "block_num2": 3,
+        "block_size1": 128,
+        "block_size2": 128,
+        "cu_seqlens_q": [
+          0,
+          1024
+        ],
+        "seqused_kv": [
+          1024
+        ],
+        "softmax_scale": 0.04419417,
+        "cmp_ratio": 4,
+        "ori_win_left": 127,
+        "ori_win_right": 0,
+        "ori_mask_mode": 4,
+        "cmp_mask_mode": 3
+      },
+      "CPU_trace_sha256": "57048b61348319ed4dab2701e20ea16af8314234cb411b2b699d9cb8fe7e8bdc"
+    }
+  ],
+  "scope": {
+    "original_FAST_CLI_rows": 3,
+    "supplemental_float16_source_rows": 3,
+    "standalone_SWA_CLI": "Original complete standalone constructor is identical to sparse_mla_swa_bf16; the original print and exit remain. No standalone CLI execution claimed.",
+    "source_core_control": "Explicit original core_num=24; no device property/default-core query.",
+    "source_SDK": "Six original archived TA plus six current main complete sources; six current actual SDK compilations, no old ELF substituted for changed current sources.",
+    "public_JIT": "Six genuine public constructor cold calls with one actual SDK each, then six independent-process disk restores with zero SDK; real Kernel/CDLL/typed params/source/ELF/workspace checked. No Kernel call.",
+    "signed_CPP": "Actual CSA emitted signed int64 SDK GetBlockIdx chain and four exact C++ condition functions checked over 8352 rows. Intermediate truncating quotient differs from whole TIR floor in active rows; both real tile-count uses agree in this finite input domain. No FloorDiv/compiler/algorithm/sync change.",
+    "IR": "432 actual core/vid traces, two separate TIR-floor and IR-truncating diagnostic modes; full ordered effects/all args/scalar stores match TA/main within this domain. IR-truncating diagnostic is not the emitted C++ type model.",
+    "device_numerical": false,
+    "full_original_CLI_executed": false,
+    "performance": false,
+    "fresh_fixed_TA": "Independent fixed0deb + TVMc292 + original two patches full native (1019/a406) regenerated all six complete original sources byte-exact to archived TA inputs. No new TA SDK is claimed; original compiler/implicit-header provenance limitations remain in the recorded original SDK metadata."
+  },
+  "evidence": {
+    "report": "refactor_main/reports/p3_deepseek_v4/D2/resumed_normal_a9_v1",
+    "source_inputs_sha256": "c8784ed06801a20b95537d49edef736310a09858aa062ec43be682c99fd89df0",
+    "CPU_request_trace_sha256": "57048b61348319ed4dab2701e20ea16af8314234cb411b2b699d9cb8fe7e8bdc",
+    "normal_native_sha256": "a9cefba866baa68644769faf202515a91490ac970b4dccb99078c8a6c40f867f",
+    "fresh_fixed_TA_six_full_CPP_byte_identity": "refactor_main/reports/p3_deepseek_v4/D2/resumed_normal_a9_v1/fresh_fixed_TA_source_comparison.json"
+  }
+}
