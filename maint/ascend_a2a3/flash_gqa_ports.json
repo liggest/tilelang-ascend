@@ -264,6 +264,34 @@
         "actual_msprof_SDK_NPU_subprocess_or_original_benchmark_executed": false
       },
       "all_original_cases_retained": true
+    },
+    {
+      "source_path": "examples/gqa_fwd_varlen/perf_gqa_fwd_varlen.py",
+      "destination_path": "examples/ascend_a2a3/gqa_fwd_varlen/perf_gqa_fwd_varlen.py",
+      "source_git_blob": "e6073fb557653326d039e234350193a410234f19",
+      "source_sha256": "46933ee911064a232301ef682d31417ae590a8f47d4d8368ea32fcb64b42bd2d",
+      "destination_sha256": "a0ca5b443c170a75da1e616c19ec0489dc5a788953ca4fe302ed068ee992319b",
+      "adaptations": [
+        "Preserve complete original function signatures/bodies and all default/small/sweep/causal-sweep request order, masks/reference/NaN-visible-row logic, seed, strict max_diff<1e-2 and original success/exit1 behavior. Four dependency preparation prefixes are the only function-body additions apart from two benchmark device kwargs.",
+        "Replace global sys.path mutation and top-level sibling/runtime imports with exact adjacent file-location lazy dependencies. Parse/help precedes TorchNPU registration; explicit main preserves original NPU execution and restores caller CPU RNG. No product fallback to another checkout or generic GPU example.",
+        "Forward each existing benchmark device parameter to the modern existing do_bench device keyword while preserving original5/5 mean and5/10 median, callback/sync order, budgets and backend; no new execution mode or timing claim."
+      ],
+      "validation": {
+        "full_original_performance_function_main_parser_AST_inverse": true,
+        "actual_adjacent5_helper_and_factory_whole_AST_equals_original": true,
+        "ON_host_and_source_tests": 23,
+        "actual_OFF_host_passed": 13,
+        "actual_OFF_native_source_skipped": 10,
+        "actual_CPU_small_full_random_third_causal_and_noncausal_input_helpers": 6,
+        "real_original_preset_factory_resolutions_each_side": 10,
+        "actual_SDK_ELF_adapter_unique_compiles_each_side": 9,
+        "original_duplicate_default_sq2048_same_real_kernel_memo_each_side": true,
+        "fresh10_full_CPP_equal_actual_SDK_inputs": true,
+        "all866_sync_records_each_side_and238_dead_int32_domains_compared": true,
+        "physical_5view_UB_relocations_in5_requests_explicitly_audited": true,
+        "original_numerical_golden_timing_or_NPU_execution": false
+      },
+      "all_original_cases_retained": true
     }
   ]
 }
