@@ -68,7 +68,7 @@ inconsistencies are not converted to that narrow miss. AscendC and PTO each run
 the strict loader boundary. Placeholder loader files only test control flow;
 they do not count as valid ABI, ELF, public compilation or NPU numerical evidence.
 Real public/Bisheng recovery remains covered by the existing
-`testing/ascend/jit/test_a2a3_tuner_library_recovery.py` integration gate, whose
+`testing/ascend_a2a3/python/refactor/jit/test_a2a3_tuner_library_recovery.py` integration gate, whose
 benchmark is explicitly a stub and must not be called a numerical/performance run.
 
 The modern metadata reader propagates a missing best_config/function/latency

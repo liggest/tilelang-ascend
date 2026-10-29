@@ -28,7 +28,7 @@ pytestmark = pytest.mark.usefixtures("isolated_a2a3_cache")
 
 
 def _example():
-    path = _ROOT / "examples_experiment/ascend_a2a3/convolution/example_convolution_autotune.py"
+    path = _ROOT / "examples_experiment/convolution/example_convolution_autotune.py"
     spec = importlib.util.spec_from_file_location("_convolution_config_boundary", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
