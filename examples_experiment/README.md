@@ -13,7 +13,7 @@ convolution tuner retained all 12 candidates per scenario, with its original
 separate from these numerical results.
 
 ```bash
-python -m pytest examples_experiment/ascend_a2a3/
+python -m pytest examples_experiment/
 ```
 
 A build without A2/A3 native components runs the CPU unpack test and skips only

@@ -11,7 +11,7 @@ import tilelang.ascend.a2a3.language as T
 from pathlib import Path as _Path
 import importlib.util as _importlib_util
 
-_FWD_DIR = _Path(__file__).resolve().parents[3] / "examples" / "ascend_a2a3" / "mha_sink_fwd_bhsd"
+_FWD_DIR = _Path(__file__).resolve().parents[2] / "examples" / "ascend_a2a3" / "mha_sink_fwd_bhsd"
 
 
 def _load_private_file(name, path):

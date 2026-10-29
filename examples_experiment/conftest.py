@@ -4,7 +4,7 @@ import importlib.util
 import pytest
 from pathlib import Path
 
-_fixture_path = Path(__file__).resolve().parents[2] / "examples" / "ascend_a2a3" / "conftest.py"
+_fixture_path = Path(__file__).resolve().parents[1] / "examples" / "ascend_a2a3" / "conftest.py"
 _spec = importlib.util.spec_from_file_location("_a2a3_common_example_fixtures", _fixture_path)
 _fixtures = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_fixtures)

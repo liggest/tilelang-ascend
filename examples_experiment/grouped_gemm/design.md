@@ -1,4 +1,4 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/grouped_gemm/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/grouped_gemm/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
+> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/grouped_gemm/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/grouped_gemm/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
 
 <!-- TA RESOURCE BODY -->
 # grouped_gemm_bwd 算子设计文档
@@ -139,12 +139,12 @@ with T.Kernel(T.ceildiv(M, block_M), T.ceildiv(N, block_N), batch_count, threads
 | API | 来源 | 验证状态 |
 |-----|------|---------|
 | `T.Kernel(..., batch_count)` | 参考实现 line 177 | ✅ 已验证（三维 kernel） |
-| `T.alloc_shared` | [api-kernel-memory.md §2](../../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
-| `T.alloc_fragment` | [api-kernel-memory.md §2](../../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
-| `T.Pipelined` | [api-schedule-sync.md](../../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-schedule-sync.md) | ✅ 已验证 |
-| `T.gemm(..., transpose_A=True)` | [api-compute.md §1](../../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-compute.md) | ✅ 已验证 |
+| `T.alloc_shared` | [api-kernel-memory.md §2](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
+| `T.alloc_fragment` | [api-kernel-memory.md §2](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
+| `T.Pipelined` | [api-schedule-sync.md](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-schedule-sync.md) | ✅ 已验证 |
+| `T.gemm(..., transpose_A=True)` | [api-compute.md §1](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-compute.md) | ✅ 已验证 |
 | `T.if_then_else` | TileLang 内置 | ✅ 已验证（条件表达式） |
-| `T.copy` | [api-kernel-memory.md §3](../../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
+| `T.copy` | [api-kernel-memory.md §3](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
 | `T.clear` | 参考实现 line 182 | ✅ 已验证（清零累加器） |
 
 ---
