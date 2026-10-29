@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+  "previous_ecology_source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "stage": "3.1",
+  "stage3_accepted": false,
+  "owner_scope": "I2 SiTU_GLU5 and I5 GLM53Kpool4 assets only; source/CPU checks are not SDK/device/CI validation",
+  "entries": [
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/situ_glu/bench_situ_glu.py",
+      "destination_path": "examples/ascend_a2a3/situ_glu/bench_situ_glu.py",
+      "source_git_blob": "9e68338102b5916c0350844d24681f06faffe1e0",
+      "source_sha256": "7ec6874637423de23b842c68298d9d3131cab631b3a1ec21a133ff7560fe6070",
+      "source_lines": 122,
+      "destination_sha256": "dc4123d19e16448070b3ddd01d5e341929b5ca501ca3343d275ac9db34680b49",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "original_definition_AST_sha256": {
+        "torch_situ_glu_unfused": "23bf026ba54da6af1db711e696ac254279f5dedcb02a851408b05be70c229c33",
+        "bench_wall": "8963da6e7fe294976537b3d81d9b5214015521739a55a7ab6fc56468e666ff38",
+        "bench_event": "0e82307fae0f7e5d287cb0e3468a050cb59ea81aef4d8c6c0426ffe894b583d2",
+        "correctness_spot_check": "9f30aab5a38b18af8b1f5e91c1b9a4285e80375f8da59e3da61fba8c60863c2f",
+        "main": "9b3d58221ea965de9ae165687843c83e4ead27acbd3eaded67d17414132aa22c"
+      },
+      "original_global_AST_sha256": {},
+      "adaptations": [
+        "A2/A3 private namespace only; original kernel/host/golden/factory/config and complete case matrices retained.",
+        "Standalone device entry registers TorchNPU at execution; pytest adds per-device gating using existing conftest.",
+        "SiTU exact namespaced sibling loader preserves shared factory identity without process-global sys.path changes; original cache-disable CLI restores caller raw state."
+      ]
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/situ_glu/benchmark.md",
+      "destination_path": "examples/ascend_a2a3/situ_glu/benchmark.md",
+      "source_git_blob": "f7dfb9440a72cef32c03b3cb8e8bce0ab2453eb1",
+      "source_sha256": "a351494f3bf70ada8760117150bf2fa115a6562c8d20f7cff580bc935da00bca",
+      "source_lines": 95,
+      "destination_sha256": "2e4a9e4cc46d4dc18aaa7c7a015870fed4c5150aa9cfac7b90446a8908c25e90",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Original bilingual benchmark content and historical results preserved; provenance/current-unverified note added."
+      ]
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/situ_glu/benchmark_zh.md",
+      "destination_path": "examples/ascend_a2a3/situ_glu/benchmark_zh.md",
+      "source_git_blob": "16df3bafce00b2bf0fbca3533eb27c78821116c2",
+      "source_sha256": "f61a47b5ef047452b64040129853b1f8f2d64ead9dd2af44d8bd112d5ca3e72e",
+      "source_lines": 93,
+      "destination_sha256": "00995ef51d44762ad07372dcb563c59ef5f07a3fa5ec2ec56b5e9f0ff9f26a5c",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Original bilingual benchmark content and historical results preserved; provenance/current-unverified note added."
+      ]
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/situ_glu/situ_glu.py",
+      "destination_path": "examples/ascend_a2a3/situ_glu/situ_glu.py",
+      "source_git_blob": "2b63be34dc8732851241a9a311bdfe930c687b5f",
+      "source_sha256": "327bf4ebfd33699dff24d242d2dac5e805217b7f590f30ef77eecceeddd54ac4",
+      "source_lines": 246,
+      "destination_sha256": "f079616d5653d736ff0a62659b9cf398885004342b9187f0d2856db7f19e5f78",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "original_definition_AST_sha256": {
+        "situ_glu": "6993af77ad205397fd55b7f798100d77e146d7c9183fe1e46b8ffddfc62e881c"
+      },
+      "original_global_AST_sha256": {
+        "VEC_NUM": "36266ac3160160c08aaf6529380e8067fd1d01eed5ca4c7e9764c761888e9556",
+        "STAGES": "1bee02abf869a20888436d04c14e38a98340d32cf42d07673fd6c8ff32c5da64",
+        "TANH_EPS": "55da4f6b55410c603e0cb915c8abb5bc3276227e81d07beb365ac31935e37bc4"
+      },
+      "adaptations": [
+        "A2/A3 private namespace only; original kernel/host/golden/factory/config and complete case matrices retained.",
+        "Standalone device entry registers TorchNPU at execution; pytest adds per-device gating using existing conftest.",
+        "SiTU exact namespaced sibling loader preserves shared factory identity without process-global sys.path changes; original cache-disable CLI restores caller raw state."
+      ]
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/situ_glu/test_situ_glu.py",
+      "destination_path": "examples/ascend_a2a3/situ_glu/test_situ_glu.py",
+      "source_git_blob": "019281766c36a59fad1571844ec409302b1e91c7",
+      "source_sha256": "c9817cd18f4ca05c9369dcdafab1a4dbe4368f6ceb3af1c8f0585af34b258067",
+      "source_lines": 541,
+      "destination_sha256": "95013386861279966b3fc5402d6fc4ac373409945431470d1095f21b6ea40dbc",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "original_definition_AST_sha256": {
+        "_pick_blocks": "b4ba98c4fc5fb2c11f9a126514a8cc4cd8986b462eab3c7e3a3fff009505246e",
+        "golden_situ_glu": "8e443f8a7b9143b866e088828a476b60b794262d1055ec7463bee524eef90644",
+        "get_precision": "c135b500e40f8be28cd1b816c7df5224b97ed433d5b4a9fc6d3b2a7a4a8ae477",
+        "check_precision": "b120ed2f962ba4e14bc7e52e1f20d2c3ecc5994c95143f705a1b7a5d378dfd98",
+        "make_input": "5ff30548a27fd045661501ce9df2880872509f91845661b31cfedf4313d4d2ab",
+        "make_special": "abe23639234340b9ce496ba1b9325109f306cfddc3f9a9e47e7e94273a0b99e4",
+        "make_paired": "171776527aee45d4df1ae889c9da437ac705477d63eb27d190fa3164a4998451",
+        "run_situ_glu": "f704290f5547bd8fca8f4ccd4293b65e32cc9d6d5d70765bf1643c8814e2c535",
+        "run_case": "968317bab8851117643397abfa5168ba79cfeb0df6bb5692db3f5c71b84436ab",
+        "test_situ_glu_l0": "ca8132ed06f8d5005ae2e179f797209efaab02e0b55b13c03a8d85d865a2354f",
+        "test_situ_glu_l1": "4e228498513e4a6c98044b81f684e0890ad0af7ec65de83af68587bb25b57862",
+        "_run_exception": "4671d3b276a681ebbea556ea0217db1178c7efd90907ca529379fc79c0cff973",
+        "test_situ_glu_l2": "72ba68bf82058b376ca1786f0bcfa862a645844e038d916dcff8cd7893e5e965",
+        "_run_boundary": "08c1ba7994a27648eaa2a01381bc22e1eb2684b7c56f217950a9f13a05f8c164",
+        "test_situ_glu_boundary": "46df5a1dfe9d96cb4227d34006072cb096a30e4f30ff000c768b1c02f1db6a6d",
+        "main": "74cc800ce3e7d1562853e01f4fcf1ed1014b5364c31760e5cb49a6fc478aad57"
+      },
+      "original_global_AST_sha256": {
+        "TORCH_TO_TL_DTYPE": "127562b33b6adf760b963dfdea49d08b14b5ab8c4134f346f7944b52364b4705",
+        "SUB_M": "1d1c35337d0114132f27ae4d026c42fa6eb131c34e9689c4561572f45f0faaf5",
+        "COVERAGE_CATEGORY": "9fbf8b709ef83f78ee2beceb30a5983ef6188abe05033899937bc52eab3f9bd2",
+        "COVERAGE_NA": "722680c52d2047ec438cdf27fe5a118f1ad36a0eb5d6622ba8f4f9f5f032c830",
+        "L1_CASES": "650e00a5cdca38253f966af87b382f5cbf6b8c86912a50fddcb5fe27f46e8049",
+        "COVERAGE_MANIFEST": "58f06885c8c0db60cbaa0f1c261627673458be2bcc5756a55ff184a6dddb1f13"
+      },
+      "adaptations": [
+        "A2/A3 private namespace only; original kernel/host/golden/factory/config and complete case matrices retained.",
+        "Standalone device entry registers TorchNPU at execution; pytest adds per-device gating using existing conftest.",
+        "SiTU exact namespaced sibling loader preserves shared factory identity without process-global sys.path changes; original cache-disable CLI restores caller raw state."
+      ]
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/kpool/benchmark.md",
+      "destination_path": "examples/ascend_a2a3/kpool/benchmark.md",
+      "source_git_blob": "f39a9e76a5df9987ec885c43b8adab74f7d0c46d",
+      "source_sha256": "afe21ab0cbf6d71b5cb88770e0b8a508b2cfbe839ce8701fc9209a1cf4c82431",
+      "source_lines": 136,
+      "destination_sha256": "6012f4eb0b6873ff3ad8f46e2ef114bda56eb138f842460a3b20c69363e06871",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Original bilingual benchmark content and historical results preserved; provenance/current-unverified note added."
+      ]
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/kpool/benchmark_zh.md",
+      "destination_path": "examples/ascend_a2a3/kpool/benchmark_zh.md",
+      "source_git_blob": "7178ddf655d22a294d0c9ec166790b10c0ca382b",
+      "source_sha256": "400391b39da9c8b5c1d179614319f1b0a11a0e70d788794adbbebc2748b16af2",
+      "source_lines": 128,
+      "destination_sha256": "9730c7d8a749cfd7eb172b2f6ff019597e398c82cd924e6f8f85c0308b48801c",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "adaptations": [
+        "Original bilingual benchmark content and historical results preserved; provenance/current-unverified note added."
+      ]
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/kpool/example_glm53_kpool_compress.py",
+      "destination_path": "examples/ascend_a2a3/kpool/example_glm53_kpool_compress.py",
+      "source_git_blob": "c17de92676fb4877959cbdd5da35f62a95ad137c",
+      "source_sha256": "d2ea4779be94071ea3555a73309c749a3c274e7651a502124b2f5af8be94ce7c",
+      "source_lines": 577,
+      "destination_sha256": "e4d437a22275b267110f8831c84ac20a4a70d495edf0e73a0c17e1642dcb30fe",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "original_definition_AST_sha256": {
+        "glm53_kpool_compress_kernel": "0f26e7960857883225d305d7ea1ff2173fdf8af53a0a3c8cfcaee507de95d682",
+        "_ordered_codes": "26846d29c2b93185ed3d1631d90d1d4c680dcc58c0ae3f092367f4122256063a",
+        "_assert_fp8_within_one_ulp": "a91bcf7739f621c7e836d88458fcfd9dfe6e26fb1aee3c9fc24f1ae2f78c6930",
+        "_validate_kpool_inputs": "4e706cdbc38f7c5b0338c057a51b107683feb039d0d5405db1bfe8704b8aea05",
+        "_validate_active_locs": "1482f5d89fb8e00b510a467c33a9137e36d8be7bb51c6e25abbd66d11d091340",
+        "glm53_kpool_compress_and_write_cache": "fac45ec71df385bd8709c87c8a7e2436a61a0e917f634aafe869261e0270da7b",
+        "hadamard128_reference": "da3d81d11f07d2fc500c61828d93ff77dcbb68d1acaa7fa2e11345650e012730",
+        "glm53_kpool_reference": "f4ebf7455cf35edee21020196b42ae2f36b5a64525f242e6672c35e9f849f9b9",
+        "test": "a3d0abd2d7c24ecb1c3d3bdcc4a7f43d3e4e3ee976498628c4987e08b6ffe9cb"
+      },
+      "original_global_AST_sha256": {
+        "GLM53_HEAD_DIM": "d9127f953e65b0805fc6091c9b7c4054469473ec71b2df4f9e2c3e10cfc3e394",
+        "GLM53_POOL_SIZE": "a0bb8e6ac8770d2327cbbba529d66418ab0bfdd9788c6fec83e76edff041c112",
+        "HADAMARD128_SCALE": "f2dd93cdc34ac8dac93d7dcac5b7de19d5d1a947510fd3d754c2ae8c3e2f0f03",
+        "E4M3_MAX": "a001b90ce3c19b7945f60acc06365f87d509033a5146957133a6a435fe415d17",
+        "E4M3_MAX_CODE": "567fc92c62a3b8150a7333e72b70bbd55d3f3a38de0bca9fc5b388b62aa7f5d2",
+        "E4M3_MIN_NORMAL_CODE": "d8d21b5c4f6100cc37e4319276c54ae158579c45df9655f26c2f9f2831e0c6d9",
+        "E4M3_SUBNORMAL_SCALE": "77f5f916e57d7c9d4cda664f1fea281b8666bcd0a93f3fd92e425f6cb94f04fb",
+        "E4M3_RNE_BIAS": "1030b0f24fc35fd0cd0bae0680f151116280b58b3bc2ab18d256bcd5c4a65ff6",
+        "E4M3_CODE_BASE": "faecde8d7af275b3abda68922588c218d0de3c7bafb7a9c580c39e7b5c4bf9ee",
+        "FP32_MANT_MASK": "3d128956089662d014793aaf32fbc4804a17aa3effeabb7ba5623b8325344118",
+        "FP32_ONE_BITS": "43b9cac69472b509c1a7f8d3f757b9aa46be9fa3d7f47ed0ed4892191cff4d7f",
+        "POOL_TILE": "5fd766fa395544106fc6d32459f0ed615cdf94d7f051e9368901b29d06ef937e",
+        "BLOCK_POOLS": "91693157684f1a59c07491548ee135cddd3d90a8b8a56ba21f0c3d4cfe7d175c",
+        "PASS_CONFIGS": "d41dfa197b88d67cdee43d010becbe60721813be6c438a338d5a4555ae13ea46"
+      },
+      "adaptations": [
+        "A2/A3 private namespace only; original kernel/host/golden/factory/config and complete case matrices retained.",
+        "Standalone device entry registers TorchNPU at execution; pytest adds per-device gating using existing conftest.",
+        "SiTU exact namespaced sibling loader preserves shared factory identity without process-global sys.path changes; original cache-disable CLI restores caller raw state."
+      ]
+    },
+    {
+      "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+      "source_path": "examples/kpool/test_example_glm53_kpool_compress.py",
+      "destination_path": "examples/ascend_a2a3/kpool/test_example_glm53_kpool_compress.py",
+      "source_git_blob": "026843d743b5caad28c65e316e86d8f82cd3e90f",
+      "source_sha256": "e19456cda70c869fe5dafdab6d16128894de847878cfd7fd40246aa4c9d96301",
+      "source_lines": 223,
+      "destination_sha256": "b3ba171db569382f460df6a3d2aab2bb725c9b83c14c3854a08fa017372626fe",
+      "state": "complete_source_and_CPU_helper_verified_native_SDK_device_CI_pending",
+      "all_original_cases_retained": true,
+      "original_definition_AST_sha256": {
+        "_load_example": "3b9e2990a97bff3fc4104ce8da24be0f03f8bc5d3a0fd898ded88a5240ee6ce1",
+        "_make_inputs": "e7598227cdb3ebd53b827c1f8a5e44b50323b248fe33734401026a794a0e2e68",
+        "test_glm53_kpool_published_geometry": "75a4fda9b5ad5da4bdd8f765904e8fd5da7e328e9c479a1cbd64eb085e0239bd",
+        "test_glm53_kpool_compress_reordered_masked_cache_write": "0af903c55491745b8829bb19b819f229127c83eb469af057253664b246c77ee0",
+        "test_glm53_kpool_compress_default_mask_and_empty_input": "076d2981dfc437fb98d0a23b3dd1933e84c12c1e2e6da18b336f4b2863d931fd",
+        "test_glm53_kpool_compress_rejects_unsafe_metadata": "7c7b025c4e2a4efb5a1f63746e0a995aa85796f13e1c016de11aaaf74e97dadb",
+        "_assert_fp8_within_bounds": "1f376cacde43a749a9a01db76a2884f69ecc512d8a727dbbfb73a46f2165fb7d",
+        "test_glm53_kpool_compress_multi_tile_scatter": "22045d87005686b82a99cbccded526abc1a0edb8f8efebd40cc6df67b0caa1ec"
+      },
+      "original_global_AST_sha256": {},
+      "adaptations": [
+        "A2/A3 private namespace only; original kernel/host/golden/factory/config and complete case matrices retained.",
+        "Standalone device entry registers TorchNPU at execution; pytest adds per-device gating using existing conftest.",
+        "SiTU exact namespaced sibling loader preserves shared factory identity without process-global sys.path changes; original cache-disable CLI restores caller raw state."
+      ]
+    }
+  ],
+  "CI_source_status": "latest145 registry source preserved separately; wiring pending central review, no TA workflows activated",
+  "validation": {
+    "source_AST": "all_original_definitions_and_global_case_tables_exact_after_only_declared_import_launcher_marker_adaptations",
+    "CPU_original_reference_pair": {
+      "passed": true,
+      "count": 56,
+      "counts": {
+        "Kpool_CPU_uint8_golden_only": 12,
+        "SiTU_Boundary_CPU_golden_only": 11,
+        "SiTU_L0_CPU_golden_only": 9,
+        "SiTU_L1_CPU_golden_only": 24
+      },
+      "comparison": "actual original and migrated CPU tensors raw byte equality including FP8 uint8 codes/scales; no kernel execution",
+      "empty_reference_boundary": "both original/new zero-row CPU reference reject identically; public device adapter empty path remains unexecuted"
+    },
+    "native_build": "pending_root_fresh_build",
+    "SDK": "not_run",
+    "device_original_pytest_CLI": "not_run",
+    "performance": "not_run",
+    "sourcehost_tests_passed": 7,
+    "original_device_pytest_nodes_executed": 0,
+    "native_compilation_executed": 0,
+    "original_case_inventory": {
+      "SiTU_L0": 9,
+      "SiTU_L1": 24,
+      "SiTU_L2": 9,
+      "SiTU_Boundary": 11,
+      "SiTU_pytest_functions": 4,
+      "SiTU_benchmark_shapes": 6,
+      "Kpool_pytest_nodes": 9,
+      "Kpool_low_priority_nodes": 2
+    }
+  }
+}
