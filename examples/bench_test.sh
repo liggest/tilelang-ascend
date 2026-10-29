@@ -177,38 +177,38 @@ if [ "$ENABLE_COVERAGE" = true ] || [ "$ENABLE_CPP_COVERAGE" = true ]; then
     echo "====================================="
     echo "Cleaning old coverage data..."
     echo "====================================="
-      
+
     # 1. 清除 Python coverage 数据
     echo "Removing Python coverage files..."
     rm -rf "${PROJECT_ROOT}/coverage_data/.coverage*" 2>/dev/null || true
     rm -f "${PROJECT_ROOT}/coverage_data/*.json" 2>/dev/null || true
-    
+
     echo "  ✓ Python coverage files cleaned"
-    
+
     # 2. 清除 C++ coverage 数据（如果启用）
     if [ "$ENABLE_CPP_COVERAGE" = true ]; then
         echo "Removing C++ coverage files..."
-        
+
         # 清除 build 目录的 .gcda 文件（运行时覆盖率数据）
         find "${PROJECT_ROOT}/build" -name "*.gcda" -type f -delete 2>/dev/null || true
-        
+
         # 清除旧的 coverage.info
         rm -f "${PROJECT_ROOT}/coverage_data/coverage.info" 2>/dev/null || true
-        
+
         echo "  ✓ C++ coverage files cleaned"
     fi
-    
+
     # 3. 清除旧的报告
     echo "Removing old coverage reports..."
     rm -f "${PROJECT_ROOT}/core_files_coverage_report.md" 2>/dev/null || true
     rm -rf "${PROJECT_ROOT}/coverage_reports" 2>/dev/null || true
-    
+
     echo "  ✓ Old reports cleaned"
-    
+
     # 4. 创建干净的目录
     mkdir -p "${PROJECT_ROOT}/coverage_data"
     mkdir -p "${PROJECT_ROOT}/coverage_reports"
-    
+
     echo ""
     echo "✓ Coverage cleanup completed. Ready for fresh test."
     echo "====================================="
@@ -246,7 +246,7 @@ should_skip_python_script() {
 collect_test_scripts() {
     local dir="$1"
     local scripts=()
-    
+
     # 特殊目录：排除整个目录，不收集任何 py 文件
     case "$dir" in
         "./gemm_aot"|"./torch_tl_ascend"|"./dispatch_combine"|"./shmem")
@@ -268,12 +268,12 @@ collect_test_scripts() {
             for f in $py_files; do
                 should_skip_python_script "$f" || scripts+=("$f")
             done
-            
+
             echo "${scripts[@]}"
             return
             ;;
     esac
-    
+
     # 搜索 maxdepth 2 的 py 文件（排除特殊文件和 bench_sfa 子目录）
     local py_files=$(find "$dir" -maxdepth 2 -name "*.py" \
         -not -name "__init__.py" \
@@ -287,11 +287,11 @@ collect_test_scripts() {
     for f in $py_files; do
         should_skip_python_script "$f" || scripts+=("$f")
     done
-    
+
     # 搜索 bash 脚本（特定命名模式）
     local sh_files=$(find "$dir" -maxdepth 2 \( -name "run_*.sh" -o -name "test_*.sh" \) | sort)
     for f in $sh_files; do scripts+=("$f"); done
-    
+
     echo "${scripts[@]}"
 }
 
@@ -357,7 +357,7 @@ if [ -n "$TEST_DIRS" ] || [ -n "$EXPERIMENT_DIRS" ]; then
 else
     # 全量测试：使用 collect_test_scripts 遍历所有目录
     echo "Full test mode - scanning all directories"
-    
+
     # 遍历所有一级目录
     for dir in $(find . -maxdepth 1 -type d -not -name "." -not -name "dispatch_combine" -not -name "shmem" -not -name "exception_dump_test" | sort); do
         collected=$(collect_test_scripts "$dir")
@@ -367,7 +367,7 @@ else
             done
         fi
     done
-    
+
     # EXTRA_TASKS
     for extra_task in "${EXTRA_TASKS[@]}"; do
         et_dir=$(echo "$extra_task" | cut -d'|' -f1)
@@ -705,12 +705,12 @@ if [ -n "$pytest_summary" ]; then
     if echo "$pytest_summary" | grep -q "passed"; then
         pytest_passed=$(echo "$pytest_summary" | grep -Eo "[0-9]+ passed" | grep -Eo "[0-9]+" || echo "0")
     fi
-    
+
     # 提取 failed 数量（不含 xfailed）
     if echo "$pytest_summary" | grep -q "failed"; then
         pytest_failed=$(echo "$pytest_summary" | grep -Eo "[0-9]+ failed" | grep -Eo "[0-9]+" || echo "0")
     fi
-    
+
     # 提取 xfailed 数量（预期失败，不计入失败）
     if echo "$pytest_summary" | grep -q "xfailed"; then
         pytest_xfailed=$(echo "$pytest_summary" | grep -Eo "[0-9]+ xfailed" | grep -Eo "[0-9]+" || echo "0")
@@ -733,13 +733,13 @@ if [ "$ENABLE_COVERAGE" = true ] || [ "$ENABLE_CPP_COVERAGE" = true ]; then
     echo -e "\n====================================="
     echo "Collecting Coverage Data"
     echo "====================================="
-    
+
     mkdir -p "${PROJECT_ROOT}/coverage_data" "${PROJECT_ROOT}/coverage_reports"
-    
+
     # Python coverage
     if [ "$ENABLE_COVERAGE" = true ]; then
         echo "Collecting Python coverage..."
-        
+
         # Combine all coverage files in coverage_data (examples + pytest already write here)
         coverage_files=$(find "${PROJECT_ROOT}/coverage_data" -name ".coverage*" -type f)
         if [ -n "$coverage_files" ]; then
@@ -752,19 +752,19 @@ if [ "$ENABLE_COVERAGE" = true ] || [ "$ENABLE_CPP_COVERAGE" = true ]; then
             echo "✓ Python coverage collected"
         fi
     fi
-    
+
     # C++ coverage
     if [ "$ENABLE_CPP_COVERAGE" = true ]; then
         echo "Collecting C++ coverage..."
         # Only collect from tilelang_objs.dir (contains only tilelang-ascend/src)
         # This is faster and avoids timeout issues with collecting entire build directory
         lcov --capture --directory "${PROJECT_ROOT}/build/CMakeFiles/tilelang_objs.dir" --output-file "${PROJECT_ROOT}/coverage_data/coverage.info" --no-checksum --ignore-errors source,graph 2>&1 || true
-        
+
         if [ -f "${PROJECT_ROOT}/coverage_data/coverage.info" ]; then
             echo "✓ C++ coverage collected (tilelang-ascend/src only)"
         fi
     fi
-    
+
     # Generate report
     if [ -f "${PROJECT_ROOT}/scripts/generate_coverage_stats_report.py" ]; then
         python "${PROJECT_ROOT}/scripts/generate_coverage_stats_report.py"
