@@ -38,7 +38,7 @@
       "destination_bytes": 28144,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "6 documentation/CPU CSV tests; no msprof/NPU/external Agent evaluation"
+      "runtime_validation_scope": "6 documentation/CPU CSV tests;msprof/NPU/external Agent evaluation not executed (evidence scope only,not an additional required migration gate)"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -57,7 +57,7 @@
       "destination_bytes": 1123,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "6 documentation/CPU CSV tests; no msprof/NPU/external Agent evaluation"
+      "runtime_validation_scope": "6 documentation/CPU CSV tests;msprof/NPU/external Agent evaluation not executed (evidence scope only,not an additional required migration gate)"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -76,7 +76,7 @@
       "destination_bytes": 15497,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "6 documentation/CPU CSV tests; no msprof/NPU/external Agent evaluation"
+      "runtime_validation_scope": "6 documentation/CPU CSV tests;msprof/NPU/external Agent evaluation not executed (evidence scope only,not an additional required migration gate)"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -95,7 +95,7 @@
       "destination_bytes": 1231,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "6 documentation/CPU CSV tests; no msprof/NPU/external Agent evaluation"
+      "runtime_validation_scope": "6 documentation/CPU CSV tests;msprof/NPU/external Agent evaluation not executed (evidence scope only,not an additional required migration gate)"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -114,7 +114,7 @@
       "destination_bytes": 12423,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "6 documentation/CPU CSV tests; no msprof/NPU/external Agent evaluation"
+      "runtime_validation_scope": "6 documentation/CPU CSV tests;msprof/NPU/external Agent evaluation not executed (evidence scope only,not an additional required migration gate)"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -133,7 +133,7 @@
       "destination_bytes": 31914,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "6 documentation/CPU CSV tests; no msprof/NPU/external Agent evaluation"
+      "runtime_validation_scope": "6 documentation/CPU CSV tests;msprof/NPU/external Agent evaluation not executed (evidence scope only,not an additional required migration gate)"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -264,12 +264,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/kpool/benchmark.md",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "6012f4eb0b6873ff3ad8f46e2ef114bda56eb138f842460a3b20c69363e06871",
       "destination_bytes": 7408,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -283,12 +283,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/kpool/benchmark_zh.md",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "9730c7d8a749cfd7eb172b2f6ff019597e398c82cd924e6f8f85c0308b48801c",
       "destination_bytes": 7162,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -302,12 +302,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/kpool/example_glm53_kpool_compress.py",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "e4d437a22275b267110f8831c84ac20a4a70d495edf0e73a0c17e1642dcb30fe",
       "destination_bytes": 28014,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -321,12 +321,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/kpool/test_example_glm53_kpool_compress.py",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "b3ba171db569382f460df6a3d2aab2bb725c9b83c14c3854a08fa017372626fe",
       "destination_bytes": 10702,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -340,12 +340,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/situ_glu/bench_situ_glu.py",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "dc4123d19e16448070b3ddd01d5e341929b5ca501ca3343d275ac9db34680b49",
       "destination_bytes": 5281,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -359,12 +359,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/situ_glu/benchmark.md",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "2e4a9e4cc46d4dc18aaa7c7a015870fed4c5150aa9cfac7b90446a8908c25e90",
       "destination_bytes": 5313,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -378,12 +378,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/situ_glu/benchmark_zh.md",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "00995ef51d44762ad07372dcb563c59ef5f07a3fa5ec2ec56b5e9f0ff9f26a5c",
       "destination_bytes": 5140,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -397,12 +397,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/situ_glu/situ_glu.py",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "f079616d5653d736ff0a62659b9cf398885004342b9187f0d2856db7f19e5f78",
       "destination_bytes": 12465,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -416,12 +416,12 @@
       "stage3_accepted": false,
       "destination_path": "examples/ascend_a2a3/situ_glu/test_situ_glu.py",
       "owner_manifest": "maint/ascend_a2a3/upstream_situ_kpool_ports.json",
-      "migration_state": "complete_original_source_and_CPU_reference_verified_native_SDK_device_CI_pending",
+      "migration_state": "complete_original_source_CPU_reference_and_actual_SDK_verified_device_full_CI_pending",
       "destination_sha256": "95013386861279966b3fc5402d6fc4ac373409945431470d1095f21b6ea40dbc",
       "destination_bytes": 24361,
       "source_identity_checked_at_consolidation": true,
       "target_present_at_consolidation": true,
-      "runtime_validation_scope": "7 source/host tests and56 original-vs-migrated CPU reference checks; no SDK or NPU claim"
+      "runtime_validation_scope": "7 source/host tests and56 CPU reference checks;main25/25 actual SDK;TA default host SDK19pass6fail,controlled NPU-storage source25/25 SDK;no NPU claim"
     },
     {
       "source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
@@ -584,7 +584,7 @@
     "source_file_inventory": "fixed463c source objects",
     "source_CPU_math_partial_packages": "see per-owner evidence, not original device tests",
     "fresh_native_USE_ASCEND_build": "root376 verified; subsequent runtime/Cython rebuild independently pending",
-    "SDK": "vector16 actual builds; W4 owner source/SDK evidence; no full queue",
+    "SDK": "vector16 actual builds;SiTU/Kpool main25/25 and controlled TA25/25(default host19pass6fail);W4 owner source/SDK evidence;no full queue",
     "NPU": "original TA W4 only; main latest and other increment device matrices pending",
     "original_CI_full_or_performance": "not_run",
     "documentation_source_static_CSV_tests": {
@@ -641,7 +641,18 @@
     "full_latest_TA_CI_testing_benchmark_performance": "not_run",
     "final_current_source_wheel_install_acceptance": "not_run",
     "stage3_accepted": false,
-    "snapshot_semantics": "source ownership at d891d8b7; subsequent runtime/Cython/device reports must record their own exact HEAD and loader identity"
+    "snapshot_semantics": "source ownership at d891d8b7; subsequent runtime/Cython/device reports must record their own exact HEAD and loader identity",
+    "SiTU_Kpool_actual_SDK": {
+      "main_pass": 25,
+      "TA_host_default_pass": 19,
+      "TA_host_default_failed": 6,
+      "TA_controlled_NPU_storage_source_pass": 25,
+      "device_execution": false
+    },
+    "SiTU_Kpool_SDK_report": {
+      "workspace_report": "refactor_main/reports/p3_1_situ_kpool_native_validation/validation_summary.json",
+      "sha256": "e8447f72dab3ab5489129dc0eb82e3961b8955c799ae0516f15a30920de6d952"
+    }
   },
   "CI_increment_scope": {
     "source_base_bench_tasks": 177,
@@ -678,6 +689,8 @@
       "scripts/ci/resolve_operator_tests.py",
       "ci/operator_test_manifest.yaml"
     ],
-    "full_run_preparation": "latest TA-equivalent full batch requested; prepare migrated task/resolver/bench scope and submit exact commands for user confirmation before full device run"
+    "full_run_preparation": "latest TA-equivalent full batch requested; prepare migrated task/resolver/bench scope and submit exact commands for user confirmation before full device run",
+    "next_acceptance_step": "prepare exact full TA-equivalent commands;await user confirmation before180 migrated bench tasks+27 active operator pytest files+original TA testing scope;prior19-case L0 plan is unexecuted historical reference only",
+    "statically_collected_proposed_main_bench_tasks": 180
   }
 }

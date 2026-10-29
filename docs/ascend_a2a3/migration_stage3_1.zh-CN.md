@@ -17,12 +17,12 @@
 | 编号 | 资产 | 已完成范围 | 仍待验收 |
 | --- | --- | --- | --- |
 | I1 | Dilation2D，2 个原 Python 文件 | 完整算法、factory、原测试与 CLI 已迁移；与 I3/I6 合计 42 项 host/source、14 个 factory 请求生成 16 份源码并通过 16 次真实 SDK 编译 | 原 CLI 和全部设备测试矩阵 |
-| I2 | SiTU GLU，5 个原 Python 文件 | 与 I5 合计 7 项 host/source 检查及 56 组原 TA/迁移版纯 CPU reference 对照 | SDK 和设备矩阵 |
+| I2 | SiTU GLU，5 个原资产（3 Python + 2 Markdown） | 与 I5 合计 7 项 host/source、56 组纯 CPU reference 对照及主线 25/25 次真实 SDK 编译 | 设备矩阵与完整 CI |
 | I3 | Chunk Scaled Dot KKT，2 个原 Python 文件 | 完整原算法及 `run_*` CLI 保留；源码/SDK 计入 I1/I6 汇总 | 原默认 L0 CLI 及其余层级设备测试 |
 | I4 | W4A4，4 个核心文件、2 个 Python 文件及 guide 增量 | 原变更 token 保真核对；USE_ASCEND 原生编译通过；原 TA 15 个设备节点及默认 CLI 通过 | 主线设备验收仍 pending：首次尝试在 dtype wrapper 发 kernel 前被拒绝，独立 runtime 修复和重新构建正在单独验证 |
-| I5 | GLM-5.3 kpool compress，4 个原 Python 文件 | 完整原资产与 CPU reference 对照，计入 I2 汇总 | SDK 和设备矩阵 |
+| I5 | GLM-5.3 kpool compress，4 个原 Python 文件 | 完整原资产、CPU reference 和真实 SDK 编译，计入 I2 汇总 | 设备矩阵与完整 CI |
 | I6 | Depthwise Conv2D，2 个原 Python 文件 | 保留 NCHW 算法及四个原 pytest 聚合层级；源码/SDK 计入 I1/I3 汇总 | 原 operator pytest 与设备矩阵 |
-| I7 | op-profiling skill，6 个资产及版本化 guide | 原始来源归档、完整 parser AST 和静态 CSV 对照，6 项 CPU 测试通过；既有主线 skills 保持 | 实际 msprof、性能测量和外部 Agent 评测 |
+| I7 | op-profiling skill，6 个资产及版本化 guide | 原始来源归档、完整 parser AST 和静态 CSV 对照，6 项 CPU 测试通过；既有主线 skills 保持 | 迁移资产/静态审查已通过；未运行 msprof 或外部 Agent 评测仅说明证据范围，不新增迁移验收门槛 |
 
 逐文件来源、目标、SHA256、owner 和验收边界见 `maint/ascend_a2a3/upstream_463c234c_ports.json` 及其引用的四份 owner manifest。29 项来源变更均已核对固定 Git 来源和当前目标；七组资产集成不替代行为验收。
 
@@ -30,11 +30,11 @@
 
 ## 编译、CPU 与设备证据的边界
 
-本轮 USE_ASCEND=ON 的 3 个 C++ TU 增量构建成功，实际 libtilelang SHA256 为 `376afdbe0739cad1bf13d00862a70b94c96a2332ae4e347ea289b3b650b3fdbc`。149 项旧回归、54 项新增 native/source 检查通过；54 项包含 I1/I3/I6 的 42 项，不能重复相加。I2/I5 的 7 项 host/source、56 组纯 CPU reference，以及 I7 的 6 项 CPU 文档/parser 检查分别记录。
+本轮 USE_ASCEND=ON 的 3 个 C++ TU 增量构建成功，实际 libtilelang SHA256 为 `376afdbe0739cad1bf13d00862a70b94c96a2332ae4e347ea289b3b650b3fdbc`。149 项旧回归、54 项新增 native/source 检查通过；54 项包含 I1/I3/I6 的 42 项，不能重复相加。I2/I5 的 7 项 host/source、56 组纯 CPU reference、主线 25/25 次真实 SDK 编译，以及 I7 的 6 项 CPU 文档/parser 检查分别记录。I2/I5 的原 TA 默认 host source 有 6 项 SDK 失败，按实际 NPU storage 路径受控生成的原 TA source 为 25/25 SDK 通过；该受控源码比较不等于原 TA 默认 host 编译或设备通过。
 
 原 TA 最新来源已用 `install_ascend.sh` 重新构建并验证加载。原 TA W4A4 的 15 个设备节点及默认 CLI 通过；主线首次尝试停在 dtype wrapper，尚未发 kernel。主线 runtime 修复后的 Cython/native 身份和设备结果须另报，不能把源码、SDK、CPU reference 或原 TA 的通过写成主线设备通过。
 
-I1/I3/I6 的最小后续设备方案是两端分别运行原 Dilation `--level l0`、Depthwise 原 `test_depthwise_conv_2d_l0` 聚合节点、KKT `--level l0`，各保留 8、8、3 个原 case，共 19 个数值 case/端。保持原 CLI/pytest、原参数和 golden，不截断函数、不缩小大 shape；KKT 大 case 的编译和 CPU golden 耗时尚未测定。此方案尚未运行，也不是全 CI。须待统筹释放 W4 设备窗口后，固定新 HEAD，使用 physical2/visible0、独立 cache、owned-process 清理和失败即停协议执行。
+此前 I1/I3/I6 的 19-case/端最小 L0 方案仅保留为未执行的历史参考。当前下一步是核对并提交完整 TA CI 等效命令，等待用户确认后运行迁移队列的 180 个 bench 任务、27 个 operator pytest 文件以及原 TA testing 范围；不再以 L0 子集代替这项完整验收。执行时固定新 HEAD，保持原 CLI/pytest、并发、marker、case、golden 和退出判定；设备窗口、独立 cache 和 owned-process 清理由统筹控制。
 
 ## TA CI 的原跑法与迁移后路径
 
