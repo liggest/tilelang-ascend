@@ -55,7 +55,9 @@ def test_planner_uses_packed_bits_before_byte_and_allocation_rounding(dtype, ele
 def test_pto_packed_int4_rejection_is_actionable_without_a_device():
     source = X.decl_buffer((4, 64), "float16", name="source", scope="shared.ub")
     quantized = X.decl_buffer((4, 64), "int4", name="quantized", scope="shared.ub")
-    cast = X.Evaluate(X.call_intrin("handle", "tl.ascend_cast", quantized.access_ptr("w"), source.access_ptr("r"), "CAST_RINT", 256))
+    cast = X.Evaluate(
+        X.call_intrin("handle", tvm.ir.Op.get("tl.ascend_cast"), quantized.access_ptr("w"), source.access_ptr("r"), "CAST_RINT", 256)
+    )
     func = _make_func(
         _allocate([source, quantized], [cast]),
         attrs={"logic_buffer_shapes": {buffer.data: [4, 64, 4, 64] for buffer in (source, quantized)}},
