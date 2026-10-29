@@ -1,3 +1,5 @@
+> Historical validation: the source/SDK/device numbers below were recorded before the 2026-10-30 directory adjustment, when these assets lived under `examples_experiment/ascend_a2a3/`. Current entry paths use `examples_experiment/`; a new complete CI run is still pending. Algorithms, original matrices and prior evidence remain unchanged.
+
 # A2/A3 experimental examples
 
 This namespace preserves the five original active TA example/test pairs for

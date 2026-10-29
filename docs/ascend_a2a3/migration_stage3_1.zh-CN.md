@@ -20,13 +20,13 @@
 | I2 | SiTU GLU，5 个原资产（3 Python + 2 Markdown） | 与 I5 合计 7 项 host/source、56 组纯 CPU reference 对照及主线 25/25 次真实 SDK 编译 | 设备矩阵与完整 CI |
 | I3 | Chunk Scaled Dot KKT，2 个原 Python 文件 | 完整原算法及 `run_*` CLI 保留；源码/SDK 计入 I1/I6 汇总 | 原默认 L0 CLI 及其余层级设备测试 |
 | I4 | W4A4，4 个核心文件、2 个 Python 文件及 guide 增量 | 原变更 token 保真核对；USE_ASCEND 原生编译通过；原 TA 15 个设备节点及默认 CLI 通过 | 主线设备验收仍 pending：首次尝试在 dtype wrapper 发 kernel 前被拒绝，独立 runtime 修复和重新构建正在单独验证 |
-| I5 | GLM-5.3 kpool compress，4 个原 Python 文件 | 完整原资产、CPU reference 和真实 SDK 编译，计入 I2 汇总 | 设备矩阵与完整 CI |
+| I5 | GLM-5.3 kpool compress，4 个原资产（2 Python + 2 Markdown） | 完整原资产、CPU reference 和真实 SDK 编译，计入 I2 汇总 | 设备矩阵与完整 CI |
 | I6 | Depthwise Conv2D，2 个原 Python 文件 | 保留 NCHW 算法及四个原 pytest 聚合层级；源码/SDK 计入 I1/I3 汇总 | 原 operator pytest 与设备矩阵 |
 | I7 | op-profiling skill，6 个资产及版本化 guide | 原始来源归档、完整 parser AST 和静态 CSV 对照，6 项 CPU 测试通过；既有主线 skills 保持 | 迁移资产/静态审查已通过；未运行 msprof 或外部 Agent 评测仅说明证据范围，不新增迁移验收门槛 |
 
 逐文件来源、目标、SHA256、owner 和验收边界见 `maint/ascend_a2a3/upstream_463c234c_ports.json` 及其引用的四份 owner manifest。29 项来源变更均已核对固定 Git 来源和当前目标；七组资产集成不替代行为验收。
 
-旧 `ecosystem_manifest.json` 的 394 项来源台账保持原样。新增 17 项生态资产使来源资产盘点达到 411；另有 6 项新增 skill 资产。411 是来源数量，不是设备通过数。文档当前为 231 项映射、22 个 TA skills、41 份原始归档；原 0deb 的 225/21/34 字段明确保留为历史审查范围，旧 guide 的原文和 hash 仍在历史版本中。
+原 0deb 的 394 项 A2/A3 生态来源台账保持原样。新增 17 项生态资产使来源资产盘点达到 411；另有 6 项新增 skill 资产。411 是来源数量，不是设备通过数。文档当前为 231 项映射、22 个 TA skills、41 份原始归档；原 0deb 的 225/21/34 字段明确保留为历史审查范围，旧 guide 的原文和 hash 仍在历史版本中。
 
 ## 编译、CPU 与设备证据的边界
 
@@ -34,18 +34,20 @@
 
 原 TA 最新来源已用 `install_ascend.sh` 重新构建并验证加载。原 TA W4A4 的 15 个设备节点及默认 CLI 通过；主线首次尝试停在 dtype wrapper，尚未发 kernel。主线 runtime 修复后的 Cython/native 身份和设备结果须另报，不能把源码、SDK、CPU reference 或原 TA 的通过写成主线设备通过。
 
-此前 I1/I3/I6 的 19-case/端最小 L0 方案仅保留为未执行的历史参考。当前下一步是核对并提交完整 TA CI 等效命令，等待用户确认后运行迁移队列的 180 个 bench 任务、27 个 operator pytest 文件以及原 TA testing 范围；不再以 L0 子集代替这项完整验收。执行时固定新 HEAD，保持原 CLI/pytest、并发、marker、case、golden 和退出判定；设备窗口、独立 cache 和 owned-process 清理由统筹控制。
+此前 I1/I3/I6 的 19-case/端最小 L0 方案仅保留为未执行的历史参考。用户已批准本轮目录调整、等效入口准备及完整 CI 四步工作；当前正在准备新目录与受控 harness，完整设备批跑尚未启动。随后按已批准范围运行迁移队列的 180 个 bench 任务、27 个 operator pytest 文件以及原 TA testing 范围，不再以 L0 子集代替这项完整验收。执行时固定新 HEAD，保持原 CLI/pytest、并发、marker、case、golden 和退出判定；设备窗口、独立 cache 和 owned-process 清理由统筹控制。
 
 ## TA CI 的原跑法与迁移后路径
 
 本轮原 TA legacy bench 登记为 177→183，新增六个脚本任务；active operator source/test 对为 24→27，新增 `depthwise_conv_2d`、`kpool`、`situ_glu`。原始最新 145 项 registry 及其差异保存在 `maint/ascend_a2a3/upstream_463c234c/`，属于受控来源数据，尚未激活成当前主线 workflow。保留 TA 原 runner、容器、benchmark 收集和测试控制流；迁移后的安装方式和文件路径按主线适配，完整 TA 组装后置。
 
-当前主仓尚无 TA 的 `ci_cd.yml`、`bench_test.sh` 和 `resolve_operator_tests.py` 活动入口。独立算子 CLI/pytest 已可按迁移路径调用；完整批跑还需准备并核对等效入口，不能引用旧 fef 组装路径冒充已集成。用户已要求确认完整 TA CI 等效命令，完整设备批跑等待其确认。新增六个 legacy 任务分别为 Dilation 源脚本和测试脚本、SiTU bench、W4A4 源脚本、KKT 源脚本和测试脚本；完整源路径列于中央 manifest。
+当前主仓尚无 TA 的 `ci_cd.yml`、`bench_test.sh` 和 `resolve_operator_tests.py` 活动入口。独立算子 CLI/pytest 已可按迁移路径调用；完整批跑还需准备并核对等效入口，不能引用旧 fef 组装路径冒充已集成。用户已批准准备并执行完整 TA CI 等效流程；当前等效入口仍在准备，完整设备批跑尚未启动，不再等待重复确认。新增六个 legacy 任务分别为 Dilation 源脚本和测试脚本、SiTU bench、W4A4 源脚本、KKT 源脚本和测试脚本；完整源路径列于中央 manifest。
 
-- legacy bench 按 `bench_test.sh` 的原脚本枚举、CLI、退出码和成功标志运行，路径映到 `examples/ascend_a2a3/`、`examples_experiment/ascend_a2a3/`。Dilation 保持原 legacy CLI 路由；KKT 保持默认 L0、`run_*` 非 pytest 协议。
+- legacy bench 按 `bench_test.sh` 的原脚本枚举、CLI、退出码和成功标志运行，路径映到 `examples/ascend_a2a3/`、`examples_experiment/`。Dilation 保持原 legacy CLI 路由；KKT 保持默认 L0、`run_*` 非 pytest 协议。
 - active operator 保持原 source/test 配对及 `pytest --forked` 的 n4 增量/n8 全量范围。Depthwise 保留四个原 pytest 聚合节点，不把单个 L0 结果扩写成全文件通过。
-- 原 `testing/` 的测试范围单独登记，不能用 example 的 source 编译替代。当前未完整运行最新 183 bench、27 operator 对及 testing 并行矩阵。
+- 原 `testing/` 的测试范围单独登记，不能用 example 的 source 编译替代。原始 source 登记为 183 bench；当前迁移目标队列为 180 bench、27 operator 文件和原 testing 范围，完整并行矩阵尚未启动。
 - 原上游 simple_fusion 两项登记合并后指向源树不存在的 `example_simple_fusion.py`，保留为源问题，不能凭空创造算子或计为通过。
+
+[TA issue #1950](https://github.com/tile-ai/tilelang-ascend/issues/1950) 的已核对历史 C 基线标题为 2903＝180 bench＋2723 testing 通过，另有 4 testing skip；443 operator 通过独立统计，不计入该标题。新批跑须分别报告 legacy bench、operator pytest 和 testing 三段，不用标题总数代替覆盖范围。
 
 旧 0deb bench 177→174 候选收集、activation 10 CLI 和选定 23 pytest 节点的设备证据均保留为历史范围。它们不证明本轮新增任务、完整 CI、性能或最新安装包验收。
 

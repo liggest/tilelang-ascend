@@ -21,7 +21,7 @@ SPEC.loader.exec_module(eco)
 class ImportRulesTest(unittest.TestCase):
     def test_namespace_has_no_fallback_and_rejects_unsafe_paths(self):
         self.assertEqual(eco.destination_for("examples/gemm/x.py"), "examples/ascend_a2a3/gemm/x.py")
-        self.assertEqual(eco.destination_for("examples_experiment/x.py"), "examples_experiment/ascend_a2a3/x.py")
+        self.assertEqual(eco.destination_for("examples_experiment/x.py"), "examples_experiment/x.py")
         self.assertEqual(eco.destination_for("testing/python/x.py"), "testing/ascend_a2a3/python/x.py")
         for path in (
             "/examples/x.py",

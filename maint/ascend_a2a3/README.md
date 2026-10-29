@@ -119,11 +119,16 @@ unresolved IR/runtime APIs remain explicit review work.
 The pure `destination_for(original_ta_path: str) -> str` contract is:
 
 - `examples/<relative>` → `examples/ascend_a2a3/<relative>`;
-- `examples_experiment/<relative>` → `examples_experiment/ascend_a2a3/<relative>`;
+- `examples_experiment/<relative>` → `examples_experiment/<relative>`;
 - `testing/<relative>` → `testing/ascend_a2a3/<relative>`.
 
-It rejects absolute paths, non-normalized paths, traversal, and already adopted
-paths. Mapping alone does not authorize a migration. CI resolvers may use these
+It rejects absolute paths, non-normalized paths, traversal, and explicit
+`ascend_a2a3` wrapper paths. Experimental source and destination paths now
+intentionally match because mainline had no experimental tree. New A2/A3 component tests are grouped under
+`testing/ascend_a2a3/python/refactor/`; original mainline `testing/ascend/`
+assets remain in place. The former experimental `examples_experiment/ascend_a2a3/`
+prefix is historical; see `experiment_layout_move.json` for each old/new blob.
+Mapping alone does not authorize a migration. CI resolvers may use these
 paths only after checking which layout they are running in; they must never fall
 back to a same-named main CUDA/A5 file. TA CI workflows/scripts and their dependency
 closure are protected for separate review under the user's latest CI requirement.

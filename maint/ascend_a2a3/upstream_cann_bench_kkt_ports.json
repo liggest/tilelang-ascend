@@ -394,7 +394,7 @@
       "source_sha256": "5e2a1ff8079035985a660bd5c23c0be4fa0a7c1b30cfcb92af5b6abbb886cff1",
       "source_git_blob": "22ef32c95d8ad5767b82af8481070112d71b709e",
       "bytes": 17953,
-      "destination_path": "examples_experiment/ascend_a2a3/gdn/chunk_scaled_dot_kkt/example_chunk_scaled_dot_kkt.py",
+      "destination_path": "examples_experiment/gdn/chunk_scaled_dot_kkt/example_chunk_scaled_dot_kkt.py",
       "destination_sha256": "91330ed05c2ae1d3d9016c7acf6e0cd187663ded519918c105728fa8c75a9d0d",
       "original_function_AST_sha256": {
         "chunk_scaled_dot_kkt_fwd": "d774c8b48be0587749efd067c6e6e2d5df2b506e4064827918a7ab348b45f69d"
@@ -430,7 +430,7 @@
       "source_sha256": "f49d7acb2de3bbb0a59a5f002793693970e5d5275788efff4870a1f917d691f4",
       "source_git_blob": "12f3905924373712681376dadbd0924a2c5339c1",
       "bytes": 20017,
-      "destination_path": "examples_experiment/ascend_a2a3/gdn/chunk_scaled_dot_kkt/test_chunk_scaled_dot_kkt.py",
+      "destination_path": "examples_experiment/gdn/chunk_scaled_dot_kkt/test_chunk_scaled_dot_kkt.py",
       "destination_sha256": "6414334d4d84b05112c3955ab24abef2981110f7c2a30262f76a072af2b1848c",
       "original_function_AST_sha256": {
         "get_precision": "63f4a7e621d6aec3cb8396a201a3427a55b919b56537ef3d6f8e510d48e16e1e",
@@ -859,5 +859,12 @@
       "actual_returncode": 0,
       "compiler_sha256": "3ad0a69e3acf9a05bce29027e348401ba7d97c05bd41153e9eba12ec443149c5"
     }
-  ]
+  ],
+  "layout_revision_20261030": {
+    "previous_layout_base": "289fcda7c0a9a6141bde7c25c866d05eb6fcacb9",
+    "experiment_move_manifest": "maint/ascend_a2a3/experiment_layout_move.json",
+    "component_test_destination": "testing/ascend_a2a3/python/refactor/",
+    "source_pin_path_hash_and_inventory_counts_unchanged": true,
+    "historical_validation_evidence": "existing validation fields/reports remain bound to their recorded pre-relocation snapshots; current full CI still pending"
+  }
 }

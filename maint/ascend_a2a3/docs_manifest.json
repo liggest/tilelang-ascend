@@ -808,7 +808,7 @@
       "source_mode": "100644",
       "original_archive": "docs/ascend_a2a3/_source_config/archives/source-458bf4e8f68ea4148fc87952f0d176c28bd9148a2af8efae6f36ece9492a9dc1.gz",
       "review": "scope-and-source-references-reviewed; execution not implied",
-      "destination_sha256": "6dda6b0c12c41bc89871565f39cc098e8ea68a8425a9aae6747f27623258caf8",
+      "destination_sha256": "cabab05bbe743870076899e8929cb47c3e22f3b687882bda80d2849d866af297",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-custom-skill/tilelang-review/SKILL.md",
       "destination_mode": "100644",
       "archive_sha256": "01fdd0cc30b06204763d72cb43ba46419b99680bdf3a9e5ea50b4a880456ce33"
@@ -968,7 +968,7 @@
       ],
       "source_mode": "100644",
       "review": "scope-and-source-references-reviewed; execution not implied",
-      "destination_sha256": "5b13d599209de74e3364b6eaff9003de863874e1b01203e95d724b99be8c45bf",
+      "destination_sha256": "a124c0fa43f5efc4ac5332f61cdae10ea7f1ed29ac8269e141c8f5f22c2a41ef",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-op-design/SKILL.md",
       "destination_mode": "100644"
     },
@@ -2150,7 +2150,7 @@
       ],
       "source_mode": "100644",
       "original_archive": "docs/ascend_a2a3/_source_config/archives/source-f974c9d854cdb72b161dcc41f6483aac5e9a7f87474e23df348feeed53cc3843.gz",
-      "destination_sha256": "ee83088645e083c9bc25fd4747db8ba74f099228adfa00ae89f8df4e68f66b9c",
+      "destination_sha256": "e9240ea5529b95dbaf2df0db5029fde6ea4c58ac159743efd71bc25e8001fedb",
       "source_url": "https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/.agents/skills/tilelang-pass-generate/templates/pass-impl-skeleton-template.md",
       "destination_mode": "100644",
       "archive_sha256": "159065625a42e844e71760841a98cf43110501bf15b8f6d6b4417342cca247af"
@@ -4689,5 +4689,12 @@
       "NPU/performance validation",
       "whole stage3 acceptance"
     ]
+  },
+  "layout_revision_20261030": {
+    "previous_layout_base": "289fcda7c0a9a6141bde7c25c866d05eb6fcacb9",
+    "experiment_move_manifest": "maint/ascend_a2a3/experiment_layout_move.json",
+    "component_test_destination": "testing/ascend_a2a3/python/refactor/",
+    "source_pin_path_hash_and_inventory_counts_unchanged": true,
+    "historical_validation_evidence": "existing validation fields/reports remain bound to their recorded pre-relocation snapshots; current full CI still pending"
   }
 }

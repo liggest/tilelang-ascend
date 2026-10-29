@@ -1,3 +1,5 @@
+> 历史迁移摘要：以下来源、源码/SDK及设备状态属于目录调整前记录，当时目标前缀为 `examples_experiment/ascend_a2a3/`。2026-10-30 后当前入口前缀为 `examples_experiment/`，逐文件搬移及保真证据见 `maint/ascend_a2a3/experiment_layout_move.json`；本次路径调整不把历史状态变成完整 CI 已通过。
+
 # Remaining experimental source ports
 
 `maint/ascend_a2a3/ecosystem_experiment_rest_ports.json` records fixed original

@@ -16,7 +16,7 @@
 | tilelang/ascend/a2a3/pipeline.py | 原序列中的真实插入点/条件 |
 | tilelang/transform/pass_config.py | 只有新增公共enum时改唯一owner |
 | tilelang/ascend/a2a3/pass_config.py | 仅本地归一化/default所需更改 |
-| testing/ascend/.../test_a2a3_*.py | 真实新行为与失败边界；原算子资产仍在testing/ascend_a2a3 |
+| testing/ascend_a2a3/python/refactor/.../test_a2a3_*.py | 真实新行为与失败边界；原算子资产仍在testing/ascend_a2a3 |
 
 ## 2. IR算法与数据合同
 

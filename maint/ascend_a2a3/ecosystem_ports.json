@@ -1480,7 +1480,7 @@
     },
     {
       "source_path": "examples_experiment/blocksparse_gemm/example_blocksparse_gemm.py",
-      "destination_path": "examples_experiment/ascend_a2a3/blocksparse_gemm/example_blocksparse_gemm.py",
+      "destination_path": "examples_experiment/blocksparse_gemm/example_blocksparse_gemm.py",
       "source_git_blob": "5cf5f838445399a4f6cfd8c19f19cddc88f61002",
       "source_sha256": "a685544d2d09c9998dd7ec1f153e1491af6d31b16f386f28b43edb25804e7300",
       "destination_sha256": "bdd9b2d4d1bcf3eb890fe6e279c2fef37873226f94fc71ba759c9d390c266175",
@@ -1511,7 +1511,7 @@
     },
     {
       "source_path": "examples_experiment/blocksparse_gemm/test_example_blocksparse_gemm.py",
-      "destination_path": "examples_experiment/ascend_a2a3/blocksparse_gemm/test_example_blocksparse_gemm.py",
+      "destination_path": "examples_experiment/blocksparse_gemm/test_example_blocksparse_gemm.py",
       "source_git_blob": "845fa7f50e6a7946bf6239001e739664c87a04c6",
       "source_sha256": "15b741a016a9018f312df5d350eb641691738d3f707dd8f2348cf9dcce0ccda8",
       "destination_sha256": "a39056671dab0a4afea16f95503daa57c9b1ce74602b47f6c94192b97a1754af",
@@ -1542,7 +1542,7 @@
     },
     {
       "source_path": "examples_experiment/convolution/example_convolution.py",
-      "destination_path": "examples_experiment/ascend_a2a3/convolution/example_convolution.py",
+      "destination_path": "examples_experiment/convolution/example_convolution.py",
       "source_git_blob": "f1f98d1b7f1414cd161160a09f2ed4195aa11859",
       "source_sha256": "feafce71b21b2801458c5dd24086acc6ac744a4724eebf61ccc650f3bc8105b4",
       "destination_sha256": "e6aa5c3d6ae4abd029aa794df8974a4b9b5635e4d88e17dbd617ecb2b4f16dae",
@@ -1573,7 +1573,7 @@
     },
     {
       "source_path": "examples_experiment/convolution/test_example_convolution.py",
-      "destination_path": "examples_experiment/ascend_a2a3/convolution/test_example_convolution.py",
+      "destination_path": "examples_experiment/convolution/test_example_convolution.py",
       "source_git_blob": "f6cd7b2fdd27db38cd13227285092547561309a9",
       "source_sha256": "4e88648900a11c543bff8b603d165aeca5276426a0f8555d6a94e3b0f4a33ed0",
       "destination_sha256": "f87e99004532929bff4b88856944452ca12545551babcf44cf244a251999a505",
@@ -1604,7 +1604,7 @@
     },
     {
       "source_path": "examples_experiment/convolution/example_convolution_autotune.py",
-      "destination_path": "examples_experiment/ascend_a2a3/convolution/example_convolution_autotune.py",
+      "destination_path": "examples_experiment/convolution/example_convolution_autotune.py",
       "source_git_blob": "7a99b91e5b26020a67c092e3e08ed5680b717480",
       "source_sha256": "801b15e2e0cb5f2dcf81e673ff8b013f8085469edc6e10c4031fcced75d41126",
       "destination_sha256": "ae44d7d024caf7ba723a5bd974678d6b5f24599c6b29e8fe93ab55f3c7457d3b",
@@ -1637,7 +1637,7 @@
     },
     {
       "source_path": "examples_experiment/convolution/test_example_convolution_autotune.py",
-      "destination_path": "examples_experiment/ascend_a2a3/convolution/test_example_convolution_autotune.py",
+      "destination_path": "examples_experiment/convolution/test_example_convolution_autotune.py",
       "source_git_blob": "8b6773c25112cb8e9b4a799c72cc11d274894f1b",
       "source_sha256": "5e6cf0622e87ebb178ccdb73f50aff9154b262620d0e9d994885547e9bf2625a",
       "destination_sha256": "a9d292e602f63ede54b0933d3c733a2815b13a018702eecc2cf1b47279454adb",
@@ -1668,7 +1668,7 @@
     },
     {
       "source_path": "examples_experiment/dequantize_gemm/example_dequant_gemm_fine_grained.py",
-      "destination_path": "examples_experiment/ascend_a2a3/dequantize_gemm/example_dequant_gemm_fine_grained.py",
+      "destination_path": "examples_experiment/dequantize_gemm/example_dequant_gemm_fine_grained.py",
       "source_git_blob": "8a13f2c4d5a1f45f4e1fce12bfcd96b3cdc56931",
       "source_sha256": "4abc53d4e1ef078a089daa940a814de6d8bac820315a6004d0d8cbba58f6796b",
       "destination_sha256": "a6d9e7c4ff17054322c52dea3286ce110a34cd9016a7edb71d73067bc6ccc918",
@@ -1699,7 +1699,7 @@
     },
     {
       "source_path": "examples_experiment/dequantize_gemm/test_example_dequant_gemm_fine_grained.py",
-      "destination_path": "examples_experiment/ascend_a2a3/dequantize_gemm/test_example_dequant_gemm_fine_grained.py",
+      "destination_path": "examples_experiment/dequantize_gemm/test_example_dequant_gemm_fine_grained.py",
       "source_git_blob": "9a3f88640c000d658e2731684917d7161212799b",
       "source_sha256": "9877c2d18086d86796212740e5b5624a29f8ef99717d0d76f987166c43be1bb8",
       "destination_sha256": "f4d61f4c8f6b45027bf05145fb2997cd9414b34dfff749e3147b13c2e46fe1ce",
@@ -1730,7 +1730,7 @@
     },
     {
       "source_path": "examples_experiment/dequantize_gemm/example_dequant_gemm_w4a8.py",
-      "destination_path": "examples_experiment/ascend_a2a3/dequantize_gemm/example_dequant_gemm_w4a8.py",
+      "destination_path": "examples_experiment/dequantize_gemm/example_dequant_gemm_w4a8.py",
       "source_git_blob": "6c7f2e4274adb4f95af43f1da238b6c182337a64",
       "source_sha256": "3a1d47c3709773956ca30eea621d3cae722aa2d228778d5bbd6aa7aaaaf9f9fa",
       "destination_sha256": "0801fcb58671219f83ea9683340da90c9ffd97aa643e6b2f2fc23c2753a2d473",
@@ -1761,7 +1761,7 @@
     },
     {
       "source_path": "examples_experiment/dequantize_gemm/test_example_dequant_gemm_w4a8.py",
-      "destination_path": "examples_experiment/ascend_a2a3/dequantize_gemm/test_example_dequant_gemm_w4a8.py",
+      "destination_path": "examples_experiment/dequantize_gemm/test_example_dequant_gemm_w4a8.py",
       "source_git_blob": "60eefc4ebf5b6e17cea210b212e945a4f7d5d6ad",
       "source_sha256": "b66bb7702c8f4b713c4f389a3f76a59323cdef131112452bdc5cc3d51e06ab58",
       "destination_sha256": "0e8726f2623f172002e0de6cfe36977cbb6d188bdef295b1d0284abf755e1841",
@@ -1914,5 +1914,12 @@
       "root_independent_combined_audit": "refactor_main/reports/p3_experimental_D_combined_device_root_review.json",
       "standalone_invalid_extra_configs_not_counted_as_success": true
     }
+  },
+  "layout_revision_20261030": {
+    "previous_layout_base": "289fcda7c0a9a6141bde7c25c866d05eb6fcacb9",
+    "experiment_move_manifest": "maint/ascend_a2a3/experiment_layout_move.json",
+    "component_test_destination": "testing/ascend_a2a3/python/refactor/",
+    "source_pin_path_hash_and_inventory_counts_unchanged": true,
+    "historical_validation_evidence": "existing validation fields/reports remain bound to their recorded pre-relocation snapshots; current full CI still pending"
   }
 }

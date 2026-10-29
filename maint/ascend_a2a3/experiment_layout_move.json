@@ -8,8 +8,8 @@
   "source_pin_and_original_source_path_unchanged": true,
   "counts": {
     "moved": 61,
-    "bytes_identical": 45,
-    "mechanical_path_only_changes": 16,
+    "bytes_identical": 44,
+    "mechanical_path_only_changes": 17,
     "Python": 46
   },
   "moves": [
@@ -19,10 +19,12 @@
       "mode": "100644",
       "previous_git_blob": "43c50c89f8751af4d0fccfe483ff44d76e4982e3",
       "previous_sha256": "c30cac1fd96552f0fa97b33c55486efc5641724f53f547297ad15b886996553a",
-      "destination_sha256": "c30cac1fd96552f0fa97b33c55486efc5641724f53f547297ad15b886996553a",
-      "destination_git_blob": "43c50c89f8751af4d0fccfe483ff44d76e4982e3",
-      "mechanical_changes": [],
-      "bytes_identical": true
+      "destination_sha256": "58b4ef5f492fd9818e82e02748f1642d788c6c3a71128f150090f9ff31167226",
+      "destination_git_blob": "add3013d948a8b2e4718db9421ecec11c9fbd40e",
+      "mechanical_changes": [
+        "explicit pre-directory-layout historical-summary annotation or canonical Markdown formatting; original report text retained"
+      ],
+      "bytes_identical": false
     },
     {
       "previous_destination_path": "examples_experiment/ascend_a2a3/README.md",
@@ -30,10 +32,11 @@
       "mode": "100644",
       "previous_git_blob": "68802f75529f886f7a9a4db41793493009f61582",
       "previous_sha256": "daaeec6c3f7f4c2727996f9657d5cdfccbd69d3d703ebbb29a25644841a8c8de",
-      "destination_sha256": "86515aee28c7512e62e7b1705bbb3bec430e8d3ad53a74afcb0b09b8c4d55acd",
-      "destination_git_blob": "977db848175574c45e7b77df99014f4d5ddaf3cf",
+      "destination_sha256": "12ded0f9fe6069bb90f077cc7e03c37f3de7ee09b28e51b658d6b7be7c94ea77",
+      "destination_git_blob": "f50ec060d29d0a98a3df229450ab78dfdf45bde6",
       "mechanical_changes": [
-        "current local link/path examples_experiment/ascend_a2a3/→examples_experiment/"
+        "current local link/path examples_experiment/ascend_a2a3/→examples_experiment/",
+        "explicit pre-directory-layout historical-summary annotation or canonical Markdown formatting; original report text retained"
       ],
       "bytes_identical": false
     },

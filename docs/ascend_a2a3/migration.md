@@ -64,10 +64,12 @@ export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
 | 原 TA 路径 | 当前 A2/A3 路径 |
 |---|---|
 | `examples/<relative>` | `examples/ascend_a2a3/<relative>` |
-| `examples_experiment/<relative>` | `examples_experiment/ascend_a2a3/<relative>` |
+| `examples_experiment/<relative>` | `examples_experiment/<relative>` |
 | `testing/<relative>` | `testing/ascend_a2a3/<relative>` |
 
-主线 `testing/ascend/**/test_a2a3*.py` 等纯 host/source 组件测试继续保留，和原算子资产测试不是同一集合。先确认具体资产已经完成迁移；未完成资产的显式阻断或原已有失败不能算通过。
+迁移新增的 A2/A3 host/source 组件测试统一放在 `testing/ascend_a2a3/python/refactor/{原 testing/ascend 子目录}`；主线原有 `testing/ascend/` 文件保持原位。两者和原 TA 算子资产测试不是同一集合。先确认具体资产已经完成迁移；未完成资产的显式阻断或原已有失败不能算通过。
+
+2026-10-30 目录调整前，实验目标曾为 `examples_experiment/ascend_a2a3/`，新增组件测试曾位于 `testing/ascend/`；这些路径仅保留在历史报告/搬移清单中，原 source pin、source path、历史测试范围和数量不随目标路径调整改写。逐文件去向见 `maint/ascend_a2a3/experiment_layout_move.json`，完整 TA CI 等效命令另按当前受控入口执行。
 
 使用原 factory、decorator、`pass_configs`、`out_idx`、`workspace_idx`、shape/dtype 和原 golden 门槛。例如运行已迁移的原脚本时：
 

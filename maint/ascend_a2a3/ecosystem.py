@@ -33,7 +33,7 @@ RESERVED = "examples/autotune/"
 
 
 def destination_for(source_path: str) -> str:
-    """Map an original TA example/test path to the frozen adopted namespace.
+    """Map an original TA example/test path to the current adopted layout.
 
     Pure path mapping only: the caller must check the source manifest and review
     classification. In particular, a mapped A5 path is NOT permission to migrate it.
@@ -46,6 +46,9 @@ def destination_for(source_path: str) -> str:
         raise ValueError(f"no adopted example/test namespace for {source_path!r}")
     if path.parts[1] == "ascend_a2a3":
         raise ValueError("input must be the original TA path, not an adopted path")
+    # Mainline had no experimental tree: preserve the original TA hierarchy.
+    if path.parts[0] == "examples_experiment":
+        return source_path
     return str(PurePosixPath(path.parts[0], "ascend_a2a3", *path.parts[1:]))
 
 

@@ -6,7 +6,7 @@
   "entries": [
     {
       "source_path": "examples_experiment/cumsum_gdn/example_cumsum.py",
-      "destination_path": "examples_experiment/ascend_a2a3/cumsum_gdn/example_cumsum.py",
+      "destination_path": "examples_experiment/cumsum_gdn/example_cumsum.py",
       "source_git_blob": "d36627a32e88a930ffed4fea79e4ca27c8d8d69c",
       "source_sha256": "4504d5d89223ef2277020ee412e0926083acf5cd3a7f8d82f582f679618efc0c",
       "destination_sha256": "04031cd9b63a19cbeac7fccadd413560ae9953b3e28f956723f414c72cc859ac",
@@ -49,7 +49,7 @@
     },
     {
       "source_path": "examples_experiment/cumsum_kda/example_cumsum_kda.py",
-      "destination_path": "examples_experiment/ascend_a2a3/cumsum_kda/example_cumsum_kda.py",
+      "destination_path": "examples_experiment/cumsum_kda/example_cumsum_kda.py",
       "source_git_blob": "f46bb14a38509ba41bc9687ce4dbacc537b47a2c",
       "source_sha256": "6550b34bbb0a449dd9e1ea631722f4fd4ffabc394b053b9bd5e4c4be0744026b",
       "destination_sha256": "ef5a4324d306a6ad52b462157f722717ab9c60b89898c843056883ef9cdbafa5",
@@ -94,7 +94,7 @@
     },
     {
       "source_path": "examples_experiment/gemm_splitk/example_tilelang_gemm_splitk.py",
-      "destination_path": "examples_experiment/ascend_a2a3/gemm_splitk/example_tilelang_gemm_splitk.py",
+      "destination_path": "examples_experiment/gemm_splitk/example_tilelang_gemm_splitk.py",
       "source_git_blob": "38cace0f1291018d4cd0148c9a8d0d717409cc02",
       "source_sha256": "3529ab65c964cdce867db1146d9541f3e73de28c7da4d7c4d469b742796b9f0b",
       "destination_sha256": "500ea097d8d117821188b2e6f07a1002667b9a9c1bf5cd26d9c2c5e569559f49",
@@ -128,7 +128,7 @@
     },
     {
       "source_path": "examples_experiment/hadamard_transform/example_hadamard_transform.py",
-      "destination_path": "examples_experiment/ascend_a2a3/hadamard_transform/example_hadamard_transform.py",
+      "destination_path": "examples_experiment/hadamard_transform/example_hadamard_transform.py",
       "source_git_blob": "00e2e6fefa52e1ee57f226028706976130a4d0a4",
       "source_sha256": "7b787788f4e1ee2c1028a2c4675451a375d043ff76aa32ed2c207827940cb776",
       "destination_sha256": "8fc62a638812656899c743ed66022d9d094bf76bf0af129cbde68b54f98c21ee",
@@ -162,7 +162,7 @@
     },
     {
       "source_path": "examples_experiment/random_1d/random_1d.py",
-      "destination_path": "examples_experiment/ascend_a2a3/random_1d/random_1d.py",
+      "destination_path": "examples_experiment/random_1d/random_1d.py",
       "source_git_blob": "cd802962de46742ffbda1f6dccb68aedd5ac5fad",
       "source_sha256": "353e2b544e5e3096fcc3ce8e7060de897ad40df8a94ff03880cab3aa0d31aa24",
       "destination_sha256": "4655863dc220926e0bb871d0ea45c991fbd6fe53d8e6bf5a75b91e25343caa86",
@@ -202,7 +202,7 @@
     },
     {
       "source_path": "examples_experiment/grouped_gemm/example_grouped_gemm_bwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/grouped_gemm/example_grouped_gemm_bwd.py",
+      "destination_path": "examples_experiment/grouped_gemm/example_grouped_gemm_bwd.py",
       "source_git_blob": "b7b31455ed0dc7a419e2503752f2bc9ab2567bf3",
       "source_sha256": "721d121bbf855cc4cbccf4bc3b556008e236b98588930586183dc05c17d38c93",
       "destination_sha256": "21178d070b107df2e5630bc134730f547aeccfabf13b517d338f9d2d2f8dd346",
@@ -238,7 +238,7 @@
     },
     {
       "source_path": "examples_experiment/grouped_gemm/example_grouped_gemm_fwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/grouped_gemm/example_grouped_gemm_fwd.py",
+      "destination_path": "examples_experiment/grouped_gemm/example_grouped_gemm_fwd.py",
       "source_git_blob": "e6265c1a178c59902cbe6515b56dad11e2c814b1",
       "source_sha256": "d26175118395baaca045c899fc8670004057c6f9ad425953b3f1344091890506",
       "destination_sha256": "bc19376c32a66a8be8ff27c1dee0555cf1511ee589d6463e5afbbbc00113220a",
@@ -273,7 +273,7 @@
     },
     {
       "source_path": "examples_experiment/grouped_gemm/example_grouped_gemm_fwd_ptr.py",
-      "destination_path": "examples_experiment/ascend_a2a3/grouped_gemm/example_grouped_gemm_fwd_ptr.py",
+      "destination_path": "examples_experiment/grouped_gemm/example_grouped_gemm_fwd_ptr.py",
       "source_git_blob": "b29de5067909704762d2ffa5cd7b723a03068c31",
       "source_sha256": "5352431b2b065fdfe7b727c20d57d0a9f3caf8438de0b06e5dce86cf453e4772",
       "destination_sha256": "2994e4b4966643e738afd15d000b406b56dc626d508d645d136e122f82c6f363",
@@ -309,7 +309,7 @@
     },
     {
       "source_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
-      "destination_path": "examples_experiment/ascend_a2a3/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
+      "destination_path": "examples_experiment/chunk_gated_delta_rule/chunk_gated_delta_rule.py",
       "source_git_blob": "7f357d651b0d721802ac9d227f0e60781ed5c0c7",
       "source_sha256": "56bd0de7ec80d48dc209314c0b84789e2dc11d126683ca502ad2f210737e57e9",
       "destination_sha256": "2840e788d7d8a99b51cd02f237e554fa8c1c97ddd0b6c452230874fd54e8e2ac",
@@ -350,7 +350,7 @@
     },
     {
       "source_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
-      "destination_path": "examples_experiment/ascend_a2a3/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
+      "destination_path": "examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py",
       "source_git_blob": "ed18a5983e2b182f351cb7b37a87240bd9e95950",
       "source_sha256": "3f58149c63b242c544c018fb328cb0ec5f08d0b85a759c46af85acea7d6d7e6a",
       "destination_sha256": "8074b83939b29d9e5a72f40f2df6fca1b60ba1ee95d845dd6ecb8d2a204084fd",
@@ -391,7 +391,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_mla/example_mla_decode/example_mla_decode.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode/example_mla_decode.py",
+      "destination_path": "examples_experiment/deepseek_mla/example_mla_decode/example_mla_decode.py",
       "source_git_blob": "7b5703747ee0b6b07819c003dc2475b995a9ed58",
       "source_sha256": "2eee3715391e6603064b7c9e30c23f9d3c459ff2cd0b76a74178c2aa4008ffad",
       "destination_sha256": "7fc90d9584335345e955a67180b744cb9162bee54e572943afebe4bbddfea9e0",
@@ -421,7 +421,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_mla/example_mla_decode/test_mla_decode.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode/test_mla_decode.py",
+      "destination_path": "examples_experiment/deepseek_mla/example_mla_decode/test_mla_decode.py",
       "source_git_blob": "7a06bd7be408d402d3b2666a3f69defb44861d0a",
       "source_sha256": "88ffbf150894cc4ab0318636658e9187a80d832234ec471eceb7e7d1bba240e6",
       "destination_sha256": "b84ecfbd996f4b98303110b8c2f9e8ce20ec29209eb91e846484e16cc217eec6",
@@ -452,7 +452,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
+      "destination_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/example_mla_decode_paged.py",
       "source_git_blob": "91fcee0f0d09567736b492916fc88ce21cea90b5",
       "source_sha256": "ba16de49b8aaab70b084787f1f2591efc04c24093dd6c6aae59711338576ff31",
       "destination_sha256": "6ffae40a8b17f89bdd2db0b3f33e5086dc4a77617bde1bf478c772d5b604d2dd",
@@ -482,7 +482,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
+      "destination_path": "examples_experiment/deepseek_mla/example_mla_decode_paged/test_mla_decode_paged.py",
       "source_git_blob": "f7e06609be3aff9a0c17d9bc9cc2be5e0e64d300",
       "source_sha256": "e08f7ed81676041d47b8afe7a5e285c0613f97fb8e1c023841181218ceb59765",
       "destination_sha256": "2a3259fce3037045370e896e2e874be2f78b1b26cbdb60d6ad8b4a841ba35e31",
@@ -513,7 +513,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
+      "destination_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/example_mla_decode_persistent.py",
       "source_git_blob": "5a7df95a7d4f3d3157fe1404c5a18fef3ebcc28b",
       "source_sha256": "81828c81fd43eee33106409dd399585f3c54ecf9edef360a0918a4dd092e714f",
       "destination_sha256": "949a7fc241e11f2c783b62f611a87ef77fc8771b49da704e1a6b714c8fc99e0a",
@@ -556,7 +556,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/test_mla_decode_persistent.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_mla/example_mla_decode_persistent/test_mla_decode_persistent.py",
+      "destination_path": "examples_experiment/deepseek_mla/example_mla_decode_persistent/test_mla_decode_persistent.py",
       "source_git_blob": "b2ce5144305a9dcf5f700a512bd5bc73fca443be",
       "source_sha256": "bd3acd36e5c4bf68bf4b7a8e5422b129ff5eedec23c5e87c8af26f5e51161459",
       "destination_sha256": "a2053c474e77585617bf5a5aafdc57e579c06d40ee5fe41177b12606db543a88",
@@ -600,7 +600,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
+      "destination_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/example_tilelang_nsa_decode.py",
       "source_git_blob": "606e0f159041a77ddbab981cca39812126a80459",
       "source_sha256": "607281dd1c7ee84c503d5cb048ec3330ba85b1c98bdf073fa6c5bcdf4405c901",
       "destination_sha256": "2b21078db609670537df27e2dc0443c8384d92b3be5f8c4210b296ff9c412bda",
@@ -630,7 +630,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/test_example_tilelang_nsa_decode.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_decode/test_example_tilelang_nsa_decode.py",
+      "destination_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_decode/test_example_tilelang_nsa_decode.py",
       "source_git_blob": "af41cf31b20502926a34db92e61b51f7fc417e42",
       "source_sha256": "e799fca1c844325c56cec545d234b87e9b418de6c747f1a98761854f48081423",
       "destination_sha256": "d05129169f38239deb936daf0ffa67d3c4e48f2dbf9bba8891b0cba4b9820f25",
@@ -661,7 +661,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
+      "destination_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/example_tilelang_nsa_fwd.py",
       "source_git_blob": "4fb516738391d4fd1ba7f673b0be5a0ddf2ff0ea",
       "source_sha256": "fbdfd27205be065a074d83c5905beef4eb18679684c4304352045d73ee4ad12f",
       "destination_sha256": "8d0b932216ca41a194882d064e846e60f402c3a2ade36f814ec4616be7e0bec6",
@@ -699,7 +699,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/test_example_tilelang_nsa_fwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd/test_example_tilelang_nsa_fwd.py",
+      "destination_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/test_example_tilelang_nsa_fwd.py",
       "source_git_blob": "47f3233d7e349a9737e8aafe35e93c8786a5ee97",
       "source_sha256": "f001502f4e049fdbc347ef7cfb6215b0cbe730de67de3a707561072092300555",
       "destination_sha256": "5083effe3d00ec55026d0f9bc1d6d64c2bd22f326d423bf38600f0c7c70b9e7a",
@@ -736,7 +736,7 @@
         "original_core_num_None_query_AST_unchanged": true
       },
       "original_oracle_source_archive": {
-        "path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd/original_odd_gqa_child.txt",
+        "path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd/original_odd_gqa_child.txt",
         "sha256": "46ebcec7f3eacee2844ccc36afad55d954098d0b1dc371140be918a87c2a7fa5",
         "scope": "Exact complete original -c child literal, inactive plaintext; no executable extension or automatic invocation"
       },
@@ -750,7 +750,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
+      "destination_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/example_tilelang_nsa_fwd_varlen.py",
       "source_git_blob": "bbda7c48bc9d7c594505cb1aad5bdb00368a503d",
       "source_sha256": "604aadcb4d679af9a31f7704ded2dafea2c200ffee77653839b590e7985aae65",
       "destination_sha256": "70f88bc530c02c338913385d3287728c5fb2409f48080e882f2a3693f5687d74",
@@ -787,7 +787,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/test_example_tilelang_nsa_fwd_varlen.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_fwd_varlen/test_example_tilelang_nsa_fwd_varlen.py",
+      "destination_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_fwd_varlen/test_example_tilelang_nsa_fwd_varlen.py",
       "source_git_blob": "deea854ceca1910e8b5a26922782eb7240a03f10",
       "source_sha256": "e2b247402d16e3dc80906be4773452948947bc4207afdf66034546d6e6d9f337",
       "destination_sha256": "55fe3f1d188d5ee335bc916221e5c7f46b7389431c0c869afe05a7fcdf878e72",
@@ -825,7 +825,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
+      "destination_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/example_tilelang_nsa_bwd.py",
       "source_git_blob": "d7f118fb280545788ebd7f3246b2a2cf2aeb512c",
       "source_sha256": "7d74b9d53f36fb77d9a341ba71a7721dd74567bbd2d23ad8d92e0c2b6dd9d1de",
       "destination_sha256": "3227b93b06ccad1da943264a15f7b1953122e577de2c58f94d077082211c8358",
@@ -855,7 +855,7 @@
     },
     {
       "source_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/test_tilelang_nsa_bwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/deepseek_nsa/example_tilelang_nsa_bwd/test_tilelang_nsa_bwd.py",
+      "destination_path": "examples_experiment/deepseek_nsa/example_tilelang_nsa_bwd/test_tilelang_nsa_bwd.py",
       "source_git_blob": "e4c27424cc5bfc81b5ff1a88af352265d29061e2",
       "source_sha256": "368f243fb095ae8757e83df145bb4bb387c05e2fd106a39febe1a53f45ae53ee",
       "destination_sha256": "295f2f8e5b438bbe5d8db3641d475326fcdad9174236ed2c6d86072f88a60aab",
@@ -887,7 +887,7 @@
     },
     {
       "source_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/dsa_sparse_finetune/example_indexer_bwd.py",
+      "destination_path": "examples_experiment/dsa_sparse_finetune/example_indexer_bwd.py",
       "source_git_blob": "1dd8a1e1aea71d34eed35d469282a833b3eac0cf",
       "source_sha256": "592c3fdc0ebfb90c3c1b092449ad4fa7e23509ad60d8850f5857418195d58d8b",
       "destination_sha256": "825e682663be53e2e662491a08e2a719eb1f56330bba1f03236a1e54c748d4d6",
@@ -926,7 +926,7 @@
     },
     {
       "source_path": "examples_experiment/dsa_sparse_finetune/test_example_indexer_bwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/dsa_sparse_finetune/test_example_indexer_bwd.py",
+      "destination_path": "examples_experiment/dsa_sparse_finetune/test_example_indexer_bwd.py",
       "source_git_blob": "c22c890a111ba4bfc86244b5608ff432272b47eb",
       "source_sha256": "fc52836886263721a5de439ccc524aef04034f30bb00fb99fb94d9280b9f8b85",
       "destination_sha256": "58873418ac30e106655db59ed310cca6265402af4d8ec723c0f876a0adbe9fd8",
@@ -1031,7 +1031,7 @@
     },
     {
       "source_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/example_gqa_bwd/example_gqa_bwd.py",
+      "destination_path": "examples_experiment/example_gqa_bwd/example_gqa_bwd.py",
       "source_git_blob": "9b1e08f8a70cd65c5b3bf1a6d3768ceaf8adee5f",
       "source_sha256": "da4fe4410df1062abe5a6a8997dda1533f4de41c9fc3110529dad1ae2528b360",
       "destination_sha256": "a5ba422eacec06263ed24a27b20d6f00fb5486498539ae5aac687660cae576d8",
@@ -1062,10 +1062,10 @@
     },
     {
       "source_path": "examples_experiment/example_gqa_bwd/test_gqa_bwd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/example_gqa_bwd/test_gqa_bwd.py",
+      "destination_path": "examples_experiment/example_gqa_bwd/test_gqa_bwd.py",
       "source_git_blob": "27101042b52709e1c11a26779619b3531f96511a",
       "source_sha256": "71d89b48229dd5257c02ebdce238b57830f57bf34fd340ca1b15eab6e538dfbe",
-      "destination_sha256": "c5bcb18fd44b7826d63917dc1f0e7096623dea4f5484323488302c43509ff246",
+      "destination_sha256": "9bc706cfdee1286722c6b70e069a32058ce68b86dd9659913d98f52cdd505c6c",
       "batch": "E6a",
       "source_domain": "original_experiments",
       "state": "source_SDK_verified_device_pending",
@@ -1097,7 +1097,7 @@
     },
     {
       "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
-      "destination_path": "examples_experiment/ascend_a2a3/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
+      "destination_path": "examples_experiment/example_gqa_sink_bwd_varlen/example_gqa_sink_bwd_varlen.py",
       "source_git_blob": "75c2d76f62aa4c78e0878088bcdfedaf090a3321",
       "source_sha256": "76df0e8b4cbfc137ede8b0c4b3065ec821f4571eeba5381c19b65d72f2e2e718",
       "destination_sha256": "a15df6bb49140b34e881066ce2558952e15d9781ac388874b87d605a342a8d8b",
@@ -1129,7 +1129,7 @@
     },
     {
       "source_path": "examples_experiment/example_gqa_sink_bwd_varlen/test_gqa_sink_bwd_varlen.py",
-      "destination_path": "examples_experiment/ascend_a2a3/example_gqa_sink_bwd_varlen/test_gqa_sink_bwd_varlen.py",
+      "destination_path": "examples_experiment/example_gqa_sink_bwd_varlen/test_gqa_sink_bwd_varlen.py",
       "source_git_blob": "4f257e2c19555a1de408279dc38790001d634b7e",
       "source_sha256": "e27ba52b4e92c791a83f1e11caebd98c2faaa2c6b28d599ab4e4867e6190515a",
       "destination_sha256": "b5784b2523996650b0942bf9d703dfdfb5509ca6ea603c0f7efed1b146f9b772",
@@ -1162,10 +1162,10 @@
     },
     {
       "source_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
+      "destination_path": "examples_experiment/mha_sink_bwd_bhsd/mha_sink_bwd_bhsd.py",
       "source_git_blob": "15c6815bc32d35abfabfbae59a62a8969f7eda5d",
       "source_sha256": "a362b5887278d71b4b31ce72363dfc40dd9fc215503be7d4f603becac91f7fc2",
-      "destination_sha256": "46ac9db308a5f9fff778333453f04639e62ea903b88ffadd132f5774ba984f5d",
+      "destination_sha256": "b85cd152d68b9fdc48bc8d33b8173d1740333a6ef1bd352c43479899fd520568",
       "batch": "E6c",
       "source_domain": "original_experiments",
       "state": "source_SDK_verified_device_pending",
@@ -1196,7 +1196,7 @@
     },
     {
       "source_path": "examples_experiment/mha_sink_bwd_bhsd/test_mha_sink_bwd_bhsd.py",
-      "destination_path": "examples_experiment/ascend_a2a3/mha_sink_bwd_bhsd/test_mha_sink_bwd_bhsd.py",
+      "destination_path": "examples_experiment/mha_sink_bwd_bhsd/test_mha_sink_bwd_bhsd.py",
       "source_git_blob": "523c3a020a7987f99c6d2187734d89b6d69d7c9f",
       "source_sha256": "b48aaf36b6c0b8679b3b34274bf567e5e804d00410e92e00b6cc9b85caf867ee",
       "destination_sha256": "68088a9487bfe15d82f0805db19efc4a3d12618cc7522a77c757699077b0df34",
@@ -1232,7 +1232,7 @@
     },
     {
       "source_path": "examples_experiment/seer_attention/block_sparse_attn.py",
-      "destination_path": "examples_experiment/ascend_a2a3/seer_attention/block_sparse_attn.py",
+      "destination_path": "examples_experiment/seer_attention/block_sparse_attn.py",
       "source_git_blob": "884c5c0daeffbd949392bd32e3d8f3e1c11292fb",
       "source_sha256": "02dc13b9106d43f695467d2a737664c81093d04a22d4de7e68915727d859d484",
       "destination_sha256": "605971f6fdfc00601165388acfb94b56a9641e8f66fe202bf4cb01f1ad5ee787",
@@ -20496,5 +20496,12 @@
       "rtol": 0.01,
       "original_torch_input_reference_assertions_not_run": true
     }
-  ]
+  ],
+  "layout_revision_20261030": {
+    "previous_layout_base": "289fcda7c0a9a6141bde7c25c866d05eb6fcacb9",
+    "experiment_move_manifest": "maint/ascend_a2a3/experiment_layout_move.json",
+    "component_test_destination": "testing/ascend_a2a3/python/refactor/",
+    "source_pin_path_hash_and_inventory_counts_unchanged": true,
+    "historical_validation_evidence": "existing validation fields/reports remain bound to their recorded pre-relocation snapshots; current full CI still pending"
+  }
 }

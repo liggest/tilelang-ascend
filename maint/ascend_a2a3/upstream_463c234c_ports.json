@@ -452,7 +452,7 @@
       "source_bytes": 17953,
       "source_lines": 393,
       "stage3_accepted": false,
-      "destination_path": "examples_experiment/ascend_a2a3/gdn/chunk_scaled_dot_kkt/example_chunk_scaled_dot_kkt.py",
+      "destination_path": "examples_experiment/gdn/chunk_scaled_dot_kkt/example_chunk_scaled_dot_kkt.py",
       "migration_state": "complete_original_source_and_AST_host_native_source_actual_SDK_verified_device_CI_pending",
       "destination_sha256": "91330ed05c2ae1d3d9016c7acf6e0cd187663ded519918c105728fa8c75a9d0d",
       "destination_bytes": 18477,
@@ -471,7 +471,7 @@
       "source_bytes": 20017,
       "source_lines": 440,
       "stage3_accepted": false,
-      "destination_path": "examples_experiment/ascend_a2a3/gdn/chunk_scaled_dot_kkt/test_chunk_scaled_dot_kkt.py",
+      "destination_path": "examples_experiment/gdn/chunk_scaled_dot_kkt/test_chunk_scaled_dot_kkt.py",
       "migration_state": "complete_original_source_and_AST_host_native_source_actual_SDK_verified_device_CI_pending",
       "destination_sha256": "6414334d4d84b05112c3955ab24abef2981110f7c2a30262f76a072af2b1848c",
       "destination_bytes": 20486,
@@ -670,7 +670,7 @@
     "original_simple_fusion_missing_source_registration": "upstream simple_fusion registrations merged into missing example_simple_fusion.py; preserve as upstream source issue, do not invent implementation or call it pass",
     "current_paths": [
       "examples/ascend_a2a3/",
-      "examples_experiment/ascend_a2a3/",
+      "examples_experiment/",
       "testing/ (original test scope; actual migrated paths recorded separately)"
     ],
     "original_protocol": "legacy bench executes full scripts with original CLI/exit/markers; registered operator pairs use original pytest --forked and original n4/n8 scope; testing language suite remains separate",
@@ -692,5 +692,12 @@
     "full_run_preparation": "latest TA-equivalent full batch requested; prepare migrated task/resolver/bench scope and submit exact commands for user confirmation before full device run",
     "next_acceptance_step": "prepare exact full TA-equivalent commands;await user confirmation before180 migrated bench tasks+27 active operator pytest files+original TA testing scope;prior19-case L0 plan is unexecuted historical reference only",
     "statically_collected_proposed_main_bench_tasks": 180
+  },
+  "layout_revision_20261030": {
+    "previous_layout_base": "289fcda7c0a9a6141bde7c25c866d05eb6fcacb9",
+    "experiment_move_manifest": "maint/ascend_a2a3/experiment_layout_move.json",
+    "component_test_destination": "testing/ascend_a2a3/python/refactor/",
+    "source_pin_path_hash_and_inventory_counts_unchanged": true,
+    "historical_validation_evidence": "existing validation fields/reports remain bound to their recorded pre-relocation snapshots; current full CI still pending"
   }
 }

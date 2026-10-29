@@ -92,9 +92,9 @@ description: "根据算子需求生成 TileLang-Ascend 算子设计文档（desi
      - 多步（如 softmax = max + sub + exp + sum + div）→ 多次计算、可能需要中间缓冲
      - 融合（如 flash attention = GEMM + softmax + GEMM）→ 核间协作、流水线
    - **动态 shape 判定**：是否存在运行时才确定的维度
-4. **非整除场景预判**：先核具体 copy 的 scope/dtype/alignment/尾块支持，再决定动态切片或 padding。`T.ceildiv` 只能解决迭代次数，不能单独证明数据搬运边界合法。固定 TA 的 `examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py` 是来源参考，迁移目标为 `examples_experiment/ascend_a2a3/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py`；目标尚未迁时不作为可执行主线示例。对同一已支持 Region 路径，可参照源中的 valid_m 与尾块切片思路，并用原 shape/dtype/对齐条件验证。
+4. **非整除场景预判**：先核具体 copy 的 scope/dtype/alignment/尾块支持，再决定动态切片或 padding。`T.ceildiv` 只能解决迭代次数，不能单独证明数据搬运边界合法。固定 TA 的 `examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py` 是来源参考，迁移目标为 `examples_experiment/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py`；目标尚未迁时不作为可执行主线示例。对同一已支持 Region 路径，可参照源中的 valid_m 与尾块切片思路，并用原 shape/dtype/对齐条件验证。
 
-5. **多 group 输出竞态约束**（grouped 类算子）：当多个 group 共享同一输出 buffer（紧凑排列，不 padding）时，尾块按 block_M 整块写会溢出到隔壁 group 的区域，导致竞态条件（执行顺序不确定→结果不确定）。解法：metadata 记录 valid_m，kernel 用 `T.copy(C_L0, Y[m_start : m_start + valid_m, ...])` 只写有效行。参考 `examples_experiment/ascend_a2a3/grouped_gemm/example_grouped_gemm_fwd.py` 的 block_metadata[2]（valid_m 字段，当前未使用，应启用）。
+5. **多 group 输出竞态约束**（grouped 类算子）：当多个 group 共享同一输出 buffer（紧凑排列，不 padding）时，尾块按 block_M 整块写会溢出到隔壁 group 的区域，导致竞态条件（执行顺序不确定→结果不确定）。解法：metadata 记录 valid_m，kernel 用 `T.copy(C_L0, Y[m_start : m_start + valid_m, ...])` 只写有效行。参考 `examples_experiment/grouped_gemm/example_grouped_gemm_fwd.py` 的 block_metadata[2]（valid_m 字段，当前未使用，应启用）。
 6. **数据重排成本建模**：按 [references/ascend-constraints.md](references/ascend-constraints.md) §4.2 为每条路径和最大/关键 case 计算 DMA/GM
    标量访问/地址解码/并行度；不能只给 tile shape，不计算 transaction 数量。
 
