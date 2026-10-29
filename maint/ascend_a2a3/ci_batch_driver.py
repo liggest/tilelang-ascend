@@ -101,7 +101,9 @@ def pytest_deselected(items):
 def selected_health(text: str, physical_ids: list[int]) -> list[dict]:
     """Parse management rows, without creating a runtime/NPU context."""
     lines = text.splitlines()
-    assert any("Process id" in line and "NPU" in line for line in lines), "missing management process table"
+    headers = [i for i, line in enumerate(lines) if "Process id" in line and "NPU" in line]
+    assert len(headers) == 1, "missing or ambiguous management process table"
+    board_lines = lines[: headers[0]]
     processes = []
     for line in lines:
         match = re.match(r"^\|\s*(\d+)\s+(\d+)\s*\|\s*(\d+)\s*\|", line)
@@ -109,7 +111,7 @@ def selected_health(text: str, physical_ids: list[int]) -> list[dict]:
             processes.append({"card": int(match[1]), "chip": int(match[2]), "pid": int(match[3])})
     result = []
     for physical in physical_ids:
-        matches = [i for i, line in enumerate(lines) if re.match(rf"^\|\s+\d+\s+{physical}\s+\|", line)]
+        matches = [i for i, line in enumerate(board_lines) if re.match(rf"^\|\s+\d+\s+{physical}\s+\|", line)]
         assert len(matches) == 1, f"cannot identify physical {physical}"
         index = matches[0]
         name, row = lines[index - 1].split("|"), lines[index].split("|")

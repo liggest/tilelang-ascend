@@ -135,3 +135,17 @@ def test_real_pytest_xml_retains_passed_streams_and_xfail_distinctly(tmp_path):
     passed = next(row for row in nodes if row["name"] == "test_pass")
     assert "passed stdout" in passed["stdout"] and "passed stderr" in passed["stderr"]
     assert next(row for row in nodes if row["outcome"] == "xfail")["verdict_details"][0]["attributes"]["type"] == "pytest.xfail"
+
+
+def test_process_table_rows_do_not_alias_physical_zero_board_row():
+    spec = importlib.util.spec_from_file_location("ci_health_under_test", ROOT / "maint/ascend_a2a3/ci_batch_driver.py")
+    driver = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(driver)
+    text = (
+        "| 0 Ascend910 | OK | power temp |\n"
+        "| 0 0 | BUS | 0 memory hbm |\n"
+        "| NPU Chip | Process id | Process name |\n"
+        "| No running processes found in NPU 0 |\n"
+        "| 7 0 | 9000 | unrelated process |\n"
+    )
+    assert driver.selected_health(text, [0])[0]["physical"] == 0
