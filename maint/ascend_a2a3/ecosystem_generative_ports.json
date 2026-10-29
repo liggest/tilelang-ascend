@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+  "owner_scope": "GRC3 complete original recommendation kernel, CPU reference and full testcase catalog",
+  "entries": [
+    {
+      "source_path": "examples/generative_recommendation/mtgr_ragged_segment_attention.py",
+      "destination_path": "examples/ascend_a2a3/generative_recommendation/mtgr_ragged_segment_attention.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "444c5dedffe410de710398074b480e875028e9e183bbf3551b5f8d7620045472",
+      "source_git_blob": "fec804097ded0d694b8b2ae6c8a41052d62fad9a",
+      "destination_sha256": "91f6f3183a72af89fdee11e1e9f8e758be757fea3a254a902e33e99fc60a5836",
+      "state": "complete_default_source_SDK_CPU_host_OFF_verified_device_pending",
+      "original_definition_AST_sha256": {
+        "mtgr_ragged_segment_attention_kernel": "453cacdb14e67b9e18d06709ecb9fea68f177d93b4169d040ebaa06aaf39df9e",
+        "mtgr_ragged_segment_attention": "6d6b19f0ca49b99e1341d953574921cdfa7f8288bbb2b3b26fdb6f6c5821b33c",
+        "test": "ef0d4cde3854a1b6a593e9fd7de6fc60d9ebdc4be0942cb0766854843c95c807"
+      },
+      "original_definition_count": 3,
+      "device_not_run": true,
+      "original_CLI_AST_sha256": "5aaae810e49896759b07f407350b448f6cc11e763a174e3f9ea42188240131c2",
+      "original_default_configs": [
+        {
+          "H": 8,
+          "D": 128,
+          "seg_lengths": [
+            [
+              1600,
+              8,
+              5,
+              1200
+            ]
+          ],
+          "rules": [
+            0,
+            1,
+            2,
+            2
+          ],
+          "matched_prefix_arr": [
+            0
+          ]
+        }
+      ],
+      "original_default_runtime_calls": 1,
+      "original_default_golden_assertions": 1,
+      "original_rtol_atol": 0.01,
+      "adaptations": [
+        "private dialect/layout imports",
+        "exact local lazy golden/testcase with retained function signatures",
+        "task-owned cache clear and scoped cache memory/raw enabled/staging restoration",
+        "whole original CLI in main; explicit TorchNPU import only there"
+      ],
+      "source_SDK_scope": "original CLI H8/D128, core24/MN128/stages14/cross2, arbitrary generated catalog source/runtime pending",
+      "original_target": "auto"
+    },
+    {
+      "source_path": "examples/generative_recommendation/golden.py",
+      "destination_path": "examples/ascend_a2a3/generative_recommendation/golden.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "241ea4c978ea8fbd0f7844f63338ab75f639dde52b7e7bc9757f742087a6da25",
+      "source_git_blob": "42582f0439ec3fa255d6fb09dc5d5cceb293b5b7",
+      "destination_sha256": "241ea4c978ea8fbd0f7844f63338ab75f639dde52b7e7bc9757f742087a6da25",
+      "state": "complete_default_source_SDK_CPU_host_OFF_verified_device_pending",
+      "original_definition_AST_sha256": {
+        "_prepare_kv_and_mask": "4a268929fd8564cf5962684e638ae944fece975c7ec857ff68ec76ef81d5c66b",
+        "golden_attention_float64": "334b45526b9b4719ceabec97eb38a3d969099d18c2007dc312c6696a054fb94b",
+        "golden_attention_simulated_kernel": "ced20bc4936c4c7947a2366ee04117808087f11c9d6ccc5dc87883a0b82046fb"
+      },
+      "original_definition_count": 3,
+      "device_not_run": true,
+      "whole_original_module_AST_sha256": "c16272ba9b549325d4db7374d129b4f6dd0e99dee901990dd9ac1db461884b43",
+      "original_module_body_preserved": true,
+      "original_standalone_runtime_CLI": false
+    },
+    {
+      "source_path": "examples/generative_recommendation/testcase.py",
+      "destination_path": "examples/ascend_a2a3/generative_recommendation/testcase.py",
+      "source_pin": "0deb8b93da11b7f0becbcded732d9633b7ca4e34",
+      "source_sha256": "861afa13e9132a5c8f7cc8b2a83d804c77bb3f0107cf7b876d2b17a47241e31e",
+      "source_git_blob": "f52b3709ce04b372965e926be565da3fb8098622",
+      "destination_sha256": "861afa13e9132a5c8f7cc8b2a83d804c77bb3f0107cf7b876d2b17a47241e31e",
+      "state": "complete_default_source_SDK_CPU_host_OFF_verified_device_pending",
+      "original_definition_AST_sha256": {
+        "prepare_data": "6998f5083a6ff914b49c4b5de3880693533cd390b74bb919cd69ea358176046f",
+        "_make_pattern": "6227f75aecf84409b760a3cd9d6c75d70f97b14f472e08e9ffd20851e27360b9",
+        "_gen_uniform": "110caf08388f2397ef76694de4d5584515b6d0ebe189b92fb85cf91ee38d2543",
+        "_gen_random_ps": "0d49ee096f4740f7e35063ce7d7dfc59fc89ebad3cc56573faf0f90e74049a15",
+        "_sample_seg_num": "9462c19e79a61c6b847c7fcbcdf39490f6cff179fdda8796f2c42d219ebf3d3a",
+        "_sample_seg_len": "8bd20a72f7820340385f259bcd04bef7587ec614e474880e2d003057fab7f64a",
+        "_generate_multi_seg": "a619c90291e0d55e7e3a58a525485beb5e9cae8ce0ab4214ac6c1c289a1807ac",
+        "_generate_big_seg": "c375809ba52f57c3e0a85e188e391bdaa45ca12b90c0435f7c95c0f3fb316bb6",
+        "_generate_multi_seg_patterns": "9b9a713118233a4034f923df686bc154ab57d292951cc73d8f6db9bf3ac055fa",
+        "_generate_constraint_patterns": "46734d6cad0fb68108505952d8ef4129d6011fc0ff0dff37808c633fe773e3fe",
+        "_generate_prefix_patterns": "bd06e8fba8787b01338bdf0a929ffae8bbfb42f18760cc7adab2fad44858af66",
+        "_generate_sampled_patterns": "24d241651ddb3a71b5ecb4783d4ea48a918d8a7941e87562341db81019292e8c"
+      },
+      "original_definition_count": 12,
+      "device_not_run": true,
+      "whole_original_module_AST_sha256": "d30afac7c3f2e3321a8000cf8a4ea9ea2d45681b4c03140c106c33111a7296cc",
+      "original_module_body_preserved": true,
+      "original_standalone_runtime_CLI": false
+    }
+  ],
+  "factory_requests": [
+    {
+      "id": "mtgr_default",
+      "source_path": "examples/generative_recommendation/mtgr_ragged_segment_attention.py",
+      "factory": "mtgr_ragged_segment_attention_kernel",
+      "args": [],
+      "kwargs": {
+        "heads": 8,
+        "dim": 128,
+        "sm_scale": 0.08838834764831845,
+        "block_M": 128,
+        "block_N": 128,
+        "core_num": 24,
+        "num_stages": 14,
+        "cross_interval": 2
+      },
+      "dialect": "ascendc",
+      "core_sampling": "none"
+    }
+  ],
+  "validation": {
+    "original_assets": 3,
+    "original_definitions": 18,
+    "original_default_CLI_runtime": 1,
+    "original_default_CLI_golden": 1,
+    "source_SDK_host_OFF_pending": false,
+    "catalog_all_generated_entries_preserved_but_not_default_CLI": true,
+    "device_not_run": true,
+    "complete_catalog_canonical_SHA256": "88ecd7d6b129f5789ca581fcf78cd639eddaac9810fe74ace9b171baf753a6cf",
+    "full_default_source_per_framework": 1,
+    "real_SDK_per_framework": 1,
+    "full_catalog_count": 462,
+    "D_counts": {
+      "128": 159,
+      "64": 159,
+      "32": 144
+    },
+    "kv_group_counts": {
+      "1": 432,
+      "2": 10,
+      "4": 10,
+      "8": 10
+    },
+    "multi_seed_count": 14,
+    "perf_test_count": 63,
+    "host_ON_passed": 18,
+    "actual_OFF_passed": 17,
+    "actual_OFF_native_only_skipped": 1,
+    "default_CPU_simulated_reference_full_shape": [
+      2813,
+      8,
+      128
+    ],
+    "default_CPU_reference_is_not_kernel_numeric": true,
+    "actual_Cython_adapter_restore_runtime0": true,
+    "catalog_source_SDK_device_not_done": true,
+    "historical_initial_validation_scope": "Existing pre-a9 TA/main one-source/one-SDK facts and original CPU reference/catalog evidence remain historical; current a9 acceptance is recorded separately below.",
+    "current_normal_a9_refresh": {
+      "native_sha256": "a9cefba866baa68644769faf202515a91490ac970b4dccb99078c8a6c40f867f",
+      "source_scope": "Complete original public factories/args/configs; no source algorithm or original CLI change",
+      "strict_fixed_TA_full_CPP_review": {
+        "path": "refactor_main/reports/p3_PA3_GRC3_root_a9_review/exact_fixed_TA_review.json",
+        "sha256": "5caf89ef7f71a65a25365ea966912ba9936960d8e8c8c4c3a5f0865b2d5a337e",
+        "size": 7349
+      },
+      "actual_source_SDK_report": {
+        "path": "refactor_main/reports/p3_PA3_GRC3_root_a9_review/SDK/SDK.json",
+        "sha256": "2694af9e9c462a6b69bf759190789d2378f4795128f74933dbd3a32e672dcc89",
+        "size": 636027
+      },
+      "headers_toolchain_postflight": {
+        "path": "refactor_main/reports/p3_PA3_GRC3_root_a9_review/SDK/postflight.json",
+        "sha256": "4d33f4bda11a42afea428c62cf74fabfbd16070cca06739e627a9ccd22065091",
+        "size": 754
+      },
+      "new_NPU_or_performance_execution": false,
+      "old_frozen_delivery_indexes_unchanged": true,
+      "complete_default_source_requests": 1,
+      "actual_new_public_SDK_compiles": 1,
+      "historical_SDK_reuses": 0,
+      "source_difference_scope": "Complete fixed-TA CPP exact after header relocation, two zero-initialized int declaration placements and two single-use pure bool RHS substitutions; no float propagation or new sync; all28 ordered views/ABI equal",
+      "host_ON": 18,
+      "actual_OFF": {
+        "passed": 17,
+        "native_skipped": 1
+      },
+      "full462_catalog_NPU_not_run": true
+    }
+  }
+}
