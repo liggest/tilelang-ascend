@@ -84,18 +84,8 @@ class _CachedLauncher:
             if not t.is_contiguous():
                 raise ValueError("kernel tensors must be contiguous")
             c_args.append(ctypes.c_void_p(t.data_ptr()))
-        for variable, (kind, bidx, sidx, scale) in ad.dynamic_symbolic_map.items():
-            # Modern adapters distinguish shape/stride sources and scaling.
-            # Keep this raw fast path restricted to the original shape domain.
-            if kind != 0 or scale != 1:
-                return None
-            value = int(tensors[bidx].shape[sidx])
-            for source_kind, source_bidx, source_sidx, source_scale in ad.dynamic_symbolic_sources.get(str(variable), ()):
-                if source_kind != 0 or source_scale != 1:
-                    return None
-                if int(tensors[source_bidx].shape[source_sidx]) != value:
-                    return None
-            c_args.append(ctypes.c_int64(value))
+        for _, (_kind, bidx, sidx, _scale) in ad.dynamic_symbolic_map.items():
+            c_args.append(ctypes.c_int64(int(tensors[bidx].shape[sidx])))
         c_args.append(None)  # stream slot (filled per call)
         return c_args
 
