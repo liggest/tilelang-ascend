@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/causal_conv1d/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/causal_conv1d/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # causal_conv1d 算子设计文档
 
 ## 1. 概述
@@ -74,9 +71,9 @@ Expert 模式的优势：
 
 ```python
 pass_configs_config = {
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,  # 自动 CV 分离
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: False,  # 关闭自动同步，手动控制
-    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,  # 开启内存规划
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,   # 自动 CV 分离
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: False,        # 关闭自动同步，手动控制
+    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,   # 开启内存规划
 }
 ```
 
@@ -190,7 +187,7 @@ save0~2:  3 × 512 × 2B = 3KB
 for i in range(num_iterations):
     cur = i % 2           # 当前 stage
     nxt = (i + 1) % 2     # 下一 stage
-
+    
     # Stage N: 计算 cur，预加载 nxt
     T.wait_flag("mte2", "v", cur)        # 等待数据就绪
     [计算 4 个 token]
@@ -245,19 +242,19 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
             num_tokens = T.Select(block_end > block_offset, block_end - block_offset, 0)
             global_start = seq_start + block_offset
             global_end = seq_start + block_end
-
+            
             d_offset = 0  # 当前核处理的维度偏移
-
+            
             # 标志位
             is_first_buf = T.alloc_ub((1,), "int32")
             T.tile.fill(is_first_buf, (block_idx == 0))
             is_last_buf = T.alloc_ub((1,), "int32")
             T.tile.fill(is_last_buf, (block_end >= seqlen))
-
+            
             cache_line = T.Select(batch_id == 0, cache_indices[0], cache_indices[1])
             has_initial = T.Select(batch_id == 0, initial_state_mode[0], initial_state_mode[1])
             hist_base = global_start - hist_len * (block_idx != 0)
-
+            
             # UB buffers
             x_buf = T.alloc_ub((STAGES, BATCH_TOKENS, base_dim), dtype_str)
             y_buf = T.alloc_ub((STAGES, BATCH_TOKENS, base_dim), dtype_str)
@@ -275,19 +272,19 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
             save0 = T.alloc_ub((base_dim,), dtype_str)
             save1 = T.alloc_ub((base_dim,), dtype_str)
             save2 = T.alloc_ub((base_dim,), dtype_str)
-
+            
             # Weight preload
             T.copy(weight[0, d_offset], w0)
             T.copy(weight[1, d_offset], w1)
             T.copy(weight[2, d_offset], w2)
             T.copy(weight[3, d_offset], w3)
             T.barrier_all()
-
+            
             # History initialization
             T.tile.fill(hist0, 0.0)
             T.tile.fill(hist1, 0.0)
             T.tile.fill(hist2, 0.0)
-
+            
             if is_first_buf[0] != 0 and has_initial != 0:
                 # 从 conv_state 加载历史
                 if hist_len >= 1 and symbol_state_len > 0:
@@ -305,7 +302,7 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
                 if hist_len >= 3:
                     T.copy(x[hist_base + 2, d_offset], hist2)
             T.barrier_all()
-
+            
             # Initial state compute
             T.tile.mul(state2, w0, hist2)
             T.tile.mul(state1, w0, hist1)
@@ -316,13 +313,13 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
             T.tile.add(state0, state0, tmp)
             T.tile.mul(tmp, w2, hist2)
             T.tile.add(state0, state0, tmp)
-
+            
             # Pipeline loop
             num_iterations = (num_tokens + 3) // 4
             T.set_flag("mte3", "mte2", 0)
             T.set_flag("mte3", "mte2", 1)
             T.wait_flag("mte3", "mte2", 0)
-
+            
             if num_tokens > 0:
                 # 预加载第一批数据
                 T.copy(x[global_start, d_offset], x_buf[0, 0, :])
@@ -330,12 +327,12 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
                 T.copy(x[global_start + 2, d_offset], x_buf[0, 2, :])
                 T.copy(x[global_start + 3, d_offset], x_buf[0, 3, :])
                 T.set_flag("mte2", "v", 0)
-
+            
             for i in T.serial(num_iterations):
                 cur = i % 2
                 nxt = (i + 1) % 2
                 out_base = global_start + i * 4
-
+                
                 if i < num_iterations - 1:
                     # 预加载下一批数据
                     T.wait_flag("mte3", "mte2", nxt)
@@ -345,9 +342,9 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
                     T.copy(x[next_base + 2, d_offset], x_buf[nxt, 2, :])
                     T.copy(x[next_base + 3, d_offset], x_buf[nxt, 3, :])
                     T.set_flag("mte2", "v", nxt)
-
+                
                 T.wait_flag("mte2", "v", cur)
-
+                
                 # 计算 4 个 token
                 # Token 0
                 T.tile.mul_add_dst(state0, x_buf[cur, 0, :], w3)
@@ -357,7 +354,7 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
                 T.tile.mul(tmp, w1, x_buf[cur, 0, :])
                 T.tile.add(state1, tmp, state2)
                 T.tile.mul(state2, w0, x_buf[cur, 0, :])
-
+                
                 # Token 1
                 T.tile.mul_add_dst(state0, x_buf[cur, 1, :], w3)
                 T.tile.silu(y_buf[cur, 1, :], state0)
@@ -366,7 +363,7 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
                 T.tile.mul(tmp, w1, x_buf[cur, 1, :])
                 T.tile.add(state1, tmp, state2)
                 T.tile.mul(state2, w0, x_buf[cur, 1, :])
-
+                
                 # Token 2
                 T.tile.mul_add_dst(state0, x_buf[cur, 2, :], w3)
                 T.tile.silu(y_buf[cur, 2, :], state0)
@@ -375,7 +372,7 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
                 T.tile.mul(tmp, w1, x_buf[cur, 2, :])
                 T.tile.add(state1, tmp, state2)
                 T.tile.mul(state2, w0, x_buf[cur, 2, :])
-
+                
                 # Token 3
                 T.tile.mul_add_dst(state0, x_buf[cur, 3, :], w3)
                 T.tile.silu(y_buf[cur, 3, :], state0)
@@ -384,10 +381,10 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
                 T.tile.mul(tmp, w1, x_buf[cur, 3, :])
                 T.tile.add(state1, tmp, state2)
                 T.tile.mul(state2, w0, x_buf[cur, 3, :])
-
+                
                 T.set_flag("v", "mte3", cur)
                 T.wait_flag("v", "mte3", cur)
-
+                
                 # 写入输出
                 remain = num_tokens - i * 4
                 if remain >= 1:
@@ -398,12 +395,12 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
                     T.copy(y_buf[cur, 2, :], y[out_base + 2, d_offset])
                 if remain >= 4:
                     T.copy(y_buf[cur, 3, :], y[out_base + 3, d_offset])
-
+                
                 T.set_flag("mte3", "mte2", cur)
-
+            
             T.wait_flag("mte3", "mte2", 0)
             T.wait_flag("mte3", "mte2", 1)
-
+            
             # Conv_state writeback
             if is_last_buf[0] != 0 and seqlen > 0:
                 T.tile.fill(save0, 0.0)
@@ -441,12 +438,12 @@ def _build_kernel(width, dim_num, num_batches, base_dim, dtype_str="float16"):
      T.wait_flag("mte3", "mte2", nxt)  # 等待 buffer 空闲
      T.copy(x[...], x_buf[nxt, ...])    # 加载数据
      T.set_flag("mte2", "v", nxt)       # 数据就绪
-
+  
   2. 计算 (v):
      T.wait_flag("mte2", "v", cur)       # 等待数据就绪
      [计算 4 个 token]
      T.set_flag("v", "mte3", cur)        # 计算完成
-
+  
   3. 写入输出 (mte3):
      T.wait_flag("v", "mte3", cur)       # 等待计算完成
      T.copy(y_buf[...], y[...])          # 写入输出
@@ -530,7 +527,8 @@ T.barrier_all()
 ### 8.1 Golden 函数（PyTorch 参考实现）
 
 ```python
-def causal_conv1d_fn_ref(x, weight, conv_states, cache_indices, cu_seqlens, initial_state_mode, activation="silu"):
+def causal_conv1d_fn_ref(x, weight, conv_states, cache_indices, cu_seqlens, 
+                         initial_state_mode, activation="silu"):
     dtype = x.dtype
     x = x.float()
     weight = weight.float()
@@ -538,7 +536,7 @@ def causal_conv1d_fn_ref(x, weight, conv_states, cache_indices, cu_seqlens, init
     num_batches = cache_indices.size(0)
     hist_len = weight.shape[0] - 1
     y = torch.zeros_like(x)
-
+    
     for b in range(num_batches):
         seq_start = cu_seqlens[b].item()
         seq_end = cu_seqlens[b + 1].item()
@@ -643,11 +641,12 @@ def causal_conv1d_fn_ref(x, weight, conv_states, cache_indices, cu_seqlens, init
 ```python
 _kernel_cache = {}
 
-
 def get_causal_conv1d_fn_pipeline_v15(weight_width, num_batches, dim, dtype_str="float16"):
     cache_key = (weight_width, num_batches, dim, dtype_str)
     if cache_key not in _kernel_cache:
-        _kernel_cache[cache_key] = _build_kernel(weight_width, CORE_NUM, num_batches, dim, dtype_str)
+        _kernel_cache[cache_key] = _build_kernel(
+            weight_width, CORE_NUM, num_batches, dim, dtype_str
+        )
     return _kernel_cache[cache_key]
 ```
 
@@ -681,9 +680,9 @@ def get_causal_conv1d_fn_pipeline_v15(weight_width, num_batches, dim, dtype_str=
 
 ```python
 symbol_cache_lines = T.symbolic("num_cache_lines")  # 缓存行数
-symbol_state_len = T.symbolic("state_len")  # 状态长度
-symbol_dim = T.symbolic("dim")  # 维度
-symbol_total_len = T.symbolic("total_len")  # 总 token 数
+symbol_state_len = T.symbolic("state_len")          # 状态长度
+symbol_dim = T.symbolic("dim")                      # 维度
+symbol_total_len = T.symbolic("total_len")          # 总 token 数
 ```
 
 符号维度允许 kernel 在编译时不需要知道具体大小，运行时动态确定。

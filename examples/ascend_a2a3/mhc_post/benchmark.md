@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/mhc_post/benchmark.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/mhc_post/benchmark.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 **English** | [中文](benchmark_zh.md)
 
 # MHC Post Benchmark & Optimization Path
@@ -136,7 +133,7 @@ output = x * post_layer_mix + comb_res_mix^T @ residual
   1. `set_flag` event id must be a compile-time constant. Passing the `T.serial`
      loop var `i % 2` makes codegen drop the `% 2`, producing a runtime event id
      (`i` = 0,1,2,...) that never pairs up → deadlock. Fix: use a `stages` variable
-     - `T.serial(0, h_num - 1)` + an explicit epilogue so the loop unrolls to
+     + `T.serial(0, h_num - 1)` + an explicit epilogue so the loop unrolls to
      constant 0/1.
   2. `T.tile.mul`'s scalar read (`post_fp32[out_idx]`) emits `PipeBarrier<PIPE_ALL>`,
      and the global barrier forms a deadlock cycle with the flag ring. Fix: replace

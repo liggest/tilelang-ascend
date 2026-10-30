@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/pos_embedding/RotaryPositionEmbedding/README.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/pos_embedding/RotaryPositionEmbedding/README.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # RotaryPositionEmbedding (RoPE)
 
 基于 TileLang DSL 实现的昇腾 NPU 旋转位置编码（Rotary Position Embedding）算子，
@@ -49,14 +46,14 @@ out = x * cos + rotate(x) * sin_signed
 
 ### 1. 环境
 
-```text
+```bash
 source set_env.sh                 # CANN 环境变量
 # 确认依赖：python -c "import tilelang, torch_npu"
 ```
 
 ### 2. 精度测试
 
-```text
+```bash
 cd examples/pos_embedding/RotaryPositionEmbedding
 
 # Golden = CANN 官方算子 (torch_npu.npu_rotary_mul)
@@ -69,7 +66,7 @@ python rope_half_interleaved.py --shape 4 64 128 128 --layout half --dtype float
 
 ### 3. 性能对比
 
-```text
+```bash
 bash bench.sh                                    # 跑默认 shape 组
 bash bench.sh --list                             # 仅列出 shape
 bash bench.sh --shape "4 64 128 128" --layout half   # 单 shape
@@ -81,9 +78,9 @@ bash bench.sh --shape "4 64 128 128" --layout half   # 单 shape
 
 ```python
 pass_configs = {
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,  # 自动 barrier
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,        # 自动 barrier
     tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,  # UB 内存复用
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_SYNC: True,  # Vector/Cube 自动同步
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_SYNC: True,     # Vector/Cube 自动同步
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,  # CV cast 合并
 }
 ```

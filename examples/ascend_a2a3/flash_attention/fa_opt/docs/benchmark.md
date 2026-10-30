@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/flash_attention/fa_opt/docs/benchmark.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/flash_attention/fa_opt/docs/benchmark.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 **English** | [中文](benchmark_zh.md)
 
 Flash Attention is a core operator in Transformer models, and its performance directly impacts model training and inference efficiency.

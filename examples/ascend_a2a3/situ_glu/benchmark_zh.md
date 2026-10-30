@@ -1,5 +1,3 @@
-> 迁移说明：本页保留 TA `463c234ce3087205c092e931207ca87b4cd5494c` 的原始测量、环境与结论；这些历史结果不代表迁移后当前环境已验收。当前文件位于 `examples/ascend_a2a3/situ_glu/`。
-
 **中文** | [English](benchmark.md)
 
 # SituGlu 性能基准

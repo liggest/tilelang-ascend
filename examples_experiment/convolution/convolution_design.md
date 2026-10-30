@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/convolution/convolution_design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/convolution/convolution_design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # conv2d (im2col + GEMM) 算子设计文档
 
 ## 1. 概述
@@ -130,15 +127,17 @@ Input_pad (K_pad, N_pad)        Kernel_pad (M_pad, K_pad)
 
 ```python
 @T.prim_func
-def main(A: T.Tensor((M, K), "float16"), B: T.Tensor((K, N), "float16"), C: T.Tensor((M, N), "float16")):
+def main(A: T.Tensor((M, K), "float16"),
+         B: T.Tensor((K, N), "float16"),
+         C: T.Tensor((M, N), "float16")):
     with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
-        bx = cid // n_num  # M 方向的 block 索引
-        by = cid % n_num  # N 方向的 block 索引
+        bx = cid // n_num        # M 方向的 block 索引
+        by = cid % n_num         # N 方向的 block 索引
 
         # 1. 分配片上缓冲区
-        A_L1 = T.alloc_shared((block_M, block_K), "float16")  # L1/UB
-        B_L1 = T.alloc_shared((block_K, block_N), "float16")  # L1/UB
-        C_L0 = T.alloc_fragment((block_M, block_N), "float")  # L0C (accum)
+        A_L1 = T.alloc_shared((block_M, block_K), "float16")      # L1/UB
+        B_L1 = T.alloc_shared((block_K, block_N), "float16")      # L1/UB
+        C_L0 = T.alloc_fragment((block_M, block_N), "float")       # L0C (accum)
 
         # 2. K 方向分块迭代累加
         loop_k = T.ceildiv(K, block_K)
@@ -283,13 +282,13 @@ GM[Input]  ──T.copy──► L1/UB[B_L1] ────────┘        
 ### 5.2 Block 划分
 
 ```python
-block_M = 128  # M 方向分块，匹配 L0C 容量：128×128×4B = 64KB = L0C 容量
-block_N = 128  # N 方向分块，匹配 L0C 容量
-block_K = 128  # K 方向分块，匹配 L0A/L0B 容量：128×128×2B = 32KB（L0A/L0B 各 64KB）
+block_M = 128   # M 方向分块，匹配 L0C 容量：128×128×4B = 64KB = L0C 容量
+block_N = 128   # N 方向分块，匹配 L0C 容量
+block_K = 128   # K 方向分块，匹配 L0A/L0B 容量：128×128×2B = 32KB（L0A/L0B 各 64KB）
 
-m_num = M // block_M  # M 方向 block 数
-n_num = N // block_N  # N 方向 block 数
-block_num = m_num * n_num  # 总 block 数 = Cube 核数
+m_num = M // block_M          # M 方向 block 数
+n_num = N // block_N          # N 方向 block 数
+block_num = m_num * n_num     # 总 block 数 = Cube 核数
 loop_k = T.ceildiv(K, block_K)  # K 方向迭代次数
 ```
 
@@ -331,8 +330,8 @@ loop_k = T.ceildiv(K, block_K)  # K 方向迭代次数
 ```python
 # Block 级并行（隐式，由 T.Kernel 管理）
 with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
-    bx = cid // n_num  # M 方向 block 索引: [0, m_num)
-    by = cid % n_num  # N 方向 block 索引: [0, n_num)
+    bx = cid // n_num           # M 方向 block 索引: [0, m_num)
+    by = cid % n_num            # N 方向 block 索引: [0, n_num)
 
     # K 方向串行迭代累积
     for k in T.serial(T.ceildiv(K, block_K)):
@@ -356,14 +355,14 @@ copy 下一块 → gemm 计算当前块（隐式重叠）。
 
 ```python
 # 在 conv_im2col_gemm 中（主机侧）：
-M_pad = ((M + block_M - 1) // block_M) * block_M  # 向上舍入到 128 倍数
+M_pad = ((M + block_M - 1) // block_M) * block_M    # 向上舍入到 128 倍数
 N_pad = ((N + block_N - 1) // block_N) * block_N
 K_pad = ((K + block_K - 1) // block_K) * block_K
 
 # 对短边 zero-padding
 if need_pad:
-    kernel_padded[:M, :K] = kernel_flat  # 其余为 0
-    input_padded[:K, :N] = input_flat  # 其余为 0
+    kernel_padded[:M, :K] = kernel_flat       # 其余为 0
+    input_padded[:K, :N] = input_flat         # 其余为 0
     func = matmul(M_pad, N_pad, K_pad, ...)
 
 # GEMM 后裁剪
@@ -394,9 +393,9 @@ output = output[:M, :N]
 
 ```python
 pass_configs = {
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,  # 自动 Cube/Vector 核分离
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,  # 自动同步（T.copy ↔ T.gemm_v0）
-    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,  # 自动内存复用规划
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,   # 自动 Cube/Vector 核分离
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,         # 自动同步（T.copy ↔ T.gemm_v0）
+    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,   # 自动内存复用规划
 }
 ```
 
@@ -417,10 +416,10 @@ pass_configs = {
 ```python
 import torch.nn.functional as F
 
-
 def golden_conv2d(input_tensor, kernel, stride=1, padding=0):
     """基于 PyTorch Conv2d 的参考实现"""
-    return F.conv2d(input_tensor.cpu(), kernel.cpu(), stride=stride, padding=padding).npu()
+    return F.conv2d(input_tensor.cpu(), kernel.cpu(),
+                     stride=stride, padding=padding).npu()
 ```
 
 ### 9.2 测试用例

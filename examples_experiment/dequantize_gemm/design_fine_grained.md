@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/dequantize_gemm/design_fine_grained.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/dequantize_gemm/design_fine_grained.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # dequantize_gemm (Unsigned INT4) 算子设计文档
 
 ## 1. 概述
@@ -78,7 +75,7 @@ i8 = int8(u4)         // 范围 0-15
 #### FP16 模式（Developer）
 
 ```python
-pass_configs = {
+pass_configs={
     tl.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
     tl.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
     tl.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,
@@ -89,7 +86,7 @@ pass_configs = {
 #### INT8 模式（Developer）
 
 ```python
-pass_configs = {
+pass_configs={
     tl.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
     tl.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
     tl.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,
@@ -194,17 +191,19 @@ def torch_unpack_uint4_to_fp16(tensor: torch.Tensor) -> torch.Tensor:
 
 ```python
 @T.prim_func
-def main(A: T.Tensor((M, K), "float16"), B: T.Tensor((K, N), "float16"), C: T.Tensor((M, N), "float16")):
+def main(A: T.Tensor((M, K), "float16"),
+         B: T.Tensor((K, N), "float16"),
+         C: T.Tensor((M, N), "float16")):
     with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
         A_L1 = T.alloc_shared((block_M, block_K), "float16")
         B_L1 = T.alloc_shared((block_K, block_N), "float16")
         C_L0 = T.alloc_fragment((block_M, block_N), "float")
-
+        
         for k in T.serial(K // block_K):
             T.copy(A[bx * block_M, k * block_K], A_L1)
             T.copy(B[k * block_K, by * block_N], B_L1)
             T.gemm_v0(A_L1, B_L1, C_L0, init=(k == 0))
-
+        
         T.copy(C_L0, C[bx * block_M, by * block_N])
 ```
 
@@ -212,17 +211,19 @@ def main(A: T.Tensor((M, K), "float16"), B: T.Tensor((K, N), "float16"), C: T.Te
 
 ```python
 @T.prim_func
-def main(A: T.Tensor((M, K), "int8"), B: T.Tensor((K, N), "int8"), C: T.Tensor((M, N), "int32")):
+def main(A: T.Tensor((M, K), "int8"),
+         B: T.Tensor((K, N), "int8"),
+         C: T.Tensor((M, N), "int32")):
     with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
         A_L1 = T.alloc_shared((block_M, block_K), "int8")
         B_L1 = T.alloc_shared((block_K, block_N), "int8")
         C_L0 = T.alloc_fragment((block_M, block_N), "int32")
-
+        
         for k in T.serial(K // block_K):
             T.copy(A[bx * block_M, k * block_K], A_L1)
             T.copy(B[k * block_K, by * block_N], B_L1)
             T.gemm_v0(A_L1, B_L1, C_L0, init=(k == 0))
-
+        
         T.copy(C_L0, C[bx * block_M, by * block_N])
 ```
 
@@ -258,7 +259,6 @@ def ref_program_fp16(A: torch.Tensor, B_packed: torch.Tensor):
     C_fp32 = torch.matmul(A_fp32, B_fp32.T)
     return C_fp32.to(torch.float16)
 
-
 def ref_program_int8(A: torch.Tensor, B_packed: torch.Tensor):
     B_int8 = torch_unpack_uint4_to_int8(B_packed)
     A_int32 = A.to(torch.int32)
@@ -280,7 +280,7 @@ def ref_program_int8(A: torch.Tensor, B_packed: torch.Tensor):
 
 ## 9. 运行命令
 
-```text
+```bash
 # 设置环境
 source set_env.sh
 

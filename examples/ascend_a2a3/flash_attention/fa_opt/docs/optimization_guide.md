@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/flash_attention/fa_opt/docs/optimization_guide.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/flash_attention/fa_opt/docs/optimization_guide.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # CV Fusion Operator Performance Analysis and Tuning Methods
 
 [中文](optimization_guide_zh.md) | **English**
@@ -29,16 +26,16 @@ CANN provides a built-in performance analysis tool `msprof` that supports two mo
 
 ### 1.2 Collecting Performance Data
 
-```text
+```bash
 msprof op --kernel-name="main_kernel" --output=<output_path> python3 xxx.py
 ```
 
 **Example Scripts**:
-- [Batch Testing Script](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/flash_attention/fa_opt/bench.sh)
+- [Batch Testing Script](../bench.sh)
 
 ### 1.3 Collecting Pipeline Diagrams (Simulator Mode)
 
-```text
+```bash
 msprof op simulator --soc-version=Ascend910B4 --kernel-name="main_kernel" --output=<output_path> python3 xxx.py
 ```
 
@@ -103,7 +100,7 @@ Taking FA operator as an example, this section introduces the overall approach f
 Serial Mode:
   Block0: [MTE2][VEC][MTE3]
   Block1:        ----------[MTE2][VEC][MTE3]
-
+  
 Double Buffer:
   Block0: [MTE2][VEC][MTE3]
   Block1:   [MTE2][VEC][MTE3]
@@ -122,7 +119,7 @@ Reduce the number of data transfers between GM and L1.
 
 **Code Example (Large Reuse)**:
 ```python
-T.copy(Q[bz, by, bx * block_M : (bx + 1) * block_M, :], q_l1)
+T.copy(Q[bz, by, bx * block_M:(bx + 1) * block_M, :], q_l1)
 for k in T.Pipelined(T.ceildiv(seq_len, block_N), num_stages=num_stages):
     for n_i in T.serial(n_num):
         T.copy(K[bz, by, k * block_N + n_i * block_K : k * block_N + (n_i + 1) * block_K, :], k_l1)
@@ -330,5 +327,5 @@ Performance below expectations
 ## Appendix: Related Resources
 
 - [T.pipelined Detailed Tutorial](https://github.com/tile-ai/tilelang-ascend/blob/ascendc_pto/docs/tutorials/t_pipelined.md)
-- [TileLang-Ascend Programming Guide](../../../../../docs/ascend_a2a3/TileLang-Ascend%20Programming%20Guide.md)
+- [TileLang-Ascend Programming Guide](../../../../../docs/ascend_a2a3/TileLang-Ascend Programming Guide.md)
 - [MindStudio Insight Download](https://gitcode.com/Ascend/msinsight/releases/tag_MindStudio_26.0.0-alpha.1)

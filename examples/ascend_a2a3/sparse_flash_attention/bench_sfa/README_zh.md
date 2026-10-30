@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/sparse_flash_attention/bench_sfa/README_zh.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/sparse_flash_attention/bench_sfa/README_zh.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 
 [English](README.md) | **中文**
 
@@ -39,6 +36,7 @@ act_kv_s 固定为 2560，sparse_size 固定为 2048，实际参与计算的有�
 
 *注： AscendC 参考实现来源：* https://gitcode.com/cann/cann-recipes-infer/blob/master/ops/ascendc/torch_ops_extension/custom_ops/converter/npu_sparse_flash_attention.py
 
+
 ## 📖文件说明
 ```
 ├── sparse_flash_attn_pa_baseline.py            # 基线版本
@@ -53,10 +51,10 @@ act_kv_s 固定为 2560，sparse_size 固定为 2048，实际参与计算的有�
 
 | 文件 | Fixed Core    | s2切分大小    | kv gather与连续搬出 | 异步拷贝/核内手动同步 | 搬入搬出 Ping-Pong | CV pipeline   |  Broadcast优化 | AXPY优化 |  性能数据（A3） |
 |----- |:-----------:  | :----------: | :----------------: | :-----------------: | :---------------: | :-----------: | :-----------: | :------: | :------------: |
-|[sparse_flash_attn_pa_baseline.py](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_baseline.py)             | √ | 64  | × | × | × | × | × | × | 602us |
-|[sparse_flash_attn_pa_developer.py](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_developer.py)           | √ | 64  | √ | × | × | × | √ | × | 347us |
-|[sparse_flash_attn_pa.py](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa.py)                               | √ | 64  | √ | √ | √ | √ | √ | √ | 127us |
-|[sparse_flash_attn_pa_no_cv_pipeline.py](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/sparse_flash_attention/bench_sfa/sparse_flash_attn_pa_no_cv_pipeline.py) | √ | 256 | √ | √ | √ | × | √ | √ | 109us |
+|[sparse_flash_attn_pa_baseline.py](./sparse_flash_attn_pa_baseline.py)             | √ | 64  | × | × | × | × | × | × | 602us |
+|[sparse_flash_attn_pa_developer.py](./sparse_flash_attn_pa_developer.py)           | √ | 64  | √ | × | × | × | √ | × | 347us |
+|[sparse_flash_attn_pa.py](./sparse_flash_attn_pa.py)                               | √ | 64  | √ | √ | √ | √ | √ | √ | 127us |
+|[sparse_flash_attn_pa_no_cv_pipeline.py](./sparse_flash_attn_pa_no_cv_pipeline.py) | √ | 256 | √ | √ | √ | × | √ | √ | 109us |
 
 ## 📄使用方法
 
@@ -64,4 +62,4 @@ act_kv_s 固定为 2560，sparse_size 固定为 2048，实际参与计算的有�
 ```Python
 python bench_sfa.py --file="sparse_flash_attn_pa_baseline"
 ```
-- --file：支持sparse_flash_attn_pa_baseline、sparse_flash_attn_pa_developer、sparse_flash_attn_pa和sparse_flash_attn_pa_no_cv_pipeline。
+* --file：支持sparse_flash_attn_pa_baseline、sparse_flash_attn_pa_developer、sparse_flash_attn_pa和sparse_flash_attn_pa_no_cv_pipeline。

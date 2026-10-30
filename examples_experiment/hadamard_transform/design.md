@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/hadamard_transform/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/hadamard_transform/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # Hadamard 变换算子设计文档
 
 ## 1. 概述
@@ -228,7 +225,10 @@ def hadamard_transform_complete(b, n, dtype="float", block_size=1024):
     log_block = int(math.log2(block_size))
 
     kernel_intra = hadamard_block_intra(b, n, block_size, dtype)
-    cross_kernels = [hadamard_cross_block_pair(b, n, block_size, stage, dtype) for stage in range(log_block, log_n)]
+    cross_kernels = [
+        hadamard_cross_block_pair(b, n, block_size, stage, dtype)
+        for stage in range(log_block, log_n)
+    ]
 
     def full_transform(x):
         y = kernel_intra(x)
@@ -331,9 +331,9 @@ pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,
 }
 
-
 @tilelang.jit(out_idx=[1], pass_configs=pass_configs)
-def hadamard_block_intra(b, n, block_size, dtype="float"): ...
+def hadamard_block_intra(b, n, block_size, dtype="float"):
+    ...
 ```
 
 ---
@@ -367,7 +367,7 @@ total_blocks = b * num_blocks_per_batch  # each Block processes block_size eleme
 - **对齐约束**: n、block_size 必须是 2 的幂次，n % block_size == 0 ✓
 - **UB 容量**: 块内 kernel data_ub = block_size * elem_size
   - block_size=1024, float32: 1024 * 4 = 4KB，远小于 192KB UB
-  - 跨块 kernel: 3 *half* elem_size，half = chunk_size / 2
+  - 跨块 kernel: 3 * half * elem_size，half = chunk_size / 2
 - **L0 容量**: 无 Cube 计算，不适用
 - **Ascend Block 模型**: 每个 Block 由 cid 标识，vid 取 0/1，用 `vid == 0` 守卫执行
 
@@ -403,7 +403,7 @@ total_blocks = b * num_blocks_per_batch  # each Block processes block_size eleme
 
 **Intra-block butterfly core logic**:
 ```python
-for stage in T.serial(log_block):  # log_block = log2(block_size)
+for stage in T.serial(log_block):       # log_block = log2(block_size)
     chunk_size = 1 << (stage + 1)
     chunk_num = block_size // chunk_size
     for chunk_idx in T.serial(chunk_num):
@@ -480,7 +480,6 @@ pass_configs = {
 def ref_hadamard(x: torch.Tensor):
     """Reference implementation based on scipy"""
     import scipy.linalg
-
     assert x.ndim == 2
     dim = x.shape[-1]
     assert is_pow_of_2(dim)
@@ -618,7 +617,7 @@ examples/hadamard_transform/
 Stage 1 (Kernel 1): first 10 butterfly stages (intra-block)
   Block 0: processes elements 0-1023
   Block 1: processes elements 1024-2047
-
+  
 Stage 2 (Kernel 2): 11th butterfly stage (cross-block)
   elements 0-1023 paired with elements 1024-2047 for butterfly
   a[i] + b[i], a[i] - b[i]
@@ -643,8 +642,8 @@ def hadamard_cross_block_pair(b, n, block_size, cross_stage, dtype):
 | 范围 | Kernel 调用次数 | 性能特点 |
 |------|----------------|---------|
 | n ≤ block_size | 1 次 | 高效，单 kernel 完成 |
-| n = 2 *block_size | 2 次 | 块内 + 1 级跨块 |
-| n = 4* block_size | 3 次 | 块内 + 2 级跨块 |
+| n = 2 * block_size | 2 次 | 块内 + 1 级跨块 |
+| n = 4 * block_size | 3 次 | 块内 + 2 级跨块 |
 | n = 8 * block_size | 4 次 | 块内 + 3 级跨块 |
 
 ### 后续优化方向

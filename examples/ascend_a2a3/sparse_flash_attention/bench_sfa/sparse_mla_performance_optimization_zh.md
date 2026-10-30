@@ -1,6 +1,4 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/sparse_flash_attention/bench_sfa/sparse_mla_performance_optimization_zh.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/sparse_flash_attention/bench_sfa/sparse_mla_performance_optimization_zh.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
 
-<!-- TA RESOURCE BODY -->
 
 # 用TileLang-Ascend编写高性能SparseMLA算子
 
@@ -9,6 +7,7 @@
 ## 1. 背景
 
 SparseMLA 是 DeepSeek v3.2 中引入的核心注意力机制，本文讨论Paged Attention版本SparseMLA算子在TileLang-Ascend的实现与优化。
+
 
 ## 2. 测试输入
 
@@ -36,12 +35,16 @@ act_kv_s 固定为 2560，sparse_size 固定为 2048，实际参与计算的有�
 
 ## 3. 性能结果
 
+
 |  | shape0 | shape1 | shape2 | 平均耗时(us) | AscendC / TileLang |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | AscendC  | 98.000 | 99.000 | 100.000 | 99.000 | 1.00x |
 | TileLang | 109.760 | 109.100 | 108.980 | 109.280 | 0.91x |
 
 *注： AscendC 参考实现来源：* https://gitcode.com/cann/cann-recipes-infer/blob/master/ops/ascendc/torch_ops_extension/custom_ops/converter/npu_sparse_flash_attention.py
+
+
+
 
 ## Fixed Core：launch kernel 固定物理计算核
 
@@ -92,8 +95,10 @@ def tl_kernel(
 - **CV 中转显存优化**：Cube-Vector 数据交互所需的 Workspace 被严格限制为 `core_num` 份（24 份），而非 `block_num` 份，从根本上遏制了显存膨胀。
 - **中间数据常驻 L2**：Workspace 分配使中间张量尽可能常驻于片上 L2 Cache，Cube 核写入的结果可被 Vector 核直接从 L2 读取，避免了向 HBM 置换带来的延迟。
 
+
 ## Tiling：切分策略
 Tiling 不仅决定核间负载均衡，还直接影响整体计算效率与任务调度方式。这里主要涉及两个关键维度的切分设计：
+
 
 ### 核间切分
 
@@ -103,12 +108,16 @@ Tiling 不仅决定核间负载均衡，还直接影响整体计算效率与任�
 
 - **Head group 维度分块**：GQA group size `g = q_heads / kv_heads = 128`。由于 `g > m_base_size`，将 Q head 维度按 `m_base_size=16` 切分，得到 `g_block_num = g / m_base_size = 8` 个子块。每个计算核处理 16 个连续的 Q head 子块。
 
+
+
 ### 核内切分
 
 每个物理核在执行单个逻辑任务时，沿 **seq_len_kv（topk）** 维度进一步分块迭代，
 将 `topk=2048` 按 `n_base_size=256` 切分，得到 `n_block_num = ⌈topk / n_base_size⌉ = 8` 次迭代。每次迭代执行一轮完整的 "Gather KV → MM1(QK^T) → Softmax → MM2(PV) → 累加输出" 流程。
 
 提升 `seq_len_kv` 维度分块大小，增加每轮 Gather kv 和 Copy out 的数据规模，有利于提升访存吞吐；同时，增大基本块大小，也能进一步提升cube侧计算效率。
+
+
 
 ## Sparse KV: 稀疏访存优化
 在稀疏场景下，KV 数据在 Global Memory 中呈离散分布，但后续的 Cube 矩阵运算需要连续的内存输入，这里采取了以下机制设计并优化：
@@ -129,11 +138,14 @@ Tiling 不仅决定核间负载均衡，还直接影响整体计算效率与任�
 **优化后流水：**
 ![稀疏访存优化后](figures/v0_sparse_kv_after.png)
 
+
+
 ## Split-K pipelined GEMM v0 implementation: MTE1 与 Cube 流水重叠
 
 在标准的矩阵乘执行过程中，数据需先由 MTE1 从 L1 搬运到 L0A/L0B，随后才交给 Cube 计算单元执行 MMA（矩阵乘加）指令。若按串行逻辑执行，Cube 在等待 MTE1 搬运下一批数据时将完全闲置。`gemm_v0` 模板通过 **K 轴切块 + Ping-Pong 双缓冲 + 细粒度同步** 实现 MTE1 与 Cube 的流水重叠，具体切分如下：
 
 ### Cube 核内切分
+
 
 - **MM1 (Q×K^T) 的 K 维切分**：矩阵乘的 K 维度为 `dim + rope_dim = 512 + 64 = 576`，按 `k_l0_size=64` 切分为 `⌈576/64⌉ = 9` 个子块。L0A/L0B 各申请双份缓冲（`q_l0a[2, 16, 64]`、`kv_l0b[2, 64, 256]`），通过 Ping-Pong 实现 MTE1 搬运与 Cube 计算的流水重叠。
 
@@ -152,6 +164,7 @@ Cube:           [计算 k0] [计算 k1] [计算 k2] ...
 ![alt text](figures/pipelined_gemm.png)
 
 通过 `gemm_v0` 模板，实现了 Cube 核内部 MTE1 访存与 Cube 计算的重叠，成功掩盖了大部分 MTE1 访存延迟。
+
 
 ## CV pipeline: Cube 核与 Vector 核操作 Overlap
 
@@ -172,9 +185,11 @@ A2和A3机器采用Cube核/Vector核分离架构，可以实现 CV 操作overlap
 ## Vectorization: Broadcast 与 AXPY
 在稀疏注意力的实现中，Vector核围绕 Softmax 的动态更新以及输出结果的逐步累加展开。早期实现采用标量获取索引+逐行计算的方式，这种方式引入了额外的scaler计算，同时向量化程度低，无法充分利用vector核的计算能力。
 
+
 - **Broadcast 向量化**：引入 `m_i_broadcast`、`m_i_prev_broadcast`、`sumexp_broadcast` 等中间张量，通过 broadcast 操作将按行更新的状态扩展为与输入张量对齐的形状，从而避免逐行操作，提升向量指令的执行效率。
 
 - **AXPY指令**：在输出张量（`acc_o`）的更新过程中，将“历史结果缩放 + 当前结果累加”这一具有迭代依赖的步骤，重构为连续的向量 `mul` 与 `add` 运算流水，并以 AXPY（a·X + Y）指令的形式完成，减少指令下发与中间访存耗时。
+
 
 ## 6. 总结
 

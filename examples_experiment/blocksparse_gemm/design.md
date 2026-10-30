@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/blocksparse_gemm/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/blocksparse_gemm/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # BlockSparse GEMM 算子设计文档
 
 ## 1. 概述
@@ -123,7 +120,7 @@ def blocksparse_matmul(M, N, K, block_M, block_N, block_K, num_stages, dtype="fl
     m_num = M // block_M
     n_num = N // block_N
     k_num = (K + block_K - 1) // block_K
-
+    
     @T.prim_func
     def block_sparse_matmul(
         A: T.Tensor((M, K), dtype),
@@ -134,26 +131,26 @@ def blocksparse_matmul(M, N, K, block_M, block_N, block_K, num_stages, dtype="fl
         with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
             # 手动索引分解（替代二维 Kernel）
             bx = cid // n_num  # M 维 block 索引
-            by = cid % n_num  # N 维 block 索引
-
+            by = cid % n_num   # N 维 block 索引
+            
             # 分配 buffer（Developer 模式自动映射）
             A_shared = T.alloc_shared((block_M, block_K), dtype)
             B_shared = T.alloc_shared((block_K, block_N), dtype)
             C_local = T.alloc_fragment((block_M, block_N), accum_dtype)
-
+            
             # K 维度迭代循环（条件判断场景使用 T.serial）
             for k in T.serial(k_num):
                 if BlockMask[bx, by, k]:
                     # 数据搬入
                     T.copy(A[bx * block_M, k * block_K], A_shared)
                     T.copy(B[k * block_K, by * block_N], B_shared)
-
+                    
                     # 矩阵乘累加（init=(k==0) 依赖约束 BlockMask[:,:,0]=1）
                     T.gemm_v0(A_shared, B_shared, C_local, init=(k == 0))
-
+            
             # 数据搬出
             T.copy(C_local, C[bx * block_M, by * block_N])
-
+    
     return block_sparse_matmul
 ```
 
@@ -304,7 +301,7 @@ pass_configs = {
 # 默认配置（参考实现）
 block_M = 128  # L0C 容量限制，block_M=128, block_N=128 时 C_local = 128x128 float32 ≈ 64KB
 block_N = 128  # 同 block_M，平衡设计
-block_K = 32  # 较小的 block_K 便于流水线，减少单次搬运数据量
+block_K = 32   # 较小的 block_K 便于流水线，减少单次搬运数据量
 
 # 自动调优配置范围
 block_M_options = [64, 128, 256]
@@ -351,15 +348,15 @@ block_num = m_num * n_num  # 一维 Kernel 总 block 数
 with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
     # 手动索引分解
     bx = cid // n_num  # M 维 block 索引
-    by = cid % n_num  # N 维 block 索引
-
+    by = cid % n_num   # N 维 block 索引
+    
     # K 维度迭代循环
     for k in T.serial((K + block_K - 1) // block_K):
         if BlockMask[bx, by, k]:
             T.copy(A[bx * block_M, k * block_K], A_shared)
             T.copy(B[k * block_K, by * block_N], B_shared)
             T.gemm_v0(A_shared, B_shared, C_local, init=(k == 0))
-
+    
     # 输出
     T.copy(C_local, C[bx * block_M, by * block_N])
 ```
@@ -405,10 +402,10 @@ Developer 模式下，编译器自动插入同步：
 
 ```python
 pass_configs = {
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,  # 自动同步插入
-    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,  # 自动内存规划
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,         # 自动同步插入
+    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,   # 自动内存规划
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: False,  # 无 Vector 核，不启用核间流水线
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_SYNC: False,  # 无 Vector 核，不启用核间同步
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_SYNC: False,     # 无 Vector 核，不启用核间同步
 }
 ```
 
@@ -422,20 +419,20 @@ pass_configs = {
 def ref_program(A, B, BlockMask, block_M, block_N, block_K):
     """
     基于 PyTorch 的参考实现
-
+    
     Args:
         A: (M, K) 输入矩阵，float16
         B: (K, N) 输入矩阵，float16
         BlockMask: (M // block_M, N // block_N, K // block_K) 布尔掩码
         block_M, block_N, block_K: 分块大小
-
+    
     Returns:
         C: (M, N) 输出矩阵，float16
     """
     M, K = A.shape
     _, N = B.shape
     ref_c = torch.zeros((M, N), dtype=torch.float16, device=A.device)
-
+    
     for i in range(M // block_M):
         for j in range(N // block_N):
             accu = torch.zeros((block_M, block_N), dtype=torch.float32, device=A.device)
@@ -448,7 +445,7 @@ def ref_program(A, B, BlockMask, block_M, block_N, block_K):
                     accu += A_block.to(torch.float32) @ B_block.to(torch.float32)
             # 转回 float16 输出
             ref_c[i * block_M : (i + 1) * block_M, j * block_N : (j + 1) * block_N] = accu.to(torch.float16)
-
+    
     return ref_c
 ```
 

@@ -1,20 +1,17 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/dispatch_combine/README.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/dispatch_combine/README.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
-# overview
+# overview 
 
 This document describes how to run the Dispatch operator and the Combine operator in Tilelang.
 
-# Environment Preparation ##
+# Environment Preparation ## 
 
-## Hardware Requirements
+## Hardware Requirements 
 
 - Product Model: Atlas Series: 800I A3、800T A3
 - Operating System: Linux ARM
 
-## Software Dependencies
+## Software Dependencies 
 
-- Driver and Firmware（*.run）: Ascend HDK 25.3.RC1.2。Download Link: [Driver and Firmware Resources](https://www.hiascend.com/hardware/firmware-drivers/community?product=7&model=34&cann=8.3.RC1.alpha003&driver=Ascend+HDK+25.3.RC1.2)
+- Driver and Firmware（*.run）: Ascend HDK 25.3.RC1.2。Download Link: [Driver and Firmware Resources](https://www.hiascend.com/hardware/firmware-drivers/community?product=7&model=34&cann=8.3.RC1.alpha003&driver=Ascend+HDK+25.3.RC1.2) 
    ```
    # example
    Atlas-A3-hdk-npu-firmware_7.8.0.2.212.run
@@ -28,7 +25,7 @@ This document describes how to run the Dispatch operator and the Combine operato
    Ascend-cann-toolkit_8.5.0_linux-aarch64.run
    ```
 - Toolchain:
-  - cmake ≥ 3.19
+  - cmake ≥ 3.19  
   - GLIBC ≥ 2.28
 
 ## Software Package Installation
@@ -36,7 +33,7 @@ This document describes how to run the Dispatch operator and the Combine operato
 1. Install the driver and firmware, install the CANN toolkit package, and install the CANN ops package. (Users can customize the installation paths or use the default ones.)
 
    ```
-   # Install the driver and firmware packages
+   # Install the driver and firmware packages 
    # Install the firmware package first, then the driver package
    chmod +x *.run
    bash Atlas-A3-hdk-npu-firmware_7.8.0.2.212.run --upgrade
@@ -48,7 +45,7 @@ This document describes how to run the Dispatch operator and the Combine operato
    chmod 755 ${install_path}
    chmod 755 ${parent directories path}
    # Install the CANN package
-   ./Ascend-cann-A3-ops_8.5.0_linux-aarch64.run --install --install-path=${install_path}
+   ./Ascend-cann-A3-ops_8.5.0_linux-aarch64.run --install --install-path=${install_path}  
    ./Ascend-cann-toolkit_8.5.0_linux-aarch64.run --install --install-path=${install_path}
    ```
 
@@ -63,15 +60,15 @@ This document describes how to run the Dispatch operator and the Combine operato
 1. Set the environment variables for the CANN packages
 
    ```
-   # User-defined installation path
+   # User-defined installation path  
    source ${install_path}/ascend-toolkit/latest/bin/setenv.bash
    ```
 
 2. Set the environment variables for TileLang and Shmem
 
    ```
-   cd tilelang-ascend
-   bash install_ascend.sh --enable-shmem
+   cd tilelang-ascend   
+   bash install_ascend.sh --enable-shmem   
    source set_env.sh
    source 3rdparty/shmem/install/set_env.sh
    ```
@@ -81,10 +78,10 @@ This document describes how to run the Dispatch operator and the Combine operato
 1. Configure the IP
 
    ```
-   vim tilelang-ascend/examples/dispatch_combine/dispatch_combine_shmem.py
+   vim tilelang-ascend/examples/dispatch_combine/dispatch_combine_shmem.py 
    # Set G_IP_PORT to the local IP address
-   # Replace xxx.xxx.xxx.xxx with the local IP address and xxxx with the port number
-   G_IP_PORT = "tcp://xxx.xxx.xxx.xxx:xxxx"
+   # Replace xxx.xxx.xxx.xxx with the local IP address and xxxx with the port number 
+   G_IP_PORT = "tcp://xxx.xxx.xxx.xxx:xxxx" 
    ```
 
 2. Run the code
@@ -121,7 +118,7 @@ This document describes how to run the Dispatch operator and the Combine operato
 
 # Whole Network Adaptation Strategy:
 
-- Please note that the Tilelang operator may temporarily conflict with the TBE operator. If TBE operators appear in the whole network, they need to be bypassed. <!-- codespell:ignore -->
+- Please note that the Tilelang operator may temporarily conflict with the TBE operator. If TBE operators appear in the whole network, they need to be bypassed.
 - Please note that the currently developed dispatch & combine operators are in non-quantization mode. Quantization should be disabled for the entire network. On this basis, features such as quantization can be further developed to meet specific requirements.
 - For the cross-machine adaptation of the entire network, it should also be carried out in accordance with the aforementioned cross-machine adaptation ideas, including the setting of the attributes of the shmem object, as well as the cross-machine IP and total number of ranks in the entire network, all of which are common adaptation points.
 - The shmem component should avoid repeated initialization and free operations. It is recommended to define a dedicated function (e.g., init_shmem_once()) to initialize shmem exactly once.

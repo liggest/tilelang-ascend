@@ -1,13 +1,10 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/fused_sigmoid_gating_delta_rule/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/fused_sigmoid_gating_delta_rule/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # Fused Sigmoid Gating Delta Rule SSM Scan — 设计文档
 
 ## 功能概述
 
 本算子实现 Mamba-style 线性注意力中的融合 sigmoid 门控 + delta rule 状态更新的多序列扫描计算（SSM Scan）。支持变长序列、多核并行、ping-pong 数据预取，将门控参数（softplus + sigmoid）与 delta rule 状态更新融合在单个 kernel 中执行。
 
-**编程模式**: Expert（显式内存分配 + 手动同步 + `T.tile.xxx` 原语）
+**编程模式**: Expert（显式内存分配 + 手动同步 + `T.tile.xxx` 原语）  
 **目标硬件**: 昇腾 NPU（24 核 Vector）
 
 ---

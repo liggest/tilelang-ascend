@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/chunk_gated_delta_rule/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/chunk_gated_delta_rule/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # chunk_gated_delta_rule 算子设计文档
 
 ## 1. 概述
@@ -264,19 +261,10 @@ hupd_ub_float:    2×64×64×4B = 32768B = 32KB
 ```python
 @tilelang.jit(workspace_idx=[9, 10, 11, 12], pass_configs=pass_configs)
 def chunk_gated_delta_rule_fwd_kernel(
-    N,
-    H,
-    T_total_pad,
-    Hg,
-    K,
-    V,
-    NT_max,
-    BT=64,
-    USE_G=True,
-    STORE_FINAL_STATE=True,
-    SAVE_NEW_VALUE=True,
-    dtype="float16",
-    accum_dtype="float32",
+    N, H, T_total_pad, Hg, K, V, NT_max,
+    BT=64, USE_G=True,
+    STORE_FINAL_STATE=True, SAVE_NEW_VALUE=True,
+    dtype="float16", accum_dtype="float32",
 ):
     V_half = V // 2
 
@@ -346,7 +334,8 @@ def chunk_gated_delta_rule_fwd_kernel(
                             T.copy(ws_h[i_n, i_h, j, :, :], h_state_l1[j, :, :])
                             T.set_flag("mte2", "m", 2)
                             T.wait_flag("mte2", "m", 2)
-                            T.gemm_v0(w_chunk_l1[pid, :, :], h_state_l1[j, :, :], wh_frag[j, :, :], init=True)
+                            T.gemm_v0(w_chunk_l1[pid, :, :], h_state_l1[j, :, :],
+                                       wh_frag[j, :, :], init=True)
                             T.set_flag("m", "fix", 3)
                             T.wait_flag("m", "fix", 3)
                             T.copy(wh_frag[j, :, :], ws_wh[i_n, i_h, j, :, :])
@@ -358,7 +347,8 @@ def chunk_gated_delta_rule_fwd_kernel(
                             T.copy(ws_vnew[i_n, i_h, j, :, :], v_new_l1[j, :, :])
                             T.set_flag("mte2", "m", 4)
                             T.wait_flag("mte2", "m", 4)
-                            T.gemm_v0(k_chunk_l1[pid, :, :], v_new_l1[j, :, :], hupd_frag[j, :, :], transpose_A=True, init=True)
+                            T.gemm_v0(k_chunk_l1[pid, :, :], v_new_l1[j, :, :],
+                                       hupd_frag[j, :, :], transpose_A=True, init=True)
                             T.set_flag("m", "fix", 5)
                             T.wait_flag("m", "fix", 5)
                             T.copy(hupd_frag[j, :, :], ws_hupd[i_n, i_h, j, :, :])
@@ -375,17 +365,17 @@ def chunk_gated_delta_rule_fwd_kernel(
 
                 # 加载初始状态 h0
                 for j in T.serial(2):
-                    T.copy(h0[i_n, i_h, K // 2 * vid : K // 2 * vid + K // 2, j * V_half : (j + 1) * V_half], h_state_ub[j, :, :])
+                    T.copy(h0[i_n, i_h, K // 2 * vid : K // 2 * vid + K // 2,
+                             j * V_half : (j + 1) * V_half], h_state_ub[j, :, :])
 
                 # 预取 chunk 0 的 v/g
                 if NT_i > 0:
                     for j in T.serial(2):
-                        T.copy(
-                            v[bos + BT // 2 * vid : bos + BT // 2 * vid + BT // 2, i_h, j * V_half : (j + 1) * V_half],
-                            v_chunk_ub[0, j, :, :],
-                        )
+                        T.copy(v[bos + BT // 2 * vid : bos + BT // 2 * vid + BT // 2,
+                                 i_h, j * V_half : (j + 1) * V_half], v_chunk_ub[0, j, :, :])
                     if USE_G:
-                        T.copy(g[i_h, bos + BT // 2 * vid : bos + BT // 2 * vid + BT // 2], g_chunk_ub[0, :])
+                        T.copy(g[i_h, bos + BT // 2 * vid : bos + BT // 2 * vid + BT // 2],
+                               g_chunk_ub[0, :])
                     T.set_flag("mte2", "v", 2)
 
                 for i in T.serial(NT_max):
@@ -401,27 +391,30 @@ def chunk_gated_delta_rule_fwd_kernel(
                         if i + 1 < NT_i:
                             for j in T.serial(2):
                                 T.copy(
-                                    v[
-                                        g_start_next + BT // 2 * vid : g_start_next + BT // 2 * vid + BT // 2,
-                                        i_h,
-                                        j * V_half : (j + 1) * V_half,
-                                    ],
+                                    v[g_start_next + BT // 2 * vid :
+                                          g_start_next + BT // 2 * vid + BT // 2,
+                                      i_h, j * V_half : (j + 1) * V_half],
                                     v_chunk_ub[next_pid, j, :, :],
                                 )
                             if USE_G:
                                 T.copy(
-                                    g[i_h, g_start_next + BT // 2 * vid : g_start_next + BT // 2 * vid + BT // 2], g_chunk_ub[next_pid, :]
+                                    g[i_h, g_start_next + BT // 2 * vid :
+                                          g_start_next + BT // 2 * vid + BT // 2],
+                                    g_chunk_ub[next_pid, :]
                                 )
                             T.set_flag("mte2", "v", v_flag_next)
 
                         # 将 h_state 搬运到 workspace，通知 Cube 核
                         for j in T.serial(2):
-                            T.copy(h_state_ub[j, :, :], ws_h[i_n, i_h, j, K // 2 * vid : K // 2 * vid + K // 2, :])
+                            T.copy(h_state_ub[j, :, :],
+                                   ws_h[i_n, i_h, j, K // 2 * vid : K // 2 * vid + K // 2, :])
                             T.set_cross_flag("MTE3", SEM_H_V2C + j)
 
                         # 保存当前 h[t] 到输出
                         for j in T.serial(2):
-                            T.copy(h_state_ub[j, :, :], h[i_n, i, i_h, K // 2 * vid : K // 2 * vid + K // 2, j * V_half : (j + 1) * V_half])
+                            T.copy(h_state_ub[j, :, :],
+                                   h[i_n, i, i_h, K // 2 * vid : K // 2 * vid + K // 2,
+                                     j * V_half : (j + 1) * V_half])
 
                         # 等待 v/g 数据就绪
                         T.wait_flag("mte2", "v", v_flag_pid)
@@ -429,7 +422,10 @@ def chunk_gated_delta_rule_fwd_kernel(
                         # 门控计算
                         if USE_G:
                             # 提取最后一个有效 token 的 gate
-                            g_last = T.if_then_else(i * BT + BT <= T_len, g[i_h, g_start + BT - 1], g[i_h, g_start + T_len - i * BT - 1])
+                            g_last = T.if_then_else(
+                                i * BT + BT <= T_len,
+                                g[i_h, g_start + BT - 1],
+                                g[i_h, g_start + T_len - i * BT - 1])
                             # exp(g_last - g)
                             T.tile.fill(g_exp_ub, g_last)
                             T.set_flag("mte2", "v", 4)
@@ -446,29 +442,35 @@ def chunk_gated_delta_rule_fwd_kernel(
 
                             # v_new = v - w @ h
                             T.wait_cross_flag(SEM_WH_C2V + j)
-                            T.copy(ws_wh[i_n, i_h, j, BT // 2 * vid : BT // 2 * vid + BT // 2, :], wh_ub_float[j, :, :])
+                            T.copy(ws_wh[i_n, i_h, j, BT // 2 * vid :
+                                          BT // 2 * vid + BT // 2, :],
+                                   wh_ub_float[j, :, :])
                             T.set_flag("mte2", "v", 5)
                             T.wait_flag("mte2", "v", 5)
-                            T.tile.sub(v_chunk_ub_float[j, :, :], v_chunk_ub_float[j, :, :], wh_ub_float[j, :, :])
+                            T.tile.sub(v_chunk_ub_float[j, :, :],
+                                       v_chunk_ub_float[j, :, :], wh_ub_float[j, :, :])
 
                             # 保存 v_new 到输出
                             if SAVE_NEW_VALUE:
-                                T.copy(v_chunk_ub_float[j, :, :], v_chunk_ub[pid, j, :, :])
+                                T.copy(v_chunk_ub_float[j, :, :],
+                                       v_chunk_ub[pid, j, :, :])
                                 T.set_flag("v", "mte3", 6)
                                 T.wait_flag("v", "mte3", 6)
                                 T.copy(
                                     v_chunk_ub[pid, j, :, :],
-                                    v_new[
-                                        g_start + BT // 2 * vid : g_start + BT // 2 * vid + BT // 2, i_h, j * V_half : j * V_half + V_half
-                                    ],
+                                    v_new[g_start + BT // 2 * vid :
+                                              g_start + BT // 2 * vid + BT // 2,
+                                          i_h, j * V_half : j * V_half + V_half],
                                 )
 
                             if USE_G:
                                 # v_new *= exp(g_last - g)
-                                T.tile.mul(v_chunk_ub_float[j, :, :], v_chunk_ub_float[j, :, :], g_exp_ub_broc)
+                                T.tile.mul(v_chunk_ub_float[j, :, :],
+                                           v_chunk_ub_float[j, :, :], g_exp_ub_broc)
                                 # h_state *= exp(g_last)
                                 T.copy(h_state_ub[j, :, :], h_state_ub_float[j, :, :])
-                                T.tile.mul(h_state_ub_float[j, :, :], h_state_ub_float[j, :, :], g_last_scalar[0])
+                                T.tile.mul(h_state_ub_float[j, :, :],
+                                           h_state_ub_float[j, :, :], g_last_scalar[0])
                             else:
                                 T.copy(h_state_ub[j, :, :], h_state_ub_float[j, :, :])
 
@@ -478,16 +480,21 @@ def chunk_gated_delta_rule_fwd_kernel(
                             T.copy(v_chunk_ub_float[j, :, :], v_chunk_ub[pid, j, :, :])
                             T.set_flag("v", "mte3", 8)
                             T.wait_flag("v", "mte3", 8)
-                            T.copy(v_chunk_ub[pid, j, :, :], ws_vnew[i_n, i_h, j, BT // 2 * vid : BT // 2 * vid + BT // 2, :])
+                            T.copy(v_chunk_ub[pid, j, :, :],
+                                   ws_vnew[i_n, i_h, j, BT // 2 * vid :
+                                               BT // 2 * vid + BT // 2, :])
                             T.set_cross_flag("MTE3", SEM_VNEW_V2C + j)
 
                         # 等待 h_update 结果：h += k.T @ v_new
                         for j in T.serial(2):
                             T.wait_cross_flag(SEM_HUPD_C2V + j)
-                            T.copy(ws_hupd[i_n, i_h, j, K // 2 * vid : K // 2 * vid + K // 2, :], hupd_ub_float[j, :, :])
+                            T.copy(ws_hupd[i_n, i_h, j, K // 2 * vid :
+                                               K // 2 * vid + K // 2, :],
+                                   hupd_ub_float[j, :, :])
                             T.set_flag("mte2", "v", 9)
                             T.wait_flag("mte2", "v", 9)
-                            T.tile.add(h_state_ub_float[j, :, :], h_state_ub_float[j, :, :], hupd_ub_float[j, :, :])
+                            T.tile.add(h_state_ub_float[j, :, :],
+                                       h_state_ub_float[j, :, :], hupd_ub_float[j, :, :])
                             T.copy(h_state_ub_float[j, :, :], h_state_ub[j, :, :])
 
                         # flush 同步
@@ -497,7 +504,9 @@ def chunk_gated_delta_rule_fwd_kernel(
                 # Epilogue: 存储最终状态 ht
                 if STORE_FINAL_STATE:
                     for j in T.serial(2):
-                        T.copy(h_state_ub[j, :, :], ht[i_n, i_h, K // 2 * vid : K // 2 * vid + K // 2, j * V_half : (j + 1) * V_half])
+                        T.copy(h_state_ub[j, :, :],
+                               ht[i_n, i_h, K // 2 * vid : K // 2 * vid + K // 2,
+                                  j * V_half : (j + 1) * V_half])
 
     return main
 ```
@@ -572,12 +581,14 @@ def chunk_gated_delta_rule_fwd_kernel(
 ### 8.1 Golden 函数（PyTorch 参考实现）
 
 ```python
-def ref_chunk_gated_delta_rule(k, w, u, g=None, initial_state=None, output_final_state=False, chunk_size=64, cu_seqlens=None):
+def ref_chunk_gated_delta_rule(k, w, u, g=None, initial_state=None, 
+                                output_final_state=False, chunk_size=64, 
+                                cu_seqlens=None):
     BT = chunk_size
 
-    k = k.float().squeeze(0)  # [T_total, Hg, K]
-    w = w.float().squeeze(0)  # [T_total, H, K]
-    u = u.float().squeeze(0)  # [T_total, H, V]
+    k = k.float().squeeze(0)       # [T_total, Hg, K]
+    w = w.float().squeeze(0)       # [T_total, H, K]
+    u = u.float().squeeze(0)       # [T_total, H, V]
     g = g.float().squeeze(0) if g is not None else None  # [T_total, H]
     initial_state = initial_state.float().squeeze(0) if initial_state is not None else None  # [N, H, K, V]
 
@@ -598,7 +609,8 @@ def ref_chunk_gated_delta_rule(k, w, u, g=None, initial_state=None, output_final
         NT = (T_len + BT - 1) // BT
 
         for i_h in range(H):
-            h_state = initial_state[i_n, i_h].clone() if initial_state is not None else torch.zeros(K, V, dtype=torch.float32)
+            h_state = (initial_state[i_n, i_h].clone() if initial_state is not None
+                       else torch.zeros(K, V, dtype=torch.float32))
             k_head = i_h // (H // Hg)
 
             for i_t in range(NT):
@@ -639,7 +651,7 @@ def ref_chunk_gated_delta_rule(k, w, u, g=None, initial_state=None, output_final
 
 ### 8.3 命令行接口
 
-```text
+```bash
 python examples/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py \
   --use_g True --use_initial_state False \
   --seqlens 512,512,512,512 --H 8 --Hg 4 --K 128 --V 128
@@ -661,6 +673,7 @@ python examples/chunk_gated_delta_rule/expert_chunk_gated_delta_rule.py \
 | **V = 128 固定** | V_half=64 分半处理，需要 V 为大于 0 的偶数 |
 | **BT = 64 固定** | chunk size 固定，双缓冲 slot 数 = 2 |
 | **Hg ≤ H** | GQA 比例必须满足 |
+
 
 ## 10. 交付清单
 

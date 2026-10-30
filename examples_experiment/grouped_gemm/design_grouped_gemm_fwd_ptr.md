@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/grouped_gemm/design_grouped_gemm_fwd_ptr.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/grouped_gemm/design_grouped_gemm_fwd_ptr.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # Grouped GEMM (Forward_ptr) 算子设计文档
 
 ## 1. 概述
@@ -113,13 +110,13 @@ def grouped_gemm_fwd(batch_sizes_list, K, N, block_M, block_N, block_K, dtype="f
             with T.Scope("C"):
                 loop_k = T.ceildiv(K, block_K)
                 for k in T.serial(loop_k):
-                    T.copy(A[m_start : m_start + block_M, k * block_K : (k + 1) * block_K], A_L1)
-                    T.copy(B[cur_batch_idx, k * block_K : (k + 1) * block_K, by * block_N : (by + 1) * block_N], B_L1)
+                    T.copy(A[m_start:m_start + block_M, k * block_K:(k + 1) * block_K], A_L1)
+                    T.copy(B[cur_batch_idx, k * block_K:(k + 1) * block_K, by * block_N:(by + 1) * block_N], B_L1)
                     T.barrier_all()
                     T.gemm_v0(A_L1, B_L1, C_L0, init=(k == 0))
                     T.barrier_all()
 
-                T.copy(C_L0, C[m_start : m_start + block_M, by * block_N : (by + 1) * block_N])
+                T.copy(C_L0, C[m_start:m_start + block_M, by * block_N:(by + 1) * block_N])
 
     return kernel
 ```
@@ -218,9 +215,9 @@ GM[C] <--T.copy-- L0C[C_L0] ◄────────────────�
 ### 5.2 Block 划分
 
 ```python
-block_M = 64  # M 方向 tile 大小，与 L0C 累加器行维度匹配
+block_M = 64   # M 方向 tile 大小，与 L0C 累加器行维度匹配
 block_N = 128  # N 方向 tile 大小，与 L0C 累加器列维度匹配
-block_K = 64  # K 方向分块大小，控制 L1 缓冲占用
+block_K = 64   # K 方向分块大小，控制 L1 缓冲占用
 total_m_blocks = sum(ceil(M_g / block_M) for g in groups)
 n_num = ceil(N / block_N)
 block_num = total_m_blocks * n_num
@@ -262,7 +259,7 @@ block_num = total_m_blocks * n_num
 ```python
 with T.Kernel(total_m_blocks * n_num, is_npu=True) as (cid, _):
     bx = cid // n_num  # M-tile 索引
-    by = cid % n_num  # N-tile 索引
+    by = cid % n_num   # N-tile 索引
 
     # 查表获取组信息和偏移
     cur_batch_idx = block_metadata[bx, 0]
@@ -277,8 +274,8 @@ with T.Kernel(total_m_blocks * n_num, is_npu=True) as (cid, _):
         loop_k = T.ceildiv(K, block_K)
         for k in T.serial(loop_k):
             # 数据搬入
-            T.copy(A[m_start : m_start + block_M, k * block_K : (k + 1) * block_K], A_L1)
-            T.copy(B[cur_batch_idx, k * block_K : (k + 1) * block_K, by * block_N : (by + 1) * block_N], B_L1)
+            T.copy(A[m_start:m_start + block_M, k * block_K:(k + 1) * block_K], A_L1)
+            T.copy(B[cur_batch_idx, k * block_K:(k + 1) * block_K, by * block_N:(by + 1) * block_N], B_L1)
             T.barrier_all()
 
             # 矩阵乘累加
@@ -286,7 +283,7 @@ with T.Kernel(total_m_blocks * n_num, is_npu=True) as (cid, _):
             T.barrier_all()
 
         # 结果搬出
-        T.copy(C_L0, C[m_start : m_start + block_M, by * block_N : (by + 1) * block_N])
+        T.copy(C_L0, C[m_start:m_start + block_M, by * block_N:(by + 1) * block_N])
 ```
 
 ### 6.3 流水线优化

@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/grouped_gemm/README.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/grouped_gemm/README.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # TileLang Grouped GEMM for Ascend NPU
 
 This example implements **Grouped Matrix Multiplication (Grouped GEMM)** optimized for Ascend NPUs using [TileLang-Ascend](https://github.com/tile-ai/tilelang-ascend).
@@ -9,28 +6,31 @@ It is designed to efficiently handle variable-length sequences (stacked into a s
 
 ## 🚀 Key Features
 
-- **Group-Aligned Tiling**: Tiling strategies respect group boundaries. Computation blocks do not cross between different groups/batches, ensuring isolation and correctness.
-- **Metadata-Driven Indexing**: Uses a pre-computed CPU metadata table to map logical blocks to physical memory addresses, eliminating expensive runtime control flow and logic within the NPU kernel.
+-   **Group-Aligned Tiling**: Tiling strategies respect group boundaries. Computation blocks do not cross between different groups/batches, ensuring isolation and correctness.
+-   **Metadata-Driven Indexing**: Uses a pre-computed CPU metadata table to map logical blocks to physical memory addresses, eliminating expensive runtime control flow and logic within the NPU kernel.
+
+
 
 ## ⚠️ Constraints & Requirements
 
 **Crucial**: The current implementation is a specialized "Aligned Kernel". To ensure maximum performance and avoid hardware memory alignment errors (`ADDR_MISALIGN`), the inputs **must** adhere to the following constraints:
 
-1. **Batch Size Alignment**:
-   - Every element in `batch_sizes_list` must be **divisible by `block_M`**.
-   - *Reason*: The kernel currently does not handle tail/masked writing. It writes full `block_M` rows back to global memory. Partial blocks will cause memory corruption or crashes.
-   - ✅ Valid: `batch_sizes=[128, 64]`, `block_M=64`
-   - ❌ Invalid: `batch_sizes=[100, 70]`, `block_M=64`
+1.  **Batch Size Alignment**:
+    *   Every element in `batch_sizes_list` must be **divisible by `block_M`**.
+    *   *Reason*: The kernel currently does not handle tail/masked writing. It writes full `block_M` rows back to global memory. Partial blocks will cause memory corruption or crashes.
+    *   ✅ Valid: `batch_sizes=[128, 64]`, `block_M=64`
+    *   ❌ Invalid: `batch_sizes=[100, 70]`, `block_M=64`
 
-2. **Dimension Alignment**:
-   - **N** must be **divisible by `block_N`**.
-   - **K** must be **divisible by `block_K`**.
+2.  **Dimension Alignment**:
+    *   **N** must be **divisible by `block_N`**.
+    *   **K** must be **divisible by `block_K`**.
+
 
 ## 🛠 Usage
 
 Run the example script to compile the kernel and verify correctness against a PyTorch reference implementation:
 
-```text
+```shell
 cd examples/grouped_gemm/
 python example_grouped_gemm_fwd.py
 ```

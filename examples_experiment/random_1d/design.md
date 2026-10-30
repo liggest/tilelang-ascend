@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/random_1d/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/random_1d/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # random_1d 算子设计文档
 
 ## 1. 概述
@@ -90,7 +87,7 @@ Developer 模式的优势：
 ```python
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,  # 自动融合 mul+add
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,  # 自动插入 barrier
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,        # 自动插入 barrier
     tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,  # 自动内存规划
 }
 ```
@@ -133,11 +130,11 @@ pass_configs = {
 **TileLang API：第一个参数是 dst**
 
 ```python
-T.tile.add(dst, src0, src1)  # dst = src0 + src1  ✓ 正确
-T.tile.mul(dst, src0, src1)  # dst = src0 * src1  ✓ 正确
+T.tile.add(dst, src0, src1)   # dst = src0 + src1  ✓ 正确
+T.tile.mul(dst, src0, src1)   # dst = src0 * src1  ✓ 正确
 
 # 错误示例（常见错误）：
-T.tile.add(src0, src1, dst)  # ❌ dst 在最后是错误的！
+T.tile.add(src0, src1, dst)   # ❌ dst 在最后是错误的！
 ```
 
 ---
@@ -196,7 +193,7 @@ seed_ub:      128×4B = 512B
 
 计算阶段：
   idx_ub + seed_ub → state_ub                # state = global_idx + seed（向量化）
-
+  
   LCG 循环（3轮，向量化）：
     state_ub × a_ub → temp_ub                # temp = state × A
     temp_ub + c_ub → state_ub                # state = temp + C
@@ -290,7 +287,7 @@ def random_1d(M, block_size, seed, lcg_a, lcg_c):
                 T.tile.add(state_ub, temp_ub, c_ub)
 
             base_offset = cid * TOTAL_BLOCK_SIZE + vid * block_size
-            T.copy(state_ub, output[base_offset : base_offset + block_size])
+            T.copy(state_ub, output[base_offset:base_offset + block_size])
 
     return main
 ```
@@ -319,7 +316,7 @@ for i in T.serial(block_size):
     output[base_offset + i] = state_ub[i]
 
 # 当前版本：批量写回（高效）
-T.copy(state_ub, output[base_offset : base_offset + block_size])
+T.copy(state_ub, output[base_offset:base_offset + block_size])
 ```
 
 **性能提升**：
@@ -398,7 +395,7 @@ def reference_random_1d(M, seed):
 
 ### 8.3 命令行接口
 
-```text
+```bash
 # 默认配置
 python examples/random/random_1d.py
 
@@ -583,7 +580,7 @@ for i in T.serial(128):
     output[base + i] = state_ub[i]
 
 # 高效版本（17倍性能提升）
-T.copy(state_ub, output[base : base + 128])
+T.copy(state_ub, output[base:base + 128])
 ```
 
 **2. 自动同步替代手动 barrier**：

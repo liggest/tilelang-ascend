@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/aclgraph/README.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/aclgraph/README.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # Using AclGraph Mode in TileLang
 
 This example demonstrates how to combine TileLang operators with `torch.npu.NPUGraph` (AclGraph), using the Graph Capture mechanism to fuse multiple operators for execution, reducing kernel launch overhead and improving end-to-end performance.
@@ -18,20 +15,20 @@ When multiple TileLang operators need to be executed sequentially (e.g., RMS Nor
 
 ### Run the Example
 
-```text
+```bash
 # Run with default parameters
 python rms_rope_aclgraph.py
 ```
 
 ## Code Walkthrough
 
-Using [rms_rope_aclgraph.py](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/aclgraph/rms_rope_aclgraph.py) as an example, the complete workflow consists of three steps: **Define operators → Graph capture → Graph replay**.
+Using [rms_rope_aclgraph.py](rms_rope_aclgraph.py) as an example, the complete workflow consists of three steps: **Define operators → Graph capture → Graph replay**.
 
 ### Step 1: Configure Compilation Options
 
 ```python
 import tilelang
-import tilelang.language as T
+import tilelang.ascend.a2a3.language as T
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
@@ -73,7 +70,6 @@ def rms_norm_kernel(M, head_dim, block_M, eps, dtype="float16"):
             for i in T.serial(0, row_per_vec):
                 T.tile.div(x_ub_fp32[i, :], x_ub_fp32[i, :], rms_ub[i])
             T.copy(x_ub, out[row_x : row_x + row_per_vec, :])
-
     return main_rms
 ```
 
@@ -97,7 +93,6 @@ def rope_kernel_in_place(M, block_M, batch_size, hidden_size, rope_dim, head_num
         with T.Kernel(m_num, is_npu=True) as (cid, vid):
             # Modify x in-place, no extra output Tensor needed
             ...
-
     return main_rope
 ```
 
@@ -113,8 +108,8 @@ g = torch.npu.NPUGraph()
 
 # 2. Capture the operator call sequence
 with torch.npu.graph(g):
-    q = tilelang_rms_norm(q, variance_epsilon)  # RMS Norm
-    q = tilelang_apply_rope(q, sin, cos)  # RoPE
+    q = tilelang_rms_norm(q, variance_epsilon)   # RMS Norm
+    q = tilelang_apply_rope(q, sin, cos)          # RoPE
 
 # 3. Replay execution (can be called multiple times)
 g.replay()
@@ -137,7 +132,7 @@ torch.testing.assert_close(q, q_ref, rtol=1e-2, atol=1e-2)
 
 Check the info-level Host compilation logs and search for the `capture model` keyword. A value of 0 (default) means AclGraph mode is disabled; a value of 1 means it is enabled. Configure the environment variables as follows:
 
-```text
+```bash
 export ASCEND_HOST_LOG_FILE_NUM=1000
 export ASCEND_PROCESS_LOG_PATH=logs
 export ASCEND_GLOBAL_LOG_LEVEL=1

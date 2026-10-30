@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/flash_attention/fa_opt/expert_v2/README.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/flash_attention/fa_opt/expert_v2/README.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # Expert v2：先搭好流水，再找到值得改的地方
 
 这个示例计算完整的非因果 attention：先用 query 与 key 的点积得到分数，再用 softmax
@@ -9,7 +6,7 @@
 
 在昇腾上，矩阵乘法由 Cube 单元完成，softmax 和输出更新由 Vector 单元完成。
 优化的目标不只是让某一步更快，还要让这两类计算与内存搬运尽量同时推进。
-下面说明 [`kernel.py`](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/flash_attention/fa_opt/expert_v2/kernel.py) 为什么最终保留普通 FP32 归约和三个工作区槽。
+下面说明 [`kernel.py`](kernel.py) 为什么最终保留普通 FP32 归约和三个工作区槽。
 
 ## 1. 分块以后，还要让各道工序接得上
 
@@ -94,7 +91,7 @@ FP16；运行统计量、输出贡献工作区和输出累加为 FP32。它支�
 
 运行一个较小的正确性用例：
 
-```text
+```bash
 source ./set_env.sh
 python examples/flash_attention/fa_opt/expert_v2/kernel.py \
   --B 1 --S 4096 --q-heads 12 --kv-heads 1 --D 128

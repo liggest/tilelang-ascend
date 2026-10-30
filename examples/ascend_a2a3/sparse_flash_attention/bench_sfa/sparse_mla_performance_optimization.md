@@ -1,6 +1,4 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/sparse_flash_attention/bench_sfa/sparse_mla_performance_optimization.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/sparse_flash_attention/bench_sfa/sparse_mla_performance_optimization.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
 
-<!-- TA RESOURCE BODY -->
 
 # Writing High-Performance SparseMLA Operator with TileLang-Ascend
 
@@ -92,8 +90,10 @@ By constraining computation tasks to a fixed number of physical cores via `T.Ker
 - **CV Relay Memory Optimization**: The Workspace required for Cube-Vector data interaction is strictly limited to `core_num` copies (24 copies) instead of `block_num` copies, fundamentally curbing memory inflation.
 - **Intermediate Data Resident in L2**: The Workspace allocation keeps intermediate tensors resident in the on-chip L2 Cache as much as possible. Results written by the Cube core can be directly read by the Vector core from L2, avoiding the latency caused by swapping to HBM.
 
+
 ## Tiling: Split Strategy
 Tiling not only determines the inter-core load balance but also directly affects overall computational efficiency and task scheduling. It mainly involves two key dimensions of split design:
+
 
 ### Inter-Core Splitting
 
@@ -103,12 +103,16 @@ Taking the test input parameters as an example (`q_heads=128, kv_heads=1, m_base
 
 - **Head group dimension blocking**: GQA group size `g = q_heads / kv_heads = 128`. Since `g > m_base_size`, the Q head dimension is split by `m_base_size=16`, yielding `g_block_num = g / m_base_size = 8` sub-blocks. Each compute core processes 16 consecutive Q head sub-blocks.
 
+
+
 ### Intra-Core Splitting
 
 Each physical core, when executing a single logical task, further iterates in blocks along the **seq_len_kv (topk)** dimension.
 `topk=2048` is split by `n_base_size=256`, yielding `n_block_num = ⌈topk / n_base_size⌉ = 8` iterations. Each iteration executes a complete round of "Gather KV → MM1(QK^T) → Softmax → MM2(PV) → Accumulate Output".
 
 Increasing the block size of the `seq_len_kv` dimension enlarges the data scale of each round of Gather KV and Copy Out, which helps to improve memory access throughput. At the same time, enlarging the basic block size can further improve Cube-side computational efficiency.
+
+
 
 ## Sparse KV: Sparse Memory Access Optimization
 In sparse scenarios, KV data is discretely distributed in Global Memory, but subsequent Cube matrix operations require continuous memory input. The following mechanism design and optimization are adopted here:
@@ -129,11 +133,14 @@ The actual pipelines before and after the final optimization of this sample are 
 **Pipeline after optimization:**
 ![After Sparse Memory Access Optimization](figures/v0_sparse_kv_after.png)
 
+
+
 ## Split-K pipelined GEMM v0 implementation: MTE1 and Cube Pipeline Overlap
 
 In standard matrix multiplication execution, data must first be carried from L1 to L0A/L0B by MTE1 before being handed to the Cube compute unit for MMA (matrix multiply-accumulate) instruction execution. If executed in serial logic, the Cube sits completely idle while waiting for MTE1 to carry the next batch of data. The `gemm_v0` template achieves MTE1 and Cube pipeline overlap through **K-axis blocking + Ping-Pong double buffering + fine-grained synchronization**, with the following specific splits:
 
 ### Cube Intra-Core Splitting
+
 
 - **K-dimension splitting of MM1 (Q×K^T)**: The K dimension of the matrix multiplication is `dim + rope_dim = 512 + 64 = 576`, split by `k_l0_size=64` into `⌈576/64⌉ = 9` sub-blocks. L0A/L0B each allocate double buffers (`q_l0a[2, 16, 64]`, `kv_l0b[2, 64, 256]`), achieving MTE1 transport and Cube computation pipeline overlap through Ping-Pong.
 
@@ -152,6 +159,7 @@ Pipeline after optimization:
 ![alt text](figures/pipelined_gemm.png)
 
 Through the `gemm_v0` template, MTE1 memory access and Cube computation inside the Cube core are overlapped, successfully hiding most of the MTE1 memory access latency.
+
 
 ## CV pipeline: Overlap Operations of Cube Core and Vector Core
 
@@ -172,9 +180,11 @@ The actual pipelines before and after the final optimization of this sample are 
 ## Vectorization: Broadcast and AXPY
 In the implementation of sparse attention, the Vector core pivots around the dynamic update of Softmax and the progressive accumulation of output results. Early implementations used scalar index acquisition and row-by-row calculation, which introduced additional scalar computation, provided low vectorization levels, and failed to fully utilize the computing capability of the Vector core.
 
+
 - **Broadcast Vectorization**: Introduction of intermediate tensors such as `m_i_broadcast`, `m_i_prev_broadcast`, and `sumexp_broadcast` expands row-by-row updated states into shapes aligned with the input tensors via broadcast operations, avoiding row-wise operations and enhancing the execution efficiency of vector instructions.
 
 - **AXPY Instructions**: During the output tensor (`acc_o`) update, the step of "historical result scaling + current result accumulation" with iteration dependencies is refactored into a continuous vector `mul` and `add` pipeline computation via AXPY (a·X + Y) instructions, reducing the time spent on issuing instructions and intermediate memory access.
+
 
 ## 6. Summary
 

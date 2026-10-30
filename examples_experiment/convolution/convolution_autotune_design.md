@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/convolution/convolution_autotune_design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/convolution/convolution_autotune_design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # Convolution Autotune 算子设计文档
 
 ## 1. 概述
@@ -156,13 +153,13 @@ im2col 变换在 PyTorch 端完成，NPU 端仅涉及 GEMM。NPU GEMM 的计算�
 # NPU 端 GEMM kernel (Developer 模式)
 @T.prim_func
 def main(
-    A: T.Tensor((M, K), "float16"),  # 卷积核展开矩阵
-    B: T.Tensor((K, N), "float16"),  # im2col 展开矩阵
-    C: T.Tensor((M, N), "float16"),  # 卷积输出展开矩阵
+    A: T.Tensor((M, K), "float16"),    # 卷积核展开矩阵
+    B: T.Tensor((K, N), "float16"),    # im2col 展开矩阵
+    C: T.Tensor((M, N), "float16"),    # 卷积输出展开矩阵
 ):
     with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
-        bx = cid // n_num  # M 维 block 索引
-        by = cid % n_num  # N 维 block 索引
+        bx = cid // n_num              # M 维 block 索引
+        by = cid % n_num               # N 维 block 索引
 
         # 1. 分配 L1 buffer（A tile + B tile）
         A_L1 = T.alloc_shared((block_M, K_L1), "float16")
@@ -295,6 +292,7 @@ Output_flat_pad --slice[:M,:N]--> Output_flat(M, N) --view--> Output(OC, B, HO, 
 | **L1 总计** | (A_L1 + B_L1) | | **65,536 (64KB)** | L1 |
 | **L0C 总计** | C_L0 | | **65,536 (64KB)** | L0C |
 
+
 ### 4.7 动态轴定义
 
 无。所有维度在 autotune 阶段通过参数化 JIT 编译为静态 shape。
@@ -303,14 +301,14 @@ Output_flat_pad --slice[:M,:N]--> Output_flat(M, N) --view--> Output(OC, B, HO, 
 
 ```python
 pass_configs = {
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,  # 自动 CV 分离（为 GEMM 提供 Cube 调度）
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,  # 自动同步插入
-    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,  # 自动内存规划
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,   # 自动 CV 分离（为 GEMM 提供 Cube 调度）
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,          # 自动同步插入
+    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,    # 自动内存规划
 }
 
-
 @tilelang.jit(out_idx=[-1], pass_configs=pass_configs)
-def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"): ...
+def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"):
+    ...
 ```
 
 ---
@@ -327,33 +325,30 @@ def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"
 
 ```python
 # autotune 搜索空间（含维度过滤）
-block_M_pool = [64, 128]  # M 维候选池
-block_N_pool = [64, 128]  # N 维候选池
-K_L1_pool = [32, 64, 128]  # K 维候选池
+block_M_pool = [64, 128]        # M 维候选池
+block_N_pool = [64, 128]        # N 维候选池
+K_L1_pool   = [32, 64, 128]     # K 维候选池
 
-block_M = [bs for bs in block_M_pool if bs <= M]  # 过滤 ≤ M 的候选
-block_N = [bs for bs in block_N_pool if bs <= N]  # 过滤 ≤ N 的候选
-K_L1 = [bs for bs in K_L1_pool if bs <= K]  # 过滤 ≤ K 的候选
+block_M = [bs for bs in block_M_pool if bs <= M]   # 过滤 ≤ M 的候选
+block_N = [bs for bs in block_N_pool if bs <= N]   # 过滤 ≤ N 的候选
+K_L1    = [bs for bs in K_L1_pool   if bs <= K]    # 过滤 ≤ K 的候选
 
 # 退化兜底：当某维度所有候选均 > 实际维度时，使用 max(1, dim) 作为唯一候选
-if not block_M:
-    block_M = [max(1, M)]
-if not block_N:
-    block_N = [max(1, N)]
-if not K_L1:
-    K_L1 = [max(1, K)]
+if not block_M: block_M = [max(1, M)]
+if not block_N: block_N = [max(1, N)]
+if not K_L1:    K_L1    = [max(1, K)]
 
 # 笛卡尔积生成所有配置组合
 configs = list(itertools.product(block_M, block_N, K_L1))
 
 # Block 布局
-m_num = M // block_M  # M 维 block 个数
-n_num = N // block_N  # N 维 block 个数
+m_num = M // block_M   # M 维 block 个数
+n_num = N // block_N   # N 维 block 个数
 block_num = m_num * n_num  # 总 block 数
 
 # 每个 block 的 2D 位置映射
-bx = cid // n_num  # block 在 M 维的索引
-by = cid % n_num  # block 在 N 维的索引
+bx = cid // n_num   # block 在 M 维的索引
+by = cid % n_num    # block 在 N 维的索引
 ```
 
 **选择理由**：
@@ -394,8 +389,8 @@ by = cid % n_num  # block 在 N 维的索引
 # Block 级并行（隐式，由 T.Kernel 管理）
 # 外层并行：T.Kernel 将 m_num × n_num 个 block 分配到各 AI Core
 with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
-    bx = cid // n_num  # M 维 block 索引
-    by = cid % n_num  # N 维 block 索引
+    bx = cid // n_num    # M 维 block 索引
+    by = cid % n_num     # N 维 block 索引
 
     # 初始化 buffer
     A_L1 = T.alloc_shared((block_M, K_L1), dtype)
@@ -449,9 +444,9 @@ with T.Kernel(m_num * n_num, is_npu=True) as (cid, _):
 
 ```python
 pass_configs = {
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,  # 自动 CV 分离
-    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,  # 自动同步插入
-    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,  # 自动内存规划
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,   # 自动 CV 分离
+    tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,          # 自动同步插入
+    tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,    # 自动内存规划
 }
 ```
 
@@ -476,7 +471,6 @@ pass_configs = {
 ```python
 # 使用 PyTorch 原生 conv2d 作为参考实现
 import torch.nn.functional as F
-
 
 def golden_conv2d(input_tensor, kernel, stride=1, padding=0):
     """PyTorch 原生 2D 卷积（Golden 实现）"""

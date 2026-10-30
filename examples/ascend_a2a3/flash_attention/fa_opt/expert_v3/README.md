@@ -1,13 +1,10 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/flash_attention/fa_opt/expert_v3/README.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/flash_attention/fa_opt/expert_v3/README.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # Expert v3：先验证 CCE 调度，再用 TileLang 表达
 
 这条路线希望把手写 CCE 版已经验证过的流水组织，用现有 TileLang 接口表达出来。
 矩阵乘法交给 Cube，softmax 和输出更新交给 Vector。两者是芯片上不同的计算单元，
 可以同时工作。输入和输出仍是 FP16，Vector 的中间运算和输出累加使用 FP32。
 
-它是独立的新实现，运行入口为 [`kernel.py`](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/flash_attention/fa_opt/expert_v3/kernel.py)。
+它是独立的新实现，运行入口为 [`kernel.py`](kernel.py)。
 v2 从 TileLang 的写法出发组织高性能流水；v3 则先用 CCE 写出并验证计算和调度，
 再考虑怎样用 TileLang 表达。不能直接表达的部分，用现有原语组合或拆分处理。
 这两版的区别是设计起点，不只是版本号先后。
@@ -117,7 +114,7 @@ Vector 指令写完结果后，后续指令需要隔一段时间才能安全读�
 key/value 长度是 512 的整数倍，query 头数能被 K/V 头数整除。CLI 使用相等的
 query/key 长度，默认 24 个逻辑 Cube 核。FP32 中间计算不表示支持任意数值范围。
 
-```text
+```bash
 source ./set_env.sh
 python examples/flash_attention/fa_opt/expert_v3/kernel.py
 ```
@@ -125,12 +122,12 @@ python examples/flash_attention/fa_opt/expert_v3/kernel.py
 `run.py --tl expert_v3/kernel.py` 可选择本版；默认仍保留 v2。
 `bench_test.sh` 自动发现本目录的 `kernel.py`，不会执行更深一层的生成工具。
 
-[`kernel.tl`](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/flash_attention/fa_opt/expert_v3/kernel.tl) 是含 LOCK 声明的可编辑源，
+[`kernel.tl`](kernel.tl) 是含 LOCK 声明的可编辑源，
 `kernel.py` 是生成结果，不直接编辑。LOCK 表示缓冲区在两条流水线间的占有权交接，
 覆盖初始化、取用、归还和退出时的 drain；它不是通用互斥锁。
 修改后从仓库根目录执行：
 
-```text
+```bash
 python examples/flash_attention/fa_opt/expert_v3/tools/preprocess.py \
   examples/flash_attention/fa_opt/expert_v3/kernel.tl \
   -o examples/flash_attention/fa_opt/expert_v3/kernel.py

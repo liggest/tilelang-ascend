@@ -1,12 +1,9 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/xattention/expert_v2/README.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/xattention/expert_v2/README.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # Expert v2：把私有短序列接进共享前缀流水
 
-本目录是新增的 v2 实现，不替换已有的 [非分页](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/xattention/expert_v1/kernel.py)或[分页](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/xattention/expert_v1/paged.py) v1。
+本目录是新增的 v2 实现，不替换已有的 [非分页](../expert_v1/kernel.py)或[分页](../expert_v1/paged.py) v1。
 与它们的区别见[目录说明](../README.md)。
 
-[`kernel.py`](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/xattention/expert_v2/kernel.py) 计算这样一种 attention：同一请求下的多个候选序列（beam）
+[`kernel.py`](kernel.py) 计算这样一种 attention：同一请求下的多个候选序列（beam）
 共享一段较长的历史 K/V，但每个 beam 还有自己的两个新 token。每个 query 都要对
 “共享前缀 + 自己的新 token”做一次完整 softmax，再对 value 加权求和。
 它不是分别算出两个归一化输出后取平均。
@@ -128,7 +125,7 @@ softmax 与输出累加使用 FP32；32 个 query 头共享 8 个 K/V 头，头�
 `[R*B,32,128]`、两份 `[R*S,8,128]`、两份 `[R*B,8,2,128]`；
 输出为 `[R*B,32,128]`。共享 K/V 直接复用，不按 beam 复制。
 
-```text
+```bash
 source ./set_env.sh
 python examples/xattention/expert_v2/kernel.py
 # 原研究问题的 18 个输入形状，仅检查本示例，不运行全量算子测试：

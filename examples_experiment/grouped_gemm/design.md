@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples_experiment/grouped_gemm/design.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples_experiment/grouped_gemm/design.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # grouped_gemm_bwd 算子设计文档
 
 ## 1. 概述
@@ -123,10 +120,18 @@ with T.Kernel(T.ceildiv(M, block_M), T.ceildiv(N, block_N), batch_count, threads
     for k in T.Pipelined(T.ceildiv(batch_sizes[bz], block_K), num_stages=num_stages):
         # 搬入 A 分块（带边界保护）
         for i, j in T.Parallel(block_K, block_M):
-            A_shared[i, j] = T.if_then_else(i < batch_sizes[bz], A[batch_offsets[bz] + k * block_K + i, bx * block_M + j], 0)
+            A_shared[i, j] = T.if_then_else(
+                i < batch_sizes[bz],
+                A[batch_offsets[bz] + k * block_K + i, bx * block_M + j],
+                0
+            )
         # 搬入 B 分块（带边界保护）
         for i, j in T.Parallel(block_K, block_N):
-            B_shared[i, j] = T.if_then_else(i < batch_sizes[bz], B[batch_offsets[bz] + k * block_K + i, by * block_N + j], 0)
+            B_shared[i, j] = T.if_then_else(
+                i < batch_sizes[bz],
+                B[batch_offsets[bz] + k * block_K + i, by * block_N + j],
+                0
+            )
         # 转置矩阵乘累加
         T.gemm(A_shared, B_shared, C_local, transpose_A=True)
 
@@ -139,12 +144,12 @@ with T.Kernel(T.ceildiv(M, block_M), T.ceildiv(N, block_N), batch_count, threads
 | API | 来源 | 验证状态 |
 |-----|------|---------|
 | `T.Kernel(..., batch_count)` | 参考实现 line 177 | ✅ 已验证（三维 kernel） |
-| `T.alloc_shared` | [api-kernel-memory.md §2](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
-| `T.alloc_fragment` | [api-kernel-memory.md §2](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
-| `T.Pipelined` | [api-schedule-sync.md](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-schedule-sync.md) | ✅ 已验证 |
-| `T.gemm(..., transpose_A=True)` | [api-compute.md §1](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-compute.md) | ✅ 已验证 |
+| `T.alloc_shared` | [api-kernel-memory.md §2](../tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
+| `T.alloc_fragment` | [api-kernel-memory.md §2](../tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
+| `T.Pipelined` | [api-schedule-sync.md](../tilelang-custom-skill/tilelang-api-best-practices/references/api-schedule-sync.md) | ✅ 已验证 |
+| `T.gemm(..., transpose_A=True)` | [api-compute.md §1](../tilelang-custom-skill/tilelang-api-best-practices/references/api-compute.md) | ✅ 已验证 |
 | `T.if_then_else` | TileLang 内置 | ✅ 已验证（条件表达式） |
-| `T.copy` | [api-kernel-memory.md §3](../../.agents/skills/tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
+| `T.copy` | [api-kernel-memory.md §3](../tilelang-custom-skill/tilelang-api-best-practices/references/api-kernel-memory.md) | ✅ 已验证 |
 | `T.clear` | 参考实现 line 182 | ✅ 已验证（清零累加器） |
 
 ---
@@ -217,7 +222,13 @@ L0C[C_local] --T.copy--> GM[C[bz, ...]]
         "tl.disable_warp_specialized": True,  # 禁用 warp 优化
     },
 )
-def grouped_gemm_bwd(batch_sum, batch_count, M, N, block_M, block_N, block_K, num_stages=2, threads=128, dtype=T.float16): ...
+def grouped_gemm_bwd(
+    batch_sum, batch_count, M, N,
+    block_M, block_N, block_K,
+    num_stages=2, threads=128,
+    dtype=T.float16
+):
+    ...
 ```
 
 ---
@@ -233,12 +244,12 @@ def grouped_gemm_bwd(batch_sum, batch_count, M, N, block_M, block_N, block_K, nu
 ### 5.2 Block 划分
 
 ```python
-block_M = 64  # M 维分块大小，平衡 L0C 容量和计算效率
+block_M = 64   # M 维分块大小，平衡 L0C 容量和计算效率
 block_N = 128  # N 维分块大小，对齐 128 字节（float16）
-block_K = 64  # K 维（批次维度）分块大小，控制流水线迭代次数
+block_K = 64   # K 维（批次维度）分块大小，控制流水线迭代次数
 block_num_x = T.ceildiv(M, block_M)  # M 方向 block 数
 block_num_y = T.ceildiv(N, block_N)  # N 方向 block 数
-block_num_z = batch_count  # 组数方向 block 数
+block_num_z = batch_count             # 组数方向 block 数
 ```
 
 **选择理由**：
@@ -248,7 +259,7 @@ block_num_z = batch_count  # 组数方向 block 数
 
 ### 5.3 约束分析
 
-- **对齐约束**:
+- **对齐约束**: 
   - block_N=128, fp16 尾轴 128 > 16 ✓
   - block_M=64, 不要求对齐 ✓
 - **L1 容量**: 2×num_stages×(A_shared + B_shared) = 2×2×24KB = 96KB，小于 L1 上限（约 1MB）✓
@@ -281,8 +292,8 @@ block_num_z = batch_count  # 组数方向 block 数
 with T.Kernel(
     T.ceildiv(M, block_M),  # bx: M 方向分块数
     T.ceildiv(N, block_N),  # by: N 方向分块数
-    batch_count,  # bz: 组数
-    threads=threads,
+    batch_count,            # bz: 组数
+    threads=threads
 ) as (bx, by, bz):
     # 分配 buffer
     A_shared = T.alloc_shared([block_K, block_M], dtype)
@@ -296,10 +307,18 @@ with T.Kernel(
     for k in T.Pipelined(T.ceildiv(batch_sizes[bz], block_K), num_stages=num_stages):
         # 搬入 A 分块（boundary guard）
         for i, j in T.Parallel(block_K, block_M):
-            A_shared[i, j] = T.if_then_else(i < batch_sizes[bz], A[batch_offsets[bz] + k * block_K + i, bx * block_M + j], 0)
+            A_shared[i, j] = T.if_then_else(
+                i < batch_sizes[bz],
+                A[batch_offsets[bz] + k * block_K + i, bx * block_M + j],
+                0
+            )
         # 搬入 B 分块（boundary guard）
         for i, j in T.Parallel(block_K, block_N):
-            B_shared[i, j] = T.if_then_else(i < batch_sizes[bz], B[batch_offsets[bz] + k * block_K + i, by * block_N + j], 0)
+            B_shared[i, j] = T.if_then_else(
+                i < batch_sizes[bz],
+                B[batch_offsets[bz] + k * block_K + i, by * block_N + j],
+                0
+            )
         # 转置矩阵乘累加
         T.gemm(A_shared, B_shared, C_local, transpose_A=True)
 
@@ -360,9 +379,9 @@ def ref_grouped_gemm_bwd(A, B, batch_sizes):
     batch_count = len(batch_sizes)
     M = A.shape[1]
     N = B.shape[1]
-
+    
     dB = torch.empty((batch_count, M, N), device=A.device, dtype=A.dtype)
-
+    
     start = 0
     for i, size in enumerate(batch_sizes):
         end = start + size
@@ -370,7 +389,7 @@ def ref_grouped_gemm_bwd(A, B, batch_sizes):
         B_i = B[start:end]  # shape: (b_i, N)
         dB[i] = torch.mm(A_i.T, B_i)  # dB_i = A_i^T @ B_i
         start = end
-
+    
     return dB
 ```
 

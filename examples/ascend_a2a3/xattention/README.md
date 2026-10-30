@@ -1,6 +1,3 @@
-> 固定 TA 来源资料（资源迁移，不是内核/入口已迁或当前性能验收）：[examples/xattention/README.md](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/xattention/README.md)。原 benchmark 数字、设计与代码片段保留；原命令和绝对路径属于当时实验记录，未迁执行资产不能在当前仓直接照跑。当前入口/构建先读[迁移指南](../../../docs/ascend_a2a3/migration.md)，逐项状态见[资源清单](../../../maint/ascend_a2a3/ecosystem_resource_ports.json)及 Python ports。
-
-<!-- TA RESOURCE BODY -->
 # xAttention 示例
 
 这里按版本组织已有的 **Expert v1** 和新增的 **Expert v2**。它们都计算共享前缀与每个 beam 私有
@@ -21,9 +18,9 @@ xattention/
 
 ## 入口
 
-- [`expert_v1/kernel.py`](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/xattention/expert_v1/kernel.py)：已有的非分页示例。
-- [`expert_v1/paged.py`](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/xattention/expert_v1/paged.py)：已有的分页示例，通过块表寻址 K/V。
-- [`expert_v2/kernel.py`](https://github.com/tile-ai/tilelang-ascend/blob/0deb8b93da11b7f0becbcded732d9633b7ca4e34/examples/xattention/expert_v2/kernel.py)：新增的连续 K/V 输入版本；中文优化历程和
+- [`expert_v1/kernel.py`](expert_v1/kernel.py)：已有的非分页示例。
+- [`expert_v1/paged.py`](expert_v1/paged.py)：已有的分页示例，通过块表寻址 K/V。
+- [`expert_v2/kernel.py`](expert_v2/kernel.py)：新增的连续 K/V 输入版本；中文优化历程和
   历史对照数据与代码放在同一目录，见 [Expert v2 说明](expert_v2/README.md)。
 
 v1 的两个脚本只移动路径，内容保持不变。旧路径不再保留一份重复入口。
@@ -45,7 +42,7 @@ v2 固定 32 个 query 头、8 个 K/V 头和 128 的头维度；共享长度须
 
 默认运行 v2：
 
-```text
+```bash
 source ./set_env.sh
 python examples/xattention/expert_v2/kernel.py
 ```
