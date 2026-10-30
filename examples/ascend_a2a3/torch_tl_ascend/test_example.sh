@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ensure_torch_tl_ascend() {
     local output
-    if ! output=$(pip show torch_tl_ascend 2>&1); then
+    if ! output=$(python -m pip show torch_tl_ascend 2>&1); then
         echo "torch_tl_ascend is not installed. Installing with python setup.py install ..."
-        python setup.py install --user || { echo "Failed to install package"; exit 1; }
+        python setup.py install || { echo "Failed to install package"; exit 1; }
         echo "Installed torch_tl_ascend"
         return 0
     fi
@@ -16,8 +16,8 @@ ensure_torch_tl_ascend() {
         echo "Cleaning previous build artifacts ..."
         rm -rf build/ dist/
         rm -rf src/*.egg-info/
-        pip uninstall -y torch_tl_ascend || { echo "Failed to uninstall outdated package"; exit 1; }
-        python setup.py install --user || { echo "Failed to install package"; exit 1; }
+        python -m pip uninstall -y torch_tl_ascend || { echo "Failed to uninstall outdated package"; exit 1; }
+        python setup.py install || { echo "Failed to install package"; exit 1; }
         echo "Installed torch_tl_ascend v$expected_version"
         return 0
     fi
