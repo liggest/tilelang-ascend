@@ -88,7 +88,7 @@ PYTEST_TARGETS=()
 while IFS= read -r target; do
     [ -n "$target" ] && PYTEST_TARGETS+=("${PROJECT_ROOT}/$target")
 done <<< "$PYTEST_PATHS"
-PYTEST_CI_ARGS=(-c "${PROJECT_ROOT}/ci/pytest-ascend.ini")
+PYTEST_CI_ARGS=(-c "${PROJECT_ROOT}/testing/ascend_a2a3/pytest.ini")
 TA_TEST_HELPERS=$(python "$PATH_RESOLVER" --path testing/python) || exit 1
 export PYTHONPATH="${PROJECT_ROOT}/${TA_TEST_HELPERS}${PYTHONPATH:+:$PYTHONPATH}"
 cd "${PROJECT_ROOT}/${EXAMPLES_REL}" || exit 1

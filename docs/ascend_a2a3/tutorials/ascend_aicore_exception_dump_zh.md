@@ -162,7 +162,7 @@ ASCEND_DUMP_PATH环境变量用来设置异常dump文件的存储路径，不设
 在 `except` 块中调用 `parse_exception_dump()`，自动完成 dump 文件查找、msaicerr 解析和 tensor 数据读取：
 
 ```python
-from tilelang.ascend.a2a3.tools.parse_exception_dump import parse_exception_dump
+from tilelang.tools.ascend.a2a3.ascend_exception_dump_bin import parse_exception_dump
 
 try:
     # 执行可能触发 AI Core 异常的 kernel 调用
@@ -206,7 +206,7 @@ python $ASCEND_HOME_PATH/tools/msaicerr/msaicerr.py \
 
 ```python
 # 2. 读取 .bin 文件
-from tilelang.ascend.a2a3.tools.parse_exception_dump import read_msaicerr_bin
+from tilelang.tools.ascend.a2a3.ascend_exception_dump_bin import read_msaicerr_bin
 import numpy as np
 
 data = read_msaicerr_bin(

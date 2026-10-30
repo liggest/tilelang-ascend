@@ -7,7 +7,7 @@ import textwrap
 import numpy as np
 import pytest
 
-parser = importlib.import_module("tilelang.ascend.a2a3.tools.parse_exception_dump")
+parser = importlib.import_module("tilelang.tools.ascend.a2a3.ascend_exception_dump_bin")
 
 
 def _dump(root, timestamp="200", kernel="main_kernel"):

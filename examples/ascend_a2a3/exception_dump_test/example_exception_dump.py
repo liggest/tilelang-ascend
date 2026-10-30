@@ -24,7 +24,7 @@ import ctypes
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
-from tilelang.ascend.a2a3.tools.parse_exception_dump import parse_exception_dump
+from tilelang.tools.ascend.a2a3.ascend_exception_dump_bin import parse_exception_dump
 
 tilelang.disable_cache()
 

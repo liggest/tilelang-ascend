@@ -165,7 +165,7 @@ The `ASCEND_DUMP_PATH` environment variable sets the storage path for exception 
 Call `parse_exception_dump()` in the `except` block to automatically handle dump file discovery, msaicerr parsing, and tensor data reading:
 
 ```python
-from tilelang.ascend.a2a3.tools.parse_exception_dump import parse_exception_dump
+from tilelang.tools.ascend.a2a3.ascend_exception_dump_bin import parse_exception_dump
 
 try:
     # Execute a kernel call that may trigger an AI Core exception
@@ -209,7 +209,7 @@ python $ASCEND_HOME_PATH/tools/msaicerr/msaicerr.py \
 
 ```python
 # 2. Read the .bin file
-from tilelang.ascend.a2a3.tools.parse_exception_dump import read_msaicerr_bin
+from tilelang.tools.ascend.a2a3.ascend_exception_dump_bin import read_msaicerr_bin
 import numpy as np
 
 data = read_msaicerr_bin(

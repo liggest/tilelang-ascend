@@ -213,7 +213,7 @@ def build_plan(root: Path, python: Path, output: Path, visible: str) -> dict:
     )
     targets = _layout(root).pytest_targets(root)
     assert targets == ["testing/ascend_a2a3/python"]
-    config = root / "ci/pytest-ascend.ini"
+    config = root / "testing/ascend_a2a3/pytest.ini"
     plugin = ["-p", "maint.ascend_a2a3.ci_batch_driver"]
     common = [str(python), "-m", "pytest", "--forked", "-c", str(config)]
     tail = ["-v", "-n", "8", "-m", "not ci_skip", *plugin]

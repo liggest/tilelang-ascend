@@ -16,7 +16,7 @@ FILES = [
     "scripts/ci/path_layout.py",
     "scripts/ci/ci_scope.py",
     "scripts/ci/resolve_operator_tests.py",
-    "ci/pytest-ascend.ini",
+    "testing/ascend_a2a3/pytest.ini",
     "ci/operator_test_manifest.yaml",
 ]
 
@@ -120,7 +120,7 @@ def test_real_pytest_xml_retains_passed_streams_and_xfail_distinctly(tmp_path):
     )
     xml = tmp_path / "results.xml"
     result = subprocess.run(
-        [sys.executable, "-m", "pytest", "-c", str(repo / "ci/pytest-ascend.ini"), str(script), "--junitxml=" + str(xml)],
+        [sys.executable, "-m", "pytest", "-c", str(repo / "testing/ascend_a2a3/pytest.ini"), str(script), "--junitxml=" + str(xml)],
         env=dict(os.environ, PYTEST_DISABLE_PLUGIN_AUTOLOAD="1"),
         text=True,
         capture_output=True,
