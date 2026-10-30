@@ -495,6 +495,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    import torch_npu  # noqa: F401
-
     main()

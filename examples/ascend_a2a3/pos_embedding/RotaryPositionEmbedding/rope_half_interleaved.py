@@ -20,6 +20,7 @@ import sys
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+import torch_npu
 
 # ========== Pass Configs (Developer mode, auto-sync) ==========
 pass_configs = {
@@ -30,7 +31,7 @@ pass_configs = {
 }
 
 NUM_CORES = 48
-device = "npu"  # Defer backend registration/device construction to runtime.
+device = torch.device("npu")
 
 torch_dtype_map = {
     "float16": torch.float16,
@@ -291,8 +292,6 @@ def cann_rope_ref(x_cpu, sin_cpu, cos_cpu, layout, dtype_str):
     For BSND interleave, the CANN op doesn't support sin/cos broadcast
     when B>1 and S>1, so we reshape to equivalent TND first.
     """
-    import torch_npu
-
     rope_dim = sin_cpu.shape[-1]
     dim_start = x_cpu.shape[-1] - rope_dim
     x_slice = x_cpu[..., dim_start:].contiguous()
@@ -595,8 +594,6 @@ def run_perf(side, shape, layout, dtype_str):
     side: "tl" (TileLang) or "cann" (torch_npu.npu_rotary_mul)
     shape/layout/dtype_str: same as test cases (full rope: rope_dim == hidden_size)
     """
-    import torch_npu
-
     torch_dtype = torch_dtype_map[dtype_str]
     if len(shape) == 4:
         bs, h, hs, rd = shape
@@ -626,7 +623,7 @@ def run_perf(side, shape, layout, dtype_str):
 
 
 # ========== Main ==========
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="RoPE (Half + Interleaved) on Ascend NPU")
     parser.add_argument("--level", default="l0", choices=["l0", "l1", "l2", "boundary", "all"], help="Test level to run (default: l0)")
     parser.add_argument("--shape", type=int, nargs="+", help="Single-case shape: 4 ints (TND: BS H HS RD) or 5 ints (BSND: B S H HS RD)")
@@ -701,22 +698,6 @@ def _original_main():
     else:
         print("Test FAILED (L0/L1 precision errors)")
         sys.exit(1)
-
-
-def main():
-    global device
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    device = torch.device("npu")
-    enabled = CacheState.is_enabled()
-    try:
-        return _original_main()
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

@@ -26,9 +26,15 @@ import torch
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 
+tilelang.disable_cache()
 
+parser = argparse.ArgumentParser(description="compile_flags example")
+parser.add_argument("--m", type=int, default=256, help="Matrix M dimension")
+parser.add_argument("--n", type=int, default=256, help="Matrix N dimension")
+args = parser.parse_args()
+
+M, N = args.m, args.n
 VEC_NUM = 2
 
 
@@ -75,41 +81,25 @@ def sigmoid(
     return build()
 
 
-def main():
-    import torch_npu  # noqa: F401
+torch.manual_seed(0)
+a = torch.randn(M, N).npu()
+ref = torch.sigmoid(a)
 
-    A2A3CythonKernelCache().clear_cache()
+custom_flags = ["--cce-auto-sync=off", "-O3"]
+kernel_with_custom_flags = sigmoid(M, N, 64, 64, compile_flags=custom_flags)
 
-    parser = argparse.ArgumentParser(description="compile_flags example")
-    parser.add_argument("--m", type=int, default=256, help="Matrix M dimension")
-    parser.add_argument("--n", type=int, default=256, help="Matrix N dimension")
-    args = parser.parse_args()
+# Compiled after the custom-flag kernel: its default flags must remain independent.
+kernel_with_defaults = sigmoid(M, N, 64, 64, compile_flags=None)
 
-    M, N = args.m, args.n
+print("Compilation successful!")
 
-    torch.manual_seed(0)
-    a = torch.randn(M, N).npu()
-    ref = torch.sigmoid(a)
+out_with_custom_flags = kernel_with_custom_flags(a)
+out_with_defaults = kernel_with_defaults(a)
 
-    custom_flags = ["--cce-auto-sync=off", "-O3"]
-    kernel_with_custom_flags = sigmoid(M, N, 64, 64, compile_flags=custom_flags)
+torch.testing.assert_close(out_with_custom_flags, ref, rtol=1e-2, atol=1e-2)
+torch.testing.assert_close(out_with_defaults, ref, rtol=1e-2, atol=1e-2)
 
-    # Compiled after the custom-flag kernel: its default flags must remain independent.
-    kernel_with_defaults = sigmoid(M, N, 64, 64, compile_flags=None)
-
-    print("Compilation successful!")
-
-    out_with_custom_flags = kernel_with_custom_flags(a)
-    out_with_defaults = kernel_with_defaults(a)
-
-    torch.testing.assert_close(out_with_custom_flags, ref, rtol=1e-2, atol=1e-2)
-    torch.testing.assert_close(out_with_defaults, ref, rtol=1e-2, atol=1e-2)
-
-    print("Custom compile flags: output matches PyTorch.")
-    print("Default compile flags: output matches PyTorch.")
-    print("Default compile flags remained kernel-scoped.")
-    print("Test Passed!")
-
-
-if __name__ == "__main__":
-    main()
+print("Custom compile flags: output matches PyTorch.")
+print("Default compile flags: output matches PyTorch.")
+print("Default compile flags remained kernel-scoped.")
+print("Test Passed!")

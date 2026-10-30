@@ -1,5 +1,5 @@
 import argparse
-import os  # noqa: F401 - retained original dependency
+import os
 import sys
 from typing import Optional
 
@@ -8,18 +8,12 @@ import torch
 import tilelang
 from tilelang.profiler import do_bench  # noqa: E402
 
-# Resolve only this namespaced sibling; no process-wide path changes.
-try:
-    from . import mha_sink_fwd_bhsd as _sink_fwd_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-    _spec = _importlib_util.spec_from_file_location("_a2a3_mha_sink_fwd_bhsd", _Path(__file__).with_name("mha_sink_fwd_bhsd.py"))
-    _sink_fwd_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_sink_fwd_module)
-flashattn = _sink_fwd_module.flashattn
-build_causal_mask = _sink_fwd_module.build_causal_mask
+from mha_sink_fwd_bhsd import (  # noqa: E402
+    flashattn,
+    build_causal_mask,
+)
 
 
 # ===========================================================================
@@ -181,8 +175,6 @@ def test_mha_sink_fwd_bhsd_l0():
     Cases from DESIGN.md §11.4 「L0 门槛测试计划」.
     All shapes are divisible by block_M=block_N=128.
     """
-    import torch_npu  # noqa: F401
-
     device = "npu"
     dtype = torch.float16
     atol, rtol = 1e-2, 1e-2
@@ -242,8 +234,6 @@ def test_mha_sink_fwd_bhsd_l1():
     Irregular shapes test host padding + mask=0 tail-block handling.
     Returns True iff all cases pass (blocking).
     """
-    import torch_npu  # noqa: F401
-
     device = "npu"
     dtype = torch.float16
     atol, rtol = 1e-2, 1e-2
@@ -307,8 +297,6 @@ def _run_boundary_case(name, batch, heads, seq_q, seq_kv, dim, window_size, inpu
 
 def test_mha_sink_fwd_bhsd_l2():
     """L2 abnormal input tests. Non-blocking: prints [BOUNDARY_PASS/WARN]."""
-    import torch_npu  # noqa: F401
-
     block_M, block_N = 128, 128
     cases = [
         ("l2_single_block", 1, 1, 128, 128, 128, None, 1.0),  # minimum 1 KV block
@@ -321,8 +309,6 @@ def test_mha_sink_fwd_bhsd_l2():
 
 def test_mha_sink_fwd_bhsd_boundary():
     """Boundary / special value tests. Non-blocking: prints [BOUNDARY_PASS/WARN]."""
-    import torch_npu  # noqa: F401
-
     block_M, block_N = 128, 128
     cases = [
         ("zero_input", 1, 4, 128, 128, 128, None, 0.0),  # all-zero Q/K/V/sinks
@@ -610,7 +596,7 @@ def run_perf_mode(args):
 # ===========================================================================
 
 
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="Attention Sink MHA Forward (Ascend NPU, Expert)")
     parser.add_argument(
         "--level",
@@ -643,60 +629,45 @@ def _original_main():
     args = parser.parse_args()
 
     tilelang.disable_cache()
-    with torch.device("npu"):
-        torch.manual_seed(0)
+    torch.set_default_device("npu")
+    torch.manual_seed(0)
 
-        if args.level == "perf":
-            # Performance benchmark mode only (integrated from perf_mha_sink_fwd_bhsd.py).
-            run_perf_mode(args)
-            return
+    if args.level == "perf":
+        # Performance benchmark mode only (integrated from perf_mha_sink_fwd_bhsd.py).
+        run_perf_mode(args)
+        return
 
-        if args.level == "default":
-            # Default mode: run L0 precision gate + one perf bench (default shape, with golden).
-            # This is what users get when they run the script with no arguments.
-            print("=" * 70)
-            print("Stage 1: L0 precision gate")
-            print("=" * 70)
-            blocking_ok = test_mha_sink_fwd_bhsd_l0()
-            print()
-            print("=" * 70)
-            print("Stage 2: performance benchmark (default shape, with golden)")
-            print("=" * 70)
-            run_perf_mode(args)
-            if not blocking_ok:
-                sys.exit(1)
-            return
+    if args.level == "default":
+        # Default mode: run L0 precision gate + one perf bench (default shape, with golden).
+        # This is what users get when they run the script with no arguments.
+        print("=" * 70)
+        print("Stage 1: L0 precision gate")
+        print("=" * 70)
+        blocking_ok = test_mha_sink_fwd_bhsd_l0()
+        print()
+        print("=" * 70)
+        print("Stage 2: performance benchmark (default shape, with golden)")
+        print("=" * 70)
+        run_perf_mode(args)
+        if not blocking_ok:
+            sys.exit(1)
+        return
 
-        blocking_ok = True  # Only L0/L1 count toward blocking
+    blocking_ok = True  # Only L0/L1 count toward blocking
 
-        if args.level in ("l0", "all"):
-            blocking_ok &= test_mha_sink_fwd_bhsd_l0()
-        if args.level in ("l1", "all"):
-            blocking_ok &= test_mha_sink_fwd_bhsd_l1()
-        if args.level in ("l2", "all"):
-            test_mha_sink_fwd_bhsd_l2()
-        if args.level in ("boundary", "all"):
-            test_mha_sink_fwd_bhsd_boundary()
+    if args.level in ("l0", "all"):
+        blocking_ok &= test_mha_sink_fwd_bhsd_l0()
+    if args.level in ("l1", "all"):
+        blocking_ok &= test_mha_sink_fwd_bhsd_l1()
+    if args.level in ("l2", "all"):
+        test_mha_sink_fwd_bhsd_l2()
+    if args.level in ("boundary", "all"):
+        test_mha_sink_fwd_bhsd_boundary()
 
-        if blocking_ok:
-            print("Test Passed!")
-            sys.exit(0)
-        sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+    if blocking_ok:
+        print("Test Passed!")
+        sys.exit(0)
+    sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -573,11 +573,5 @@ def test() -> None:
     print("Kernel Output Match!")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    return test()
-
-
 if __name__ == "__main__":
-    main()
+    test()

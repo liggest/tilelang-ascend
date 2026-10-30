@@ -1,14 +1,16 @@
 """First-generation hand-synchronized Expert Flash Attention example."""
 
 import argparse
-import importlib.util
-import os
-from pathlib import Path
 import tilelang
 import tilelang.ascend.a2a3.language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 
 import torch
+
+torch.set_default_device("npu")
+torch.manual_seed(0)
+
+tilelang.disable_cache()
 
 
 L0_MAX_SIZE = 64 * 1024  # 64KB
@@ -356,7 +358,7 @@ def flash_attention_fwd(
     return main
 
 
-def parse_args(argv=None):
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--B", type=int, default=4, help="batch size")
     parser.add_argument("--S", type=int, default=4096, help="seq len")
@@ -366,11 +368,7 @@ def parse_args(argv=None):
     parser.add_argument("--D", type=int, default=128, help="hidden dim")
     parser.add_argument("--no-check", action="store_true", help="disable reference check")
     parser.add_argument("--cross-interval", type=int, default=2, help="cross-core signal interval")
-    return parser.parse_args(argv)
-
-
-def _run_original(args):
-    torch.manual_seed(0)
+    args = parser.parse_args()
     B, S, H, D = args.B, args.S, args.H, args.D
     Q_H = args.q_heads or H
     KV_H = args.kv_heads or H
@@ -415,35 +413,3 @@ def _run_original(args):
         print("Test Passed!")
     else:
         print("Reference check skipped.")
-
-
-def _load_execution_module():
-    # Preserve the actual constructor memo policies rather than assuming dicts.
-    spec = importlib.util.spec_from_file_location(__name__ + "_execution", __file__)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-def main(argv=None):
-    args = parse_args(argv)
-    requested = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this example")
-    if Path(tilelang.env.TILELANG_CACHE_DIR).resolve() != Path(requested).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; execution was refused")
-    import torch_npu  # noqa: F401 - register only after explicit CLI validation
-    from tilelang.env import CacheState
-
-    caller_raw = CacheState._enabled
-    try:
-        execution = _load_execution_module()
-        tilelang.disable_cache()
-        with torch.random.fork_rng(devices=[]), torch.device("npu"):
-            execution._run_original(args)
-    finally:
-        CacheState._enabled = caller_raw
-
-
-if __name__ == "__main__":
-    main()

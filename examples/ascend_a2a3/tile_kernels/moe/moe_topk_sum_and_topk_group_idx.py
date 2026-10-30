@@ -4,11 +4,10 @@ import pytest
 import numpy as np
 import torch
 import tilelang
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-from tilelang.ascend.a2a3 import language as T
+import tilelang.ascend.a2a3.language as T
 
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
 
+tilelang.disable_cache()
 
 # Apply pass configs to remove auto sync
 pass_configs = {
@@ -504,15 +503,8 @@ def test_topk_sum_and_topk_group_idx_backward(params):
     print(f"Backward Test passed for {make_param_id(params)}")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
     exit_code = pytest.main([__file__, "-v"])
     if exit_code == pytest.ExitCode.OK:
         print("All topk_sum_and_topk_group_idx tests passed! Kernel Output Match!")
     sys.exit(exit_code)
-
-
-if __name__ == "__main__":
-    main()

@@ -10,6 +10,7 @@ import tilelang.ascend.a2a3.language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 import torch
 
+tilelang.disable_cache()
 
 # ===========================================================================
 # Lock declarations
@@ -1322,10 +1323,7 @@ def reference_attention(query, shared_key, shared_value, unshared_key, unshared_
     return output.reshape(request_num * beams, KV_HEADS * GROUP_SIZE, DIM).to(query.dtype)
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    tilelang.disable_cache()
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--request-num", type=int)
     parser.add_argument("--beam-size", type=int)
@@ -1368,7 +1366,3 @@ def main():
             torch.testing.assert_close(output, expected, rtol=1e-2, atol=1e-2)
         print(f"Checked R={request_num}, B={beams}, shared length={seq_len}")
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

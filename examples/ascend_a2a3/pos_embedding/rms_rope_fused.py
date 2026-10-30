@@ -1,9 +1,9 @@
 import tilelang
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-from tilelang.ascend.a2a3 import language as T
+import tilelang.ascend.a2a3.language as T
 import torch
 import argparse
 
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -18,7 +18,7 @@ def rms_rope_fused(M, block_M, batch_size, head_dim, rope_dim, head_num, eps, dt
 
     ACC_DTYPE = "float"
     MASK_DTYPE = "uint32"
-    TMP_DTYPE = "uint8"  # noqa: F841 - retained from the pinned TA factory
+    TMP_DTYPE = "uint8"  # noqa: F841
 
     VEC_NUM = 2
     m_num = M // block_M
@@ -191,11 +191,7 @@ def parse_args():
     return p.parse_args()
 
 
-def main():
-    global device
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
     torch.manual_seed(42)
     tilelang.disable_cache()
 
@@ -225,7 +221,3 @@ def main():
 
     torch.testing.assert_close(q_out, q_ref, rtol=1e-2, atol=1e-2)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

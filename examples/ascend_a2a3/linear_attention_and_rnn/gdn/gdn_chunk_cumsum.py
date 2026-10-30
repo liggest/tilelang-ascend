@@ -1,5 +1,3 @@
-import os
-from pathlib import Path
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
@@ -69,10 +67,8 @@ def ref_chunk_cumsum(g, C):
     return g_sum
 
 
-def _run_original_cli():
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
+    tilelang.disable_cache()
     torch.manual_seed(0)
     torch.set_printoptions(threshold=float("inf"), sci_mode=True)
 
@@ -89,35 +85,3 @@ def _run_original_cli():
         print("Test passed!")
 
     print("Kernel Output Match!")
-
-
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from tilelang import env
-    from tilelang.env import CacheState
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-    from torch._tensor_str import PRINT_OPTS
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-    from tilelang.cache.kernel_cache import KernelCache
-
-    old_enabled = CacheState.is_enabled()
-    old_staging_root = KernelCache._last_cleaned_staging_root
-    cache = A2A3CythonKernelCache()
-    old_memory = cache._memory_cache
-    old_print_options = vars(PRINT_OPTS).copy()
-    cache._memory_cache = {}
-    try:
-        _run_original_cli()
-    finally:
-        cache._memory_cache = old_memory
-        KernelCache._last_cleaned_staging_root = old_staging_root
-        CacheState._enabled = old_enabled
-        torch.set_printoptions(**old_print_options)
-
-
-if __name__ == "__main__":
-    main()

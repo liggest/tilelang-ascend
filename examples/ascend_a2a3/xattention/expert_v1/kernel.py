@@ -1,11 +1,7 @@
-import argparse
-from contextlib import ExitStack
-import importlib.util
 import os
-from pathlib import Path
 
 import tilelang
-from tilelang.ascend.a2a3 import language as T
+import tilelang.ascend.a2a3.language as T
 import torch
 
 
@@ -25,7 +21,9 @@ HALF_STACK = STACK_NUM // 2
 EFFECTIVE_BLOCK_N = BLOCK_N * STACK_NUM
 HALF_BLOCK_N = BLOCK_N * HALF_STACK
 BM = 128
+NUM_CORES = int(torch.npu.get_device_properties("npu").cube_core_num)
 UNSHARED_CORES = 4
+SHARED_CORES = NUM_CORES - UNSHARED_CORES
 
 UNSHARED_BEAM = BEAM_SIZE
 DECODE_STEP = 4
@@ -55,6 +53,7 @@ WARMUP_RUNS = 3
 NUM_RUNS = 10
 
 
+tilelang.disable_cache()
 VEC_NUM = 2
 if BM % VEC_NUM != 0:
     raise ValueError("BM must be divisible by VEC_NUM")
@@ -66,7 +65,9 @@ SHARED_S_ROWS = min(SHARED_S_UB_ELEMS // EFFECTIVE_BLOCK_N, v_p)
 SHARED_S_ROW_TILES = v_p // SHARED_S_ROWS
 MERGE_ROW_TILE = 64
 MERGE_BEAMS_PER_TILE = MERGE_ROW_TILE // NUM_HEADS
+MERGE_WORKERS = NUM_CORES * VEC_NUM
 MERGE_TOTAL_TILES = BEAM_SIZE // MERGE_BEAMS_PER_TILE
+MERGE_TILES_PER_WORKER = (MERGE_TOTAL_TILES + MERGE_WORKERS - 1) // MERGE_WORKERS
 SHARED_SOFTMAX_DB = 2
 SHARED_RESCALE_EVENT = 2
 MERGE_BRCB_REPEAT = MERGE_ROW_TILE // UB_ALIGN_ELEMS
@@ -104,8 +105,13 @@ SHARED_Q_TILES_PER_KV_HEAD = GROUP_SIZE // SHARED_Q_HEADS_PER_TILE
 SHARED_BEAM_KV_PAIRS = SHARED_BEAM_CHUNKS * KV_HEADS
 SHARED_TOTAL_PAIRS = SHARED_BEAM_KV_PAIRS * SHARED_Q_TILES_PER_KV_HEAD
 SHARED_RESIDENT_GROUPS = SHARED_BEAM_KV_PAIRS
+SHARED_RESIDENT_GROUPS_PER_CORE = (SHARED_RESIDENT_GROUPS + SHARED_CORES - 1) // SHARED_CORES
+SHARED_ACTIVE_RESIDENT_CORES = min(SHARED_RESIDENT_GROUPS, SHARED_CORES)
 SHARED_CURRENT_KV_LOAD_UNITS = SHARED_TOTAL_PAIRS * SHARED_KV_TILES * STACK_NUM
 SHARED_QGROUP_KV_LOAD_UNITS = SHARED_RESIDENT_GROUPS * SHARED_KV_TILES * STACK_NUM
+SHARED_PAIRS_PER_CORE = (SHARED_TOTAL_PAIRS + SHARED_CORES - 1) // SHARED_CORES
+SHARED_TASKS_PER_CORE = SHARED_PAIRS_PER_CORE * SHARED_KV_TILES
+SHARED_PIPE_STEPS = SHARED_TASKS_PER_CORE + PRE_LAUNCH
 
 
 dtype = "bfloat16"
@@ -129,47 +135,12 @@ pass_configs = {
 }
 
 
-_GEOMETRY_READY = False
-
-
-def _ensure_geometry():
-    """Freeze the original nine geometry assignments once for this module/JIT memo lifetime.
-
-    A different core count requires a fresh module namespace; there is no
-    process environment fallback or shared memo-reset mechanism.
-    """
-    global \
-        _GEOMETRY_READY, \
-        NUM_CORES, \
-        SHARED_CORES, \
-        MERGE_WORKERS, \
-        MERGE_TILES_PER_WORKER, \
-        SHARED_RESIDENT_GROUPS_PER_CORE, \
-        SHARED_ACTIVE_RESIDENT_CORES, \
-        SHARED_PAIRS_PER_CORE, \
-        SHARED_TASKS_PER_CORE, \
-        SHARED_PIPE_STEPS
-    if _GEOMETRY_READY:
-        return
-    NUM_CORES = int(torch.npu.get_device_properties("npu").cube_core_num)
-    SHARED_CORES = NUM_CORES - UNSHARED_CORES
-    MERGE_WORKERS = NUM_CORES * VEC_NUM
-    MERGE_TILES_PER_WORKER = (MERGE_TOTAL_TILES + MERGE_WORKERS - 1) // MERGE_WORKERS
-    SHARED_RESIDENT_GROUPS_PER_CORE = (SHARED_RESIDENT_GROUPS + SHARED_CORES - 1) // SHARED_CORES
-    SHARED_ACTIVE_RESIDENT_CORES = min(SHARED_RESIDENT_GROUPS, SHARED_CORES)
-    SHARED_PAIRS_PER_CORE = (SHARED_TOTAL_PAIRS + SHARED_CORES - 1) // SHARED_CORES
-    SHARED_TASKS_PER_CORE = SHARED_PAIRS_PER_CORE * SHARED_KV_TILES
-    SHARED_PIPE_STEPS = SHARED_TASKS_PER_CORE + PRE_LAUNCH
-    _GEOMETRY_READY = True
-
-
 @tilelang.jit(
     out_idx=[3],
     workspace_idx=[],
     pass_configs=pass_configs,
 )
 def xattention():
-    _ensure_geometry()
     block_num = NUM_CORES
 
     @T.prim_func
@@ -1566,204 +1537,166 @@ def ref_x_attention_decode(
     return final_O.to(Q.dtype)
 
 
-def _run_original():
-    with ExitStack() as _device_scope:
-        tilelang.disable_cache()
-        torch.manual_seed(42)
-        tilelang.disable_cache()
-        runtime_decode_step = DECODE_STEP
-        shared_kv_len = KV_LEN
-        shared_kv_lens_values = [shared_kv_len] * REQUEST_BATCH
+if __name__ == "__main__":
+    torch.manual_seed(42)
+    tilelang.disable_cache()
+    runtime_decode_step = DECODE_STEP
+    shared_kv_len = KV_LEN
+    shared_kv_lens_values = [shared_kv_len] * REQUEST_BATCH
 
-        if _is_simulator():
-            Q = torch.full((BEAM_SIZE, NUM_HEADS, D), 0.1, dtype=TORCH_DTYPE, device="cpu").npu()
-            K_shared = torch.full(
-                tuple(k_shared_shape),
-                0.1,
-                dtype=TORCH_DTYPE,
-                device="cpu",
-            ).npu()
-            V_shared = torch.full(
-                tuple(v_shared_shape),
-                0.1,
-                dtype=TORCH_DTYPE,
-                device="cpu",
-            ).npu()
-            K_unshared = torch.full(
-                (MAX_REQUEST_NUM, BEAMS_PER_REQUEST, KV_HEADS, DECODE_STEP, D),
-                0.1,
-                dtype=TORCH_DTYPE,
-                device="cpu",
-            ).npu()
-            V_unshared = torch.full(
-                (MAX_REQUEST_NUM, BEAMS_PER_REQUEST, KV_HEADS, DECODE_STEP, D),
-                0.1,
-                dtype=TORCH_DTYPE,
-                device="cpu",
-            ).npu()
-        else:
-            _device_scope.enter_context(torch.device("npu"))
-            Q = torch.randn(BEAM_SIZE, NUM_HEADS, D, dtype=TORCH_DTYPE).uniform_(-1, 1)
-            K_shared = torch.randn(*k_shared_shape, dtype=TORCH_DTYPE).uniform_(-1, 1)
-            V_shared = torch.randn(*v_shared_shape, dtype=TORCH_DTYPE).uniform_(-1, 1)
-            K_unshared = torch.randn(
-                MAX_REQUEST_NUM,
-                BEAMS_PER_REQUEST,
-                KV_HEADS,
-                DECODE_STEP,
-                D,
-                dtype=TORCH_DTYPE,
-            ).uniform_(-1, 1)
-            V_unshared = torch.randn(
-                MAX_REQUEST_NUM,
-                BEAMS_PER_REQUEST,
-                KV_HEADS,
-                DECODE_STEP,
-                D,
-                dtype=TORCH_DTYPE,
-            ).uniform_(-1, 1)
+    if _is_simulator():
+        Q = torch.full((BEAM_SIZE, NUM_HEADS, D), 0.1, dtype=TORCH_DTYPE, device="cpu").npu()
+        K_shared = torch.full(
+            tuple(k_shared_shape),
+            0.1,
+            dtype=TORCH_DTYPE,
+            device="cpu",
+        ).npu()
+        V_shared = torch.full(
+            tuple(v_shared_shape),
+            0.1,
+            dtype=TORCH_DTYPE,
+            device="cpu",
+        ).npu()
+        K_unshared = torch.full(
+            (MAX_REQUEST_NUM, BEAMS_PER_REQUEST, KV_HEADS, DECODE_STEP, D),
+            0.1,
+            dtype=TORCH_DTYPE,
+            device="cpu",
+        ).npu()
+        V_unshared = torch.full(
+            (MAX_REQUEST_NUM, BEAMS_PER_REQUEST, KV_HEADS, DECODE_STEP, D),
+            0.1,
+            dtype=TORCH_DTYPE,
+            device="cpu",
+        ).npu()
+    else:
+        torch.set_default_device("npu")
+        Q = torch.randn(BEAM_SIZE, NUM_HEADS, D, dtype=TORCH_DTYPE).uniform_(-1, 1)
+        K_shared = torch.randn(*k_shared_shape, dtype=TORCH_DTYPE).uniform_(-1, 1)
+        V_shared = torch.randn(*v_shared_shape, dtype=TORCH_DTYPE).uniform_(-1, 1)
+        K_unshared = torch.randn(
+            MAX_REQUEST_NUM,
+            BEAMS_PER_REQUEST,
+            KV_HEADS,
+            DECODE_STEP,
+            D,
+            dtype=TORCH_DTYPE,
+        ).uniform_(-1, 1)
+        V_unshared = torch.randn(
+            MAX_REQUEST_NUM,
+            BEAMS_PER_REQUEST,
+            KV_HEADS,
+            DECODE_STEP,
+            D,
+            dtype=TORCH_DTYPE,
+        ).uniform_(-1, 1)
 
-        Q_unshared_kernel = Q.reshape(MERGE_ROWS, D)
-        K_unshared_kernel = K_unshared.reshape(MAX_REQUEST_NUM * UNSHARED_GROUPS_PER_REQUEST * DECODE_STEP, D)
-        V_unshared_kernel = V_unshared.reshape(MAX_REQUEST_NUM * UNSHARED_GROUPS_PER_REQUEST * DECODE_STEP, D)
-        unshared_block_table = torch.arange(REQUEST_BATCH, dtype=torch.int32, device="npu")
-        shared_kv_lens = torch.tensor(shared_kv_lens_values, dtype=torch.int32, device="npu")
-        decode_step_t = torch.tensor([runtime_decode_step], dtype=torch.int32, device="npu")
+    Q_unshared_kernel = Q.reshape(MERGE_ROWS, D)
+    K_unshared_kernel = K_unshared.reshape(MAX_REQUEST_NUM * UNSHARED_GROUPS_PER_REQUEST * DECODE_STEP, D)
+    V_unshared_kernel = V_unshared.reshape(MAX_REQUEST_NUM * UNSHARED_GROUPS_PER_REQUEST * DECODE_STEP, D)
+    unshared_block_table = torch.arange(REQUEST_BATCH, dtype=torch.int32, device="npu")
+    shared_kv_lens = torch.tensor(shared_kv_lens_values, dtype=torch.int32, device="npu")
+    decode_step_t = torch.tensor([runtime_decode_step], dtype=torch.int32, device="npu")
 
-        block_mask_ws = torch.full((Q_BATCH, KV_BATCH), -1e10, dtype=torch.float32, device="npu")
-        for b in range(UNSHARED_GROUPS_PER_TASK):
-            for q_row in range(GROUP_SIZE):
-                for kv_col in range(runtime_decode_step):
-                    block_mask_ws[b * GROUP_SIZE + q_row, b * DECODE_STEP + kv_col] = 0.0
+    block_mask_ws = torch.full((Q_BATCH, KV_BATCH), -1e10, dtype=torch.float32, device="npu")
+    for b in range(UNSHARED_GROUPS_PER_TASK):
+        for q_row in range(GROUP_SIZE):
+            for kv_col in range(runtime_decode_step):
+                block_mask_ws[b * GROUP_SIZE + q_row, b * DECODE_STEP + kv_col] = 0.0
 
-        s_buf = torch.zeros(SHARED_S_SLOTS, NUM_CORES, BM, EFFECTIVE_BLOCK_N, dtype=torch.float32, device="npu")
-        p_buf = torch.zeros(SHARED_P_SLOTS, NUM_CORES, BM, EFFECTIVE_BLOCK_N, dtype=TORCH_DTYPE, device="npu")
-        o_buf = torch.zeros(SHARED_O_SLOTS, NUM_CORES, BM, D, dtype=torch.float32, device="npu")
-        shared_O_merge_ws = torch.zeros(BEAM_SIZE, NUM_HEADS, D, dtype=torch.float32, device="npu")
-        shared_gm_merge_ws = torch.zeros(BEAM_SIZE, NUM_HEADS, UB_ALIGN_ELEMS, dtype=torch.float32, device="npu")
-        shared_gl_merge_ws = torch.zeros(BEAM_SIZE, NUM_HEADS, UB_ALIGN_ELEMS, dtype=torch.float32, device="npu")
-        unshared_O_ws = torch.zeros(UNSHARED_BEAM, NUM_HEADS, D, dtype=torch.float32, device="npu")
-        unshared_gm_ws = torch.zeros(UNSHARED_BEAM, NUM_HEADS, dtype=torch.float32, device="npu")
-        unshared_gl_ws = torch.zeros(UNSHARED_BEAM, NUM_HEADS, dtype=torch.float32, device="npu")
-        shared_O_merge_flat = shared_O_merge_ws.reshape(MERGE_ROWS, D)
-        shared_gm_merge_flat = shared_gm_merge_ws.reshape(MERGE_ROWS, UB_ALIGN_ELEMS)
-        shared_gl_merge_flat = shared_gl_merge_ws.reshape(MERGE_ROWS, UB_ALIGN_ELEMS)
-        unshared_O_flat = unshared_O_ws.reshape(MERGE_ROWS, D)
-        unshared_gm_flat = unshared_gm_ws.reshape(MERGE_ROWS)
-        unshared_gl_flat = unshared_gl_ws.reshape(MERGE_ROWS)
-        func = xattention()
+    s_buf = torch.zeros(SHARED_S_SLOTS, NUM_CORES, BM, EFFECTIVE_BLOCK_N, dtype=torch.float32, device="npu")
+    p_buf = torch.zeros(SHARED_P_SLOTS, NUM_CORES, BM, EFFECTIVE_BLOCK_N, dtype=TORCH_DTYPE, device="npu")
+    o_buf = torch.zeros(SHARED_O_SLOTS, NUM_CORES, BM, D, dtype=torch.float32, device="npu")
+    shared_O_merge_ws = torch.zeros(BEAM_SIZE, NUM_HEADS, D, dtype=torch.float32, device="npu")
+    shared_gm_merge_ws = torch.zeros(BEAM_SIZE, NUM_HEADS, UB_ALIGN_ELEMS, dtype=torch.float32, device="npu")
+    shared_gl_merge_ws = torch.zeros(BEAM_SIZE, NUM_HEADS, UB_ALIGN_ELEMS, dtype=torch.float32, device="npu")
+    unshared_O_ws = torch.zeros(UNSHARED_BEAM, NUM_HEADS, D, dtype=torch.float32, device="npu")
+    unshared_gm_ws = torch.zeros(UNSHARED_BEAM, NUM_HEADS, dtype=torch.float32, device="npu")
+    unshared_gl_ws = torch.zeros(UNSHARED_BEAM, NUM_HEADS, dtype=torch.float32, device="npu")
+    shared_O_merge_flat = shared_O_merge_ws.reshape(MERGE_ROWS, D)
+    shared_gm_merge_flat = shared_gm_merge_ws.reshape(MERGE_ROWS, UB_ALIGN_ELEMS)
+    shared_gl_merge_flat = shared_gl_merge_ws.reshape(MERGE_ROWS, UB_ALIGN_ELEMS)
+    unshared_O_flat = unshared_O_ws.reshape(MERGE_ROWS, D)
+    unshared_gm_flat = unshared_gm_ws.reshape(MERGE_ROWS)
+    unshared_gl_flat = unshared_gl_ws.reshape(MERGE_ROWS)
+    func = xattention()
 
-        for _ in range(WARMUP_RUNS):
-            Output_flat = func(
-                Q,
-                K_shared,
-                V_shared,
-                s_buf,
-                p_buf,
-                o_buf,
-                K_unshared_kernel,
-                V_unshared_kernel,
-                Q_unshared_kernel,
-                shared_O_merge_ws,
-                shared_gm_merge_ws,
-                shared_gl_merge_ws,
-                unshared_O_ws,
-                unshared_gm_ws,
-                unshared_gl_ws,
-                shared_O_merge_flat,
-                shared_gm_merge_flat,
-                shared_gl_merge_flat,
-                unshared_O_flat,
-                unshared_gm_flat,
-                unshared_gl_flat,
-                block_mask_ws,
-                unshared_block_table,
-                shared_kv_lens,
-                decode_step_t,
-            )
-        torch.npu.synchronize()
-
-        for _ in range(NUM_RUNS):
-            Output_flat = func(
-                Q,
-                K_shared,
-                V_shared,
-                s_buf,
-                p_buf,
-                o_buf,
-                K_unshared_kernel,
-                V_unshared_kernel,
-                Q_unshared_kernel,
-                shared_O_merge_ws,
-                shared_gm_merge_ws,
-                shared_gl_merge_ws,
-                unshared_O_ws,
-                unshared_gm_ws,
-                unshared_gl_ws,
-                shared_O_merge_flat,
-                shared_gm_merge_flat,
-                shared_gl_merge_flat,
-                unshared_O_flat,
-                unshared_gm_flat,
-                unshared_gl_flat,
-                block_mask_ws,
-                unshared_block_table,
-                shared_kv_lens,
-                decode_step_t,
-            )
-        torch.npu.synchronize()
-        Output = Output_flat.reshape(BEAM_SIZE, NUM_HEADS, D)
-
-        ref_O = ref_x_attention_decode(
+    for _ in range(WARMUP_RUNS):
+        Output_flat = func(
             Q,
             K_shared,
             V_shared,
-            K_unshared,
-            V_unshared,
-            sm_scale,
-            NUM_HEADS,
-            KV_HEADS,
-            runtime_decode_step,
-            shared_block_table=None,
-            shared_kv_lens=shared_kv_lens,
-            unshared_block_table=unshared_block_table,
-            return_parts=False,
+            s_buf,
+            p_buf,
+            o_buf,
+            K_unshared_kernel,
+            V_unshared_kernel,
+            Q_unshared_kernel,
+            shared_O_merge_ws,
+            shared_gm_merge_ws,
+            shared_gl_merge_ws,
+            unshared_O_ws,
+            unshared_gm_ws,
+            unshared_gl_ws,
+            shared_O_merge_flat,
+            shared_gm_merge_flat,
+            shared_gl_merge_flat,
+            unshared_O_flat,
+            unshared_gm_flat,
+            unshared_gl_flat,
+            block_mask_ws,
+            unshared_block_table,
+            shared_kv_lens,
+            decode_step_t,
         )
-        torch.testing.assert_close(Output, ref_O, rtol=1e-3, atol=1e-3)
-        print("Kernel Output Match!")
+    torch.npu.synchronize()
 
+    for _ in range(NUM_RUNS):
+        Output_flat = func(
+            Q,
+            K_shared,
+            V_shared,
+            s_buf,
+            p_buf,
+            o_buf,
+            K_unshared_kernel,
+            V_unshared_kernel,
+            Q_unshared_kernel,
+            shared_O_merge_ws,
+            shared_gm_merge_ws,
+            shared_gl_merge_ws,
+            unshared_O_ws,
+            unshared_gm_ws,
+            unshared_gl_ws,
+            shared_O_merge_flat,
+            shared_gm_merge_flat,
+            shared_gl_merge_flat,
+            unshared_O_flat,
+            unshared_gm_flat,
+            unshared_gl_flat,
+            block_mask_ws,
+            unshared_block_table,
+            shared_kv_lens,
+            decode_step_t,
+        )
+    torch.npu.synchronize()
+    Output = Output_flat.reshape(BEAM_SIZE, NUM_HEADS, D)
 
-def _require_owned_cache():
-    requested = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this example")
-    if Path(tilelang.env.TILELANG_CACHE_DIR).resolve() != Path(requested).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; execution was refused")
-
-
-def _load_execution_module():
-    spec = importlib.util.spec_from_file_location(__name__ + "_execution", __file__)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-def main(argv=None):
-    parser = argparse.ArgumentParser(description="Original fixed-geometry XAttention expert kernel")
-    parser.parse_args(argv)
-    _require_owned_cache()
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    raw = CacheState._enabled
-    try:
-        execution = _load_execution_module()
-        execution._ensure_geometry()
-        with torch.random.fork_rng(devices=[]):
-            execution._run_original()
-    finally:
-        CacheState._enabled = raw
-
-
-if __name__ == "__main__":
-    main()
+    ref_O = ref_x_attention_decode(
+        Q,
+        K_shared,
+        V_shared,
+        K_unshared,
+        V_unshared,
+        sm_scale,
+        NUM_HEADS,
+        KV_HEADS,
+        runtime_decode_step,
+        shared_block_table=None,
+        shared_kv_lens=shared_kv_lens,
+        unshared_block_table=unshared_block_table,
+        return_parts=False,
+    )
+    torch.testing.assert_close(Output, ref_O, rtol=1e-3, atol=1e-3)
+    print("Kernel Output Match!")

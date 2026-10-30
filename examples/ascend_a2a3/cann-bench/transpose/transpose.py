@@ -11,8 +11,6 @@ dtype specialization:
   - int64: T.tile.transpose scalar fallback (correct but slower)
 """
 
-import argparse
-
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
@@ -443,11 +441,7 @@ def transpose(x: torch.Tensor, perm: list) -> torch.Tensor:
 # ---------------------------------------------------------------------------
 # Standalone run entry (smoke test, picked from test_transpose.py L0 case)
 # ---------------------------------------------------------------------------
-def main(argv=None):
-    argparse.ArgumentParser(description="Original cann-bench transpose standalone smoke").parse_args(argv)
-
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     torch.manual_seed(0)
 
     shape = (1024, 1024)
@@ -457,7 +451,3 @@ def main(argv=None):
     ref = torch.permute(x.cpu(), perm)
     torch.testing.assert_close(y.cpu().float(), ref.float(), rtol=1e-3, atol=1e-3)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

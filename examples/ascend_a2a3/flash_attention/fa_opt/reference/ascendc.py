@@ -1,9 +1,13 @@
-"""Original fa_opt FusionAttention reference; import/help do not register NPU."""
+"""AscendC reference used by the fa_opt comparison harness."""
 
 import argparse
+import torch
+import torch_npu
 
+torch.set_default_device("npu")
+torch.manual_seed(0)
 
-def parse_args(argv=None):
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--B", type=int, default=4, help="batch size")
     parser.add_argument("--S", type=int, default=4096, help="seq len")
@@ -12,10 +16,7 @@ def parse_args(argv=None):
     parser.add_argument("--kv-heads", type=int, default=None, help="kv head size")
     parser.add_argument("--D", type=int, default=512, help="hidden dim")
     parser.add_argument("--no-check", action="store_true", help="disable reference check")
-    return parser.parse_args(argv)
-
-
-def _run_original(args, torch, torch_npu):
+    args = parser.parse_args()
     B, S, H, D = args.B, args.S, args.H, args.D
     Q_H = args.q_heads or H
     KV_H = args.kv_heads or H
@@ -63,19 +64,3 @@ def _run_original(args, torch, torch_npu):
         print("Test Passed!")
     else:
         print("Reference check skipped.")
-
-
-def main(argv=None):
-    args = parse_args(argv)
-    import torch
-    import torch_npu
-
-    # Keep the original seed and default-NPU allocation semantics local to
-    # explicit execution, without changing a caller's global default device.
-    with torch.random.fork_rng(devices=[]), torch.device("npu"):
-        torch.manual_seed(0)
-        _run_original(args, torch, torch_npu)
-
-
-if __name__ == "__main__":
-    main()

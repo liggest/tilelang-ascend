@@ -631,84 +631,71 @@ def flashattn(
     return main
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            import os  # noqa: F401 - retained original dependency
-            import sys  # noqa: F401 - retained original dependency
-
-            # Resolve only this namespaced sibling; no process-wide path changes.
-            try:
-                from . import test_mha_sink_fwd_bhsd as _sink_fwd_reference
-            except ImportError:
-                import importlib.util as _importlib_util
-                from pathlib import Path as _Path
-
-                _spec = _importlib_util.spec_from_file_location(
-                    "_a2a3_test_mha_sink_fwd_bhsd", _Path(__file__).with_name("test_mha_sink_fwd_bhsd.py")
-                )
-                _sink_fwd_reference = _importlib_util.module_from_spec(_spec)
-                _spec.loader.exec_module(_sink_fwd_reference)
-            ref_program = _sink_fwd_reference.ref_program
-
-            tilelang.disable_cache()
-            torch.manual_seed(0)
-
-            # Minimal smoke test — matches L0 "l0_min_causal" config:
-            # batch=1, heads=1, seq_q=seq_kv=128, dim=128, causal (window=None).
-            batch, heads = 1, 1
-            seq_q, seq_kv, dim = 128, 128, 128
-            window_size = None  # causal only
-            block_M, block_N = 128, 128
-            atol = 1e-2
-
-            torch.manual_seed(0)
-            q = torch.randn(batch, heads, seq_q, dim, dtype=torch.float16, device="npu")
-            k = torch.randn(batch, heads, seq_kv, dim, dtype=torch.float16, device="npu")
-            v = torch.randn(batch, heads, seq_kv, dim, dtype=torch.float16, device="npu")
-            sinks = torch.randn(heads, dtype=torch.float16, device="npu")
-
-            # Pre-broadcast sinks [heads] -> [heads, seq_q] (avoid T.Parallel broadcast bug)
-            sinks_broad = sinks.unsqueeze(1).expand(-1, seq_q).contiguous()
-
-            # Build causal mask (right-aligned, 2D shared across batch/head)
-            mask = build_causal_mask(seq_q, seq_kv, window_size, "npu", block_M, block_N)
-
-            kernel = flashattn(
-                batch,
-                heads,
-                seq_q,
-                seq_kv,
-                dim,
-                block_M=block_M,
-                block_N=block_N,
-                has_window=(window_size is not None),
-                real_seq_q=seq_q,
-                real_seq_kv=seq_kv,
-            )
-
-            out = kernel(q, k, v, sinks_broad, mask)
-            torch.npu.synchronize()
-
-            # Golden (device-agnostic, runs on NPU; takes original [heads] sinks)
-            ref_out = ref_program(q, k, v, sinks, sliding_window=window_size, dtype=torch.float16)
-            torch.npu.synchronize()
-
-            max_diff = (out.float() - ref_out.float()).abs().max().item()
-            print(f"max_diff: {max_diff:.6e}")
-            assert max_diff < atol, f"Precision check failed: max_diff={max_diff} >= atol={atol}"
-            print("Test Passed!")
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+# ===========================================================================
+# Smoke test entry (CI compatibility)
+#
+# Repository CI (examples/bench_test.sh) marks a script PASSED only if its
+# stdout contains "Test Passed!" or "Kernel Output Match!". This __main__
+# runs the minimal L0 shape (l0_min_causal config) and validates against
+# ref_program (imported from test_mha_sink_fwd_bhsd.py) so the main file is
+# independently runnable in CI. The @tilelang.jit flashattn kernel above is
+# unchanged.
+# ===========================================================================
 
 
 if __name__ == "__main__":
-    main()
+    import os
+    import sys
+
+    # Import golden from sibling test module (same dir on sys.path)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from test_mha_sink_fwd_bhsd import ref_program  # noqa: E402
+
+    tilelang.disable_cache()
+    torch.set_default_device("npu")
+    torch.manual_seed(0)
+
+    # Minimal smoke test — matches L0 "l0_min_causal" config:
+    # batch=1, heads=1, seq_q=seq_kv=128, dim=128, causal (window=None).
+    batch, heads = 1, 1
+    seq_q, seq_kv, dim = 128, 128, 128
+    window_size = None  # causal only
+    block_M, block_N = 128, 128
+    atol = 1e-2
+
+    torch.manual_seed(0)
+    q = torch.randn(batch, heads, seq_q, dim, dtype=torch.float16, device="npu")
+    k = torch.randn(batch, heads, seq_kv, dim, dtype=torch.float16, device="npu")
+    v = torch.randn(batch, heads, seq_kv, dim, dtype=torch.float16, device="npu")
+    sinks = torch.randn(heads, dtype=torch.float16, device="npu")
+
+    # Pre-broadcast sinks [heads] -> [heads, seq_q] (avoid T.Parallel broadcast bug)
+    sinks_broad = sinks.unsqueeze(1).expand(-1, seq_q).contiguous()
+
+    # Build causal mask (right-aligned, 2D shared across batch/head)
+    mask = build_causal_mask(seq_q, seq_kv, window_size, "npu", block_M, block_N)
+
+    kernel = flashattn(
+        batch,
+        heads,
+        seq_q,
+        seq_kv,
+        dim,
+        block_M=block_M,
+        block_N=block_N,
+        has_window=(window_size is not None),
+        real_seq_q=seq_q,
+        real_seq_kv=seq_kv,
+    )
+
+    out = kernel(q, k, v, sinks_broad, mask)
+    torch.npu.synchronize()
+
+    # Golden (device-agnostic, runs on NPU; takes original [heads] sinks)
+    ref_out = ref_program(q, k, v, sinks, sliding_window=window_size, dtype=torch.float16)
+    torch.npu.synchronize()
+
+    max_diff = (out.float() - ref_out.float()).abs().max().item()
+    print(f"max_diff: {max_diff:.6e}")
+    assert max_diff < atol, f"Precision check failed: max_diff={max_diff} >= atol={atol}"
+    print("Test Passed!")

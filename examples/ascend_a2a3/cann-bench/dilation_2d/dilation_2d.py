@@ -789,27 +789,7 @@ def _golden_dilation(x, flt, sh, sw, rh, rw, pt, pl, Ho, Wo):
     return y
 
 
-# CLI cache decisions belong to the invocation, including failed original cases.
-def _preserve_cache_state(function):
-    from functools import wraps
-
-    @wraps(function)
-    def invoke(*args, **kwargs):
-        from tilelang.env import CacheState
-
-        enabled = CacheState._enabled
-        try:
-            return function(*args, **kwargs)
-        finally:
-            CacheState._enabled = enabled
-
-    return invoke
-
-
-@_preserve_cache_state
-def main():
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     # One representative shape per dispatch path (ab_ry / s1 / ph / bridge /
     # flat Path C) against the fp64 golden.
     torch.manual_seed(0)
@@ -837,7 +817,3 @@ def main():
     # CI pass criterion (examples/bench_test.sh) requires the output to end
     # with this phrase (or "TEST PASSED!"), same as the other examples.
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

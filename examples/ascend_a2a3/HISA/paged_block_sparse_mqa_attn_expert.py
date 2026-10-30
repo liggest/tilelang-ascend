@@ -41,9 +41,9 @@ Key invariants:
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import argparse
-import os
-from pathlib import Path
 import torch
+
+tilelang.disable_cache()
 
 
 @tilelang.jit(
@@ -556,7 +556,7 @@ def test_paged_block_sparse_mqa_attn(
     return logits_flat
 
 
-def _parse_args():
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Paged Sparse MQA Attention — Opt1: WS Double-buffer + Padded Mask")
     parser.add_argument("--batch", type=int, default=1)
     parser.add_argument("--seq_len", type=int, default=1)
@@ -568,10 +568,8 @@ def _parse_args():
     parser.add_argument("--max_blocks", type=int, default=256)
     parser.add_argument("--dtype", type=str, default="float16")
     args = parser.parse_args()
-    return args
 
-
-def _run_original_cli(args):
+    torch.set_default_device("npu")
     torch.manual_seed(42)
     tilelang.disable_cache()
     assert args.topk % 4 == 0
@@ -597,27 +595,3 @@ def _run_original_cli(args):
         max_blocks=args.max_blocks,
     )
     print("Kernel Output Match!")
-
-
-def main():
-    args = _parse_args()
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this compile-every-call example.")
-    from tilelang import env
-    from tilelang.env import CacheState
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    old_enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
-        with torch.device("npu"):
-            _run_original_cli(args)
-    finally:
-        CacheState._enabled = old_enabled
-
-
-if __name__ == "__main__":
-    main()

@@ -1,9 +1,6 @@
 import math
-
 import tilelang
-
 import torch
-
 import tilelang.ascend.a2a3.language as T
 
 _FWD_PASS_CONFIGS = {
@@ -260,12 +257,6 @@ def test_bwd():
     print("Kernel Output Match!")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     test_fwd()
     test_bwd()
-
-
-if __name__ == "__main__":
-    main()

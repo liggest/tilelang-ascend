@@ -1,13 +1,21 @@
-"""Original TA developer example; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import argparse
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 from tilelang.profiler import do_bench
+
+tilelang.disable_cache()
+
+parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
+parser.add_argument("--m", type=int, default=8192, help="Matrix M dimension")
+parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
+parser.add_argument("--k", type=int, default=8192, help="Matrix K dimension")
+args = parser.parse_args()
+
+M = args.m
+N = args.n
+K = args.k
 
 
 @tilelang.jit(out_idx=[-1], target="ascendc")
@@ -97,55 +105,29 @@ def matmul(M, N, K, block_M, block_N, block_K, K_L1, S1, S2, dtype="float16", ac
     return main
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
+func = matmul(M, N, K, 128, 256, 64, 256, 2, 2)
 
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
+print(func.get_kernel_source())
 
-    A2A3CythonKernelCache().clear_cache()
+torch.manual_seed(0)
 
-    parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
-    parser.add_argument("--m", type=int, default=8192, help="Matrix M dimension")
-    parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
-    parser.add_argument("--k", type=int, default=8192, help="Matrix K dimension")
-    args = parser.parse_args()
+a = torch.randn(M, K).half().npu()
+b = torch.randn(K, N).half().npu()
 
-    M = args.m
-    N = args.n
-    K = args.k
+print("init successful!")
 
-    func = matmul(M, N, K, 128, 256, 64, 256, 2, 2)
+c = func(a, b)
+ref_c = a @ b
 
-    print(func.get_kernel_source())
+torch.npu.synchronize()
 
-    torch.manual_seed(0)
+print(c, ref_c)
 
-    a = torch.randn(M, K).half().npu()
-    b = torch.randn(K, N).half().npu()
+tilelang_time = do_bench(lambda: func(a, b))
+torch_time = do_bench(lambda: a @ b)
 
-    print("init successful!")
+print(f"tilelang time: {tilelang_time} ms")
+print(f"torch time: {torch_time} ms")
 
-    c = func(a, b)
-    ref_c = a @ b
-
-    torch.npu.synchronize()
-
-    print(c, ref_c)
-
-    tilelang_time = do_bench(lambda: func(a, b))
-    torch_time = do_bench(lambda: a @ b)
-
-    print(f"tilelang time: {tilelang_time} ms")
-    print(f"torch time: {torch_time} ms")
-
-    torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
-    print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
+print("Kernel Output Match!")

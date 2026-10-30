@@ -1,8 +1,8 @@
 import tilelang
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-from tilelang.ascend.a2a3 import language as T
+import tilelang.ascend.a2a3.language as T
 import torch
 
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -20,7 +20,7 @@ def rms_norm(M, head_dim, block_M, eps, dtype="float16"):
     row_per_vec = block_M // VEC_NUM
 
     ACC_DTYPE = "float32"
-    TMP_DTYPE = "uint8"  # noqa: F841 - retained from the pinned TA factory
+    TMP_DTYPE = "uint8"  # noqa: F841
 
     @T.prim_func
     def main(
@@ -95,10 +95,7 @@ def rms_norm_reference(q, variance_epsilon):
     return q_normalized_fp32.half().view(bs, head_num, dim)
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
     torch.manual_seed(0)
     variance_epsilon = 1e-6
 
@@ -109,7 +106,3 @@ def main():
 
     torch.testing.assert_close(q_out.cpu(), ref_q.cpu(), rtol=1e-2, atol=1e-2)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

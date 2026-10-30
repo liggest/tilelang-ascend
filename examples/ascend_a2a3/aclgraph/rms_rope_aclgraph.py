@@ -2,9 +2,6 @@ import torch
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import argparse
-import importlib.util
-import os
-from pathlib import Path
 
 """Take the RMS Norm operator and RoPE operator as examples to demonstrate the aclGraph mode."""
 
@@ -15,9 +12,7 @@ pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
 }
 
-# Keep import/help free of backend registration. PyTorch accepts this same
-# unresolved device token; the explicit CLI reifies the real device below.
-device = "npu"
+device = torch.device("npu")
 
 
 # ======================== RMS Norm Kernel ========================
@@ -29,7 +24,7 @@ def rms_norm_kernel(M, head_dim, block_M, eps, dtype="float16"):
     row_per_vec = block_M // VEC_NUM
 
     ACC_DTYPE = "float32"
-    TMP_DTYPE = "uint8"  # noqa: F841 - retain the original source constant
+    TMP_DTYPE = "uint8"  # noqa: F841
 
     @T.prim_func
     def main_rms(
@@ -92,7 +87,7 @@ def rope_kernel_in_place(M, block_M, batch_size, hidden_size, rope_dim, head_num
 
     ACC_DTYPE = "float32"
     MASK_DTYPE = "uint32"
-    TMP_DTYPE = "uint8"  # noqa: F841 - retain the original source constant
+    TMP_DTYPE = "uint8"  # noqa: F841
 
     @T.prim_func
     def main_rope(
@@ -226,7 +221,7 @@ def torch_rope_ref(x, sin, cos):
 
 
 # ======================== Main ========================
-def parse_args(argv=None):
+def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument(
         "--shape",
@@ -242,13 +237,14 @@ def parse_args(argv=None):
         default=1e-6,
         help="variance epsilon for RMS norm",
     )
-    return p.parse_args(argv)
+    return p.parse_args()
 
 
-def _run_original(args):
+if __name__ == "__main__":
     torch.manual_seed(42)
     tilelang.disable_cache()
 
+    args = parse_args()
     batch_size, head_num, hidden_size, rope_dim = args.shape
     variance_epsilon = args.eps
 
@@ -276,44 +272,3 @@ def _run_original(args):
 
     torch.testing.assert_close(q, q_ref, rtol=1e-2, atol=1e-2)
     print("Kernel Output Match!")
-
-
-def _load_execution_factories():
-    # Use the real JITImpl constructor and its canonical cache policy. Caller
-    # memo objects can have custom types/capacities and must remain untouched.
-    spec = importlib.util.spec_from_file_location(__name__ + "_execution", __file__)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module.rms_norm_kernel, module.rope_kernel_in_place
-
-
-def main(argv=None):
-    args = parse_args(argv)
-    requested_cache = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested_cache:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this graph CLI")
-    if Path(tilelang.env.TILELANG_CACHE_DIR).resolve() != Path(requested_cache).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; graph execution was refused")
-
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    global device, rms_norm_kernel, rope_kernel_in_place
-    caller_device = device
-    caller_cache_state = CacheState._enabled
-    caller_factories = rms_norm_kernel, rope_kernel_in_place
-    try:
-        rms_norm_kernel, rope_kernel_in_place = _load_execution_factories()
-        device = torch.device("npu")
-        # Preserve caller CPU RNG without probing or forking other NPU devices.
-        # Original manual_seed(42) remains inside the original execution body.
-        with torch.random.fork_rng(devices=[]):
-            _run_original(args)
-    finally:
-        device = caller_device
-        CacheState._enabled = caller_cache_state
-        rms_norm_kernel, rope_kernel_in_place = caller_factories
-
-
-if __name__ == "__main__":
-    main()

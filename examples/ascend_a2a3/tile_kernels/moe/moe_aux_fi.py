@@ -1,5 +1,3 @@
-from pathlib import Path
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import os
 import pytest
 import numpy as np
@@ -9,13 +7,12 @@ import tilelang
 import tilelang.ascend.a2a3.language as T
 from typing import Iterable
 
-
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
-
 # For compatibility, keep data types consistent with those inside the operator.
 INDEX_DTYPE = "int64"
 FLOAT_DTYPE = "float32"
 INT32_DTYPE = "int32"
+
+tilelang.disable_cache()
 
 
 def get_device() -> str:
@@ -244,22 +241,8 @@ def test_aux_fi(params):
     print(f"Forward Test passed for params: {make_param_id(params)}")
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-
+if __name__ == "__main__":
     exit_code = pytest.main([__file__, "-v"])
     if exit_code == pytest.ExitCode.OK:
         print("All aux_fi tests passed! Kernel Output Match!")
     sys.exit(exit_code)
-
-
-if __name__ == "__main__":
-    main()

@@ -1,4 +1,3 @@
-import pytest
 import importlib.util
 import sys
 from pathlib import Path
@@ -61,6 +60,3 @@ def test_hc_split_sinkhorn_accuracy() -> None:
     torch.testing.assert_close(pre_ref, pre, rtol=1e-2, atol=1e-2)
     torch.testing.assert_close(post_ref, post, rtol=1e-2, atol=1e-2)
     torch.testing.assert_close(comb_ref, comb, rtol=1e-2, atol=1e-2)
-
-
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache", "isolated_npu_default_device", "disable_a2a3_cache")]

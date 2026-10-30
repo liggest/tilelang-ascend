@@ -20,60 +20,22 @@ import math
 import os
 import sys
 
-import importlib.util
-from pathlib import Path
-import pytest
-import tilelang
-import torch
-from tilelang.profiler import do_bench
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import tilelang  # noqa: E402
+import torch  # noqa: E402
+from tilelang.profiler import do_bench  # noqa: E402
 
-def _load_kernel_module():
-    spec = importlib.util.spec_from_file_location(__name__ + "_kernel", Path(__file__).with_name("example_fusedmoe.py"))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-_KERNEL_MODULE = _load_kernel_module()
-BLOCK_M = _KERNEL_MODULE.BLOCK_M
-golden_fusedmoe_full = _KERNEL_MODULE.golden_fusedmoe_full
-golden_routed_expert_nc = _KERNEL_MODULE.golden_routed_expert_nc
-golden_shared_expert = _KERNEL_MODULE.golden_shared_expert
-host_preprocess = _KERNEL_MODULE.host_preprocess
-host_preprocess_for_test = _KERNEL_MODULE.host_preprocess_for_test
-routed_expert_kernel = _KERNEL_MODULE.routed_expert_kernel
-shared_expert_kernel = _KERNEL_MODULE.shared_expert_kernel
-
-pytestmark = pytest.mark.a2a3_device
-
-
-@pytest.fixture(autouse=True)
-def _restore_example_cache_state():
-    # Override the parent example fixture locally: preserve the exact raw bit,
-    # including when a global disable option masks its effective bool value.
-    from tilelang.env import CacheState
-
-    raw = CacheState._enabled
-    try:
-        with torch.random.fork_rng(devices=[]):
-            yield
-    finally:
-        CacheState._enabled = raw
-
-
-@pytest.fixture(autouse=True)
-def _isolate_kernel_module(isolated_a2a3_cache, monkeypatch):
-    module = _load_kernel_module()
-    monkeypatch.setitem(globals(), "_KERNEL_MODULE", module)
-    monkeypatch.setitem(globals(), "BLOCK_M", module.BLOCK_M)
-    monkeypatch.setitem(globals(), "golden_fusedmoe_full", module.golden_fusedmoe_full)
-    monkeypatch.setitem(globals(), "golden_routed_expert_nc", module.golden_routed_expert_nc)
-    monkeypatch.setitem(globals(), "golden_shared_expert", module.golden_shared_expert)
-    monkeypatch.setitem(globals(), "host_preprocess", module.host_preprocess)
-    monkeypatch.setitem(globals(), "host_preprocess_for_test", module.host_preprocess_for_test)
-    monkeypatch.setitem(globals(), "routed_expert_kernel", module.routed_expert_kernel)
-    monkeypatch.setitem(globals(), "shared_expert_kernel", module.shared_expert_kernel)
+from example_fusedmoe import (  # noqa: E402
+    BLOCK_M,
+    golden_fusedmoe_full,
+    golden_routed_expert_nc,
+    golden_shared_expert,
+    host_preprocess,
+    host_preprocess_for_test,
+    routed_expert_kernel,
+    shared_expert_kernel,
+)
 
 
 def test_fusedmoe_l0():
@@ -973,13 +935,7 @@ def _bench_kernels(
     Defined outside the bench loop so lambdas capture function parameters
     (not loop variables), avoiding ruff B023.
     """
-    shared_ms = do_bench(
-        lambda: shared_run(x, wgs, wus, wds),
-        _n_warmup=5,
-        _n_repeat=5,
-        return_mode="mean",
-        device=x.device,
-    )
+    shared_ms = do_bench(lambda: shared_run(x, wgs, wus, wds), _n_warmup=5, _n_repeat=5, return_mode="mean", device=x.device)
     routed_ms = do_bench(
         lambda: routed_run(stacked_tokens, wgr, wur, wdr, expert_weights, block_metadata),
         _n_warmup=5,
@@ -1044,13 +1000,10 @@ def _bench_kernels_msprof(
     )
 
     script_content = (
-        f"import sys, os, importlib.util\n"
-        f"import torch_npu\n"
+        f"import sys, os\n"
+        f"sys.path.insert(0, {json_module.dumps(mod_dir)})\n"
         f"import tilelang, torch\n"
-        f"spec = importlib.util.spec_from_file_location('_original_fusedmoe_profiled', {json_module.dumps(os.path.join(mod_dir, 'example_fusedmoe.py'))})\n"
-        f"example = importlib.util.module_from_spec(spec)\n"
-        f"spec.loader.exec_module(example)\n"
-        f"shared_expert_kernel, routed_expert_kernel, BLOCK_M = example.shared_expert_kernel, example.routed_expert_kernel, example.BLOCK_M\n"
+        f"from example_fusedmoe import shared_expert_kernel, routed_expert_kernel, BLOCK_M\n"
         f"\n"
         f"tilelang.disable_cache()\n"
         f"torch.set_default_device('npu')\n"
@@ -1255,7 +1208,7 @@ def test_fusedmoe_bench(profiler="do_bench"):
 # ============================================================================
 # Main Entry
 # ============================================================================
-def parse_args(argv=None):
+def main():
     parser = argparse.ArgumentParser(description="FusedMoE NPU Tests")
     parser.add_argument("--level", default="l0", choices=["l0", "l1", "l2", "boundary", "all", "bench"])
     parser.add_argument(
@@ -1264,10 +1217,7 @@ def parse_args(argv=None):
         choices=["do_bench", "msprof"],
         help="Profiler for bench level: do_bench (CI-stable) or msprof (hardware-level)",
     )
-    return parser.parse_args(argv)
-
-
-def _run_original(args):
+    args = parser.parse_args()
 
     tilelang.disable_cache()
     torch.manual_seed(0)
@@ -1293,46 +1243,6 @@ def _run_original(args):
         print("Test Passed!")
         sys.exit(0)
     sys.exit(1)
-
-
-def _require_owned_cache():
-    requested = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this example")
-    if Path(tilelang.env.TILELANG_CACHE_DIR).resolve() != Path(requested).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; execution was refused")
-
-
-def main(argv=None):
-    args = parse_args(argv)
-    _require_owned_cache()
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    global _KERNEL_MODULE
-    names = [
-        "BLOCK_M",
-        "golden_fusedmoe_full",
-        "golden_routed_expert_nc",
-        "golden_shared_expert",
-        "host_preprocess",
-        "host_preprocess_for_test",
-        "routed_expert_kernel",
-        "shared_expert_kernel",
-    ]
-    old_module = _KERNEL_MODULE
-    old_names = {name: globals()[name] for name in names}
-    raw = CacheState._enabled
-    try:
-        _KERNEL_MODULE = _load_kernel_module()
-        for name in names:
-            globals()[name] = getattr(_KERNEL_MODULE, name)
-        with torch.random.fork_rng(devices=[]):
-            _run_original(args)
-    finally:
-        _KERNEL_MODULE = old_module
-        globals().update(old_names)
-        CacheState._enabled = raw
 
 
 # pytest-discoverable aliases

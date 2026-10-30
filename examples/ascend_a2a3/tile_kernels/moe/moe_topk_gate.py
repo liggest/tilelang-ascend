@@ -6,9 +6,6 @@ import torch
 import tilelang
 import tilelang.ascend.a2a3.language as T
 
-
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
-
 # NOTE: If compiling for PTO mode, all int64 index types must be changed to int32.
 # Search for INDEX_DTYPE and related "int64" strings, and replace accordingly.
 FLOAT_DTYPE = "float32"
@@ -440,14 +437,8 @@ def test_topk_gate_backward(params):
     print(f"Backward Test passed for params: {make_param_id(params)}")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     exit_code = pytest.main([__file__, "-v"])
     if exit_code == pytest.ExitCode.OK:
         print("All rms_norm tests passed! Kernel Output Match!")
     sys.exit(exit_code)
-
-
-if __name__ == "__main__":
-    main()

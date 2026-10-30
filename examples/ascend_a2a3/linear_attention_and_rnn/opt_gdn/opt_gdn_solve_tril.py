@@ -1,7 +1,5 @@
-import os
-from pathlib import Path
 import tilelang
-from tilelang import DataType  # noqa: F401 - retain original source dependency
+from tilelang import DataType  # noqa: F401
 import tilelang.ascend.a2a3.language as T
 import torch
 import torch.nn.functional as F
@@ -99,7 +97,7 @@ def solve_tril_64_ker(B, H, L, dtype="float16", accum_dtype="float"):
     C = 64
     F = 32
     chunk_num = T.ceildiv(L, C)
-    VEC_NUM = 2  # noqa: F841 - preserve original specialized algorithm constant
+    VEC_NUM = 2  # noqa: F841
 
     @T.prim_func
     def main(
@@ -190,17 +188,17 @@ def solve_tril_64_ker(B, H, L, dtype="float16", accum_dtype="float"):
 Advanced Algorithm (solve_tril_ker_128_ker):
 A = [A_00   0    0    0 ]
     [A_10 A_11   0    0 ]
-	[A_20 A_21 A_22   0 ]
-	[A_30 A_31 A_32 A_33]
+    [A_20 A_21 A_22   0 ]
+    [A_30 A_31 A_32 A_33]
 O = [O_00   0    0    0 ]
-	[O_10 O_11   0    0 ]
-	[O_20 O_21 O_22   0 ]
-	[O_30 O_31 O_32 O_33]
+    [O_10 O_11   0    0 ]
+    [O_20 O_21 O_22   0 ]
+    [O_30 O_31 O_32 O_33]
 First calculate O_00, O_11, O_22, O_33 separately using the basic algorithm on A_00, A_11, A_22, A_33.
 Then calculate O_10 = - O_11 * A_10 * O_00 and O_{32} = - O_33 * A_32 * O_22 (using gemm)
 Finally calculate [O_20 O_21]	  [O_22   0 ]	[A_20 A_21]	  [O_00   0 ]
-				  [O_30 O_31] = - [O_32 O_33] * [A_30 A_31] * [O_10 O_11] (using gemm)
-"""  # noqa: E101 - preserve original algorithm diagram string
+                  [O_30 O_31] = - [O_32 O_33] * [A_30 A_31] * [O_10 O_11] (using gemm)
+"""
 
 
 @tilelang.jit(out_idx=[-1], pass_configs=pass_configs)
@@ -208,7 +206,7 @@ def solve_tril_128_ker(B, H, L, dtype="float16", accum_dtype="float"):
     C = 128
     F = 32
     chunk_num = T.ceildiv(L, C)
-    VEC_NUM = 2  # noqa: F841 - preserve original specialized algorithm constant
+    VEC_NUM = 2  # noqa: F841
 
     @T.prim_func
     def main(
@@ -403,10 +401,8 @@ def ref_kkt(k, beta, g, C):
     return a.to(torch.float16)
 
 
-def _run_original_cli():
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
+    tilelang.disable_cache()
     torch.manual_seed(0)
     torch.set_printoptions(threshold=float("inf"), sci_mode=True)
 
@@ -416,7 +412,7 @@ def _run_original_cli():
 
     for B, H, L, DK, C in test_configs:
         print(f"Testing Solve Tril with B={B}, H={H}, L={L}, C={C}")
-        chunk_num = (L + C - 1) // C  # noqa: F841 - preserve original CLI calculation
+        chunk_num = (L + C - 1) // C
         k = torch.randn((B, H, L, DK)).npu().to(torch.float16)
         beta = torch.rand((B, H, L)).npu().to(torch.float16)
         g = torch.randn((B, H, L)).npu().to(torch.float)
@@ -431,35 +427,3 @@ def _run_original_cli():
         print("Test passed!")
 
     print("Kernel Output Match!")
-
-
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from tilelang import env
-    from tilelang.env import CacheState
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-    from torch._tensor_str import PRINT_OPTS
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-    from tilelang.cache.kernel_cache import KernelCache
-
-    old_enabled = CacheState.is_enabled()
-    old_staging_root = KernelCache._last_cleaned_staging_root
-    cache = A2A3CythonKernelCache()
-    old_memory = cache._memory_cache
-    old_print_options = vars(PRINT_OPTS).copy()
-    cache._memory_cache = {}
-    try:
-        _run_original_cli()
-    finally:
-        cache._memory_cache = old_memory
-        KernelCache._last_cleaned_staging_root = old_staging_root
-        CacheState._enabled = old_enabled
-        torch.set_printoptions(**old_print_options)
-
-
-if __name__ == "__main__":
-    main()

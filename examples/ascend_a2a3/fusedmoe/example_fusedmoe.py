@@ -14,11 +14,6 @@ Contains:
   - Host preprocessing (gating + token routing)
 """
 
-import argparse
-import importlib.util
-import os
-from pathlib import Path
-
 import torch
 import torch.nn.functional as F
 
@@ -1278,9 +1273,9 @@ def host_preprocess_for_test(group_sizes, d_hidden, n_experts, block_M, device):
 
 # ========== Smoke Test (CI entry — prints "Test Passed!") ==========
 
-
-def _run_original():
+if __name__ == "__main__":
     tilelang.disable_cache()
+    torch.set_default_device("npu")
     torch.manual_seed(0)
 
     # Minimal L0 config (shared expert, block-aligned)
@@ -1301,38 +1296,3 @@ def _run_original():
     torch.testing.assert_close(output.cpu(), ref.cpu(), atol=5e-3, rtol=5e-3)
     print(f"max_diff={max_diff:.6f}")
     print("Test Passed!")
-
-
-def _require_owned_cache():
-    requested = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this example")
-    if Path(tilelang.env.TILELANG_CACHE_DIR).resolve() != Path(requested).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; execution was refused")
-
-
-def _load_execution_module():
-    spec = importlib.util.spec_from_file_location(__name__ + "_execution", __file__)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-def main(argv=None):
-    parser = argparse.ArgumentParser(description="Original fixed-shape FusedMoE shared-expert smoke")
-    parser.parse_args(argv)
-    _require_owned_cache()
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    raw = CacheState._enabled
-    try:
-        execution = _load_execution_module()
-        with torch.random.fork_rng(devices=[]), torch.device("npu"):
-            execution._run_original()
-    finally:
-        CacheState._enabled = raw
-
-
-if __name__ == "__main__":
-    main()

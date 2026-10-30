@@ -5,8 +5,6 @@ from types import ModuleType
 
 import pytest
 
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
-
 # The cases a pull request runs; everything else is low_priority and waits for
 # the scheduled run. One case per distinct combination of the three parameters
 # that select a kernel path -- the input and output scale-factor encodings and
@@ -73,9 +71,23 @@ def _test_params() -> list:
 
 
 @pytest.fixture
-def isolated_kernel_cache(isolated_a2a3_cache):
-    """Reuse the namespace fixture instead of removed global cache-directory APIs."""
-    yield
+def isolated_kernel_cache(tmp_path):
+    """Give the case its own kernel cache directory.
+
+    The Example clears the kernel cache when it is imported, and here that
+    import happens inside every fork. Against the shared directory that would
+    delete kernels the other operator tests in the same Pytest invocation are
+    compiling into; against this one it deletes nothing anyone else holds. Each
+    case runs in its own fork, so nothing it compiles was reusable regardless.
+    """
+    import tilelang.cache
+
+    previous = tilelang.cache.get_cache_dir()
+    tilelang.cache.set_cache_dir(str(tmp_path))
+    try:
+        yield
+    finally:
+        tilelang.cache.set_cache_dir(str(previous))
 
 
 def _load_per_block_cast_example() -> ModuleType:
@@ -97,7 +109,6 @@ def _load_per_block_cast_example() -> ModuleType:
     finally:
         sys.argv = original_argv
         sys.path[:] = original_path
-        sys.modules.pop("utils", None)
         if original_utils is not None:
             sys.modules["utils"] = original_utils
     return module

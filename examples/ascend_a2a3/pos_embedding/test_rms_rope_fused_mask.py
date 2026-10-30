@@ -1,10 +1,7 @@
-import pytest
 import importlib.util
 import sys
 from pathlib import Path
 from types import ModuleType
-
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
 
 
 def _load_rms_rope_fused_mask_example() -> ModuleType:

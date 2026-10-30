@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-"""Complete original TA example; runtime effects require explicit main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
@@ -313,7 +309,7 @@ def causal_conv1d_fn_ref(
 
 def _run_test(dtype_str, dtype):
 
-    A2A3CythonKernelCache().clear_cache()
+    tilelang.disable_cache()
     _kernel_cache.clear()
     torch.manual_seed(42)
 
@@ -351,23 +347,10 @@ def _run_test(dtype_str, dtype):
     torch.testing.assert_close(OT.cpu(), golden_output, rtol=1e-2, atol=1e-2)  # codespell:ignore ot
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     print("=" * 60)
     print("Causal Conv1D — Prefill, token-block tiling, fp16/bf16")
     print("=" * 60)
     _run_test("float16", torch.float16)
     _run_test("bfloat16", torch.bfloat16)
     print("Batch Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

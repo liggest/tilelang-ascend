@@ -3,42 +3,7 @@ import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 
-from contextlib import contextmanager
-import os
-from pathlib import Path
-
-
-def _require_owned_cache():
-    from tilelang import env
-
-    explicit = os.environ.get("TILELANG_CACHE_DIR")
-    if not explicit:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(explicit).resolve():
-        raise RuntimeError("The resolved cache differs from explicit TILELANG_CACHE_DIR; remove the caller override first.")
-
-
-@contextmanager
-def _owned_cli_cache():
-    _require_owned_cache()
-    from tilelang.env import CacheState
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-    from tilelang.cache.kernel_cache import KernelCache
-
-    enabled = CacheState._enabled
-    staging = KernelCache._last_cleaned_staging_root
-    cache = A2A3CythonKernelCache()
-    memory = cache._memory_cache
-    cache._memory_cache = {}
-    try:
-        cache.clear_cache()
-        yield
-    finally:
-        cache._memory_cache = memory
-        KernelCache._last_cleaned_staging_root = staging
-        CacheState._enabled = enabled
-
-
+tilelang.disable_cache()
 SOFTPLUS_THRESHOLD = 20.0
 VEC_NUM = 2
 L2_NORM_EPS = 1e-12
@@ -506,46 +471,76 @@ def main(
     print("Kernel Output Match!")
 
 
-def _run_original_cli():
+if __name__ == "__main__":
     import threading
     import argparse
 
     test_cases = [
-        {"seqlens": [4, 8] * 50, "nk": 16, "nv": 32, "dk": 128, "dv": 128, "seed": 41},
-        {"seqlens": [4, 8, 6, 3], "nk": 4, "nv": 8, "dk": 128, "dv": 128, "seed": 20260421},
-        {"seqlens": [4, 8, 12, 6, 3, 7, 5, 9], "nk": 16, "nv": 32, "dk": 128, "dv": 128, "seed": 20260422},
-        {"seqlens": [1] * 40, "nk": 16, "nv": 32, "dk": 128, "dv": 128, "seed": 20260703},
-        {"seqlens": [1, 1, 1, 1], "nk": 4, "nv": 8, "dk": 128, "dv": 128, "seed": 20260704},
+        # Original test case
+        {
+            "seqlens": [4, 8] * 50,
+            "nk": 16,
+            "nv": 32,
+            "dk": 128,
+            "dv": 128,
+            "seed": 41,
+        },
+        # Test cases from xllm C++ gtest:
+        #   fused_sigmoid_gating_delta_rule_wrapper_test.cpp
+        {
+            "seqlens": [4, 8, 6, 3],
+            "nk": 4,
+            "nv": 8,
+            "dk": 128,
+            "dv": 128,
+            "seed": 20260421,
+        },
+        {
+            "seqlens": [4, 8, 12, 6, 3, 7, 5, 9],
+            "nk": 16,
+            "nv": 32,
+            "dk": 128,
+            "dv": 128,
+            "seed": 20260422,
+        },
+        {
+            "seqlens": [1] * 40,
+            "nk": 16,
+            "nv": 32,
+            "dk": 128,
+            "dv": 128,
+            "seed": 20260703,
+        },
+        {
+            "seqlens": [1, 1, 1, 1],
+            "nk": 4,
+            "nv": 8,
+            "dk": 128,
+            "dv": 128,
+            "seed": 20260704,
+        },
     ]
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--threads", type=int, default=1)
     args = parser.parse_args()
-    _require_owned_cache()
-    import torch_npu  # noqa: F401
 
-    with _owned_cli_cache():
-        if args.threads > 1:
-            threads = []
-            for i, case in enumerate(test_cases):
-                t = threading.Thread(target=main, kwargs=case, name=f"Test-{i + 1}")
-                threads.append(t)
-                t.start()
-                if len(threads) >= args.threads:
-                    for t in threads:
-                        t.join()
-                    threads = []
-            for t in threads:
-                t.join()
-        else:
-            for i, case in enumerate(test_cases):
-                print(f"Running test case {i + 1}: {case}")
-                main(**case)
-        print("All tests passed!")
+    if args.threads > 1:
+        threads = []
+        for i, case in enumerate(test_cases):
+            t = threading.Thread(target=main, kwargs=case, name=f"Test-{i + 1}")
+            threads.append(t)
+            t.start()
+            if len(threads) >= args.threads:
+                for t in threads:
+                    t.join()
+                threads = []
 
+        for t in threads:
+            t.join()
+    else:
+        for i, case in enumerate(test_cases):
+            print(f"Running test case {i + 1}: {case}")
+            main(**case)
 
-def cli_main():
-    _run_original_cli()
-
-
-if __name__ == "__main__":
-    cli_main()
+    print("All tests passed!")

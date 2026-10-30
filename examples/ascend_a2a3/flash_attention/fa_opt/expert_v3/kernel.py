@@ -724,9 +724,7 @@ def ref_flash_attn(q, k, v):
     ).to(torch.float16)
 
 
-def main():
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--B", type=int, default=1, help="batch size")
     parser.add_argument("--S", type=int, default=4096, help="sequence length")
@@ -768,7 +766,3 @@ def main():
         print("Kernel Output Match!")
     else:
         print("Reference check skipped.")
-
-
-if __name__ == "__main__":
-    main()

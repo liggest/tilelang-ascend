@@ -1,14 +1,12 @@
-import os
-from pathlib import Path
 import tilelang
-from tilelang import DataType  # noqa: F401 - preserve the original public import
-
-
+from tilelang import DataType  # noqa: F401
 import tilelang.ascend.a2a3.language as T
-
-
 import torch
 
+torch.set_default_device("npu")
+torch.manual_seed(0)
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -246,6 +244,15 @@ def sparse_attention_fwd(
     return main
 
 
+func = sparse_attention_fwd(
+    heads=128,
+    dim=512,
+    tail_dim=64,
+    topk=2048,
+    kv_stride=1,
+)
+
+
 def ref_sparse_attention_fwd_interface(q, kv, indices, q_start_index_s, kv_stride=4, sm_scale=None, is_casual=True):
     q = q.float()
     kv = kv.float()
@@ -286,55 +293,37 @@ def ref_sparse_attention_fwd_interface(q, kv, indices, q_start_index_s, kv_strid
     return o.to(torch.float16)
 
 
-def _run_original_cli():
-    torch.manual_seed(0)
-    tilelang.disable_cache()
-    func = sparse_attention_fwd(
-        heads=128,
-        dim=512,
-        tail_dim=64,
-        topk=2048,
-        kv_stride=1,
-    )
-    B, S, SKV, H, HKV, DQK, DV, topk = 1, 128, 32768, 128, 1, 576, 512, 2048  # noqa: F841 - preserve complete original CLI constants
-    dtype = torch.float16
-    KV_stride = 1
-    q_start_s_index = 4096 * 7
-    q = torch.randn((B, S, H, DQK), dtype=dtype)
-    kv = torch.randn((B, SKV, HKV, DQK), dtype=dtype)
-    indices = torch.full((B, S, HKV, topk), SKV, dtype=torch.int32)
-    for b in range(B):
-        for t in range(S):
-            for h in range(HKV):
-                i_i = torch.randperm(max(1, ((t + q_start_s_index) // KV_stride)))[:topk]
-                indices[b, t, h, : len(i_i)] = i_i
-    torch.npu.synchronize()
-    print("init successful!")
-    output = func(q, kv, indices)
-    torch.npu.synchronize()
-    ref_output = ref_sparse_attention_fwd_interface(q, kv, indices, q_start_s_index, KV_stride)
-    torch.npu.synchronize()
-    torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
-    print("Test Passed!")
+B, S, SKV, H, HKV, DQK, DV, topk = 1, 128, 32768, 128, 1, 576, 512, 2048
+dtype = torch.float16
 
+KV_stride = 1
+q_start_s_index = 4096 * 7
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this compile-every-call example.")
-    from tilelang import env
-    from tilelang.env import CacheState
+q = torch.randn((B, S, H, DQK), dtype=dtype)
+kv = torch.randn((B, SKV, HKV, DQK), dtype=dtype)
+indices = torch.full((B, S, HKV, topk), SKV, dtype=torch.int32)
+for b in range(B):
+    for t in range(S):
+        for h in range(HKV):
+            i_i = torch.randperm(max(1, ((t + q_start_s_index) // KV_stride)))[:topk]
+            indices[b, t, h, : len(i_i)] = i_i
 
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
+# output = torch.empty((B, S, H, DV), dtype=dtype)
+# workspace_1 = torch.zeros((256, 64, 512), dtype=dtype)
+# workspace_2 = torch.zeros((256, 64, 64), dtype=dtype)
+# workspace_3 = torch.zeros((256, 64, 64), dtype=torch.float)
+# workspace_4 = torch.zeros((256, 64, 64), dtype=dtype)
+# workspace_5 = torch.zeros((256, 64, 512), dtype=torch.float)
 
-    old_enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            _run_original_cli()
-    finally:
-        CacheState._enabled = old_enabled
+torch.npu.synchronize()
+print("init successful!")
 
+output = func(q, kv, indices)
 
-if __name__ == "__main__":
-    main()
+torch.npu.synchronize()
+
+ref_output = ref_sparse_attention_fwd_interface(q, kv, indices, q_start_s_index, KV_stride)
+torch.npu.synchronize()
+torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
+
+print("Test Passed!")

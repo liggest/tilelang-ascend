@@ -1,6 +1,3 @@
-"""Complete original TA example; runtime effects require explicit main()."""
-
-from tilelang.env import CacheState
 import argparse
 
 import tilelang as tl
@@ -101,7 +98,7 @@ def check_case(N: int, K: int, block_N: int = 64, block_K: int = 128, dtype="flo
     torch.testing.assert_close(y, ref_y, rtol=1e-2, atol=1e-2)
 
 
-def _original_main(custom_args=None):
+def main(custom_args=None):
     parser = argparse.ArgumentParser(description="GEMV Example")
     parser.add_argument("--n", type=int, default=1024, help="Matrix dimension N")
     parser.add_argument("--k", type=int, default=1024, help="Matrix dimension K")
@@ -120,19 +117,6 @@ def _original_main(custom_args=None):
     print("Kernel Output Match!")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        tl.disable_cache()
-        _original_main()
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
+    tl.disable_cache()
     main()

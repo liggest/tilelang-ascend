@@ -13,6 +13,18 @@ import tilelang.ascend.a2a3.language as T
 import torch
 
 
+tilelang.disable_cache()
+
+parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
+parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
+parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
+parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
+args = parser.parse_args()
+
+M = args.m
+N = args.n
+K = args.k
+
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
     tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
@@ -106,22 +118,8 @@ def make_matmul(M, N, K):
     )
 
 
-def main():
-    parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
-    parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
-    parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
-    parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
-    args = parser.parse_args()
-    tuned = make_matmul(args.m, args.n, args.k)
-    import torch_npu  # noqa: F401
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
-    func = tuned(args.m, args.n, args.k)
-    print("Best Config:", func.get_tuner_result())
-    print("Test passed!")
-    return func
-
-
-if __name__ == "__main__":
-    main()
+# Ascend Carver migration remains explicitly deferred by the agreed scope.
+tuned = make_matmul(M, N, K)
+func = tuned(M, N, K)
+print("Best Config:", func.get_tuner_result())
+print("Test passed!")

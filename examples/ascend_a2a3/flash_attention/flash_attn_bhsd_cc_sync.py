@@ -1,12 +1,12 @@
-import argparse
-import importlib.util
-import os
-from pathlib import Path
 import tilelang
 from tilelang import DataType
 import tilelang.ascend.a2a3.language as T
 import torch
 
+torch.set_default_device("npu")
+torch.manual_seed(0)
+
+tilelang.disable_cache()
 
 B, S, H, D = 1, 128, 1, 512
 
@@ -149,6 +149,12 @@ def flash_attention_fwd(
     return main
 
 
+func = flash_attention_fwd(
+    heads=H,
+    dim=D,
+)
+
+
 def ref_flash_attn(q, k, v):
     q = q.float()
     k = k.float()
@@ -160,62 +166,18 @@ def ref_flash_attn(q, k, v):
     return o.to(torch.float16)
 
 
-def _run_original():
-    torch.manual_seed(0)
-    func = flash_attention_fwd(
-        heads=H,
-        dim=D,
-    )
-
-    q = torch.randn((B, H, S, D), dtype=torch.float16)
-    k = torch.randn((B, H, S, D), dtype=torch.float16)
-    v = torch.randn((B, H, S, D), dtype=torch.float16)
-
-    torch.npu.synchronize()
-    print("init successful!")
-
-    output = func(q, k, v)
-    ref_output = ref_flash_attn(q, k, v)
-    torch.npu.synchronize()
-
-    torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
-
-    print("Test Passed!")
+q = torch.randn((B, H, S, D), dtype=torch.float16)
+k = torch.randn((B, H, S, D), dtype=torch.float16)
+v = torch.randn((B, H, S, D), dtype=torch.float16)
 
 
-def _require_owned_cache():
-    requested = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this example")
-    if Path(tilelang.env.TILELANG_CACHE_DIR).resolve() != Path(requested).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; execution was refused")
+torch.npu.synchronize()
+print("init successful!")
 
+output = func(q, k, v)
+ref_output = ref_flash_attn(q, k, v)
+torch.npu.synchronize()
 
-def _load_execution_module():
-    # The actual JITImpl constructor owns memo types and capacities. A fresh
-    # namespace leaves a caller's existing factory cache objects untouched.
-    spec = importlib.util.spec_from_file_location(__name__ + "_execution", __file__)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
 
-
-def main(argv=None):
-    parser = argparse.ArgumentParser(description="Original fixed-shape cross-core synchronized Flash Attention")
-    parser.parse_args(argv)
-    _require_owned_cache()
-    import torch_npu  # noqa: F401 - explicit registration after parsing/validation
-    from tilelang.env import CacheState
-
-    caller_raw = CacheState._enabled
-    try:
-        execution = _load_execution_module()
-        tilelang.disable_cache()
-        with torch.random.fork_rng(devices=[]), torch.device("npu"):
-            execution._run_original()
-    finally:
-        CacheState._enabled = caller_raw
-
-
-if __name__ == "__main__":
-    main()
+print("Test Passed!")

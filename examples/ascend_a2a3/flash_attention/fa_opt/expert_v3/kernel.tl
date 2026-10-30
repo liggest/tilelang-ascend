@@ -7,8 +7,8 @@ import argparse
 
 import tilelang
 import torch
-import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.layout import make_zn_layout
+from tilelang import language as T
+from tilelang.intrinsics import make_zn_layout
 
 NUM_CORES = 24
 Q_L1 = WS_Q = 256
@@ -28,7 +28,7 @@ COMPILE_FLAGS = ["--cce-auto-sync=off", "-O3"]
 LOCK V_TRACE 7 V MTE3
 
 
-@T.macro
+@T.macro(hygienic=False)
 def vec_capture(src, dst):
     # Diagnostic only. V owns this completion token between observations.
     REL V V_TRACE
@@ -46,19 +46,19 @@ LOCK B_L0       2 MTE1 M    2
 LOCK SP_REUSE   0 FIX  MTE2 3
 
 
-@T.macro
+@T.macro(hygienic=False)
 def cube_init():
     INIT_LOCKS Q_L1, K_L1, P_L1, V_L1, A_L0, B_L0, SP_REUSE
 
 
-@T.macro
+@T.macro(hygienic=False)
 def cube_begin_q(q_src, q_head, q_begin, q_l1):
     LOCKED MTE2 Q_L1: T.copy(q_src[q_head, q_begin:q_begin + 256, :], q_l1)
     # Keep the resident query until the final QK packet's final L1 reader.
     ACQ MTE1 Q_L1
 
 
-@T.macro
+@T.macro(hygienic=False)
 def cube_qk(
     k_src, kv_head, kv_begin, sp, core, stage, last_score,
     q_l1, k_l1, a_l0, b_l0, c_half, c_wide,
@@ -114,13 +114,13 @@ def cube_qk(
     # Caller publishes S_READY from FIX after this macro.
 
 
-@T.macro
+@T.macro(hygienic=False)
 def cube_prepare_v(v_src, kv_head, kv_begin, v_l1):
     # Call before the Scalar P_READY wait: this immutable input is independent.
     LOCKED MTE2 V_L1(0): T.copy(v_src[kv_head, kv_begin:kv_begin + 128, :], v_l1[0, :, :])
 
 
-@T.macro
+@T.macro(hygienic=False)
 def cube_pv(
     sp, v_src, kv_head, kv_begin, op, core, stage,
     p_l1, v_l1, a_l0, b_l0, c_half,
@@ -167,7 +167,7 @@ def cube_pv(
     # Caller publishes O_READY from FIX after this macro.
 
 
-@T.macro
+@T.macro(hygienic=False)
 def cube_finish():
     # Every QK packet must have a PV consumer; every query has last_score=True once.
     DESTROY_LOCKS Q_L1, K_L1, P_L1, V_L1, A_L0, B_L0, SP_REUSE
@@ -182,23 +182,23 @@ LOCK V_OUTPUT 0 V    MTE3 2
 VECTOR_RAW_GAP = 32
 
 
-@T.macro
+@T.macro(hygienic=False)
 def vec_raw_gap(aux):
     for _raw_gap_i in T.unroll(VECTOR_RAW_GAP):
         T.tile.block_reduce_max(aux, aux, 0, 64, 1, 1, 8)
 
 
-@T.macro
+@T.macro(hygienic=False)
 def vec_load_packet(src_packet, input_ub, input_side):
     LOCKED MTE2 V_INPUT(input_side): T.copy(src_packet, input_ub[input_side, :])
 
 
-@T.macro
+@T.macro(hygienic=False)
 def vec_store_packet(output_ub, output_side, dst_packet):
     LOCKED MTE3 V_OUTPUT(output_side): T.copy(output_ub[output_side, :], dst_packet)
 
 
-@T.macro
+@T.macro(hygienic=False)
 def vec_softmax_strip(
     kv, stage, row, input_side, output_side, sm_scale,
     input_ub, output_ub, score, affine_tmp, reduce_tmp,
@@ -274,7 +274,7 @@ def vec_softmax_strip(
         vec_capture(sums[stage, row:row + 16], Trace[trace_packet, 512 + query_row:528 + query_row])
 
 
-@T.macro
+@T.macro(hygienic=False)
 def vec_merge_o_tile(
     kv, num_kv, stage, row, input_side, output_side,
     input_ub, output_ub, o, l, alpha, sums, coeff, aux,
@@ -523,8 +523,7 @@ def ref_flash_attn(q, k, v):
     ).to(torch.float16)
 
 
-def main():
-    import torch_npu  # noqa: F401
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--B", type=int, default=1, help="batch size")
     parser.add_argument("--S", type=int, default=4096, help="sequence length")
@@ -566,7 +565,3 @@ def main():
         print("Kernel Output Match!")
     else:
         print("Reference check skipped.")
-
-
-if __name__ == "__main__":
-    main()

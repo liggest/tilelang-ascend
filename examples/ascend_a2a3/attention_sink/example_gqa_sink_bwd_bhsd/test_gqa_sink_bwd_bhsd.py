@@ -15,36 +15,9 @@ Golden runs on CPU (.cpu() before ref_fwd/ref_bwd).
 NPU outputs .cpu() for comparison — avoids 4GB fp32 attention OOM on NPU.
 """
 
-
-# Runtime state belongs to this invocation; import itself stays inert.
-def _runtime_scope(*, npu_default=False):
-    from contextlib import nullcontext
-    from functools import wraps
-
-    def decorate(function):
-        @wraps(function)
-        def invoke(*args, **kwargs):
-            import torch_npu  # noqa: F401
-            from tilelang.env import CacheState
-
-            enabled = CacheState.is_enabled()
-            try:
-                with torch.device("npu") if npu_default else nullcontext():
-                    return function(*args, **kwargs)
-            finally:
-                if enabled:
-                    CacheState.enable()
-                else:
-                    CacheState.disable()
-
-        return invoke
-
-    return decorate
-
-
 import argparse
 import ast
-import glob  # noqa: F401 - retained original dependency
+import glob
 import os
 import subprocess
 import sys
@@ -53,15 +26,10 @@ import time
 import tilelang
 import torch
 
-# Resolve the exact private sibling; no same-name main/GPU fallback.
-import importlib.util as _importlib_util
-from pathlib import Path as _Path
-
-_spec = _importlib_util.spec_from_file_location("_a2a3_sink_bwd_bhsd", _Path(__file__).with_name("example_gqa_sink_bwd_bhsd.py"))
-_sink_bwd_module = _importlib_util.module_from_spec(_spec)
-_spec.loader.exec_module(_sink_bwd_module)
-flashattn_bwd = _sink_bwd_module.flashattn_bwd
-flashattn_fwd = _sink_bwd_module.flashattn_fwd
+from example_gqa_sink_bwd_bhsd import (
+    flashattn_bwd,
+    flashattn_fwd,
+)
 
 # ============================================================================
 # Golden Reference (PyTorch CPU)
@@ -196,107 +164,44 @@ def check_precision(actual, golden, dtype_str):
     return passed, matched_ratio, max_abs_error
 
 
-# Only this component's observed compiler results are eligible for cleanup.
-import stat as _stat
-import tempfile as _tempfile
-import threading as _threading
-
-_owned_compilation_files = _threading.local()
-
-
-def _remember_owned_tmp_library(source, library):
-    """Record one verified source/output pair; never infer ownership from glob."""
-    try:
-        if not isinstance(source, str) or not isinstance(library, str):
-            return
-        if not os.path.isabs(source) or not os.path.isabs(library):
-            return
-        source = os.path.normpath(source)
-        library = os.path.normpath(library)
-        if os.path.dirname(source) != os.path.abspath(_tempfile.gettempdir()):
-            return
-        if not os.path.basename(source).startswith("tmp") or not source.endswith(".cpp"):
-            return
-        if library != source[:-4] + ".so":
-            return
-        source_stat = os.lstat(source)
-        library_stat = os.lstat(library)
-        if not _stat.S_ISREG(source_stat.st_mode) or not _stat.S_ISREG(library_stat.st_mode):
-            return
-        files = getattr(_owned_compilation_files, "files", None)
-        if files is None:
-            files = {}
-            _owned_compilation_files.files = files
-        files[library] = (library_stat.st_dev, library_stat.st_ino)
-    except Exception:
-        pass  # Original cleanup is best effort; observation must not change results.
-
-
-def _remember_compilation_result(result):
-    try:
-        from tilelang.ascend.a2a3.compiler import LibraryGenerator
-        from tilelang.jit.kernel import JITKernel
-
-        if not isinstance(result, JITKernel):
-            return
-        generator = getattr(result.adapter.lib_generator, "_a2a3_generator", None)
-        if isinstance(generator, LibraryGenerator):
-            _remember_owned_tmp_library(generator.srcpath, generator.libpath)
-    except Exception:
-        pass
-
-
-def _remember_failed_compilation(exc):
-    """Trust the actual compiler frame, not an arbitrary exception's argv text."""
-    try:
-        from tilelang.ascend.a2a3.compiler import LibraryGenerator
-
-        tb = exc.__traceback__
-        while tb is not None:
-            frame = tb.tb_frame
-            if frame.f_code is LibraryGenerator.compile_lib.__code__:
-                local = frame.f_locals
-                generator = local.get("self")
-                source = getattr(local.get("src"), "name", None)
-                library = local.get("libpath")
-                command = local.get("command")
-                if (
-                    isinstance(generator, LibraryGenerator)
-                    and isinstance(source, str)
-                    and isinstance(library, str)
-                    and isinstance(command, list)
-                    and all(isinstance(arg, str) for arg in command)
-                    and command.count("-o") == 1
-                    and command.count(source) == 1
-                    and command[-2:] == ["-o", library]
-                ):
-                    _remember_owned_tmp_library(source, library)
-            tb = tb.tb_next
-    except Exception:
-        pass
+# ============================================================================
+# Compile-error robustness helpers (stderr capture + /tmp cleanup + retry)
+# ============================================================================
 
 
 def _cleanup_tmp_compilation_files():
-    """Remove only observed owned .so files whose lstat identity is unchanged.
+    """Clean up tilelang JIT compilation temp files in /tmp.
 
-    Never scan /tmp, remove source .cpp files, or trust a bare argv exception.
-    An unknown owner, cached library, symlink or replaced inode is left intact.
-    Nested invocations share this component's per-thread ownership registry.
-    This is best effort and does not change the original retry/error policy.
+    tilelang.disable_cache() mode creates a new tmp*.cpp + tmp*.so per
+    kernel compilation (libgen.py uses NamedTemporaryFile(delete=False));
+    over a 24-case run these accumulate to ~700 files.
+
+    IMPORTANT: only remove tmp*.so, NOT tmp*.cpp. The .cpp source file is
+    read by the bisheng compiler process; if we remove it while bisheng is
+    still reading (especially in retry scenarios where the previous bisheng
+    process may still be tearing down), bisheng fails with
+    `error reading '/tmp/tmpXXX.cpp'` and the retry also fails — a race
+    condition. The .so is the final loaded artifact and can be safely
+    removed after dlopen. The .cpp files accumulate but inode usage stays
+    low (~540 files/run, 3% inode usage even over 100 runs), so leaving
+    them is acceptable.
+
+    Failures are silently ignored (best-effort cleanup).
     """
-    files = getattr(_owned_compilation_files, "files", {})
+    patterns = ["/tmp/tmp*.so"]
     removed = 0
-    for path, identity in list(files.items()):
-        files.pop(path, None)
-        try:
-            current = os.lstat(path)
-            if _stat.S_ISREG(current.st_mode) and (current.st_dev, current.st_ino) == identity:
+    for pattern in patterns:
+        for path in glob.glob(pattern):
+            basename = os.path.basename(path)
+            if len(basename) < 10:
+                continue
+            try:
                 os.remove(path)
                 removed += 1
-        except OSError:
-            pass
+            except OSError:
+                pass
     if removed:
-        print(f"  [cleanup] removed {removed} owned tmp compilation files")
+        print(f"  [cleanup] removed {removed} tmp compilation files from /tmp")
 
 
 def _is_compile_error(exc):
@@ -382,11 +287,8 @@ def _run_with_retry(fn, max_retries=2, kernel_name="<unknown>"):
     last_exc = None
     for attempt in range(max_retries + 1):
         try:
-            result = fn()
-            _remember_compilation_result(result)
-            return result
+            return fn()
         except Exception as e:
-            _remember_failed_compilation(e)
             if not _is_compile_error(e):
                 raise  # not a compile error — propagate immediately
             last_exc = e
@@ -577,7 +479,6 @@ def run_l0_case(case_name, B, H, groups, N, D, window_size, scale=1.0, shift=0.0
 # ============================================================================
 
 
-@_runtime_scope(npu_default=False)
 def test_gqa_sink_bwd_bhsd_l0():
     """Run all 7 L0 cases (rule shapes, block-aligned)."""
     cases = [
@@ -771,7 +672,6 @@ COVERAGE_NA = {}  # D-DTYPE-fp32 covered via dSinks (fp32) in every L0/L1 case
 # ============================================================================
 
 
-@_runtime_scope(npu_default=False)
 def test_gqa_sink_bwd_bhsd_l1():
     """L1: functional tests with varying B/H/groups/N/window/value_range.
 
@@ -832,7 +732,6 @@ def _run_exception(name, fn):
     print(f"[BOUNDARY_WARN] l2 {name}: invalid input silently accepted (should have rejected)")
 
 
-@_runtime_scope(npu_default=False)
 def test_gqa_sink_bwd_bhsd_l2():
     """L2: negative tests — invalid dtype/shape should be rejected by kernel.
 
@@ -981,7 +880,6 @@ def _run_boundary_pipeline(B, H, groups, N, D, window_size, Q_cpu, K_cpu, V_cpu,
     return dQ_fp16, dQ_ref
 
 
-@_runtime_scope(npu_default=False)
 def test_gqa_sink_bwd_bhsd_boundary():
     """Boundary: special values (INF/NAN/zero/extreme).
 
@@ -1051,7 +949,6 @@ def test_gqa_sink_bwd_bhsd_boundary():
 # ============================================================================
 
 
-@_runtime_scope(npu_default=False)
 def main():
     tilelang.disable_cache()
     # Clean up any stale tilelang JIT temp files from previous runs

@@ -1,10 +1,9 @@
 import argparse
-import os
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+import torch_npu
 
 # W4A4 GEMM: int4 (weights) x int4 (activations) -> int32 accumulation.
 #
@@ -99,11 +98,7 @@ def main():
     block_M, block_N, block_K = args.block_m, args.block_n, args.block_k
     assert M % block_M == 0 and N % block_N == 0 and K % block_K == 0, "M/N/K must be divisible by the block sizes"
 
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set TILELANG_CACHE_DIR to a dedicated W4A4 cache before running this example")
-    import torch_npu
-
-    A2A3CythonKernelCache().clear_cache()
+    tilelang.disable_cache()
     torch.manual_seed(0)
 
     # Integer-valued fp16 in [-8, 7] (the full int4 range) so that CAST_RINT

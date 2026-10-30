@@ -1,11 +1,14 @@
 import tilelang
-from tilelang import DataType  # noqa: F401 - retained original import
+from tilelang import DataType  # noqa: F401
 import tilelang.ascend.a2a3.language as T
 import torch
-import os  # noqa: F401 - retained original import
-import sys  # noqa: F401 - retained original import
+import os
+import sys
 
 from tilelang.ascend.a2a3.layout import make_zn_layout
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(parent_dir)
 
 
 def init_test():

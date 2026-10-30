@@ -1,7 +1,3 @@
-"""Original TA example; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import logging
 
 import torch
@@ -9,6 +5,8 @@ import tilelang
 import tilelang.ascend.a2a3.language as T
 
 logger = logging.getLogger(__name__)
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -277,6 +275,8 @@ def _rms_norm_grad(M, N, block_M_in, block_N_in, eps=1e-5, dtype="float"):
     return tilelang_rms_norm_grad
 
 
+torch.manual_seed(0)
+
 test_configs = [
     (256, 256, 64, 64, "float"),
     (1024, 1024, 128, 128, "float"),
@@ -287,63 +287,44 @@ test_configs = [
 ]
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
+for M, N, block_M, block_N, dtype in test_configs:
+    print(f"\nTesting rms_norm with M={M}, N={N}, block_M={block_M}, block_N={block_N}, dtype={dtype}")
+    func = _rms_norm(M, N, block_M, block_N, dtype=dtype)
+    print("  Init successful!")
 
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
+    if dtype == "bfloat16":
+        a = torch.randn(M, N, device="npu", dtype=torch.bfloat16)
+    else:
+        a = torch.randn(M, N, device="npu", dtype=torch.float32)
 
-    import torch_npu  # noqa: F401
+    b = func(a)
 
-    A2A3CythonKernelCache().clear_cache()
+    ref_b = torch.rms_norm(a.float(), normalized_shape=[N]).to(a.dtype)
+    torch.testing.assert_close(b.cpu(), ref_b.cpu(), rtol=1e-2, atol=1e-2)
+    print("  Test passed!")
 
-    torch.manual_seed(0)
+print("All rms_norm tests passed! Kernel Output Match!")
 
-    for M, N, block_M, block_N, dtype in test_configs:
-        print(f"\nTesting rms_norm with M={M}, N={N}, block_M={block_M}, block_N={block_N}, dtype={dtype}")
-        func = _rms_norm(M, N, block_M, block_N, dtype=dtype)
-        print("  Init successful!")
+for M, N, block_M, block_N, dtype in test_configs:
+    print(f"\nTesting rms_norm_grad with M={M}, N={N}, block_M={block_M}, block_N={block_N}, dtype={dtype}")
 
-        if dtype == "bfloat16":
-            a = torch.randn(M, N, device="npu", dtype=torch.bfloat16)
-        else:
-            a = torch.randn(M, N, device="npu", dtype=torch.float32)
+    func_grad = _rms_norm_grad(M, N, block_M, block_N, dtype=dtype)
+    print("  Init successful!")
 
-        b = func(a)
+    if dtype == "bfloat16":
+        x = torch.randn(M, N, device="npu", dtype=torch.bfloat16, requires_grad=True)
+        dy = torch.randn(M, N, device="npu", dtype=torch.bfloat16)
+    else:
+        x = torch.randn(M, N, device="npu", dtype=torch.float32, requires_grad=True)
+        dy = torch.randn(M, N, device="npu", dtype=torch.float32)
 
-        ref_b = torch.rms_norm(a.float(), normalized_shape=[N]).to(a.dtype)
-        torch.testing.assert_close(b.cpu(), ref_b.cpu(), rtol=1e-2, atol=1e-2)
-        print("  Test passed!")
+    y_ref = torch.rms_norm(x.float(), normalized_shape=[N]).to(x.dtype)
+    y_ref.backward(dy)
+    dx_ref = x.grad.clone()
 
-    print("All rms_norm tests passed! Kernel Output Match!")
+    dx = func_grad(dy, x.detach())
 
-    for M, N, block_M, block_N, dtype in test_configs:
-        print(f"\nTesting rms_norm_grad with M={M}, N={N}, block_M={block_M}, block_N={block_N}, dtype={dtype}")
+    torch.testing.assert_close(dx.cpu(), dx_ref.cpu(), rtol=1e-2, atol=1e-2)
+    print("  Test passed!")
 
-        func_grad = _rms_norm_grad(M, N, block_M, block_N, dtype=dtype)
-        print("  Init successful!")
-
-        if dtype == "bfloat16":
-            x = torch.randn(M, N, device="npu", dtype=torch.bfloat16, requires_grad=True)
-            dy = torch.randn(M, N, device="npu", dtype=torch.bfloat16)
-        else:
-            x = torch.randn(M, N, device="npu", dtype=torch.float32, requires_grad=True)
-            dy = torch.randn(M, N, device="npu", dtype=torch.float32)
-
-        y_ref = torch.rms_norm(x.float(), normalized_shape=[N]).to(x.dtype)
-        y_ref.backward(dy)
-        dx_ref = x.grad.clone()
-
-        dx = func_grad(dy, x.detach())
-
-        torch.testing.assert_close(dx.cpu(), dx_ref.cpu(), rtol=1e-2, atol=1e-2)
-        print("  Test passed!")
-
-    print("All rms_norm_grad tests passed! Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+print("All rms_norm_grad tests passed! Kernel Output Match!")

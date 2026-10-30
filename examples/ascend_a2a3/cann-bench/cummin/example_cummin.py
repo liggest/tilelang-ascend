@@ -7,7 +7,6 @@ Inclusive prefix-min scan along the last dim, single input -> dual output:
 Design: custom/cummin/DESIGN.md
 """
 
-from tilelang.env import CacheState
 import argparse
 import math
 import sys
@@ -551,7 +550,7 @@ def test_cummin_all():
     return ok
 
 
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="cummin NPU kernel test")
     parser.add_argument("--level", default="all", choices=["all"])
     parser.parse_args()
@@ -565,19 +564,6 @@ def _original_main():
         print("Test Passed!")
         sys.exit(0)
     sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

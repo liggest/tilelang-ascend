@@ -1,37 +1,15 @@
 """Sparse FlashAttention operator layered tests: L0/L1/L2/Boundary + main(--level)."""
 
 import argparse
-import importlib.util
-from pathlib import Path
+import os
 import sys
 
 import tilelang
 import torch
-import pytest
 
-
-# Resolve only this adopted sibling, without changing the caller's sys.path.
-def _load_kernel_module():
-    spec = importlib.util.spec_from_file_location(__name__ + "_kernel", Path(__file__).with_name("sparse_flash_attention.py"))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-_KERNEL_MODULE = _load_kernel_module()
-sparse_flash_attention = _KERNEL_MODULE.sparse_flash_attention
-pytestmark = pytest.mark.a2a3_device
-
-
-@pytest.fixture(autouse=True)
-def _isolate_kernel_module(isolated_a2a3_cache, monkeypatch):
-    # A fresh real namespace isolates all wrapper tensors, diagnostics, device
-    # memoization and JIT memo dictionaries for this test. Original per-call and
-    # repeated-call cache behavior remains intact within its complete level.
-    module = _load_kernel_module()
-    monkeypatch.setitem(globals(), "_KERNEL_MODULE", module)
-    monkeypatch.setitem(globals(), "sparse_flash_attention", module.sparse_flash_attention)
-
+# Import kernel from sibling file
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sparse_flash_attention import sparse_flash_attention  # noqa: E402
 
 # ========== Coverage declarations (for coverage_check.py) ==========
 COVERAGE_CATEGORY = "Fusion"
@@ -358,8 +336,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--level", default="l0", choices=["l0", "l1", "l2", "boundary", "all"])
     args = parser.parse_args()
-
-    import torch_npu  # noqa: F401
 
     tilelang.disable_cache()  # Disable compile cache to avoid stale artifacts
     torch.manual_seed(0)

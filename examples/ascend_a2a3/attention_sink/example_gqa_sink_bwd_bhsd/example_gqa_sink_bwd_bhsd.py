@@ -48,33 +48,6 @@ Key design decisions:
   - Precision: 169-line standard (atol=6.10e-5, rtol=1.95e-3 for fp16).
 """
 
-
-# Runtime state belongs to this invocation; import itself stays inert.
-def _runtime_scope(*, npu_default=False):
-    from contextlib import nullcontext
-    from functools import wraps
-
-    def decorate(function):
-        @wraps(function)
-        def invoke(*args, **kwargs):
-            import torch_npu  # noqa: F401
-            from tilelang.env import CacheState
-
-            enabled = CacheState.is_enabled()
-            try:
-                with torch.device("npu") if npu_default else nullcontext():
-                    return function(*args, **kwargs)
-            finally:
-                if enabled:
-                    CacheState.enable()
-                else:
-                    CacheState.disable()
-
-        return invoke
-
-    return decorate
-
-
 import tilelang
 import torch
 import tilelang.ascend.a2a3.language as T
@@ -596,9 +569,14 @@ class _attention(torch.autograd.Function):
 attention = _attention.apply
 
 
-@_runtime_scope(npu_default=True)
-def main():
+# ============================================================================
+# Main: smoke test (CI self-contained — verifies kernel runs and output shape)
+# ============================================================================
+
+
+if __name__ == "__main__":
     tilelang.disable_cache()
+    torch.set_default_device("npu")
     torch.manual_seed(42)
 
     B, H, groups, N, D = 1, 4, 2, 128, 128
@@ -626,7 +604,3 @@ def main():
     assert torch.isfinite(Q.grad).all()
 
     print("Test Passed!")
-
-
-if __name__ == "__main__":
-    main()

@@ -641,27 +641,7 @@ def depthwise_conv_2d(x, weight, bias, kernelSize, stride, padding, dilation, gr
     return y3.reshape(N, C, Ho, Wo)
 
 
-# CLI cache decisions belong to the invocation, including failed original cases.
-def _preserve_cache_state(function):
-    from functools import wraps
-
-    @wraps(function)
-    def invoke(*args, **kwargs):
-        from tilelang.env import CacheState
-
-        enabled = CacheState._enabled
-        try:
-            return function(*args, **kwargs)
-        finally:
-            CacheState._enabled = enabled
-
-    return invoke
-
-
-@_preserve_cache_state
-def main():
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     # Standalone smoke test: one representative shape per dispatch path
     # (pad+conv fp16, pad+conv fp32 dilated, 1x1 fast path bf16) against a
     # torch fp64 golden.
@@ -685,7 +665,3 @@ def main():
     # CI pass criterion (examples/bench_test.sh) requires the output to end
     # with this phrase (or "TEST PASSED!"), same as lstm/gru smoke tests.
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

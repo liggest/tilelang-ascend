@@ -1,6 +1,3 @@
-import os
-from pathlib import Path
-import threading
 import functools
 import tilelang
 import tilelang.ascend.a2a3.language as T
@@ -18,30 +15,19 @@ Persistent-kernel version:
   so there is no stale accumulated-H from previous work items
 """
 
+tilelang.disable_cache()
+tilelang.disable_cache()  # force re-compile, unless explicitly reusing compile kernel
 
 pass_configs = {tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True}
 
-# Resolve the original environment value at first factory construction,
-# rather than initializing a device merely by importing this example.
-core_num = None
-_core_num_lock = threading.Lock()
-
-
-def _resolve_core_num():
-    global core_num
-    if core_num is None:
-        with _core_num_lock:
-            if core_num is None:
-                try:
-                    core_num = int(torch.npu.get_device_properties("npu").cube_core_num)
-                except Exception:
-                    core_num = 24
-    return core_num
+try:
+    core_num = int(torch.npu.get_device_properties("npu").cube_core_num)
+except Exception:
+    core_num = 24
 
 
 @tilelang.jit(out_idx=[-1], workspace_idx=[3, 4], pass_configs=pass_configs)
 def linear_attention_ker(H, D, C, dtype="float16", accum_dtype="float"):
-    core_num = _resolve_core_num()
     B = T.symbolic("B")
     L = T.symbolic("L")
 
@@ -165,6 +151,9 @@ def ref_linear_attention(q, k, v):
     return o.to(torch.float16)
 
 
+torch.manual_seed(0)
+torch.set_printoptions(threshold=float("inf"), sci_mode=False)
+
 # All configs share H=2, D=128, C=64 → compiled ONCE; only B and L vary at runtime.
 #
 # Coverage rationale (core_num=20, so B*H work items vs 20 cores):
@@ -193,53 +182,24 @@ test_configs = [
     (16, 2, 1024, 128, 64),  # L=1k,  B*H=32 (large B + large L)
 ]
 
+for B, H, L, D, C in test_configs:
+    print(f"Testing B={B}, H={H}, L={L}, D={D}, C={C}  (B*H={B * H})")
+    q = torch.randn([B, H, L, D]).npu().to(torch.float16)
+    k = torch.randn([B, H, L, D]).npu().to(torch.float16)
+    v = torch.randn([B, H, L, D]).npu().to(torch.float16)
+    q = q / (q.pow(2).sum(dim=-1, keepdim=True).sqrt() + 1e-6)
+    k = k / (k.pow(2).sum(dim=-1, keepdim=True).sqrt() + 1e-6)
+    o = linear_attention(q, k, v, C)
+    ref_o = ref_linear_attention(q, k, v)
 
-def _run_original_cli():
-    torch.manual_seed(0)
-    torch.set_printoptions(threshold=float("inf"), sci_mode=False)
-    for B, H, L, D, C in test_configs:
-        print(f"Testing B={B}, H={H}, L={L}, D={D}, C={C}  (B*H={B * H})")
-        q = torch.randn([B, H, L, D]).npu().to(torch.float16)
-        k = torch.randn([B, H, L, D]).npu().to(torch.float16)
-        v = torch.randn([B, H, L, D]).npu().to(torch.float16)
-        q = q / (q.pow(2).sum(dim=-1, keepdim=True).sqrt() + 1e-6)
-        k = k / (k.pow(2).sum(dim=-1, keepdim=True).sqrt() + 1e-6)
-        o = linear_attention(q, k, v, C)
-        ref_o = ref_linear_attention(q, k, v)
+    # numerical error accumulates for longer sequence
+    if L >= 4096:
+        atol = 4e-2
+    elif L >= 2048:
+        atol = 2e-2
+    else:
+        atol = 1e-2
+    torch.testing.assert_close(o.cpu(), ref_o.cpu(), rtol=1e-2, atol=atol)
+    print("  passed!")
 
-        # numerical error accumulates for longer sequence
-        if L >= 4096:
-            atol = 4e-2
-        elif L >= 2048:
-            atol = 2e-2
-        else:
-            atol = 1e-2
-        torch.testing.assert_close(o.cpu(), ref_o.cpu(), rtol=1e-2, atol=atol)
-        print("  passed!")
-
-    print("Kernel Output Match!")
-
-
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
-    from tilelang.env import CacheState
-
-    old_enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()  # Original force recompile; the explicit lru cache still reuses kernels.
-        _run_original_cli()
-    finally:
-        CacheState._enabled = old_enabled
-
-
-if __name__ == "__main__":
-    main()
+print("Kernel Output Match!")

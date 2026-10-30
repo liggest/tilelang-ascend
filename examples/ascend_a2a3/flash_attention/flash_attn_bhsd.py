@@ -1,6 +1,6 @@
 import tilelang
-from tilelang.ascend.a2a3 import language as T
 from tilelang import DataType
+import tilelang.ascend.a2a3.language as T
 import argparse
 import torch
 
@@ -204,9 +204,7 @@ def flash_attention_fwd(
     return main
 
 
-def main():
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--B", type=int, default=1, help="batch size")
     parser.add_argument("--S", type=int, default=128, help="seq len")
@@ -251,7 +249,3 @@ def main():
     torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
 
     print("Test Passed!")
-
-
-if __name__ == "__main__":
-    main()

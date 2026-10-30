@@ -2,99 +2,8 @@ import torch
 import tilelang
 import tilelang.ascend.a2a3.language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
-
-from functools import wraps
-import importlib.util
-import os
-from pathlib import Path
-
-_HELPERS = {}
-
-
-def _load_local_helper(name):
-    if name not in {"golden", "testcase"}:
-        raise ValueError(f"unknown local generative recommendation helper: {name}")
-    if name not in _HELPERS:
-        path = Path(__file__).resolve().with_name(name + ".py")
-        spec = importlib.util.spec_from_file_location("_a2a3_grc_" + name, path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        _HELPERS[name] = module
-    return _HELPERS[name]
-
-
-def prepare_data(config, seed=0):
-    return _load_local_helper("testcase").prepare_data(config, seed)
-
-
-def golden_attention_simulated_kernel(
-    query_snd,
-    key_snd,
-    value_snd,
-    segment_offsets_i32,
-    segment_rules_i32,
-    q_seq_starts_i32,
-    matched_prefix_lens_i32,
-    key_cache,
-    value_cache,
-    block_table_i32,
-    block_size,
-    sm_scale,
-):
-    return _load_local_helper("golden").golden_attention_simulated_kernel(
-        query_snd,
-        key_snd,
-        value_snd,
-        segment_offsets_i32,
-        segment_rules_i32,
-        q_seq_starts_i32,
-        matched_prefix_lens_i32,
-        key_cache,
-        value_cache,
-        block_table_i32,
-        block_size,
-        sm_scale,
-    )
-
-
-def _require_owned_cache():
-    from tilelang import env
-
-    explicit = os.environ.get("TILELANG_CACHE_DIR")
-    if not explicit:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(explicit).resolve():
-        raise RuntimeError("The resolved cache differs from explicit TILELANG_CACHE_DIR; remove the caller override first.")
-
-
-def _clear_owned_cache():
-    _require_owned_cache()
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
-
-
-def _owned_test_state(function):
-    @wraps(function)
-    def wrapped(*args, **kwargs):
-        _require_owned_cache()
-        from tilelang.env import CacheState
-        from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-        from tilelang.cache.kernel_cache import KernelCache
-
-        enabled = CacheState._enabled
-        staging = KernelCache._last_cleaned_staging_root
-        cache = A2A3CythonKernelCache()
-        memory = cache._memory_cache
-        cache._memory_cache = {}
-        try:
-            return function(*args, **kwargs)
-        finally:
-            cache._memory_cache = memory
-            KernelCache._last_cleaned_staging_root = staging
-            CacheState._enabled = enabled
-
-    return wrapped
+from golden import golden_attention_simulated_kernel
+from testcase import prepare_data
 
 
 # ---------------------------------------------------------------------------
@@ -823,10 +732,9 @@ def mtgr_ragged_segment_attention(
     return output_snd
 
 
-@_owned_test_state
 def test(config, block_M=128, core_num=24, num_stages=14, cross_interval=2):
     tilelang.disable_cache()
-    _clear_owned_cache()
+    tilelang.disable_cache()
     data = prepare_data(config)
 
     torch.npu.synchronize()
@@ -888,7 +796,7 @@ def test(config, block_M=128, core_num=24, num_stages=14, cross_interval=2):
     print("Kernel Output Match!")
 
 
-def _run_original_cli():
+if __name__ == "__main__":
     test_configs = [
         {
             "H": 8,
@@ -901,14 +809,3 @@ def _run_original_cli():
 
     for config in test_configs:
         test(config)
-
-
-def main():
-    _require_owned_cache()
-    import torch_npu  # noqa: F401
-
-    _run_original_cli()
-
-
-if __name__ == "__main__":
-    main()

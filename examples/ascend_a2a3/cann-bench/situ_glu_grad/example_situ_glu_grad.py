@@ -387,9 +387,7 @@ def situ_glu_grad(
     return out.reshape(shape)
 
 
-def main():
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     torch.manual_seed(0)
 
     # Kimi K3 routed-activation shape: [M, 6144] -> grad_y [M, 3072].
@@ -401,7 +399,3 @@ def main():
     ref = golden_situ_glu_grad(x.cpu(), grad_y.cpu(), dim=-1, beta=4.0, linear_beta=25.0, activate_left=True)
     torch.testing.assert_close(grad_x.cpu(), ref.to(torch.bfloat16), rtol=1e-2, atol=1e-2)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

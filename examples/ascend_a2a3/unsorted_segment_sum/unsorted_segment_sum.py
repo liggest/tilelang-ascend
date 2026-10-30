@@ -1,6 +1,3 @@
-"""Complete original TA example; runtime effects require explicit main()."""
-
-from tilelang.env import CacheState
 import torch
 import torch.nn.functional as F
 
@@ -347,29 +344,16 @@ def _test_3d(N, D2, num_segments, dtype_str):
     print(f"Test passed: N={N}, shape=({N},{D2},32), num_segments={num_segments}, dtype={dtype_str}")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        import tilelang
-
-        tilelang.disable_cache()
-
-        _test(473, 128, 32, "float16")
-        _test(97, 512, 8, "float16")
-        _test(512, 512, 32, "float16")
-        _test(183, 128, 16, "bfloat16")
-        _test(25, 256, 4, "bfloat16")
-        _test(256, 128, 16, "bfloat16")
-
-        print("Kernel Output Match!")
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
-    main()
+    import tilelang
+
+    tilelang.disable_cache()
+
+    _test(473, 128, 32, "float16")
+    _test(97, 512, 8, "float16")
+    _test(512, 512, 32, "float16")
+    _test(183, 128, 16, "bfloat16")
+    _test(25, 256, 4, "bfloat16")
+    _test(256, 128, 16, "bfloat16")
+
+    print("Kernel Output Match!")

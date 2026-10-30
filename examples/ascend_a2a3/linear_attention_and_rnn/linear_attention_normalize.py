@@ -1,5 +1,3 @@
-import os
-from pathlib import Path
 import tilelang
 from tilelang import DataType
 import tilelang.ascend.a2a3.language as T
@@ -10,6 +8,7 @@ Functionality:
 O = (Q * K^T * V) / (Q * K^T * 1)
 """
 
+tilelang.disable_cache()
 
 pass_configs = {tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True}
 
@@ -201,42 +200,23 @@ def ref_linear_attention(q, k, v):
     return o.to(torch.float16)
 
 
+torch.manual_seed(0)
+torch.set_printoptions(threshold=float("inf"), sci_mode=False)
+
 test_configs = [
     (2, 32, 512, 128, 64, 64),
 ]
 
+for B, H, L, D, block_L, block_D in test_configs:
+    print(f"Testing linear attention with B={B}, H={H}, L={L}, D={D}, block_L={block_L}, block_D={block_D}")
+    q = torch.randn([B, H, L, D]).npu().to(torch.float16)
+    k = torch.randn([B, H, L, D]).npu().to(torch.float16)
+    v = torch.randn([B, H, L, D]).npu().to(torch.float16)
+    q = q.abs()
+    k = k.abs()
+    o = linear_attention(q, k, v, block_L, block_D)
+    ref_o = ref_linear_attention(q, k, v)
+    torch.testing.assert_close(o.cpu(), ref_o.cpu(), rtol=1e-3, atol=1e-3)
+    print("Test passed!")
 
-def _run_original_cli():
-    torch.manual_seed(0)
-    torch.set_printoptions(threshold=float("inf"), sci_mode=False)
-    for B, H, L, D, block_L, block_D in test_configs:
-        print(f"Testing linear attention with B={B}, H={H}, L={L}, D={D}, block_L={block_L}, block_D={block_D}")
-        q = torch.randn([B, H, L, D]).npu().to(torch.float16)
-        k = torch.randn([B, H, L, D]).npu().to(torch.float16)
-        v = torch.randn([B, H, L, D]).npu().to(torch.float16)
-        q = q.abs()
-        k = k.abs()
-        o = linear_attention(q, k, v, block_L, block_D)
-        ref_o = ref_linear_attention(q, k, v)
-        torch.testing.assert_close(o.cpu(), ref_o.cpu(), rtol=1e-3, atol=1e-3)
-        print("Test passed!")
-
-    print("Kernel Output Match!")
-
-
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
-    _run_original_cli()
-
-
-if __name__ == "__main__":
-    main()
+print("Kernel Output Match!")

@@ -1,10 +1,9 @@
-"""Complete original TA example; runtime effects require explicit main()."""
-
-from tilelang.env import CacheState
 import math
 import torch
 import tilelang
 import tilelang.ascend.a2a3.language as T
+
+tilelang.disable_cache()
 
 # ---------------------------------------------------------------------------
 # Pass configs (from cann_bench/_common.py + gather.py)
@@ -355,63 +354,49 @@ def run_gather(case_id, x_shape, idx_shape, x_dtype_str, idx_dtype_str, dim, val
     print(f"Case {case_id}: PASSED  (x={x_shape}, idx={idx_shape}, x_dtype={x_dtype_str}, idx_dtype={idx_dtype_str}, dim={dim})")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
-        torch.manual_seed(42)
-
-        # (case_id, x_shape, idx_shape, x_dtype, idx_dtype, dim, [x_range, idx_range])
-        test_cases = [
-            (1, [1024, 1024], [512, 1024], "float16", "int32", 0, [[-1, 1], [0, 1023]]),
-            (2, [2048, 2048], [1024, 2048], "float32", "int64", 0, [[-2, 2], [0, 2047]]),
-            (3, [4096, 4096], [2048, 4096], "bfloat16", "int32", 0, [[-3, 3], [0, 4095]]),
-            (4, [8192, 8192], [4096, 8192], "int32", "int32", 0, [[-1000, 1000], [0, 8191]]),
-            (5, [4096, 4096], [4096, 4096], "int64", "int64", 0, [[-100000, 100000], [0, 4095]]),
-            (6, [16384, 8192], [8192, 8192], "int8", "int32", 0, [[-128, 127], [0, 16383]]),
-            (7, [1023, 1023], [511, 1023], "float16", "int64", 1, [[-0.1, 0.1], [0, 1022]]),
-            (8, [1009, 1021], [505, 1021], "float32", "int32", 0, [[-1, 2], [0, 1008]]),
-            (9, [1537, 769], [769, 769], "bfloat16", "int64", 0, [[-5, 10], [0, 1536]]),
-            (10, [363, 367, 373], [181, 367, 373], "float16", "int32", 1, [[-50, 100], [0, 362]]),
-            (11, [2049, 513], [1024, 513], "float32", "int64", 0, [[-65504, 65504], [0, 2048]]),
-            (12, [3, 7, 13, 4001], [2, 7, 13, 4001], "bfloat16", "int32", 1, [[-88, 88], [0, 2]]),
-            (13, [1000003], [1000], "float32", "int64", 0, [["-inf", "inf"], [0, 1000002]]),
-            (14, [11, 13, 17, 67, 67], [7, 13, 17, 67, 67], "float16", "int32", 1, [["nan", "nan"], [0, 10]]),
-            (15, [3, 7, 11, 13, 1013], [2, 7, 11, 13, 1013], "float32", "int64", 1, [[0, 0], [0, 2]]),
-            (16, [512, 2049], [256, 2049], "bfloat16", "int32", 0, [[-0.5, 0.5], [0, 511]]),
-            (17, [255, 8193], [127, 8193], "float16", "int64", 0, [[-1, 3], [0, 254]]),
-            (18, [4097, 511], [2048, 511], "float32", "int32", 0, [[-1000, 1000], [0, 4096]]),
-            (19, [2, 511, 2049], [2, 255, 2049], "bfloat16", "int64", 1, [[-0.2, 0.2], [0, 510]]),
-            (20, [4, 255, 2049], [4, 127, 2049], "float32", "int32", 2, [[-3, 6], [0, 254]]),
-        ]
-
-        print("=" * 70)
-        print("Gather TileLang-Ascend 测试 (torch.gather 语义)")
-        print(f"共 {len(test_cases)} 个测试用例")
-        print("=" * 70)
-
-        passed = 0
-        failed = 0
-        for case_id, x_shape, idx_shape, x_dtype, idx_dtype, dim, value_range in test_cases:
-            try:
-                run_gather(case_id, x_shape, idx_shape, x_dtype, idx_dtype, dim, value_range)
-                passed += 1
-            except Exception as e:
-                print(f"Case {case_id}: FAILED - {e}")
-                failed += 1
-
-        print("=" * 70)
-        print(f"测试完成: {passed} passed, {failed} failed")
-        if failed == 0:
-            print("Test Passed!")
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
-    main()
+    torch.manual_seed(42)
+
+    # (case_id, x_shape, idx_shape, x_dtype, idx_dtype, dim, [x_range, idx_range])
+    test_cases = [
+        (1, [1024, 1024], [512, 1024], "float16", "int32", 0, [[-1, 1], [0, 1023]]),
+        (2, [2048, 2048], [1024, 2048], "float32", "int64", 0, [[-2, 2], [0, 2047]]),
+        (3, [4096, 4096], [2048, 4096], "bfloat16", "int32", 0, [[-3, 3], [0, 4095]]),
+        (4, [8192, 8192], [4096, 8192], "int32", "int32", 0, [[-1000, 1000], [0, 8191]]),
+        (5, [4096, 4096], [4096, 4096], "int64", "int64", 0, [[-100000, 100000], [0, 4095]]),
+        (6, [16384, 8192], [8192, 8192], "int8", "int32", 0, [[-128, 127], [0, 16383]]),
+        (7, [1023, 1023], [511, 1023], "float16", "int64", 1, [[-0.1, 0.1], [0, 1022]]),
+        (8, [1009, 1021], [505, 1021], "float32", "int32", 0, [[-1, 2], [0, 1008]]),
+        (9, [1537, 769], [769, 769], "bfloat16", "int64", 0, [[-5, 10], [0, 1536]]),
+        (10, [363, 367, 373], [181, 367, 373], "float16", "int32", 1, [[-50, 100], [0, 362]]),
+        (11, [2049, 513], [1024, 513], "float32", "int64", 0, [[-65504, 65504], [0, 2048]]),
+        (12, [3, 7, 13, 4001], [2, 7, 13, 4001], "bfloat16", "int32", 1, [[-88, 88], [0, 2]]),
+        (13, [1000003], [1000], "float32", "int64", 0, [["-inf", "inf"], [0, 1000002]]),
+        (14, [11, 13, 17, 67, 67], [7, 13, 17, 67, 67], "float16", "int32", 1, [["nan", "nan"], [0, 10]]),
+        (15, [3, 7, 11, 13, 1013], [2, 7, 11, 13, 1013], "float32", "int64", 1, [[0, 0], [0, 2]]),
+        (16, [512, 2049], [256, 2049], "bfloat16", "int32", 0, [[-0.5, 0.5], [0, 511]]),
+        (17, [255, 8193], [127, 8193], "float16", "int64", 0, [[-1, 3], [0, 254]]),
+        (18, [4097, 511], [2048, 511], "float32", "int32", 0, [[-1000, 1000], [0, 4096]]),
+        (19, [2, 511, 2049], [2, 255, 2049], "bfloat16", "int64", 1, [[-0.2, 0.2], [0, 510]]),
+        (20, [4, 255, 2049], [4, 127, 2049], "float32", "int32", 2, [[-3, 6], [0, 254]]),
+    ]
+
+    print("=" * 70)
+    print("Gather TileLang-Ascend 测试 (torch.gather 语义)")
+    print(f"共 {len(test_cases)} 个测试用例")
+    print("=" * 70)
+
+    passed = 0
+    failed = 0
+    for case_id, x_shape, idx_shape, x_dtype, idx_dtype, dim, value_range in test_cases:
+        try:
+            run_gather(case_id, x_shape, idx_shape, x_dtype, idx_dtype, dim, value_range)
+            passed += 1
+        except Exception as e:
+            print(f"Case {case_id}: FAILED - {e}")
+            failed += 1
+
+    print("=" * 70)
+    print(f"测试完成: {passed} passed, {failed} failed")
+    if failed == 0:
+        print("Test Passed!")

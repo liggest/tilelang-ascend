@@ -1,23 +1,19 @@
 # fmt: off
-import argparse
-import importlib.util
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+import shmem as aclshmem_module
 import multiprocessing as mp
 import random
 from multiprocessing import Barrier
-import os
-from pathlib import Path
-
+tilelang.disable_cache()
 G_IP_PORT = "tcp://xxx.xxx.xxx.xxx:xxxx"    # Enter IP and Port
 g_ash_size = 1024 * 1024 * 1024
 pass_configs = {
     tilelang.PassConfigKey.TIR_MERGE_STATIC_SMEM: True,
     tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,
 }
-
-
+#--- 1. Implement Dispatch Operator ---
 @tilelang.jit(out_idx=[4,5,6,7], workspace_idx=[8], pass_configs=pass_configs)
 def moe_dispatch_kernel(
     Bs,     # Total number of tokens
@@ -270,6 +266,7 @@ def moe_dispatch_kernel(
                         T.tile.datacachecleanandinvalid_experiment(expert_token_nums_out, "SINGLE_CACHE_LINE", "CACHELINE_OUT")
     return main_dispatch
 
+# --- 2. Implement the Combine operator ---
 @tilelang.jit(out_idx=[6], pass_configs=pass_configs)
 def moe_combine_kernel(
     Bs,
@@ -383,8 +380,6 @@ def moe_combine_kernel(
     return main_combine
 
 def worker(rank, barrier, x, expert_ids, aiv_num, ep_world_size, local_expert_num, Bs):
-    import torch_npu  # noqa: F401
-    import shmem as aclshmem_module
     print(f"Rank {rank}: Setting device")
     torch.npu.set_device(rank)
     x = x.npu()
@@ -447,6 +442,7 @@ def worker(rank, barrier, x, expert_ids, aiv_num, ep_world_size, local_expert_nu
     torch.testing.assert_close(x_out, dispatch_combine_golden, rtol=1e-2, atol=1e-2)
     print("Kernel Output Match!")
 
+# Construct input
 def init_input(rank, Bs, H, K, ep_world_size, local_expert_num):
     start = rank * Bs + 1
     end = start + Bs
@@ -464,8 +460,7 @@ def init_input(rank, Bs, H, K, ep_world_size, local_expert_num):
     expert_ids = torch.tensor(expert_ids_list, dtype=torch.int32)
     return x, expert_ids
 
-def _run_original_cli():
-    global Bs, H, K, ep_world_size, local_expert_num, aiv_num, num_processes
+if __name__ == '__main__':
     Bs = 64
     H = 7168
     K = 4
@@ -483,53 +478,4 @@ def _run_original_cli():
     for p in processes:
         p.join()
     print("All processes completed")
-
-
-def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description="Original fixed 16-rank shmem dispatch/combine example")
-    return parser.parse_args(argv)
-
-
-def main(argv=None):
-    parse_args(argv)
-    requested = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example")
-    if Path(tilelang.env.TILELANG_CACHE_DIR).resolve() != Path(requested).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; execution was refused")
-    if importlib.util.find_spec("shmem") is None:
-        raise ModuleNotFoundError("Install the pinned shmem Python extension from 3rdparty/shmem/src/python before running these multi-NPU workers")
-    import torch_npu  # noqa: F401
-    import shmem  # noqa: F401 - validate the real extension before clearing/spawning
-    from tilelang.env import CacheState
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-    from tilelang.cache.kernel_cache import KernelCache
-
-    original_names = ("Bs", "H", "K", "ep_world_size", "local_expert_num", "aiv_num", "num_processes")
-    absent = object()
-    caller_globals = {name: globals().get(name, absent) for name in original_names}
-    caller_random = random.getstate()
-    caller_raw = CacheState._enabled
-    caller_staging = KernelCache._last_cleaned_staging_root
-    cache = A2A3CythonKernelCache()
-    caller_memory = cache._memory_cache
-    cache._memory_cache = {}
-    try:
-        cache.clear_cache()
-        with torch.random.fork_rng(devices=[]):
-            _run_original_cli()
-    finally:
-        cache._memory_cache = caller_memory
-        KernelCache._last_cleaned_staging_root = caller_staging
-        CacheState._enabled = caller_raw
-        random.setstate(caller_random)
-        for name, value in caller_globals.items():
-            if value is absent:
-                globals().pop(name, None)
-            else:
-                globals()[name] = value
-
-
-if __name__ == "__main__":
-    main()
 # fmt: on

@@ -1,11 +1,10 @@
-"""Original TA developer example; runtime effects execute only through main()."""
-
-from tilelang.env import CacheState
 import argparse
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -14,6 +13,16 @@ pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_SYNC: True,
     tilelang.PassConfigKey.TL_ASCEND_PTO_USE_PIPE_IN_CV_COPY: False,
 }
+
+parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
+parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
+parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
+parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
+args = parser.parse_args()
+
+M = args.m
+N = args.n
+K = args.k
 
 
 @tilelang.jit(out_idx=[2], pass_configs=pass_configs)
@@ -59,44 +68,18 @@ def matmul_add(M, N, K, block_M, block_N, block_K, dtype="float16", accum_dtype=
     return main
 
 
-def main():
-    import torch_npu  # noqa: F401
+func = matmul_add(M, N, K, 128, 256, 64)
 
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
+torch.manual_seed(0)
 
-        parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
-        parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
-        parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
-        parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
-        args = parser.parse_args()
+a = torch.randn(M, K).half().npu()
+b = torch.randn(K, N).half().npu()
+d = torch.randn(M, N).half().npu()
+print("init successful!")
 
-        M = args.m
-        N = args.n
-        K = args.k
+c = func(a, b, d)
 
-        func = matmul_add(M, N, K, 128, 256, 64)
+ref_c = a @ b + d
 
-        torch.manual_seed(0)
-
-        a = torch.randn(M, K).half().npu()
-        b = torch.randn(K, N).half().npu()
-        d = torch.randn(M, N).half().npu()
-        print("init successful!")
-
-        c = func(a, b, d)
-
-        ref_c = a @ b + d
-
-        torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
-        print("Kernel Output Match!")
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
-if __name__ == "__main__":
-    main()
+torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
+print("Kernel Output Match!")

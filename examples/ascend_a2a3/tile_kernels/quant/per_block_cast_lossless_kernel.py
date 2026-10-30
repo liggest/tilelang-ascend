@@ -6,15 +6,14 @@ import pytest
 import torch
 import torch.nn.functional as F
 import tilelang
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import tilelang.ascend.a2a3.language as T
-
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
 
 try:
     from .utils import *
 except ImportError:
     from utils import *  # type: ignore[no-redef]
+tilelang.disable_cache()
+os.environ.setdefault("TILELANG_PRINT_ON_COMPILATION", "0")
 
 
 DEFAULT_IN_SF_BLOCK = (1, 32)
@@ -2414,16 +2413,8 @@ def test_per_block_cast_lossless(params: dict) -> None:
     assert_equal(out, out_ref, check_stride=False)
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-    os.environ.setdefault("TILELANG_PRINT_ON_COMPILATION", "0")
+if __name__ == "__main__":
     exit_code = pytest.main([__file__, "-v"])
     if exit_code == pytest.ExitCode.OK:
         print("All per_block_cast_lossless tests passed! Kernel Output Match!")
     sys.exit(exit_code)
-
-
-if __name__ == "__main__":
-    main()

@@ -21,38 +21,16 @@ exactly.
 """
 
 import argparse
+import os
+import sys
 
 import torch
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _HERE)
 
 import tilelang  # noqa: E402
-import importlib.util
-from pathlib import Path
-import pytest
-
-
-# Resolve only the complete adopted sibling; never alter the caller's sys.path.
-def _load_kernel_module():
-    spec = importlib.util.spec_from_file_location(__name__ + "_kernel", Path(__file__).with_name("dilation_2d.py"))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-_KERNEL_MODULE = _load_kernel_module()
-dilation_2d = _KERNEL_MODULE.dilation_2d
-_preserve_cache_state = _KERNEL_MODULE._preserve_cache_state
-pytestmark = pytest.mark.a2a3_device
-
-
-@pytest.fixture(autouse=True)
-def _isolate_kernel_module(isolated_a2a3_cache, monkeypatch):
-    # Keep the original complete level's local memoization intact while each
-    # pytest invocation owns a fresh real kernel namespace and scoped cache.
-    module = _load_kernel_module()
-    monkeypatch.setitem(globals(), "_KERNEL_MODULE", module)
-    monkeypatch.setitem(globals(), "dilation_2d", module.dilation_2d)
-
+from dilation_2d import dilation_2d  # noqa: E402
 
 # ========== precision standard (mixed tolerance) ==========
 _FP_TABLE = {
@@ -435,13 +413,10 @@ def test_dilation_2d_boundary():
         _run_boundary(name, dtype, fn)
 
 
-@_preserve_cache_state
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--level", default="all", choices=["l0", "l1", "l2", "boundary", "all"])
     args = parser.parse_args()
-
-    import torch_npu  # noqa: F401
 
     tilelang.disable_cache()
     torch.manual_seed(0)

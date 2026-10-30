@@ -2,6 +2,7 @@ import math
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+import torch_npu
 
 try:
     from .moe_token_utils import is_fp32_dtype
@@ -794,8 +795,6 @@ class MoeTokenPermuteGrad:
 
 
 def test_permute_grad_parameterized(pt_dtype, tl_dtype_str):
-    import torch_npu
-
     print(f"\n{'=' * 65}")
     print(f"Testing MoeTokenPermuteGrad, dtype: {tl_dtype_str.upper()}")
     print(f"{'=' * 65}")
@@ -900,11 +899,5 @@ def test_permute_grad():
     print(f"{'=' * 65}")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    test_permute_grad()
-
-
 if __name__ == "__main__":
-    main()
+    test_permute_grad()

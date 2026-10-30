@@ -1,10 +1,8 @@
-"""Original TA example; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
@@ -114,6 +112,7 @@ def layer_norm(M, N, block_M, block_N, eps=1e-5, dtype="float"):
     return main
 
 
+torch.manual_seed(0)
 test_configs = [
     (34, 34, 32, 32, "float"),
     (34, 34, 32, 32, "float16"),
@@ -123,35 +122,15 @@ test_configs = [
     (1024, 51200, 128, 128, "bfloat16"),
 ]
 
+for M, N, block_M, block_N, dtype in test_configs:
+    print(f"Testing layer_norm with M={M}, N={N}, block_M={block_M}, block_N={block_N}, dtype={dtype}")
+    func = layer_norm(M, N, block_M, block_N, dtype=dtype)
+    print("Init successful!")
+    torch_dtype = getattr(torch, dtype) if dtype != "float" else torch.float32
+    a = torch.randn(M, N, dtype=torch_dtype).npu()
+    b = func(a)
+    ref_b = torch.layer_norm(a, normalized_shape=[N])
+    torch.testing.assert_close(b.cpu(), ref_b.cpu(), rtol=1e-2, atol=1e-2)
+    print("Test pass!")
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-
-    torch.manual_seed(0)
-
-    for M, N, block_M, block_N, dtype in test_configs:
-        print(f"Testing layer_norm with M={M}, N={N}, block_M={block_M}, block_N={block_N}, dtype={dtype}")
-        func = layer_norm(M, N, block_M, block_N, dtype=dtype)
-        print("Init successful!")
-        torch_dtype = getattr(torch, dtype) if dtype != "float" else torch.float32
-        a = torch.randn(M, N, dtype=torch_dtype).npu()
-        b = func(a)
-        ref_b = torch.layer_norm(a, normalized_shape=[N])
-        torch.testing.assert_close(b.cpu(), ref_b.cpu(), rtol=1e-2, atol=1e-2)
-        print("Test pass!")
-
-    print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+print("Kernel Output Match!")

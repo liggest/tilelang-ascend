@@ -1,4 +1,3 @@
-import pytest
 import importlib.util
 import sys
 from pathlib import Path
@@ -48,6 +47,3 @@ def test_sparse_attention_accuracy() -> None:
 
     expected = example.sparse_attn(query, kv, attn_sink, topk_idxs, softmax_scale)
     torch.testing.assert_close(expected, actual, rtol=1e-2, atol=1e-2)
-
-
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache", "isolated_npu_default_device", "disable_a2a3_cache")]

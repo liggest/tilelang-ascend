@@ -14,33 +14,6 @@ Performance (B=8, H=64, G=16, Sq=Sk=2048, D=128, causal, fp16, 910B3):
   ~12 ms (1.06x GPU baseline 11.4 ms)
 """
 
-
-# Runtime state belongs to this invocation; import itself stays inert.
-def _runtime_scope(*, npu_default=False):
-    from contextlib import nullcontext
-    from functools import wraps
-
-    def decorate(function):
-        @wraps(function)
-        def invoke(*args, **kwargs):
-            import torch_npu  # noqa: F401
-            from tilelang.env import CacheState
-
-            enabled = CacheState.is_enabled()
-            try:
-                with torch.device("npu") if npu_default else nullcontext():
-                    return function(*args, **kwargs)
-            finally:
-                if enabled:
-                    CacheState.enable()
-                else:
-                    CacheState.disable()
-
-        return invoke
-
-    return decorate
-
-
 import tilelang
 import tilelang.ascend.a2a3.language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
@@ -826,9 +799,12 @@ def padded_to_varlen(padded, cu_seqlens, heads, dim):
     return torch.cat(parts, dim=0)
 
 
-@_runtime_scope(npu_default=True)
-def main():
+# ========== Smoke Test (CI entry — prints "Test Passed!") ==========
+
+
+if __name__ == "__main__":
     tilelang.disable_cache()
+    torch.set_default_device("npu")
     torch.manual_seed(0)
 
     # Minimal L0 config (block-aligned, small)
@@ -913,7 +889,3 @@ def main():
     torch.testing.assert_close(out_3d.cpu().float(), ref_out.cpu().float(), rtol=rtol, atol=atol)
     print(f"max_diff={max_diff:.6f}")
     print("Test Passed!")
-
-
-if __name__ == "__main__":
-    main()

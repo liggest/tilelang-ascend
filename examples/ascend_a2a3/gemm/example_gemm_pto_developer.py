@@ -2,8 +2,19 @@ import argparse
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import torch
+
+tilelang.disable_cache()
+
+parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
+parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
+parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
+parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
+args = parser.parse_args()
+
+M = args.m
+N = args.n
+K = args.k
 
 
 pass_configs = {
@@ -45,37 +56,18 @@ def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"
     return main
 
 
-def main():
-    import torch_npu  # noqa: F401
+func = matmul(M, N, K, 128, 256, 64)
 
-    A2A3CythonKernelCache().clear_cache()
+torch.manual_seed(0)
 
-    parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
-    parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
-    parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
-    parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
-    args = parser.parse_args()
+a = torch.randn(M, K).half().npu()
+b = torch.randn(K, N).half().npu()
+c = torch.empty(M, N).half().npu()
+print("init successful!")
 
-    M = args.m
-    N = args.n
-    K = args.k
+c = func(a, b)
 
-    func = matmul(M, N, K, 128, 256, 64)
+ref_c = a @ b
 
-    torch.manual_seed(0)
-
-    a = torch.randn(M, K).half().npu()
-    b = torch.randn(K, N).half().npu()
-    c = torch.empty(M, N).half().npu()
-    print("init successful!")
-
-    c = func(a, b)
-
-    ref_c = a @ b
-
-    torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
-    print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
+print("Kernel Output Match!")

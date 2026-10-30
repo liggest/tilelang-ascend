@@ -1,9 +1,3 @@
-"""Complete original TA example; CLI and device effects execute only in main()."""
-
-import os
-from pathlib import Path
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
 """Minimal tail-block elementwise-add example for the AscendC backend.
 
 M and N are deliberately *not* multiples of the block, so the last row/column
@@ -13,10 +7,10 @@ valid rectangle; the unused UB gap is pad-filled and never written back.
 """
 
 import tilelang
-
 import tilelang.ascend.a2a3.language as T
-
 import torch
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -53,17 +47,7 @@ def tail_add(M, N, block_M, block_N, dtype="float"):
     return main
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-
+if __name__ == "__main__":
     torch.manual_seed(0)
     for M, N, block_M, block_N, dtype in [
         (34, 130, 32, 32, "float"),
@@ -79,7 +63,3 @@ def main():
         torch.testing.assert_close(c, a + b, rtol=1e-2, atol=1e-2)
         print("  pass")
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

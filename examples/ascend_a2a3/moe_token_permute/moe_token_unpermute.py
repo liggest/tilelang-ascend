@@ -1,5 +1,6 @@
 import math
 import torch
+import torch_npu
 
 try:
     from .moe_token_utils import auto_tile_h, auto_tile_t, is_fp32_dtype, pad_first_dim, pad_last_dim
@@ -623,8 +624,6 @@ class MoeTokenUnpermute:
 
 
 def test_unpermute_parameterized(pt_dtype, tl_dtype_str):
-    import torch_npu
-
     print(f"\n{'=' * 65}")
     print(f"Testing MoeTokenUnpermute, dtype: {tl_dtype_str.upper()}")
     print(f"{'=' * 65}")
@@ -764,11 +763,5 @@ def test_unpermute():
     print(f"{'=' * 65}")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    test_unpermute()
-
-
 if __name__ == "__main__":
-    main()
+    test_unpermute()

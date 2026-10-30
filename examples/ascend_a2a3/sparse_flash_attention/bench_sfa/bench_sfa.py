@@ -1,35 +1,10 @@
-# Original benchmark: fixed TA source 0deb8b93, complete flow preserved.
 # https://gitcode.com/cann/cann-recipes-infer/blob/master/ops/ascendc/torch_ops_extension/custom_ops/converter/npu_sparse_flash_attention.py
-import argparse
-import importlib.util
-from pathlib import Path
 
+import argparse
 import torch
+import torch_npu
 
 DEVICE = "npu"
-_LEAF_NAMES = (
-    "sparse_flash_attn_pa_baseline",
-    "sparse_flash_attn_pa_developer",
-    "sparse_flash_attn_pa",
-    "sparse_flash_attn_pa_no_cv_pipeline",
-)
-
-
-def _load_leaf(name):
-    if name not in _LEAF_NAMES:
-        raise ValueError(f"unknown local sparse PA leaf: {name}")
-    path = Path(__file__).resolve().parent / f"{name}.py"
-    spec = importlib.util.spec_from_file_location(f"_a2a3_sparse_pa_bench_{name}", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-# The original benchmark always uses this initializer and rejection factory,
-# independently of --file. Its explicit public global behavior is preserved.
-_pipeline = _load_leaf("sparse_flash_attn_pa")
-init_test = _pipeline.init_test
-sparse_attention_fwd = _pipeline.sparse_attention_fwd
 
 
 def test_op(T, B, KV_S, Q_N, KV_N, D, D_rope, sparse_size, scale_value, sparse_block_size, sparse_mode, block_size, act_kv_s, tl_ops: list):
@@ -106,6 +81,30 @@ def test_op(T, B, KV_S, Q_N, KV_N, D, D_rope, sparse_size, scale_value, sparse_b
     print(f"Case completed: T={T}, KV_S={KV_S}")
 
 
+from sparse_flash_attn_pa import init_test, sparse_attention_fwd
+
+parser = argparse.ArgumentParser(description="SparseMLA test script")
+parser.add_argument("--file", type=str, default="sparse_flash_attn_pa_no_cv_pipeline", help="The version you want to run")
+args = parser.parse_args()
+
+if args.file == "sparse_flash_attn_pa_baseline":
+    from sparse_flash_attn_pa_baseline import sparse_attn_tilelang
+elif args.file == "sparse_flash_attn_pa_developer":
+    from sparse_flash_attn_pa_developer import sparse_attn_tilelang
+elif args.file == "sparse_flash_attn_pa":
+    from sparse_flash_attn_pa import sparse_attn_tilelang
+elif args.file == "sparse_flash_attn_pa_no_cv_pipeline":
+    from sparse_flash_attn_pa_no_cv_pipeline import sparse_attn_tilelang
+else:
+    raise RuntimeError(
+        "not supported file, only the following files are supported: "
+        "sparse_flash_attn_pa_baseline, sparse_flash_attn_pa_developer, sparse_flash_attn_pa, sparse_flash_attn_pa_no_cv_pipeline"
+    )
+
+init_test()
+tl_ops = [torch_npu.npu_sparse_flash_attention, sparse_attn_tilelang]
+
+
 def test_reject_invalid_topk():
     # topk must be a positive multiple of 2 * n_base_size (128 by default):
     # the T.Pipelined(num_stages=2) loop drops the tail block otherwise.
@@ -121,106 +120,75 @@ def test_reject_invalid_topk():
     print("Invalid topk rejection checks completed")
 
 
-def _run_original_cli():
-    parser = argparse.ArgumentParser(description="SparseMLA test script")
-    parser.add_argument("--file", type=str, default="sparse_flash_attn_pa_no_cv_pipeline", help="The version you want to run")
-    args = parser.parse_args()
-    if args.file == "sparse_flash_attn_pa_baseline":
-        sparse_attn_tilelang = _load_leaf("sparse_flash_attn_pa_baseline").sparse_attn_tilelang
-    elif args.file == "sparse_flash_attn_pa_developer":
-        sparse_attn_tilelang = _load_leaf("sparse_flash_attn_pa_developer").sparse_attn_tilelang
-    elif args.file == "sparse_flash_attn_pa":
-        sparse_attn_tilelang = _load_leaf("sparse_flash_attn_pa").sparse_attn_tilelang
-    elif args.file == "sparse_flash_attn_pa_no_cv_pipeline":
-        sparse_attn_tilelang = _load_leaf("sparse_flash_attn_pa_no_cv_pipeline").sparse_attn_tilelang
-    else:
-        raise RuntimeError(
-            "not supported file, only the following files are supported: sparse_flash_attn_pa_baseline, sparse_flash_attn_pa_developer, sparse_flash_attn_pa, sparse_flash_attn_pa_no_cv_pipeline"
+test_reject_invalid_topk()
+test_op(
+    T=1,
+    B=1,
+    KV_S=2560,
+    Q_N=128,
+    KV_N=1,
+    D=512,
+    D_rope=64,
+    sparse_size=2048,
+    scale_value=0.5,
+    sparse_block_size=1,
+    sparse_mode=0,
+    block_size=128,
+    act_kv_s=2560,
+    tl_ops=tl_ops,
+)
+test_op(
+    T=1,
+    B=1,
+    KV_S=6400,
+    Q_N=128,
+    KV_N=1,
+    D=512,
+    D_rope=64,
+    sparse_size=2048,
+    scale_value=0.5,
+    sparse_block_size=1,
+    sparse_mode=0,
+    block_size=128,
+    act_kv_s=2560,
+    tl_ops=tl_ops,
+)
+test_op(
+    T=1,
+    B=1,
+    KV_S=48000,
+    Q_N=128,
+    KV_N=1,
+    D=512,
+    D_rope=64,
+    sparse_size=2048,
+    scale_value=0.5,
+    sparse_block_size=1,
+    sparse_mode=0,
+    block_size=128,
+    act_kv_s=2560,
+    tl_ops=tl_ops,
+)
+# non-2048 topk coverage, only for the pipelined version (sparse_flash_attn_pa)
+# whose wrapper derives topk from sparse_indices.shape[-1]; the other versions
+# hard-code topk=2048. Values satisfy the topk % (2 * n_base_size) == 0
+# constraint: 128 is the minimum (single pipeline group), 256 spans two groups.
+if args.file == "sparse_flash_attn_pa":
+    for small_topk in (128, 256):
+        test_op(
+            T=1,
+            B=1,
+            KV_S=2560,
+            Q_N=128,
+            KV_N=1,
+            D=512,
+            D_rope=64,
+            sparse_size=small_topk,
+            scale_value=0.5,
+            sparse_block_size=1,
+            sparse_mode=0,
+            block_size=128,
+            act_kv_s=2560,
+            tl_ops=tl_ops,
         )
-    import torch_npu
-
-    init_test()
-    tl_ops = [torch_npu.npu_sparse_flash_attention, sparse_attn_tilelang]
-    test_reject_invalid_topk()
-    test_op(
-        T=1,
-        B=1,
-        KV_S=2560,
-        Q_N=128,
-        KV_N=1,
-        D=512,
-        D_rope=64,
-        sparse_size=2048,
-        scale_value=0.5,
-        sparse_block_size=1,
-        sparse_mode=0,
-        block_size=128,
-        act_kv_s=2560,
-        tl_ops=tl_ops,
-    )
-    test_op(
-        T=1,
-        B=1,
-        KV_S=6400,
-        Q_N=128,
-        KV_N=1,
-        D=512,
-        D_rope=64,
-        sparse_size=2048,
-        scale_value=0.5,
-        sparse_block_size=1,
-        sparse_mode=0,
-        block_size=128,
-        act_kv_s=2560,
-        tl_ops=tl_ops,
-    )
-    test_op(
-        T=1,
-        B=1,
-        KV_S=48000,
-        Q_N=128,
-        KV_N=1,
-        D=512,
-        D_rope=64,
-        sparse_size=2048,
-        scale_value=0.5,
-        sparse_block_size=1,
-        sparse_mode=0,
-        block_size=128,
-        act_kv_s=2560,
-        tl_ops=tl_ops,
-    )
-    if args.file == "sparse_flash_attn_pa":
-        for small_topk in (128, 256):
-            test_op(
-                T=1,
-                B=1,
-                KV_S=2560,
-                Q_N=128,
-                KV_N=1,
-                D=512,
-                D_rope=64,
-                sparse_size=small_topk,
-                scale_value=0.5,
-                sparse_block_size=1,
-                sparse_mode=0,
-                block_size=128,
-                act_kv_s=2560,
-                tl_ops=tl_ops,
-            )
-    print("Kernel Output Match!")
-
-
-def main():
-    """Run the complete original standalone CLI; preserve its process device/seed effects."""
-    from tilelang.env import CacheState
-
-    cache_enabled = CacheState._enabled
-    try:
-        _run_original_cli()
-    finally:
-        CacheState._enabled = cache_enabled
-
-
-if __name__ == "__main__":
-    main()
+print("Kernel Output Match!")

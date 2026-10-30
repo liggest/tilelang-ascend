@@ -16,55 +16,25 @@ Usage:
   python test_gqa_sink_fwd_varlen.py --level bench
 """
 
-
-# Runtime state belongs to this invocation; import itself stays inert.
-def _runtime_scope(*, npu_default=False):
-    from contextlib import nullcontext
-    from functools import wraps
-
-    def decorate(function):
-        @wraps(function)
-        def invoke(*args, **kwargs):
-            import torch_npu  # noqa: F401
-            from tilelang.env import CacheState
-
-            enabled = CacheState.is_enabled()
-            try:
-                with torch.device("npu") if npu_default else nullcontext():
-                    return function(*args, **kwargs)
-            finally:
-                if enabled:
-                    CacheState.enable()
-                else:
-                    CacheState.disable()
-
-        return invoke
-
-    return decorate
-
-
 import argparse
-import os  # noqa: F401 - retained original dependency
+import os
 import sys
 import traceback
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import tilelang
 import torch
 from tilelang.profiler import do_bench  # noqa: E402
 
-# Resolve only the actual namespaced sibling, never a main GPU module.
-import importlib.util as _importlib_util
-from pathlib import Path as _Path
-
-_spec = _importlib_util.spec_from_file_location("_a2a3_attention_sink_varlen", _Path(__file__).with_name("example_gqa_sink_fwd_varlen.py"))
-_sink_fwd_module = _importlib_util.module_from_spec(_spec)
-_spec.loader.exec_module(_sink_fwd_module)
-gqa_sink_fwd = _sink_fwd_module.gqa_sink_fwd
-ref_program = _sink_fwd_module.ref_program
-make_attention_mask = _sink_fwd_module.make_attention_mask
-make_varlen_data = _sink_fwd_module.make_varlen_data
-varlen_to_padded = _sink_fwd_module.varlen_to_padded
-padded_to_varlen = _sink_fwd_module.padded_to_varlen
+from example_gqa_sink_fwd_varlen import (  # noqa: E402
+    gqa_sink_fwd,
+    ref_program,
+    make_attention_mask,
+    make_varlen_data,
+    varlen_to_padded,
+    padded_to_varlen,
+)
 
 ATOL = 1e-2
 RTOL = 1e-2
@@ -77,7 +47,7 @@ NUM_STAGES = 14
 
 def _setup():
     tilelang.disable_cache()
-    # Original main/test_forward callers provide a lexical NPU default.
+    torch.set_default_device("npu")
 
 
 # ===========================================================================
@@ -157,7 +127,6 @@ def _run_one(batch, heads, groups, q_seqlen, k_seqlen, dim, is_causal, name, lev
 # ===========================================================================
 
 
-@_runtime_scope(npu_default=False)
 def test_gqa_sink_fwd_l0():
     """L0 threshold tests: regular shapes, block-aligned."""
     configs = [
@@ -178,7 +147,6 @@ def test_gqa_sink_fwd_l0():
 # ===========================================================================
 
 
-@_runtime_scope(npu_default=False)
 def test_gqa_sink_fwd_l1():
     """L1 functional tests: irregular shapes, GQA variants."""
     configs = [
@@ -201,7 +169,6 @@ def test_gqa_sink_fwd_l1():
 # ===========================================================================
 
 
-@_runtime_scope(npu_default=False)
 def test_gqa_sink_fwd_l2():
     """L2 exception tests: single token, min seqlen, batch=1 head=1."""
     configs = [
@@ -218,7 +185,6 @@ def test_gqa_sink_fwd_l2():
 # ===========================================================================
 
 
-@_runtime_scope(npu_default=False)
 def test_gqa_sink_fwd_boundary():
     """Boundary tests: zero input, large input."""
     configs = [
@@ -234,7 +200,6 @@ def test_gqa_sink_fwd_boundary():
 # ===========================================================================
 
 
-@_runtime_scope(npu_default=False)
 def run_bench():
     """Performance benchmark using tilelang.profiler.do_bench."""
     bench_configs = [
@@ -290,7 +255,6 @@ def run_bench():
 # ===========================================================================
 
 
-@_runtime_scope(npu_default=True)
 def main():
     parser = argparse.ArgumentParser(description="GQA + Attention Sink Forward (Varlen) test suite")
     parser.add_argument(
@@ -332,7 +296,6 @@ def main():
 
 
 # pytest-discoverable aliases
-@_runtime_scope(npu_default=True)
 def test_forward():
     """Pytest alias: run L0 cases."""
     _setup()

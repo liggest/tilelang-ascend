@@ -52,7 +52,6 @@ def test_glm53_kpool_published_geometry() -> None:
 
 
 @pytest.mark.parametrize("round_scale", [False, True])
-@pytest.mark.a2a3_device
 def test_glm53_kpool_compress_reordered_masked_cache_write(round_scale: bool) -> None:
     """Match the reference and preserve every cache slot not actively written."""
     example = _load_example()
@@ -96,7 +95,6 @@ def test_glm53_kpool_compress_reordered_masked_cache_write(round_scale: bool) ->
     assert torch.equal(flat_scale[untouched], original_scale.view(-1).cpu()[untouched])
 
 
-@pytest.mark.a2a3_device
 def test_glm53_kpool_compress_default_mask_and_empty_input() -> None:
     """Cover the implicit all-true mask and the no-launch empty-input path."""
     example = _load_example()
@@ -122,7 +120,6 @@ def test_glm53_kpool_compress_default_mask_and_empty_input() -> None:
     assert torch.equal(scale_cache, before_scale)
 
 
-@pytest.mark.a2a3_device
 def test_glm53_kpool_compress_rejects_unsafe_metadata() -> None:
     """Reject metadata that could cause ambiguous or out-of-bounds writes."""
     example = _load_example()
@@ -202,7 +199,6 @@ def _assert_fp8_within_bounds(
         pytest.param(16384, id="pools16384", marks=pytest.mark.low_priority),
     ],
 )
-@pytest.mark.a2a3_device
 def test_glm53_kpool_compress_multi_tile_scatter(num_pools: int) -> None:
     """Exercise several device tiles and cache blocks with a full write mask."""
     example = _load_example()

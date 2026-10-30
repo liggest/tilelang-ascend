@@ -1,11 +1,12 @@
-from functools import wraps
-
 import tilelang
-from tilelang import DataType  # noqa: F401 - preserve original module dependency
-
+from tilelang import DataType  # noqa: F401
 import tilelang.ascend.a2a3.language as T
-
 import torch
+
+torch.set_default_device("npu")
+torch.manual_seed(0)
+
+tilelang.disable_cache()
 
 core_num = 24
 
@@ -294,6 +295,15 @@ def sparse_attention_fwd(heads, dim, tail_dim, topk, kv_stride, kv_group=1, sm_s
     return main
 
 
+func = sparse_attention_fwd(
+    heads=128,
+    dim=512,
+    tail_dim=64,
+    topk=2048,
+    kv_stride=1,
+)
+
+
 def ref_sparse_attention_fwd_interface(
     q,
     kv,
@@ -337,78 +347,38 @@ def ref_sparse_attention_fwd_interface(
     return o.to(torch.bfloat16)
 
 
-def _reference_in_input_device(function):
-    @wraps(function)
-    def reference(q, *args, **kwargs):
-        with torch.device(q.device):
-            return function(q, *args, **kwargs)
-
-    return reference
+B, S, SKV, H, HKV, DQK, DV, topk = 1, 1024, 32 * 1024, 128, 1, 576, 512, 2048
+dtype = torch.bfloat16
 
 
-ref_sparse_attention_fwd_interface = _reference_in_input_device(ref_sparse_attention_fwd_interface)
+q = torch.randn((B, S, H, DQK), dtype=dtype)
+kv = torch.randn((B, SKV, HKV, DQK), dtype=dtype)
+indices = torch.full((B, S, HKV, topk), SKV, dtype=torch.int32)
 
+for b in range(B):
+    for t in range(S):
+        for h in range(HKV):
+            i_i = torch.randperm(max(1, t))[:topk]
+            indices[b, t, h, : len(i_i)] = i_i
 
-def _run_original_cli():
-    torch.manual_seed(0)
+torch.npu.synchronize()
 
-    tilelang.disable_cache()
+# output = torch.empty((B, S, H, DV), dtype=dtype)
+# workspace_1 = torch.zeros((core_num, 64, 512), dtype=dtype)
+# workspace_2 = torch.zeros((core_num, 64, 64), dtype=dtype)
+# workspace_3 = torch.zeros((core_num, 64, 64), dtype=torch.float)
+# workspace_4 = torch.zeros((core_num, 64, 64), dtype=dtype)
+# workspace_5 = torch.zeros((core_num, 64, 512), dtype=torch.float)
 
-    func = sparse_attention_fwd(
-        heads=128,
-        dim=512,
-        tail_dim=64,
-        topk=2048,
-        kv_stride=1,
-    )
+torch.npu.synchronize()
+print("init successful!")
 
-    B, S, SKV, H, HKV, DQK, DV, topk = 1, 1024, 32 * 1024, 128, 1, 576, 512, 2048  # noqa: F841 - preserve complete original CLI constants
-    dtype = torch.bfloat16
+output = func(q, kv, indices)
 
-    q = torch.randn((B, S, H, DQK), dtype=dtype)
-    kv = torch.randn((B, SKV, HKV, DQK), dtype=dtype)
-    indices = torch.full((B, S, HKV, topk), SKV, dtype=torch.int32)
+torch.npu.synchronize()
 
-    for b in range(B):
-        for t in range(S):
-            for h in range(HKV):
-                i_i = torch.randperm(max(1, t))[:topk]
-                indices[b, t, h, : len(i_i)] = i_i
+ref_output = ref_sparse_attention_fwd_interface(q, kv, indices)
+torch.npu.synchronize()
 
-    torch.npu.synchronize()
-
-    # output = torch.empty((B, S, H, DV), dtype=dtype)
-    # workspace_1 = torch.zeros((core_num, 64, 512), dtype=dtype)
-    # workspace_2 = torch.zeros((core_num, 64, 64), dtype=dtype)
-    # workspace_3 = torch.zeros((core_num, 64, 64), dtype=torch.float)
-    # workspace_4 = torch.zeros((core_num, 64, 64), dtype=dtype)
-    # workspace_5 = torch.zeros((core_num, 64, 512), dtype=torch.float)
-
-    torch.npu.synchronize()
-    print("init successful!")
-
-    output = func(q, kv, indices)
-
-    torch.npu.synchronize()
-
-    ref_output = ref_sparse_attention_fwd_interface(q, kv, indices)
-    torch.npu.synchronize()
-
-    torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
-    print("Test Passed!")
-
-
-def main():
-    import torch_npu  # noqa: F401 - register only for the real CLI
-    from tilelang.env import CacheState
-
-    old_enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            _run_original_cli()
-    finally:
-        CacheState._enabled = old_enabled
-
-
-if __name__ == "__main__":
-    main()
+torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
+print("Test Passed!")

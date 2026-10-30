@@ -5,8 +5,6 @@ from types import ModuleType
 
 import pytest
 
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
-
 
 FUSED_GDN_GATING_NUM_BATCHES = [
     pytest.param(1, id="batch1"),
@@ -33,18 +31,14 @@ def _load_fused_gdn_gating_example() -> ModuleType:
     module = importlib.util.module_from_spec(spec)
     original_argv = sys.argv
     original_sys_path = list(sys.path)
-    original_utils = sys.modules.pop("utils", None)
     try:
         sys.argv = [str(source)]
         sys.path.insert(0, str(source.parent))
-        sys.path.insert(0, str(source.parents[3]))
+        sys.path.insert(0, str(source.parents[2]))
         spec.loader.exec_module(module)
     finally:
         sys.argv = original_argv
         sys.path[:] = original_sys_path
-        sys.modules.pop("utils", None)
-        if original_utils is not None:
-            sys.modules["utils"] = original_utils
     return module
 
 

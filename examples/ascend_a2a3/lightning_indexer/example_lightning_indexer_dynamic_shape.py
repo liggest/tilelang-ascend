@@ -1,11 +1,11 @@
-import os
-from pathlib import Path
 import torch
 from collections import Counter
 
+torch.manual_seed(2)
 import tilelang
 import tilelang.ascend.a2a3.language as T
 
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_MEMORY_PLANNING: True,
@@ -223,24 +223,5 @@ def test_indexer():
         print("Test failed! The precision is not correct!")
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this compile-every-call example.")
-    from tilelang import env
-    from tilelang.env import CacheState
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    old_enabled = CacheState.is_enabled()
-    try:
-        torch.manual_seed(2)
-        tilelang.disable_cache()
-        test_indexer()
-    finally:
-        CacheState._enabled = old_enabled
-
-
 if __name__ == "__main__":
-    main()
+    test_indexer()

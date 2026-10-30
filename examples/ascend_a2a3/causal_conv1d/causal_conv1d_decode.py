@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Complete original TA example; runtime effects require explicit main()."""
 
 # Copyright 2025-2026 The xLLM Authors.
 import tilelang
@@ -404,7 +403,7 @@ def _run_ref_suite() -> None:
         _run_ref_check(config)
 
 
-def _original_main() -> None:
+def main() -> None:
     print("=" * 70)
     print("causal_conv1d_decode JIT 验证")
     print("=" * 70)
@@ -415,12 +414,6 @@ def _original_main() -> None:
     print("[PASS] causal_conv1d_decode 所有配置验证通过")
     print("Kernel Output Match!")
     print("=" * 70)
-
-
-def main():
-    import torch_npu  # noqa: F401
-
-    _original_main()
 
 
 if __name__ == "__main__":

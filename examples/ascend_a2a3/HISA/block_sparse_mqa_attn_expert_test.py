@@ -38,9 +38,9 @@ processes share one card and the AIVs get descheduled.
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import argparse
-import os
-from pathlib import Path
 import torch
+
+tilelang.disable_cache()
 
 
 @tilelang.jit(
@@ -722,7 +722,7 @@ def get_npu_core_num() -> int:
     return cube
 
 
-def _parse_args():
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Block Sparse MQA Attention Kernel Test")
     parser.add_argument("--seq_len", type=int, default=1024, help="Query sequence length")
     parser.add_argument("--seq_len_kv", type=int, default=128 * 1024, help="KV sequence length")
@@ -732,10 +732,8 @@ def _parse_args():
     parser.add_argument("--topk", type=int, default=64, help="Number of top blocks (must be divisible by 4)")
     parser.add_argument("--dtype", type=str, default="float16", help="Data type")
     args = parser.parse_args()
-    return args
 
-
-def _run_original_cli(args):
+    torch.set_default_device("npu")
     torch.manual_seed(42)
     tilelang.disable_cache()
 
@@ -772,27 +770,3 @@ def _run_original_cli(args):
         dtype=args.dtype,
     )
     print("Kernel Output Match!")
-
-
-def main():
-    args = _parse_args()
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this compile-every-call example.")
-    from tilelang import env
-    from tilelang.env import CacheState
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    old_enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
-        with torch.device("npu"):
-            _run_original_cli(args)
-    finally:
-        CacheState._enabled = old_enabled
-
-
-if __name__ == "__main__":
-    main()

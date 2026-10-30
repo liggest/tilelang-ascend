@@ -1,11 +1,9 @@
-"""Original TA activation; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 import torch.nn as nn
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
@@ -60,41 +58,23 @@ def gelu_mul(M, N, block_M, block_N, dtype="float"):
     return main
 
 
+torch.manual_seed(0)
 # Tests
 test_configs = [
     (256, 256, 64, 64),
     (1024, 1024, 128, 128),
 ]
 
+for M, N, block_M, block_N in test_configs:
+    print(f"Testing gelu_mul with M={M}, N={N}, block_M={block_M}, block_N={block_N}")
+    func = gelu_mul(M, N, block_M, block_N)
+    print("Init successful!")
+    a = torch.randn(M, N, dtype=torch.float).npu()
+    b = func(a)
+    gelu = nn.GELU(approximate="tanh")
+    a1, a2 = torch.split(a, N // 2, dim=1)
+    ref_b = gelu(a1) * a2
+    torch.testing.assert_close(b.cpu(), ref_b.cpu(), rtol=1e-2, atol=1e-2)
+    print("Test passed!")
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-
-    torch.manual_seed(0)
-
-    for M, N, block_M, block_N in test_configs:
-        print(f"Testing gelu_mul with M={M}, N={N}, block_M={block_M}, block_N={block_N}")
-        func = gelu_mul(M, N, block_M, block_N)
-        print("Init successful!")
-        a = torch.randn(M, N, dtype=torch.float).npu()
-        b = func(a)
-        gelu = nn.GELU(approximate="tanh")
-        a1, a2 = torch.split(a, N // 2, dim=1)
-        ref_b = gelu(a1) * a2
-        torch.testing.assert_close(b.cpu(), ref_b.cpu(), rtol=1e-2, atol=1e-2)
-        print("Test passed!")
-
-    print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+print("Kernel Output Match!")

@@ -4,26 +4,10 @@
 import os
 
 import tilelang
-from tilelang.ascend.a2a3 import language as T
+import tilelang.ascend.a2a3.language as T
 
+tilelang.disable_cache()
 from tvm import tirx as tir
-
-
-from functools import wraps
-from tilelang.env import CacheState
-
-
-def _compiler_cache_scope(function):
-    @wraps(function)
-    def scoped(*args, **kwargs):
-        enabled = CacheState._enabled
-        try:
-            tilelang.disable_cache()
-            return function(*args, **kwargs)
-        finally:
-            CacheState._enabled = enabled
-
-    return scoped
 
 
 DEFAULT_BLOCK_I = 128
@@ -2731,8 +2715,7 @@ def _build_swa(
     return func
 
 
-@_compiler_cache_scope
-def main():
+if __name__ == "__main__":
     build_sparse_flash_mla(
         batch=1,
         max_seq=1024,
@@ -2755,7 +2738,3 @@ def main():
         core_num=DEFAULT_CORE_NUM,
     )
     print("TEST PASSED!")
-
-
-if __name__ == "__main__":
-    main()

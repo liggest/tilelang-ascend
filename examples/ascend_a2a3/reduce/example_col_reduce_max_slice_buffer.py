@@ -1,10 +1,12 @@
-"""Original TA example; runtime effects execute only through main()."""
-
-from tilelang.env import CacheState
 import tilelang
 from tilelang import DataType  # noqa: F401
 import tilelang.ascend.a2a3.language as T
 import torch
+
+torch.set_default_device("npu")
+torch.manual_seed(42)
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -34,32 +36,26 @@ def reduce_max_slice_buffer():
     return main
 
 
-def main():
-    import torch_npu  # noqa: F401
+func = reduce_max_slice_buffer()
+print("init successful!")
 
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            torch.manual_seed(42)
-            tilelang.disable_cache()
-            func = reduce_max_slice_buffer()
-            print("init successful!")
-            dtype = torch.float
-            input = torch.randn((5, 8), dtype=dtype)
-            output = torch.empty((1, 8), dtype=dtype)
-            torch.npu.synchronize()
-            output = func(input)
-            torch.npu.synchronize()
-            ref_output = torch.max(input[:3, :], dim=0, keepdim=True).values
-            torch.npu.synchronize()
-            torch.testing.assert_close(ref_output, output, rtol=0.01, atol=0.01)
-            print("Kernel Output Match!")
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+dtype = torch.float
+input = torch.randn((5, 8), dtype=dtype)
+output = torch.empty((1, 8), dtype=dtype)
+torch.npu.synchronize()
 
+output = func(input)
+torch.npu.synchronize()
 
-if __name__ == "__main__":
-    main()
+ref_output = torch.max(input[:3, :], dim=0, keepdim=True).values
+torch.npu.synchronize()
+
+# print(f"ref_output: {ref_output}")
+# print(f"input: {input}")
+# print(f"output: {output[:, :4]}")
+
+torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
+print("Kernel Output Match!")
+
+# kernel = tilelang.engine.lower(func,target="pto")
+# print(kernel.kernel_source)

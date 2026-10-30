@@ -1,9 +1,3 @@
-"""Original TA GEMM autotuning on the shared mainline tuner.
-
-Source: 0deb8b93da11b7f0becbcded732d9633b7ca4e34:examples/autotune/example_gemm_autotune.py
-Source SHA256: 7eb5b356f3deb660202c381695f0bc9092197d2e813dfd3ab849b83ca0f11da3
-"""
-
 import argparse
 import itertools
 
@@ -11,8 +5,17 @@ import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+tilelang.disable_cache()
 
+parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
+parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
+parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
+parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
+args = parser.parse_args()
+
+M = args.m
+N = args.n
+K = args.k
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -21,6 +24,7 @@ pass_configs = {
 }
 
 
+# config method 1: directly defining search space in get_config function
 def get_config():
     return [
         {"block_M": 128, "block_N": 128, "K_L1": 64},
@@ -29,6 +33,7 @@ def get_config():
     ]
 
 
+# config method 2: using itertools to generate combinations
 def get_config_combination():
     block_M_options = [64, 128, 256]
     block_N_options = [64, 128, 256]
@@ -44,8 +49,6 @@ def ref_prog(A, B):
 
 
 def supply_prog(params):
-    M, K = (int(dim) for dim in params[0].shape)
-    _, N = (int(dim) for dim in params[1].shape)
     torch.manual_seed(0)
     return [torch.randn(M, K).half().npu(), torch.randn(K, N).half().npu()]
 
@@ -89,24 +92,9 @@ def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"
     return main
 
 
-def main():
-    # Register Torch's NPU device before automatic target/device resolution.
-    import torch_npu  # noqa: F401
+# To trigger auto-tuning, we should not provide the tunable parameters (block_M, block_N, K_L1)
+# If provided, the auto-tuner will skip the tuning process and use the provided values.
+func = matmul(M, N, K)
 
-    parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
-    parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
-    parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
-    parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
-    args = parser.parse_args()
-
-    # Match the original cold kernel-cache entry while keeping tuning-result
-    # persistence enabled. Use a dedicated TILELANG_CACHE_DIR for this example.
-    A2A3CythonKernelCache().clear_cache()
-    func = matmul(args.m, args.n, args.k)
-    print("Best Config:", func.get_tuner_result())
-    print("Test passed!")
-    return func
-
-
-if __name__ == "__main__":
-    main()
+print("Best Config:", func.get_tuner_result())
+print("Test passed!")

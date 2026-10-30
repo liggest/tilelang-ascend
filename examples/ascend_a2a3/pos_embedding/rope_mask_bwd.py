@@ -10,7 +10,7 @@ pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
 }
 
-device = "npu"
+device = torch.device("npu")
 
 
 def _rope_kernel_base(block_M, hidden_size, rope_dim, dtype="float16"):
@@ -370,10 +370,7 @@ def parse_args():
     return p.parse_args()
 
 
-def main():
-    global device
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     torch.manual_seed(42)
     tilelang.disable_cache()
 
@@ -391,7 +388,3 @@ def main():
             check_case_bsnd(B, S, head_num, hidden_size, rope_dim, dtype_str, rotary_mode)
 
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

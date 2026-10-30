@@ -1,7 +1,7 @@
 import torch
 
 import tilelang
-from tilelang.ascend.a2a3 import language as T
+import tilelang.ascend.a2a3.language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 
 
@@ -554,9 +554,7 @@ def flashattn(
 # ===========================================================================
 
 
-def main():
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     import torch.nn.functional as F
 
     tilelang.disable_cache()
@@ -614,7 +612,3 @@ def main():
     print(f"max_diff: {max_diff:.6e}")
     assert max_diff < atol, f"Precision check failed: max_diff={max_diff} >= atol={atol}"
     print("Test Passed!")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,25 +1,19 @@
-import pytest
-
 """SituGluGrad operator layered tests: L0/L1/L2/Boundary + main(--level)."""
 
 import argparse
+import os
 import sys
 
 import tilelang
 import torch
 
 # Import kernel/golden from the sibling implementation file
-import importlib.util
-from pathlib import Path
-
-_spec = importlib.util.spec_from_file_location("_a2a3_example_situ_glu_grad", Path(__file__).with_name("example_situ_glu_grad.py"))
-_example = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_example)
-golden_situ_glu_grad = _example.golden_situ_glu_grad
-situ_glu_grad = _example.situ_glu_grad
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from example_situ_glu_grad import golden_situ_glu_grad, situ_glu_grad  # noqa: E402
 
 # pytest collects the test functions without calling main(), so disable the
 # compile cache at import time (also avoids stale kernels across branches).
+tilelang.disable_cache()
 
 # ========== Coverage declarations (for coverage_check.py) ==========
 COVERAGE_CATEGORY = "Vector"
@@ -267,14 +261,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import torch_npu  # noqa: F401
-
-    tilelang.disable_cache()
     main()
-
-
-pytestmark = [pytest.mark.usefixtures("isolated_a2a3_cache", "disable_a2a3_cache")]
-
-# Keep the original pure CPU invalid-input contract runnable without native/NPU support.
-for _device_test in (test_situ_glu_grad_l0, test_situ_glu_grad_l1, test_situ_glu_grad_boundary):
-    pytest.mark.a2a3_device(_device_test)

@@ -1,12 +1,20 @@
-"""Original TA developer example; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import argparse
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+
+tilelang.disable_cache()
+
+parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
+parser.add_argument("--m", type=int, default=512, help="Matrix M dimension")
+parser.add_argument("--n", type=int, default=256, help="Matrix N dimension")
+parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
+args = parser.parse_args()
+
+M = args.m
+N = args.n
+K = args.k
 
 
 @tilelang.jit(out_idx=[-1])
@@ -54,44 +62,19 @@ def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"
     return main
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
+func = matmul(M, N, K, 256, 128, 64)
 
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
+torch.manual_seed(42)
 
-    A2A3CythonKernelCache().clear_cache()
+a = torch.randn(M, K).half().npu()
+b = torch.randn(N, K).half().npu()
+c = torch.empty(M, N).half().npu()
+print("init successful!")
 
-    parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
-    parser.add_argument("--m", type=int, default=512, help="Matrix M dimension")
-    parser.add_argument("--n", type=int, default=256, help="Matrix N dimension")
-    parser.add_argument("--k", type=int, default=1024, help="Matrix K dimension")
-    args = parser.parse_args()
+c = func(a, b)
 
-    M = args.m
-    N = args.n
-    K = args.k
+ref_c = a @ b.T
 
-    func = matmul(M, N, K, 256, 128, 64)
-
-    torch.manual_seed(42)
-
-    a = torch.randn(M, K).half().npu()
-    b = torch.randn(N, K).half().npu()
-    c = torch.empty(M, N).half().npu()
-    print("init successful!")
-
-    c = func(a, b)
-
-    ref_c = a @ b.T
-
-    torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
-    print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
+print("Kernel Output Match!")
+# print(func.get_kernel_source())

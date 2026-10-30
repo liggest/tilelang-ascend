@@ -1,7 +1,3 @@
-"""Complete original TA example; runtime effects require explicit main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import argparse
 from typing import Literal
 from collections import Counter
@@ -125,7 +121,7 @@ def check_case(B: int, N: int, top_k: int):
     assert accuracy > 0.99
 
 
-def _original_main(custom_args=None):
+def main(custom_args=None):
     parser = argparse.ArgumentParser(description="topk_selector Simple Example")
     parser.add_argument("--b", type=int, default=64, help="Matrix dimension B")
     parser.add_argument("--n", type=int, default=4 * 1024, help="Matrix dimension N (max ~8192 for 192KB UB)")
@@ -136,26 +132,13 @@ def _original_main(custom_args=None):
     top_k = 2048
 
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    tl.disable_cache()
 
     check_case(B, N, top_k)
     check_case(1024, 1024, 128)
 
     print("topk_selector example passed!")
     print("Kernel Output Match!")
-
-
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    _original_main()
 
 
 if __name__ == "__main__":

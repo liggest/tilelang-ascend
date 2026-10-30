@@ -1,24 +1,14 @@
-from functools import wraps
-import importlib.util
-from pathlib import Path
-
 import tilelang
-from tilelang import DataType  # noqa: F401 - preserve original module dependency
-
+from tilelang import DataType  # noqa: F401
 import tilelang.ascend.a2a3.language as T
-
 import torch
+import sfa_golden as ref
+# import numpy as np
 
+torch.set_default_device("npu")
+torch.manual_seed(0)
 
-def _load_local_reference():
-    path = Path(__file__).resolve().with_name("sfa_golden.py")
-    spec = importlib.util.spec_from_file_location("_a2a3_sparse_mask_reference", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-ref = _load_local_reference()
+tilelang.disable_cache()
 
 
 @tilelang.jit(out_idx=[3], workspace_idx=[7, 8, 9, 10, 11])
@@ -344,6 +334,25 @@ def sparse_attention_fwd(
     return main
 
 
+core_num = 24
+
+block_num = 516
+block_size = 128
+
+func = sparse_attention_fwd(
+    heads=128,
+    dim=512,
+    tail_dim=64,
+    topk=2048,
+    core_num=core_num,
+    block_num=block_num,
+    block_size=block_size,
+)
+
+print(func.get_kernel_source())
+# exit(0)
+
+
 def ref_sparse_attention_fwd_interface(
     q,
     kv,
@@ -387,117 +396,63 @@ def ref_sparse_attention_fwd_interface(
     return o.to(torch.bfloat16)
 
 
+B, S, SKV, H, HKV, DQK, DV, topk = 1, 512, 32 * 1024, 128, 1, 576, 512, 2048
+dtype = torch.bfloat16
+
+
+q = torch.randn((B, S, H, DQK), dtype=dtype)
+kv = torch.randn((block_num, block_size, 1, DQK), dtype=dtype)
+indices = torch.full((S, HKV, topk), -1, dtype=torch.int32)
+
+for t in range(S):
+    for h in range(HKV):
+        i_i = torch.randperm(max(1, t))[:topk]
+        indices[t, h, : len(i_i)] = i_i
+torch.npu.synchronize()
+
+# workspace_1 = torch.zeros((core_num, 64, 512), dtype=dtype)
+# workspace_2 = torch.zeros((core_num, 64, 64), dtype=dtype)
+# workspace_3 = torch.zeros((core_num, 64, 64), dtype=torch.float)
+# workspace_4 = torch.zeros((core_num, 64, 64), dtype=dtype)
+# workspace_5 = torch.zeros((core_num, 64, 512), dtype=torch.float)
+
+block_table = torch.zeros((B, SKV // block_size), dtype=torch.int32)
+
+actual_q_len = torch.tensor([S] * B, dtype=torch.int32)
+actual_kv_len = torch.tensor([SKV] * B, dtype=torch.int32)
+
+torch.npu.synchronize()
+print("init successful!")
+
+output = func(q, kv, indices, actual_q_len, actual_kv_len, block_table)
+torch.npu.synchronize()
+
+indices_ref = indices.unsqueeze(0)
 import math
 
+scale_value = math.sqrt(1 / DQK)
+sparse_block_size = 1
+cpu_out = ref.cpu_sparse_flash_attention(
+    q[..., 0:512],
+    kv[..., 0:512],
+    kv[..., 0:512],
+    indices_ref,
+    scale_value,
+    sparse_block_size,
+    actual_seq_lengths_query=actual_q_len,
+    actual_seq_lengths_kv=actual_kv_len,
+    query_rope=q[..., 512:],
+    key_rope=kv[..., 512:],
+    layout_query="BSND",
+    layout_kv="PA_BSND",
+    sparse_mode=3,
+    block_table=block_table,
+)
 
-def _reference_in_input_device(function):
-    @wraps(function)
-    def reference(q, *args, **kwargs):
-        with torch.device(q.device):
-            return function(q, *args, **kwargs)
+cpu_out = torch.from_numpy(cpu_out).to(dtype).to("npu")
 
-    return reference
+print(f"output:{output}, \nshape:{output.shape}")
+print(f"cpu_out:{cpu_out}, \nshape:{cpu_out.shape}")
 
-
-ref_sparse_attention_fwd_interface = _reference_in_input_device(ref_sparse_attention_fwd_interface)
-
-
-def _run_original_cli():
-    # import numpy as np
-
-    torch.manual_seed(0)
-
-    tilelang.disable_cache()
-
-    core_num = 24
-
-    block_num = 516
-    block_size = 128
-
-    func = sparse_attention_fwd(
-        heads=128,
-        dim=512,
-        tail_dim=64,
-        topk=2048,
-        core_num=core_num,
-        block_num=block_num,
-        block_size=block_size,
-    )
-
-    print(func.get_kernel_source())
-    # exit(0)
-
-    B, S, SKV, H, HKV, DQK, DV, topk = 1, 512, 32 * 1024, 128, 1, 576, 512, 2048  # noqa: F841 - preserve complete original CLI constants
-    dtype = torch.bfloat16
-
-    q = torch.randn((B, S, H, DQK), dtype=dtype)
-    kv = torch.randn((block_num, block_size, 1, DQK), dtype=dtype)
-    indices = torch.full((S, HKV, topk), -1, dtype=torch.int32)
-
-    for t in range(S):
-        for h in range(HKV):
-            i_i = torch.randperm(max(1, t))[:topk]
-            indices[t, h, : len(i_i)] = i_i
-    torch.npu.synchronize()
-
-    # workspace_1 = torch.zeros((core_num, 64, 512), dtype=dtype)
-    # workspace_2 = torch.zeros((core_num, 64, 64), dtype=dtype)
-    # workspace_3 = torch.zeros((core_num, 64, 64), dtype=torch.float)
-    # workspace_4 = torch.zeros((core_num, 64, 64), dtype=dtype)
-    # workspace_5 = torch.zeros((core_num, 64, 512), dtype=torch.float)
-
-    block_table = torch.zeros((B, SKV // block_size), dtype=torch.int32)
-
-    actual_q_len = torch.tensor([S] * B, dtype=torch.int32)
-    actual_kv_len = torch.tensor([SKV] * B, dtype=torch.int32)
-
-    torch.npu.synchronize()
-    print("init successful!")
-
-    output = func(q, kv, indices, actual_q_len, actual_kv_len, block_table)
-    torch.npu.synchronize()
-
-    indices_ref = indices.unsqueeze(0)
-
-    scale_value = math.sqrt(1 / DQK)
-    sparse_block_size = 1
-    cpu_out = ref.cpu_sparse_flash_attention(
-        q[..., 0:512],
-        kv[..., 0:512],
-        kv[..., 0:512],
-        indices_ref,
-        scale_value,
-        sparse_block_size,
-        actual_seq_lengths_query=actual_q_len,
-        actual_seq_lengths_kv=actual_kv_len,
-        query_rope=q[..., 512:],
-        key_rope=kv[..., 512:],
-        layout_query="BSND",
-        layout_kv="PA_BSND",
-        sparse_mode=3,
-        block_table=block_table,
-    )
-
-    cpu_out = torch.from_numpy(cpu_out).to(dtype).to("npu")
-
-    print(f"output:{output}, \nshape:{output.shape}")
-    print(f"cpu_out:{cpu_out}, \nshape:{cpu_out.shape}")
-
-    torch.testing.assert_close(cpu_out, output, rtol=1e-2, atol=1e-2)
-    print("Test Passed!")
-
-
-def main():
-    import torch_npu  # noqa: F401 - register only for the real CLI
-    from tilelang.env import CacheState
-
-    old_enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            _run_original_cli()
-    finally:
-        CacheState._enabled = old_enabled
-
-
-if __name__ == "__main__":
-    main()
+torch.testing.assert_close(cpu_out, output, rtol=1e-2, atol=1e-2)
+print("Test Passed!")

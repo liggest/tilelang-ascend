@@ -13,41 +13,16 @@ COVERAGE_CATEGORY / COVERAGE_MANIFEST / COVERAGE_NA feed the coverage gate.
 """
 
 import argparse
-import importlib.util
-from pathlib import Path
+import os
 import sys
 import time
 
 import tilelang
 import torch
 
-
-def _load_sibling(name):
-    source = Path(__file__).with_name(name + ".py").resolve()
-    key = "_a2a3_situ_glu_" + name
-    existing = sys.modules.get(key)
-    if existing is not None:
-        if Path(existing.__file__).resolve() != source:
-            raise ImportError(f"Conflicting sibling module: {key}")
-        return existing
-    spec = importlib.util.spec_from_file_location(key, source)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Cannot load example module: {source}")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[key] = module
-    try:
-        spec.loader.exec_module(module)
-    except BaseException:
-        sys.modules.pop(key, None)
-        raise
-    return module
-
-
-situ_glu = _load_sibling("situ_glu").situ_glu
-
-import pytest
-
-pytestmark = pytest.mark.a2a3_device
+# Import the kernel under test from the sibling file (add this dir to sys.path)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from situ_glu import situ_glu  # noqa: E402
 
 TORCH_TO_TL_DTYPE = {
     torch.float32: "float",
@@ -534,7 +509,7 @@ def test_situ_glu_boundary():
 
 
 # ========== Main: --level dispatch + exit code ==========
-def _original_main():
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--level", default="l0", choices=["l0", "l1", "l2", "boundary", "all"])
     args = parser.parse_args()
@@ -560,20 +535,6 @@ def _original_main():
         print("Test Passed!")  # all L0/L1 passed (exit code + this line are the verdict)
         sys.exit(0)
     sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    was_enabled = CacheState.is_enabled()
-    try:
-        return _original_main()
-    finally:
-        if was_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

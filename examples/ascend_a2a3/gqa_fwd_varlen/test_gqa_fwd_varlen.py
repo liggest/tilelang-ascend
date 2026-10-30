@@ -1,22 +1,19 @@
-import pytest
 import argparse
+import os
 import sys
 
 import torch
 
 import tilelang
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-import importlib.util
-from pathlib import Path
-
-_spec = importlib.util.spec_from_file_location("_a2a3_gqa_fwd_varlen", Path(__file__).with_name("gqa_fwd_varlen.py"))
-_example = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_example)
-flashattn = _example.flashattn
-generate_random_padding_mask = _example.generate_random_padding_mask
-mask_to_cu_seqlens = _example.mask_to_cu_seqlens
-build_attention_mask = _example.build_attention_mask
+from gqa_fwd_varlen import (  # noqa: E402
+    flashattn,
+    generate_random_padding_mask,
+    mask_to_cu_seqlens,
+    build_attention_mask,
+)
 
 
 # ===========================================================================
@@ -621,9 +618,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import torch_npu  # noqa: F401
-
     main()
-
-
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]

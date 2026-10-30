@@ -2,6 +2,7 @@ import math
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+import torch_npu
 
 try:
     from .moe_token_utils import is_fp32_dtype, pad_last_dim
@@ -316,8 +317,6 @@ class MoeTokenPermute:
 
 
 def test_permute_parameterized(pt_dtype, tl_dtype_str):
-    import torch_npu
-
     print(f"\n{'=' * 60}")
     print(f"Testing MoeTokenPermute, dtype: {tl_dtype_str.upper()}")
     print(f"{'=' * 60}")
@@ -411,11 +410,5 @@ def test_permute():
     print(f"{'=' * 60}")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    test_permute()
-
-
 if __name__ == "__main__":
-    main()
+    test_permute()

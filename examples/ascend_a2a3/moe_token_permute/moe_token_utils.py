@@ -40,7 +40,7 @@ def pad_last_dim(tensor: torch.Tensor, target_cols: int) -> torch.Tensor:
     return out
 
 
-def main():
+if __name__ == "__main__":
     assert is_fp32_dtype("float32") and is_fp32_dtype("float")
     assert not is_fp32_dtype("float16") and not is_fp32_dtype("bfloat16")
 
@@ -58,7 +58,3 @@ def main():
     assert pad_last_dim(a, 9).shape == (3, 9)
 
     print("Kernel Output Match")
-
-
-if __name__ == "__main__":
-    main()

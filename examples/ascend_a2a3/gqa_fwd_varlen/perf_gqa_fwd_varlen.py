@@ -1,45 +1,23 @@
-"""Original varlen GQA benchmark; import/help never prepares an NPU workload."""
-
 import argparse
-import importlib.util
-from functools import lru_cache
-from pathlib import Path
-from typing import TYPE_CHECKING
 import sys
 
+import torch
 
-if TYPE_CHECKING:
-    import torch
-    from tilelang.profiler import do_bench
-    from .gqa_fwd_varlen import flashattn, generate_random_padding_mask, mask_to_cu_seqlens, build_attention_mask
-    from .test_gqa_fwd_varlen import ref_gqa_varlen_fwd_padded
+# Import kernel + helpers from the example module (same directory).
+# Make sure the example dir is on sys.path.
+import os
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-@lru_cache(maxsize=1)
-def _ensure_helpers():
-    # Resolve the exact adjacent adopted assets without a global sys.path edit
-    # or a fallback to another checkout/CUDA example with the same basename.
-    def load(relative, label):
-        path = Path(__file__).with_name(relative)
-        spec = importlib.util.spec_from_file_location(__name__ + label, path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
+from gqa_fwd_varlen import (  # noqa: E402
+    flashattn,
+    generate_random_padding_mask,
+    mask_to_cu_seqlens,
+    build_attention_mask,
+)
+from test_gqa_fwd_varlen import ref_gqa_varlen_fwd_padded  # noqa: E402
 
-    import torch
-    from tilelang.profiler import do_bench
-
-    kernel = load("gqa_fwd_varlen.py", "_kernel")
-    reference = load("test_gqa_fwd_varlen.py", "_reference")
-    globals().update(
-        torch=torch,
-        do_bench=do_bench,
-        flashattn=kernel.flashattn,
-        generate_random_padding_mask=kernel.generate_random_padding_mask,
-        mask_to_cu_seqlens=kernel.mask_to_cu_seqlens,
-        build_attention_mask=kernel.build_attention_mask,
-        ref_gqa_varlen_fwd_padded=reference.ref_gqa_varlen_fwd_padded,
-    )
+from tilelang.profiler import do_bench  # noqa: E402
 
 
 def _ceildiv(a, b):
@@ -48,7 +26,6 @@ def _ceildiv(a, b):
 
 def build_inputs(batch, heads, groups, q_seqlen, k_seqlen, dim, is_causal, padding_mode, device, dtype, block_M, block_N):
     """Build padded 4D inputs + mask tensor (mirrors _prepare_and_run in example)."""
-    _ensure_helpers()
     torch.manual_seed(0)
     head_kv = heads // groups
 
@@ -80,7 +57,6 @@ def build_inputs(batch, heads, groups, q_seqlen, k_seqlen, dim, is_causal, paddi
 
 def bench_tilelang(kernel, q, k, v, attn_mask, device):
     """Benchmark the TileLang kernel via do_bench (returns ms, median)."""
-    _ensure_helpers()
 
     def f():
         kernel(q, k, v, attn_mask)
@@ -92,7 +68,6 @@ def bench_tilelang(kernel, q, k, v, attn_mask, device):
 
 def bench_golden(q, k, v, cu_seqlens_q, cu_seqlens_k, heads, groups, dim, is_causal, device):
     """Benchmark the PyTorch golden (per-batch loop + einsum)."""
-    _ensure_helpers()
 
     def f():
         ref_gqa_varlen_fwd_padded(
@@ -140,7 +115,6 @@ def run_one(
     dtype,
 ):
     """Run a single benchmark config and print results."""
-    _ensure_helpers()
     head_kv = heads // groups
     print(
         f"\n[{name}] batch={batch} heads={heads} groups={groups} head_kv={head_kv} "
@@ -255,7 +229,7 @@ def run_one(
     return True
 
 
-def parse_args(argv=None):
+def main():
     parser = argparse.ArgumentParser(description="GQA varlen Flash Attention (Ascend) performance benchmark")
     # Default shape matches the GPU source's main() defaults.
     parser.add_argument("--batch", type=int, default=8, help="batch size")
@@ -284,10 +258,7 @@ def parse_args(argv=None):
         choices=["default", "sweep", "small", "causal-sweep"],
         help="preset benchmark suite (overrides individual args)",
     )
-    return parser.parse_args(argv)
-
-
-def _run_original(args):
+    args = parser.parse_args()
 
     results = []
     device = "npu"
@@ -396,15 +367,6 @@ def _run_original(args):
         print("Test Passed!")
     else:
         sys.exit(1)
-
-
-def main(argv=None):
-    args = parse_args(argv)
-    import torch_npu  # noqa: F401 - register only for explicit benchmark execution
-
-    _ensure_helpers()
-    with torch.random.fork_rng(devices=[]):
-        _run_original(args)
 
 
 if __name__ == "__main__":

@@ -1,10 +1,9 @@
-"""Original TA activation; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+
+tilelang.disable_cache()
+torch.set_default_device("npu")
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
@@ -107,6 +106,7 @@ def swi_glu(block_M, block_N, split_dim, dtype="bfloat16"):
     return swiglu
 
 
+torch.manual_seed(0)
 # Tests
 test_configs = [
     (1024, 18432, 64, 64, 1, "bfloat16"),
@@ -117,48 +117,26 @@ test_configs = [
     (256, 256, 64, 64, 1, "float"),
     (128, 128, 16, 16, 1, "float"),
 ]
+for i in range(1):
+    print(f"\nRun {i + 1}/10")
+    for M, N, block_M, block_N, split_dim, dtype in test_configs:
+        print(f"Testing SwiGLU backward with M={M}, N={N}, block_M={block_M}, block_N={block_N}, split_dim={split_dim}, dtype={dtype}")
 
+        func = swi_glu(block_M, block_N, split_dim, dtype=dtype)
+        # print(func.get_kernel_source())
+        print("Init successful!")
+        if dtype == "bfloat16":
+            a = torch.randn((M, N), dtype=torch.bfloat16)
+        else:
+            a = torch.randn((M, N), dtype=torch.float32)
+        b = func(a)
+        torch.npu.synchronize()
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
+        # ascendc ref
+        ascendc_b = torch.ops.npu.npu_swiglu(a)
+        torch.npu.synchronize()
 
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
+        torch.testing.assert_close(b.cpu(), ascendc_b.cpu(), rtol=1e-2, atol=1e-2)
+        print("Test passed!")
 
-    A2A3CythonKernelCache().clear_cache()
-
-    with torch.device("npu"):
-        torch.manual_seed(0)
-        for i in range(1):
-            print(f"\nRun {i + 1}/10")
-            for M, N, block_M, block_N, split_dim, dtype in test_configs:
-                print(
-                    f"Testing SwiGLU backward with M={M}, N={N}, block_M={block_M}, block_N={block_N}, split_dim={split_dim}, dtype={dtype}"
-                )
-
-                func = swi_glu(block_M, block_N, split_dim, dtype=dtype)
-                # print(func.get_kernel_source())
-                print("Init successful!")
-                if dtype == "bfloat16":
-                    a = torch.randn((M, N), dtype=torch.bfloat16)
-                else:
-                    a = torch.randn((M, N), dtype=torch.float32)
-                b = func(a)
-                torch.npu.synchronize()
-
-                # ascendc ref
-                ascendc_b = torch.ops.npu.npu_swiglu(a)
-                torch.npu.synchronize()
-
-                torch.testing.assert_close(b.cpu(), ascendc_b.cpu(), rtol=1e-2, atol=1e-2)
-                print("Test passed!")
-
-        print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+print("Kernel Output Match!")

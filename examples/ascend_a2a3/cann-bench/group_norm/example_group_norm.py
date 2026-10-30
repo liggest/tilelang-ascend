@@ -11,7 +11,6 @@ Two kernels, selected at host level:
 - TL_ASCEND_MEMORY_PLANNING enabled for buffer reuse
 """
 
-from tilelang.env import CacheState
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
@@ -483,130 +482,117 @@ def golden_group_norm(x, gamma, beta, num_groups, eps=1e-5):
     return torch.nn.functional.group_norm(x, num_groups, gamma, beta, eps)
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
-        torch.manual_seed(42)
-
-        thresholds = {
-            "float16": (2**-10, 10 * 2**-10),
-            "bfloat16": (2**-7, 10 * 2**-7),
-            "float32": (2**-13, 10 * 2**-13),
-        }
-
-        test_cases = [
-            ("basic_4d_fp16", [8, 32, 64, 64], "float16", 8, 1e-5),
-            ("basic_4d_fp32", [4, 64, 128, 128], "float32", 16, 1e-5),
-            ("basic_4d_bf16", [2, 128, 256, 256], "bfloat16", 32, 1e-5),
-            ("group1_layernorm", [16, 257, 32, 31], "float16", 1, 1e-5),
-            ("group2_fp32", [8, 512, 17, 15], "float32", 2, 1e-5),
-            ("basic_3d_bf16", [64, 64, 128], "bfloat16", 4, 1e-5),
-            ("large_4d_fp16", [2, 256, 128, 128], "float16", 16, 1e-5),
-            ("group1_fp32", [16, 127, 31, 33], "float32", 1, 1e-6),
-            ("small_eps_bf16", [3, 64, 64, 64], "bfloat16", 8, 1e-3),
-            ("non_aligned", [7, 32, 63, 65], "float16", 4, 1e-4),
-            ("large_range_fp32", [3, 64, 127, 129], "float32", 8, 1e-4),
-            ("group6_bf16", [5, 48, 33, 65], "bfloat16", 6, 1e-4),
-            ("basic_2d_fp16", [1023, 257], "float16", 1, 1e-6),
-            ("basic_5d_fp32", [2, 60, 5, 7, 480], "float32", 4, 1e-5),
-            ("inf_special_bf16", [4, 31, 251, 251], "bfloat16", 1, 1e-8),
-            ("nan_special_fp16", [2, 64, 67, 71], "float16", 8, 1e-7),
-            ("all_zeros_fp32", [8, 127, 33, 31], "float32", 1, 1e-4),
-            ("large_4d_bf16", [2, 256, 127, 129], "bfloat16", 16, 1e-5),
-            ("fp16_boundary", [4, 128, 255, 257], "float16", 32, 1e-3),
-            ("group3_fp32", [1, 513, 63, 63], "float32", 3, 1e-6),
-        ]
-
-        all_passed = True
-        results = []
-
-        for name, shape, dtype_str, num_groups, eps in test_cases:
-            torch_dtype = getattr(torch, dtype_str)
-            mere_thresh, mare_thresh = thresholds[dtype_str]
-
-            if name == "all_zeros_fp32":
-                x = torch.zeros(shape, dtype=torch_dtype, device="npu")
-            elif name == "inf_special_bf16":
-                x = torch.randn(shape, dtype=torch_dtype, device="npu")
-                x.view(-1)[:100] = float("inf")
-                x.view(-1)[100:200] = float("-inf")
-            elif name == "nan_special_fp16":
-                x = torch.randn(shape, dtype=torch_dtype, device="npu")
-                x.view(-1)[:100] = float("nan")
-            else:
-                x = torch.randn(shape, dtype=torch_dtype, device="npu")
-
-            C = shape[1]
-            gamma = torch.randn(C, dtype=torch_dtype, device="npu")
-            beta = torch.randn(C, dtype=torch_dtype, device="npu")
-
-            try:
-                y_kernel = group_norm(x, gamma, beta, num_groups, eps)
-                torch.npu.synchronize()
-            except Exception as e:
-                print(f"[PRECISION_FAIL] {name}: Runtime error - {str(e)[:200]}")
-                all_passed = False
-                results.append((name, False))
-                continue
-
-            y_golden = golden_group_norm(x, gamma, beta, num_groups, eps)
-            try:
-                y_k = y_kernel.float().cpu()
-            except Exception as e:
-                print(f"[PRECISION_FAIL] {name}: CPU transfer error - {str(e)[:200]}")
-                all_passed = False
-                results.append((name, False))
-                continue
-            y_g = y_golden.float().cpu()
-
-            k_nan = y_k.isnan()
-            g_nan = y_g.isnan()
-            k_inf = y_k.isinf()
-            g_inf = y_g.isinf()
-
-            if name in ("inf_special_bf16", "nan_special_fp16"):
-                nan_match = (k_nan == g_nan).float().mean().item()
-                inf_match = (k_inf == g_inf).float().mean().item()
-                valid = ~(k_nan | g_nan | k_inf | g_inf)
-                if valid.sum() > 0:
-                    abs_diff = (y_k[valid] - y_g[valid]).abs()
-                    mere = (abs_diff / y_g[valid].abs().clamp(min=1e-7)).mean().item()
-                    mare = abs_diff.max().item()
-                else:
-                    mere, mare = 0.0, 0.0
-                passed = nan_match > 0.99 and inf_match > 0.99 and mere < mere_thresh and mare < mare_thresh
-            else:
-                abs_diff = (y_k - y_g).abs()
-                mere = (abs_diff / y_g.abs().clamp(min=1e-7)).mean().item()
-                mare = abs_diff.max().item()
-                passed = mere < mere_thresh and mare < mare_thresh
-            status = "[PRECISION_PASS]" if passed else "[PRECISION_FAIL]"
-            if not passed:
-                all_passed = False
-
-            print(
-                f"{status} {name}: shape={shape}, dtype={dtype_str}, groups={num_groups}, "
-                f"MERE={mere:.6e} (thresh={mere_thresh:.6e}), "
-                f"MARE={mare:.6e} (thresh={mare_thresh:.6e})"
-            )
-            results.append((name, passed))
-
-        print()
-        if all_passed:
-            print("Test Passed!")
-        else:
-            failed = [r[0] for r in results if not r[1]]
-            print(f"[PRECISION_FAIL] {len(failed)} test(s) failed: {failed}")
-            exit(1)
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
-    main()
+    tilelang.disable_cache()
+    torch.manual_seed(42)
+
+    thresholds = {
+        "float16": (2**-10, 10 * 2**-10),
+        "bfloat16": (2**-7, 10 * 2**-7),
+        "float32": (2**-13, 10 * 2**-13),
+    }
+
+    test_cases = [
+        ("basic_4d_fp16", [8, 32, 64, 64], "float16", 8, 1e-5),
+        ("basic_4d_fp32", [4, 64, 128, 128], "float32", 16, 1e-5),
+        ("basic_4d_bf16", [2, 128, 256, 256], "bfloat16", 32, 1e-5),
+        ("group1_layernorm", [16, 257, 32, 31], "float16", 1, 1e-5),
+        ("group2_fp32", [8, 512, 17, 15], "float32", 2, 1e-5),
+        ("basic_3d_bf16", [64, 64, 128], "bfloat16", 4, 1e-5),
+        ("large_4d_fp16", [2, 256, 128, 128], "float16", 16, 1e-5),
+        ("group1_fp32", [16, 127, 31, 33], "float32", 1, 1e-6),
+        ("small_eps_bf16", [3, 64, 64, 64], "bfloat16", 8, 1e-3),
+        ("non_aligned", [7, 32, 63, 65], "float16", 4, 1e-4),
+        ("large_range_fp32", [3, 64, 127, 129], "float32", 8, 1e-4),
+        ("group6_bf16", [5, 48, 33, 65], "bfloat16", 6, 1e-4),
+        ("basic_2d_fp16", [1023, 257], "float16", 1, 1e-6),
+        ("basic_5d_fp32", [2, 60, 5, 7, 480], "float32", 4, 1e-5),
+        ("inf_special_bf16", [4, 31, 251, 251], "bfloat16", 1, 1e-8),
+        ("nan_special_fp16", [2, 64, 67, 71], "float16", 8, 1e-7),
+        ("all_zeros_fp32", [8, 127, 33, 31], "float32", 1, 1e-4),
+        ("large_4d_bf16", [2, 256, 127, 129], "bfloat16", 16, 1e-5),
+        ("fp16_boundary", [4, 128, 255, 257], "float16", 32, 1e-3),
+        ("group3_fp32", [1, 513, 63, 63], "float32", 3, 1e-6),
+    ]
+
+    all_passed = True
+    results = []
+
+    for name, shape, dtype_str, num_groups, eps in test_cases:
+        torch_dtype = getattr(torch, dtype_str)
+        mere_thresh, mare_thresh = thresholds[dtype_str]
+
+        if name == "all_zeros_fp32":
+            x = torch.zeros(shape, dtype=torch_dtype, device="npu")
+        elif name == "inf_special_bf16":
+            x = torch.randn(shape, dtype=torch_dtype, device="npu")
+            x.view(-1)[:100] = float("inf")
+            x.view(-1)[100:200] = float("-inf")
+        elif name == "nan_special_fp16":
+            x = torch.randn(shape, dtype=torch_dtype, device="npu")
+            x.view(-1)[:100] = float("nan")
+        else:
+            x = torch.randn(shape, dtype=torch_dtype, device="npu")
+
+        C = shape[1]
+        gamma = torch.randn(C, dtype=torch_dtype, device="npu")
+        beta = torch.randn(C, dtype=torch_dtype, device="npu")
+
+        try:
+            y_kernel = group_norm(x, gamma, beta, num_groups, eps)
+            torch.npu.synchronize()
+        except Exception as e:
+            print(f"[PRECISION_FAIL] {name}: Runtime error - {str(e)[:200]}")
+            all_passed = False
+            results.append((name, False))
+            continue
+
+        y_golden = golden_group_norm(x, gamma, beta, num_groups, eps)
+        try:
+            y_k = y_kernel.float().cpu()
+        except Exception as e:
+            print(f"[PRECISION_FAIL] {name}: CPU transfer error - {str(e)[:200]}")
+            all_passed = False
+            results.append((name, False))
+            continue
+        y_g = y_golden.float().cpu()
+
+        k_nan = y_k.isnan()
+        g_nan = y_g.isnan()
+        k_inf = y_k.isinf()
+        g_inf = y_g.isinf()
+
+        if name in ("inf_special_bf16", "nan_special_fp16"):
+            nan_match = (k_nan == g_nan).float().mean().item()
+            inf_match = (k_inf == g_inf).float().mean().item()
+            valid = ~(k_nan | g_nan | k_inf | g_inf)
+            if valid.sum() > 0:
+                abs_diff = (y_k[valid] - y_g[valid]).abs()
+                mere = (abs_diff / y_g[valid].abs().clamp(min=1e-7)).mean().item()
+                mare = abs_diff.max().item()
+            else:
+                mere, mare = 0.0, 0.0
+            passed = nan_match > 0.99 and inf_match > 0.99 and mere < mere_thresh and mare < mare_thresh
+        else:
+            abs_diff = (y_k - y_g).abs()
+            mere = (abs_diff / y_g.abs().clamp(min=1e-7)).mean().item()
+            mare = abs_diff.max().item()
+            passed = mere < mere_thresh and mare < mare_thresh
+        status = "[PRECISION_PASS]" if passed else "[PRECISION_FAIL]"
+        if not passed:
+            all_passed = False
+
+        print(
+            f"{status} {name}: shape={shape}, dtype={dtype_str}, groups={num_groups}, "
+            f"MERE={mere:.6e} (thresh={mere_thresh:.6e}), "
+            f"MARE={mare:.6e} (thresh={mare_thresh:.6e})"
+        )
+        results.append((name, passed))
+
+    print()
+    if all_passed:
+        print("Test Passed!")
+    else:
+        failed = [r[0] for r in results if not r[1]]
+        print(f"[PRECISION_FAIL] {len(failed)} test(s) failed: {failed}")
+        exit(1)

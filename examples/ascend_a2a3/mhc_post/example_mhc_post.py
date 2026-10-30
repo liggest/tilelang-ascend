@@ -20,13 +20,10 @@ Performance: see examples/mhc_post/benchmark.md.
 """
 
 import tilelang
-
 import tilelang.ascend.a2a3.language as T
-
 import torch
 
 VEC_NUM = 2
-
 H_BLK = 2048
 
 _H_BLK_CANDIDATES = [3584, 3072, 2560, 2048, 1024, 512]
@@ -37,6 +34,11 @@ pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
     tilelang.PassConfigKey.TL_ASCEND_TAIL_MASK: True,
 }
+
+
+# ============================================================
+# Kernel: 2D res merged load + 2D bf16 merged store
+# ============================================================
 
 
 @tilelang.jit(out_idx=[4], pass_configs=pass_configs)
@@ -101,6 +103,10 @@ def mhc_post_kernel(hc, h, h_blk=H_BLK, dtype="bfloat16", accum_dtype="float"):
 
     return main
 
+
+# ============================================================
+# Host-side adapter
+# ============================================================
 
 _kernel_cache = {}
 
@@ -168,6 +174,11 @@ def mhc_post(x, residual, post_layer_mix, comb_res_mix):
     return output[:, :hc, :h]
 
 
+# ============================================================
+# Golden reference
+# ============================================================
+
+
 def mhc_post_ref(x, residual, post_layer_mix, comb_res_mix):
     """PyTorch golden, FP32 path (same as kernel, no BF16 quantization)."""
     h = x.shape[1]
@@ -178,6 +189,11 @@ def mhc_post_ref(x, residual, post_layer_mix, comb_res_mix):
     term1 = post_fp32.unsqueeze(-1) * x.unsqueeze(-2)
     output = (term1 + term2).bfloat16()[:, :hc, :h]
     return output
+
+
+# ============================================================
+# Tests
+# ============================================================
 
 
 def generate_test_data(n, h, hc, device="npu"):
@@ -278,17 +294,6 @@ def bench_vs_pytorch():
         print(f"  Speedup:         {t_pt / t_tl:.2f}x")
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    original_cache_state = CacheState._enabled
-    try:
-        tilelang.disable_cache()
-        test()
-    finally:
-        CacheState._enabled = original_cache_state
-
-
 if __name__ == "__main__":
-    main()
+    tilelang.disable_cache()
+    test()

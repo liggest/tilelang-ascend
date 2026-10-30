@@ -1,10 +1,8 @@
-"""Original TA developer example; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
@@ -44,6 +42,7 @@ def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"
     return main
 
 
+torch.manual_seed(0)
 test_configs = [
     (32 * 3 + 30, 32 * 2 + 16, 32 * 4 + 31, 32, 32, 32),
     (64 * 8 + 45, 64 * 8, 64 * 8 + 27, 64, 64, 64),
@@ -51,39 +50,20 @@ test_configs = [
     (1024 + 118, 1024 + 206, 1024 + 55, 128, 256, 64),
 ]
 
+for idx, (M, N, K, block_M, block_N, block_K) in enumerate(test_configs, 1):
+    try:
+        func = matmul(M, N, K, block_M, block_N, block_K)
+        a = torch.randn(M, K).half().npu()
+        b = torch.randn(K, N).half().npu()
+        c = torch.empty(M, N).half().npu()
+        c = func(a, b)
+        ref_c = a @ b
+        torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
+        print(f"Passed test case {idx}/{len(test_configs)}: M={M}, N={N}, K={K}")
+    except Exception as e:
+        print("error message:", e)
+        print(f"Failed test case {idx}/{len(test_configs)}: M={M}, N={N}, K={K}")
+        raise
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-
-    torch.manual_seed(0)
-
-    for idx, (M, N, K, block_M, block_N, block_K) in enumerate(test_configs, 1):
-        try:
-            func = matmul(M, N, K, block_M, block_N, block_K)
-            a = torch.randn(M, K).half().npu()
-            b = torch.randn(K, N).half().npu()
-            c = torch.empty(M, N).half().npu()
-            c = func(a, b)
-            ref_c = a @ b
-            torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
-            print(f"Passed test case {idx}/{len(test_configs)}: M={M}, N={N}, K={K}")
-        except Exception as e:
-            print("error message:", e)
-            print(f"Failed test case {idx}/{len(test_configs)}: M={M}, N={N}, K={K}")
-            raise
-
-    print("All test cases passed!")
-    print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+print("All test cases passed!")
+print("Kernel Output Match!")

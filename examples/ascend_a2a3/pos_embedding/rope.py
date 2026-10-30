@@ -10,7 +10,7 @@ pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
 }
 
-device = "npu"
+device = torch.device("npu")
 
 
 @tilelang.jit(pass_configs=pass_configs)
@@ -24,7 +24,7 @@ def rope_kernel_in_place(M, block_M, batch_size, hidden_size, rope_dim, head_num
 
     ACC_DTYPE = "float32"
     MASK_DTYPE = "uint32"
-    TMP_DTYPE = "uint8"  # noqa: F841 - retained from the pinned TA factory
+    TMP_DTYPE = "uint8"  # noqa: F841
 
     @T.prim_func
     def kernel(
@@ -159,10 +159,7 @@ def parse_args():
     return p.parse_args()
 
 
-def main():
-    global device
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     torch.manual_seed(42)
     tilelang.disable_cache()
 
@@ -189,7 +186,3 @@ def main():
 
     torch.testing.assert_close(x_tl, x_ref, rtol=1e-3, atol=1e-3)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

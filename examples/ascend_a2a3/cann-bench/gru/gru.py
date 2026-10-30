@@ -38,7 +38,6 @@ from a dedicated zero buffer to avoid reading stale data.
 """
 
 import torch
-import argparse
 import tilelang
 import tilelang.ascend.a2a3.language as T
 
@@ -1119,11 +1118,7 @@ def gru(
 # ---------------------------------------------------------------------------
 # Standalone run entry (smoke test mirroring an L0 case of test_gru.py).
 # ---------------------------------------------------------------------------
-def main(argv=None):
-    argparse.ArgumentParser(description="Original cann-bench gru standalone smoke").parse_args(argv)
-
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     torch.manual_seed(0)
 
     S, B, F, H = 7, 6, 64, 32
@@ -1160,7 +1155,3 @@ def main(argv=None):
     torch.testing.assert_close(y.cpu(), gy, rtol=1e-3, atol=1e-3)
     torch.testing.assert_close(hn.cpu(), ghn, rtol=1e-3, atol=1e-3)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

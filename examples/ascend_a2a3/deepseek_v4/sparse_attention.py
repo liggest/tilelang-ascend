@@ -5,9 +5,16 @@ import torch
 import logging
 
 import tilelang
-from tilelang.ascend.a2a3 import language as T
 from tilelang import DataType
+import tilelang.ascend.a2a3.language as T
 
+
+torch.set_default_device("npu")
+torch.manual_seed(42)
+
+logging.basicConfig(level=logging.INFO)
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -228,15 +235,5 @@ def test():
     logging.info("Kernel Output Match!")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    torch.set_default_device("npu")
-    torch.manual_seed(42)
-    logging.basicConfig(level=logging.INFO)
-    tilelang.disable_cache()
-    test()
-
-
 if __name__ == "__main__":
-    main()
+    test()

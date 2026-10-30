@@ -1,7 +1,3 @@
-"""Complete original TA example; runtime effects require explicit main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import argparse
 import tilelang
 import tilelang.ascend.a2a3.language as T
@@ -57,17 +53,8 @@ def broadcast_pipeline(M, N, block_M, sub_M, dtype="float"):
     return main
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
+    tilelang.disable_cache()
 
     parser = argparse.ArgumentParser(description="Broadcast Pipeline NPU Kernel Compilation")
     parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
@@ -98,7 +85,3 @@ def main():
 
     torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

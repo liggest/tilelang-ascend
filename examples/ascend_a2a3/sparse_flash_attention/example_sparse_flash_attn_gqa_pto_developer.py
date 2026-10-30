@@ -1,11 +1,13 @@
-from functools import wraps
-
 import tilelang
-
 from tilelang import DataType
 import tilelang.ascend.a2a3.language as T
-
 import torch
+
+torch.set_default_device("npu")
+torch.manual_seed(42)
+
+tilelang.disable_cache()
+
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
@@ -194,6 +196,16 @@ def sparse_attention_fwd(
     return main
 
 
+func = sparse_attention_fwd(
+    heads=64,
+    dim=128,
+    tail_dim=0,
+    topk=2048,
+    kv_stride=1,
+    kv_group=4,
+)
+
+
 def ref_sparse_attention_fwd_interface_gqa(q, kv, indices, q_start_index_s, kv_stride=4, sm_scale=None, is_casual=True):
     q = q.float()
     kv = kv.float()
@@ -242,85 +254,40 @@ def ref_sparse_attention_fwd_interface_gqa(q, kv, indices, q_start_index_s, kv_s
     return o.to(torch.float16)
 
 
-def _reference_in_input_device(function):
-    @wraps(function)
-    def reference(q, *args, **kwargs):
-        # The original body creates arange tensors without explicit devices.
-        # Keep that body intact while matching its input without global defaults.
-        with torch.device(q.device):
-            return function(q, *args, **kwargs)
+B, S, SKV, H_Q, H_KV, DIM, topk = 2, 273, 44444, 64, 4, 128, 2048
+kv_group = H_Q // H_KV  # 8
+dtype = torch.float16
 
-    return reference
+KV_stride = 1
+q_start_s_index = 4096 * 7
 
+# create input
+q = torch.randn((B, S, H_Q, DIM), dtype=dtype)
+kv = torch.zeros((B, SKV, H_KV, DIM), dtype=dtype)
+# value for KV head i
+for kv_head in range(H_KV):
+    kv[:, :, kv_head, :] = torch.rand(DIM, dtype=torch.float16)
 
-ref_sparse_attention_fwd_interface_gqa = _reference_in_input_device(ref_sparse_attention_fwd_interface_gqa)
+# create indice
+indices = torch.full((B, S, H_KV, topk), SKV, dtype=torch.int32)
+for b in range(B):
+    for t in range(S):
+        for h in range(H_KV):
+            i_i = torch.randperm(max(1, ((t + q_start_s_index) // KV_stride)))[:topk]
+            indices[b, t, h, : len(i_i)] = i_i
 
+output = torch.empty((B, S, H_Q, DIM), dtype=dtype)
+workspace_1 = torch.zeros((B * S * 1 * H_KV, 64, DIM), dtype=dtype)
+workspace_2 = torch.zeros((B * S * 1 * H_KV, kv_group, 64), dtype=torch.float)
+workspace_3 = torch.zeros((B * S * 1 * H_KV, kv_group, 64), dtype=dtype)
+workspace_4 = torch.zeros((B * S * 1 * H_KV, kv_group, DIM), dtype=torch.float)
 
-def _run_original_cli():
-    torch.manual_seed(42)
+torch.npu.synchronize()
 
-    tilelang.disable_cache()
-
-    func = sparse_attention_fwd(
-        heads=64,
-        dim=128,
-        tail_dim=0,
-        topk=2048,
-        kv_stride=1,
-        kv_group=4,
-    )
-
-    B, S, SKV, H_Q, H_KV, DIM, topk = 2, 273, 44444, 64, 4, 128, 2048
-    kv_group = H_Q // H_KV  # 8
-    dtype = torch.float16
-
-    KV_stride = 1
-    q_start_s_index = 4096 * 7
-
-    # create input
-    q = torch.randn((B, S, H_Q, DIM), dtype=dtype)
-    kv = torch.zeros((B, SKV, H_KV, DIM), dtype=dtype)
-    # value for KV head i
-    for kv_head in range(H_KV):
-        kv[:, :, kv_head, :] = torch.rand(DIM, dtype=torch.float16)
-
-    # create indice
-    indices = torch.full((B, S, H_KV, topk), SKV, dtype=torch.int32)
-    for b in range(B):
-        for t in range(S):
-            for h in range(H_KV):
-                i_i = torch.randperm(max(1, ((t + q_start_s_index) // KV_stride)))[:topk]
-                indices[b, t, h, : len(i_i)] = i_i
-
-    output = torch.empty((B, S, H_Q, DIM), dtype=dtype)
-    workspace_1 = torch.zeros((B * S * 1 * H_KV, 64, DIM), dtype=dtype)
-    workspace_2 = torch.zeros((B * S * 1 * H_KV, kv_group, 64), dtype=torch.float)
-    workspace_3 = torch.zeros((B * S * 1 * H_KV, kv_group, 64), dtype=dtype)
-    workspace_4 = torch.zeros((B * S * 1 * H_KV, kv_group, DIM), dtype=torch.float)
-
-    torch.npu.synchronize()
-
-    print("init successful!")
-    output = func(q, kv, indices, workspace_1, workspace_2, workspace_3, workspace_4)
-    torch.npu.synchronize()
-    ref_output = ref_sparse_attention_fwd_interface_gqa(q, kv, indices, q_start_s_index, KV_stride)
-    torch.npu.synchronize()
-    torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
-    print("Test Passed!")
-
-
-def main():
-    import torch_npu  # noqa: F401 - register only when running the real CLI
-    from tilelang.env import CacheState
-
-    old_enabled = CacheState.is_enabled()
-    try:
-        # Original set_default_device("npu") semantics, scoped to this CLI.
-        with torch.device("npu"):
-            _run_original_cli()
-    finally:
-        CacheState._enabled = old_enabled
-
-
-if __name__ == "__main__":
-    main()
+print("init successful!")
+output = func(q, kv, indices, workspace_1, workspace_2, workspace_3, workspace_4)
+torch.npu.synchronize()
+ref_output = ref_sparse_attention_fwd_interface_gqa(q, kv, indices, q_start_s_index, KV_stride)
+torch.npu.synchronize()
+torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
+print("Test Passed!")

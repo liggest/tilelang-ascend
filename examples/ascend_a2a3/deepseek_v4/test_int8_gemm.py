@@ -1,4 +1,3 @@
-import pytest
 import importlib.util
 import sys
 from pathlib import Path
@@ -69,6 +68,3 @@ def test_int8_gemm_accuracy() -> None:
     torch.npu.synchronize()
 
     torch.testing.assert_close(actual, expected, rtol=1e-2, atol=1e-2)
-
-
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache", "isolated_npu_default_device", "disable_a2a3_cache")]

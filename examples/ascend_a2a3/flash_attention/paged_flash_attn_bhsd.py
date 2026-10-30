@@ -1,8 +1,5 @@
 import argparse
 import tilelang as tl
-import importlib.util
-import os
-from pathlib import Path
 from tilelang import DataType
 import tilelang.ascend.a2a3.language as T
 import torch
@@ -30,7 +27,7 @@ def paged_flash_attention_fwd(
 ):
     DTYPE = "float16"
     ACCUM_DTYPE = "float"
-    TEMP_DTYPE = "uint8"  # noqa: F841 - preserve the original factory constant
+    TEMP_DTYPE = "uint8"  # noqa: F841
     INDICES_DTYPE = "int32"
     CAST_MODE = "CAST_NONE"
     VEC_NUM = 2
@@ -209,71 +206,25 @@ def check_case(batch: int, heads: int, seq_len: int, dim: int, block_size: int =
     torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
 
 
-def parse_args(custom_args=None):
+def main(custom_args=None):
     parser = argparse.ArgumentParser(description="Paged Flash Attention Example", add_help=False)
     parser.add_argument("-b", "--batch", type=int, default=1, help="Batch Size")
     parser.add_argument("-h", "--heads", type=int, default=16, help="Number of Heads")
     parser.add_argument("-s", "--seq_len", type=int, default=128, help="Sequence Length")
     parser.add_argument("-d", "--hidden_dim", type=int, default=128, help="Hidden Dimension Size")
-    parser.add_argument("--help", action="help", help="show this help message and exit")
     args, remains = parser.parse_known_args(custom_args)
     if remains:
         print(f"[{parser.description}]", "Unknown args:", remains)
-    return args
-
-
-def _run_original(args):
     batch, heads, seq_len, dim = args.batch, args.heads, args.seq_len, args.hidden_dim
 
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
+    tl.disable_cache()
+    torch.set_default_device("npu")
     torch.manual_seed(0)
 
     check_case(batch, heads, seq_len, dim)
 
     print("Paged Flash Attention example passed!")
     print("Kernel Output Match!")
-
-
-def _require_owned_cache():
-    requested = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this example")
-    if Path(tl.env.TILELANG_CACHE_DIR).resolve() != Path(requested).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; execution was refused")
-
-
-def _load_execution_module():
-    # The actual JITImpl constructor owns memo types and capacities. A fresh
-    # namespace leaves a caller's existing factory cache objects untouched.
-    spec = importlib.util.spec_from_file_location(__name__ + "_execution", __file__)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-def main(custom_args=None):
-    args = parse_args(custom_args)
-    _require_owned_cache()
-    import torch_npu  # noqa: F401 - explicit registration after parsing/validation
-    from tilelang.env import CacheState
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-    from tilelang.cache.kernel_cache import KernelCache
-
-    cache = A2A3CythonKernelCache()
-    caller_memory = cache._memory_cache
-    caller_staging = KernelCache._last_cleaned_staging_root
-    caller_raw = CacheState._enabled
-    try:
-        cache._memory_cache = {}
-        execution = _load_execution_module()
-        with torch.random.fork_rng(devices=[]), torch.device("npu"):
-            execution._run_original(args)
-    finally:
-        cache._memory_cache = caller_memory
-        KernelCache._last_cleaned_staging_root = caller_staging
-        CacheState._enabled = caller_raw
 
 
 if __name__ == "__main__":

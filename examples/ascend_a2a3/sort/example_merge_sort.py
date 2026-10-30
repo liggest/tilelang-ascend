@@ -1,10 +1,8 @@
-"""Complete original TA example; runtime effects require explicit main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import tilelang as tl
 import tilelang.ascend.a2a3.language as T
 import torch
+
+tl.disable_cache()
 
 ELEMENT_SIZE = 2
 VALUE_POSITION = 0
@@ -197,7 +195,7 @@ def test_merge(merge_num):
     return is_sorted and output_values == ref_values
 
 
-def _original_main():
+def main():
     torch.manual_seed(42)
 
     results = []
@@ -210,20 +208,6 @@ def _original_main():
     for merge_num, success in results:
         status = "Kernel Output Match!" if success else "FAIL"
         print(f"  {merge_num}-way merge: {status}")
-
-
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-    _original_main()
 
 
 if __name__ == "__main__":

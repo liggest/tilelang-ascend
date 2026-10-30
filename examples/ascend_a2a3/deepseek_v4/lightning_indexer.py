@@ -5,56 +5,10 @@ from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 import torch
 from typing import Optional, Tuple
 
-
-# Runtime registration/default/cache state belong to the invocation.
-def _runtime_scope(*, npu_default=False):
-    from contextlib import nullcontext
-    from functools import wraps
-
-    def decorate(function):
-        @wraps(function)
-        def invoke(*args, **kwargs):
-            try:
-                import torch_npu  # noqa: F401
-            except ImportError:
-                if npu_default:
-                    raise
-            from tilelang.env import CacheState
-
-            enabled = CacheState.is_enabled()
-            try:
-                with torch.device("npu:0") if npu_default else nullcontext():
-                    return function(*args, **kwargs)
-            finally:
-                if enabled:
-                    CacheState.enable()
-                else:
-                    CacheState.disable()
-
-        return invoke
-
-    return decorate
-
-
-@T.macro
-def _merge_cached_sort_sources(merged_ub, cache_buf, s1_local, _num_cached):
-    if _num_cached == 4:
-        T.tile.merge_sort(
-            merged_ub,
-            cache_buf[s1_local * 4 + 0, :],
-            cache_buf[s1_local * 4 + 1, :],
-            cache_buf[s1_local * 4 + 2, :],
-            cache_buf[s1_local * 4 + 3, :],
-        )
-    elif _num_cached == 3:
-        T.tile.merge_sort(
-            merged_ub,
-            cache_buf[s1_local * 4 + 0, :],
-            cache_buf[s1_local * 4 + 1, :],
-            cache_buf[s1_local * 4 + 2, :],
-        )
-    elif _num_cached == 2:
-        T.tile.merge_sort(merged_ub, cache_buf[s1_local * 4 + 0, :], cache_buf[s1_local * 4 + 1, :])
+try:
+    import torch_npu
+except ImportError:
+    torch_npu = None
 
 
 def _get_cube_core_num() -> int:
@@ -381,7 +335,27 @@ def cpu_lightning_indexer(
     return indices, full_scores, values
 
 
-@_runtime_scope(npu_default=False)
+@T.macro
+def _merge_cached_sort_sources(merged_ub, cache_buf, s1_local, _num_cached):
+    if _num_cached == 4:
+        T.tile.merge_sort(
+            merged_ub,
+            cache_buf[s1_local * 4 + 0, :],
+            cache_buf[s1_local * 4 + 1, :],
+            cache_buf[s1_local * 4 + 2, :],
+            cache_buf[s1_local * 4 + 3, :],
+        )
+    elif _num_cached == 3:
+        T.tile.merge_sort(
+            merged_ub,
+            cache_buf[s1_local * 4 + 0, :],
+            cache_buf[s1_local * 4 + 1, :],
+            cache_buf[s1_local * 4 + 2, :],
+        )
+    elif _num_cached == 2:
+        T.tile.merge_sort(merged_ub, cache_buf[s1_local * 4 + 0, :], cache_buf[s1_local * 4 + 1, :])
+
+
 def make_lightning_indexer_kernel(
     B: int,
     S1: int,
@@ -1210,7 +1184,6 @@ def make_lightning_indexer_kernel(
 # ============================================================
 # Wrapper
 # ============================================================
-@_runtime_scope(npu_default=False)
 def lightning_indexer(
     query: torch.Tensor,
     key: torch.Tensor,
@@ -1382,8 +1355,11 @@ def lightning_indexer(
     return indices, values
 
 
-@_runtime_scope(npu_default=True)
-def main():
+# ============================================================
+# Examples (4 scenarios, one per layout) — kernel vs CPU golden
+# Usage: python lightning_indexer.py [bsnd_bsnd|bsnd_pa|tnd_tnd|tnd_pa|all]
+# ============================================================
+if __name__ == "__main__":
     import math
     import sys
     import numpy as np
@@ -1391,6 +1367,7 @@ def main():
 
     _DEV = 0
     torch_npu.npu.set_device(_DEV)
+    torch.set_default_device(f"npu:{_DEV}")
     print(f"Using device {_DEV}: {torch.npu.get_device_name(_DEV)}\n")
 
     def _make_rand(shape, dtype=torch.float16):
@@ -1667,7 +1644,3 @@ def main():
     else:
         sys.exit(f"Usage: python lightning_indexer.py [{('|').join(examples.keys())}|all]")
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

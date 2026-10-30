@@ -2,28 +2,15 @@
 
 import argparse
 import math
-import importlib.util
-from pathlib import Path
+import os
 import sys
 
 import tilelang
 import torch
-import pytest
 
-# Load the adopted sibling without changing the caller's sys.path or choosing
-# an unrelated installed module named "transpose".
-_KERNEL_SPEC = importlib.util.spec_from_file_location(__name__ + "_kernel", Path(__file__).with_name("transpose.py"))
-_KERNEL_MODULE = importlib.util.module_from_spec(_KERNEL_SPEC)
-_KERNEL_SPEC.loader.exec_module(_KERNEL_MODULE)
-transpose = _KERNEL_MODULE.transpose
-
-pytestmark = pytest.mark.a2a3_device
-
-
-@pytest.fixture(autouse=True)
-def _isolate_transpose_kernels(isolated_a2a3_cache, monkeypatch):
-    monkeypatch.setattr(_KERNEL_MODULE, "_kernel_cache", {})
-
+# Import kernel from sibling file
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from transpose import transpose  # noqa: E402
 
 # ========== Coverage declarations (for coverage_check.py) ==========
 COVERAGE_CATEGORY = "Vector"
@@ -348,8 +335,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--level", default="l0", choices=["l0", "l1", "l2", "boundary", "all"])
     args = parser.parse_args()
-
-    import torch_npu  # noqa: F401
 
     tilelang.disable_cache()  # Disable compile cache to avoid stale artifacts
     torch.manual_seed(0)

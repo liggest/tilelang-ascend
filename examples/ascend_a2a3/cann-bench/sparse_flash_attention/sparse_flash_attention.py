@@ -13,7 +13,6 @@ sync constraints and rejected experiments are recorded in
 perf_tuning/board/optimization_log.md.
 """
 
-import argparse
 import tilelang
 from tilelang import DataType
 import tilelang.ascend.a2a3.language as T
@@ -1354,11 +1353,7 @@ def sparse_flash_attention(
 # ---------------------------------------------------------------------------
 # Standalone run entry (smoke test, picked from test_sparse_flash_attention.py L0 case)
 # ---------------------------------------------------------------------------
-def main(argv=None):
-    argparse.ArgumentParser(description="Original cann-bench sparse_flash_attention standalone smoke").parse_args(argv)
-
-    import torch_npu  # noqa: F401
-
+if __name__ == "__main__":
     torch.manual_seed(0)
 
     # L0 v3_decode case: BSND fp16 decode shape (topK%256==0, Dv==dim_base -> v3)
@@ -1396,7 +1391,3 @@ def main(argv=None):
 
     torch.testing.assert_close(out.cpu().float(), ref.float(), rtol=1e-3, atol=1e-3)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

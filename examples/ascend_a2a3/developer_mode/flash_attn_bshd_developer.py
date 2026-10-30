@@ -1,9 +1,11 @@
-"""Complete original TA attention developer example; runtime is explicit."""
-
-from tilelang.env import CacheState
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+
+torch.set_default_device("npu")
+torch.manual_seed(0)
+
+tilelang.disable_cache()
 
 stages = 2
 B, S, H, D = 1, 128, 1, 512
@@ -122,6 +124,12 @@ def flash_attention_fwd(
     return main
 
 
+func = flash_attention_fwd(
+    heads=H,
+    dim=D,
+)
+
+
 def ref_flash_attn(q, k, v):
     q = q.float()
     k = k.float()
@@ -133,46 +141,22 @@ def ref_flash_attn(q, k, v):
     return o.to(torch.float16)
 
 
-def main():
-    import torch_npu  # noqa: F401
+q = torch.randn((B, H, S, D), dtype=torch.float16)
+k = torch.randn((B, H, S, D), dtype=torch.float16)
+v = torch.randn((B, H, S, D), dtype=torch.float16)
 
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            torch.manual_seed(0)
+torch.npu.synchronize()
+print("init successful!")
 
-            tilelang.disable_cache()
+output = func(q, k, v)
+ref_output = ref_flash_attn(q, k, v)
+torch.npu.synchronize()
 
-            func = flash_attention_fwd(
-                heads=H,
-                dim=D,
-            )
+torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
 
-            q = torch.randn((B, H, S, D), dtype=torch.float16)
-            k = torch.randn((B, H, S, D), dtype=torch.float16)
-            v = torch.randn((B, H, S, D), dtype=torch.float16)
+from tilelang.profiler import do_bench
 
-            torch.npu.synchronize()
-            print("init successful!")
+tilelang_time = do_bench(lambda: func(q, k, v))
+print(tilelang_time)
 
-            output = func(q, k, v)
-            ref_output = ref_flash_attn(q, k, v)
-            torch.npu.synchronize()
-
-            torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
-
-            from tilelang.profiler import do_bench
-
-            tilelang_time = do_bench(lambda: func(q, k, v))
-            print(tilelang_time)
-
-            print("Test Passed!")
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
-if __name__ == "__main__":
-    main()
+print("Test Passed!")

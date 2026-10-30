@@ -5,8 +5,6 @@ from types import ModuleType
 
 import pytest
 
-pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
-
 
 ROPE_MASK_BWD_LAYOUT_CASES = [
     pytest.param("tnd", id="tnd"),

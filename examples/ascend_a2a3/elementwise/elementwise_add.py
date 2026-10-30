@@ -1,12 +1,18 @@
-"""Original TA example; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import argparse
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
+
+tilelang.disable_cache()
+
+parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
+parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
+parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
+args = parser.parse_args()
+
+M = args.m
+N = args.n
 
 
 @tilelang.jit(out_idx=[-1])
@@ -42,44 +48,19 @@ def vec_add(M, N, block_M, block_N, dtype="float"):
     return main
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
+func = vec_add(M, N, 128, 256)
 
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
+torch.manual_seed(0)
 
-    import torch_npu  # noqa: F401
+a = torch.randn(M, N).npu()
+b = torch.randn(M, N).npu()
 
-    A2A3CythonKernelCache().clear_cache()
+torch.npu.synchronize()
+print("init successful!")
 
-    parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
-    parser.add_argument("--m", type=int, default=1024, help="Matrix M dimension")
-    parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
-    args = parser.parse_args()
+c = func(a, b)
 
-    M = args.m
-    N = args.n
+ref_c = a + b
 
-    func = vec_add(M, N, 128, 256)
-
-    torch.manual_seed(0)
-
-    a = torch.randn(M, N).npu()
-    b = torch.randn(M, N).npu()
-
-    torch.npu.synchronize()
-    print("init successful!")
-
-    c = func(a, b)
-
-    ref_c = a + b
-
-    torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
-    print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()
+torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
+print("Kernel Output Match!")

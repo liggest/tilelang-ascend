@@ -7,10 +7,7 @@ from typing import Optional, Tuple, Union
 
 import torch
 
-if __package__:
-    from .sparse_flash_mla_kernel import build_sparse_flash_mla, DEFAULT_BLOCK_I, DEFAULT_CORE_NUM, _compiler_cache_scope
-else:
-    from sparse_flash_mla_kernel import build_sparse_flash_mla, DEFAULT_BLOCK_I, DEFAULT_CORE_NUM, _compiler_cache_scope
+from sparse_flash_mla_kernel import build_sparse_flash_mla, DEFAULT_BLOCK_I, DEFAULT_CORE_NUM
 
 
 _KERNEL_CACHE: dict = {}
@@ -256,26 +253,14 @@ def sparse_flash_mla(
     return out
 
 
-@_compiler_cache_scope
-def main():
-    import torch_npu  # noqa: F401
-
-    if __package__:
-        from .sparse_flash_mla_golden import (
-            FAST_SCENARIOS,
-            build_case,
-            run_case,
-            check_lse,
-            check_result,
-        )
-    else:
-        from sparse_flash_mla_golden import (
-            FAST_SCENARIOS,
-            build_case,
-            run_case,
-            check_lse,
-            check_result,
-        )
+if __name__ == "__main__":
+    from sparse_flash_mla_golden import (
+        FAST_SCENARIOS,
+        build_case,
+        run_case,
+        check_lse,
+        check_result,
+    )
 
     dtype = torch.bfloat16
     for name, cfg in FAST_SCENARIOS.items():
@@ -285,7 +270,3 @@ def main():
         check_result(out.cpu(), case["cpu_ref"])
         print(f"[{name}] passed")
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

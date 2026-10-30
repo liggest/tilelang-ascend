@@ -55,7 +55,7 @@ done
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PERF_SCRIPT="$SCRIPT_DIR/rope_half_interleaved.py"
 
-# TileLang package: repository root above the namespaced example directory.
+# TileLang 包位置: workspace 根目录（tilelang-ascend/）
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 export PYTHONPATH="$PROJECT_ROOT:${PYTHONPATH:-}"
 

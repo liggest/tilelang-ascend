@@ -1,13 +1,11 @@
-"""Original TA developer example; runtime effects execute only through main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import argparse
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 from tilelang.profiler import do_bench
+
+tilelang.disable_cache()
 
 
 @tilelang.jit(out_idx=[-1], target="ascendc")
@@ -89,17 +87,7 @@ def matmul(M, N, K, block_M, block_N, block_K, K_L1, S1, S2, dtype="float16", ac
     return main
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="NPU Kernel Compilation")
     parser.add_argument("--m", type=int, default=8192, help="Matrix M dimension")
     parser.add_argument("--n", type=int, default=1024, help="Matrix N dimension")
@@ -136,7 +124,3 @@ def main():
 
     torch.testing.assert_close(c, ref_c, rtol=1e-2, atol=1e-2)
     print("Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

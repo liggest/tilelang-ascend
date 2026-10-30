@@ -10,6 +10,7 @@ import tilelang.ascend.a2a3.language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 import torch
 
+tilelang.disable_cache()
 
 # ===========================================================================
 # Lock declarations (preprocessor expands to T.set_flag / T.wait_flag)
@@ -710,10 +711,7 @@ def ref_flash_attn(q, k, v):
     ).to(torch.float16)
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    tilelang.disable_cache()
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--B", type=int, default=1, help="batch size")
     parser.add_argument("--S", type=int, default=4096, help="sequence length")
@@ -755,7 +753,3 @@ def main():
         print("Kernel Output Match!")
     else:
         print("Reference check skipped.")
-
-
-if __name__ == "__main__":
-    main()

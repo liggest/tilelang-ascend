@@ -9,6 +9,13 @@ import tilelang
 import tilelang.ascend.a2a3.language as T
 
 
+torch.set_default_device("npu")
+torch.manual_seed(42)
+
+logging.basicConfig(level=logging.INFO)
+
+tilelang.disable_cache()
+
 FP8 = "float8_e4m3"
 BF16 = "bfloat16"
 FP32 = "float32"
@@ -160,15 +167,5 @@ def test(custom_args=None):
     logging.info("Kernel Output Match!")
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    torch.set_default_device("npu")
-    torch.manual_seed(42)
-    logging.basicConfig(level=logging.INFO)
-    tilelang.disable_cache()
-    test()
-
-
 if __name__ == "__main__":
-    main()
+    test()
