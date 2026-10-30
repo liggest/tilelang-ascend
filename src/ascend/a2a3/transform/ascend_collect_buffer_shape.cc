@@ -15,7 +15,7 @@
 #include <tvm/tirx/transform.h>
 
 #include "common/attr.h"
-#include "common/buffer_shape_config.h"
+#include "common/operation_config.h"
 #include <tvm/ffi/reflection/registry.h>
 #include <tvm/ir/attrs.h>
 
