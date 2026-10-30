@@ -108,7 +108,7 @@ lowering 结果应变成后端可识别的 `call_extern` 或已有 codegen patte
 - parallel lowering 行为：只有当 API 主要测试 `T.Parallel` 或 auto-copy 行为时，才放入 parallel 相关测试文件。
 - 新的带副作用写回、新的 memory pipeline 类别，或没有合适主题归属的 API：创建聚焦的独立测试文件。
 
-独立测试文件是允许的，但应该少用，并且要能清楚说明原因。TA adoption 保留的管理入口是 `examples/bench_test.sh`（当前主线尚未接入该候选），不是 namespaced bench 文件。候选由 `scripts/ci/path_layout.py` 选择 `testing/ascend_a2a3`；完整迁移/collector/marker 分流决定实际执行，不是新增文件就已进 CI。
+独立测试文件是允许的，但应该少用，并且要能清楚说明原因。TA A2/A3 批跑入口是 `examples/ascend_a2a3/bench_test.sh`，由 `scripts/ci/path_layout.py` 选择 `testing/ascend_a2a3`；完整迁移/collector/marker 分流决定实际执行，不是新增文件就已进 CI。
 
 ## CI 测试风格
 

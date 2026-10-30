@@ -634,7 +634,7 @@ def flashattn(
 # ===========================================================================
 # Smoke test entry (CI compatibility)
 #
-# Repository CI (examples/bench_test.sh) marks a script PASSED only if its
+# Repository CI (examples/ascend_a2a3/bench_test.sh) marks a script PASSED only if its
 # stdout contains "Test Passed!" or "Kernel Output Match!". This __main__
 # runs the minimal L0 shape (l0_min_causal config) and validates against
 # ref_program (imported from test_mha_sink_fwd_bhsd.py) so the main file is

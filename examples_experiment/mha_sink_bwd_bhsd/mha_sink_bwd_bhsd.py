@@ -706,7 +706,7 @@ def _zeroed_npu_workspace():
 # ===========================================================================
 # Smoke test entry (CI compatibility)
 #
-# Repository CI (examples/bench_test.sh) marks a script PASSED only if its
+# Repository CI (examples/ascend_a2a3/bench_test.sh) marks a script PASSED only if its
 # stdout contains "Test Passed!" or "Kernel Output Match!". This __main__
 # runs the main-repo style single-shape fwd+bwd correctness check (matches
 # GPU source main() line 431-474): single-shape (1x4x128x128) fwd+bwd, 5-item

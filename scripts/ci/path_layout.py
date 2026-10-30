@@ -35,9 +35,6 @@ def canonical_path(value: str) -> str:
 def resolve_path(repo_root: Path, value: str) -> str:
     """Resolve a registered TA path in one layout, without per-file fallback."""
     adopted = adopted_layout(repo_root)
-    if adopted and canonical_path(value) == "examples/bench_test.sh":
-        # This CI management entry stays at the root; it is not a migrated operator asset.
-        return "examples/bench_test.sh"
     canonical = canonical_path(value)
     parts = PurePosixPath(canonical).parts
     if not adopted or not parts:

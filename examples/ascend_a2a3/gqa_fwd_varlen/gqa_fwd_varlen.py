@@ -546,7 +546,7 @@ def flashattn(
 # ===========================================================================
 # Smoke test entry (CI compatibility)
 #
-# Repository CI (examples/bench_test.sh) marks a script PASSED only if its
+# Repository CI (examples/ascend_a2a3/bench_test.sh) marks a script PASSED only if its
 # stdout contains "Test Passed!" or "Kernel Output Match!". This __main__
 # runs the minimal L0 shape (l0_min_full_nc config) and validates against
 # F.scaled_dot_product_attention so the main file is independently runnable

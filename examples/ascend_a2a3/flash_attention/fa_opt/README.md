@@ -32,7 +32,7 @@ bash examples/flash_attention/fa_opt/bench.sh
 ```
 
 `run.py` 默认选择 Expert v2 和 AscendC reference，也可以用 `--tl` / `--ascendc` 指定其他实现。
-`examples/bench_test.sh` 会自动收集 `fa_opt` 任意一级实现目录中的 Python 入口；根目录的
+`examples/ascend_a2a3/bench_test.sh` 会自动收集 `fa_opt` 任意一级实现目录中的 Python 入口；根目录的
 `run.py` 和 `plot.py` 不会被当成 kernel 测试。
 
 ## 文档
