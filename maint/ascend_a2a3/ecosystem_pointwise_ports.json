@@ -675,7 +675,7 @@
       "destination_path": "examples/ascend_a2a3/cann-bench/gather/gather.py",
       "source_git_blob": "2d3b6c30a52c1fe1419fe68edca54398b65ec365",
       "source_sha256": "f7804df1e694f53a6c02a738799f6cd5eb759d7dba3209c473bf1e90736ad53d",
-      "destination_sha256": "fef0de3a9e8072cc031d17f1b9b3e28bfe94fb8ed226aa819cf8a41b5599b017",
+      "destination_sha256": "48f42abd61e6c062a21471672ee1f8f5d5c46a8f9c6279e1e524da706034446a",
       "batch": "Q5",
       "state": "source_SDK_verified_device_pending",
       "source_runtime": {
@@ -690,7 +690,8 @@
       "adaptations": [
         "Private language import; complete all factories/helpers/decorators/configs/host/golden retained.",
         "Move original top-level and __main__ runtime to explicit main with NPU registration.",
-        "Preserve original disable mode and restore caller cache state in finally."
+        "Preserve original disable mode and restore caller cache state in finally.",
+        "Read the original factory name through modern JITImpl.func.orig_func for the unchanged host cache key."
       ],
       "all_original_cases_retained": true,
       "validation": {
@@ -700,7 +701,7 @@
         "device": false,
         "evidence": "refactor_main/reports/p3_pointwise/Q5/"
       },
-      "whole_factory_helpers_decorators_AST_exact": true,
+      "whole_factory_helpers_decorators_AST_exact": false,
       "whole_original_host_AST_preserved_with_declared_adapters": true,
       "original_seed_calls": [
         "torch.manual_seed(42)"
@@ -710,7 +711,15 @@
       ],
       "original_precision_assertion_evidence": "AST_audit.json contains complete expressions; original/ported source preserves all assertions.",
       "original_identifiers_preserved_with_targeted_spelling_comments": false,
-      "explicit_scalar_fill_index_exceptions": []
+      "explicit_scalar_fill_index_exceptions": [],
+      "whole_kernel_factories_decorators_AST_exact": true,
+      "host_cache_key_compatibility": {
+        "original": "kernel_fn.__name__",
+        "modern": "kernel_fn.func.orig_func.__name__",
+        "key_values_and_arguments_unchanged": true,
+        "original_kernel_algorithms_and_golden_unchanged": true,
+        "device_revalidation": "pending after the frozen full CI batch"
+      }
     },
     {
       "source_path": "examples/cann-bench/group_norm/example_group_norm.py",

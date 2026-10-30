@@ -172,3 +172,46 @@ def test_full_original_factory_lowers_without_device(case, monkeypatch):
     with tvm.transform.PassContext(opt_level=3, config=config):
         artifact = tilelang.lower(prim, target=target)
     assert 'extern "C" void call(' in artifact.kernel_source
+
+
+def test_gather_host_cache_preserves_original_factory_identity(monkeypatch):
+    """Exercise the real modern factories, stopping at the SDK compile boundary."""
+    import importlib
+
+    from tilelang import tvm
+    from tilelang.jit import JITImpl
+
+    source = "examples/cann-bench/gather/gather.py"
+    module = _load(BY_SOURCE[source])
+    standard = module._gather_kernel_standard
+    int64 = module._gather_kernel_int64
+    assert isinstance(standard, JITImpl) and isinstance(int64, JITImpl)
+    compilations = []
+
+    def retain_original_prim_func(prim_func, **options):
+        # No alternative kernel or successful SDK stub: retain the full actual
+        # factory IR as the observable cache value and perform no device build.
+        assert isinstance(prim_func, tvm.tirx.PrimFunc)
+        assert options["out_idx"] == [-1]
+        assert options["pass_configs"] == module.GATHER_PASS_CONFIGS
+        compilations.append(prim_func)
+        return prim_func
+
+    monkeypatch.setattr(importlib.import_module("tilelang.jit"), "compile", retain_original_prim_func)
+    requests = {item["id"]: item for item in REQUESTS if item["source_path"] == source}
+    results = []
+    for case_id in ["gather_0", "gather_7", "gather_4", "gather_5"]:
+        case = requests[case_id]
+        factory = getattr(module, case["factory"])
+        result = module._get_kernel(factory, *case["args"])
+        assert module._get_kernel(factory, *case["args"]) is result
+        results.append(result)
+
+    assert len(compilations) == len(module._kernel_cache) == 4
+    assert len({id(result) for result in results}) == 4
+    assert {key[0] for key in module._kernel_cache} == {"_gather_kernel_standard", "_gather_kernel_int64"}
+    first, padded_tail, low_word, high_word = results
+    assert str(first.buffer_map[first.params[0]].dtype) == "float16"
+    assert [int(dim) for dim in padded_tail.buffer_map[padded_tail.params[0]].shape] == [512, 1023]
+    assert str(low_word.buffer_map[low_word.params[0]].dtype) == "int32"
+    assert not tvm.ir.structural_equal(low_word, high_word)

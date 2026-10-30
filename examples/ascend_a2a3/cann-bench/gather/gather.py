@@ -129,7 +129,7 @@ def _gather_kernel_int64(outer_size, M2, K, TILE_OUTER, idx_dtype, word_off):
 
 
 def _get_kernel(kernel_fn, *args):
-    key = (kernel_fn.__name__,) + args
+    key = (kernel_fn.func.orig_func.__name__,) + args
     if key not in _kernel_cache:
         _kernel_cache[key] = kernel_fn(*args)
     return _kernel_cache[key]
