@@ -1,0 +1,382 @@
+{
+  "schema": 1,
+  "date_UTC": "2026-10-30",
+  "source_HEAD": "69975dd1c109b128ffc3fc608ebfb52619a38d2f",
+  "TA_source": "463c234ce3087205c092e931207ca87b4cd5494c",
+  "old_green_CI_source": "43b0b69720f479894a13c02746599eccee5c5769",
+  "old_green_CI_run": 40590261193,
+  "stage3_accepted": false,
+  "all_scope_commands_finished": true,
+  "all_passed": false,
+  "single_uninterrupted_run_claimed": false,
+  "attempts": {
+    "bench": {
+      "name": "full_run_002",
+      "physical_devices": [
+        0
+      ],
+      "total": 180,
+      "passed": 178,
+      "failed": 2,
+      "exit_code": 1
+    },
+    "testing": {
+      "name": "full_run_004_multicard",
+      "physical_devices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "total": 8989,
+      "passed": 8946,
+      "failed": 24,
+      "skipped": 19,
+      "exit_code": 1
+    },
+    "operator": {
+      "name": "full_run_004_multicard",
+      "physical_devices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "files": 27,
+      "total": 456,
+      "passed": 456,
+      "exit_code": 0
+    }
+  },
+  "excluded_partial_attempt": "full_run_003_remaining",
+  "baseline_scope_coverage": {
+    "legacy_bench": {
+      "baseline_identities": 180,
+      "observed_outcomes": 177,
+      "passed": 175,
+      "failed_or_error_or_conflict": 2,
+      "skipped": 0,
+      "deselected": 0,
+      "xfail": 0,
+      "xpass": 0,
+      "unobserved_no_outcome_not_proof_never_started": 3,
+      "complete_status_counts": {
+        "failed": 2,
+        "passed": 175,
+        "not_observed": 3
+      }
+    },
+    "testing_pytest": {
+      "baseline_identities": 2727,
+      "observed_outcomes": 2727,
+      "passed": 2723,
+      "failed_or_error_or_conflict": 0,
+      "skipped": 4,
+      "deselected": 0,
+      "xfail": 0,
+      "xpass": 0,
+      "unobserved_no_outcome_not_proof_never_started": 0,
+      "complete_status_counts": {
+        "skipped": 4,
+        "passed": 2723
+      }
+    },
+    "operator_pytest": {
+      "baseline_identities": 443,
+      "observed_outcomes": 443,
+      "passed": 443,
+      "failed_or_error_or_conflict": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfail": 0,
+      "xpass": 0,
+      "unobserved_no_outcome_not_proof_never_started": 0,
+      "complete_status_counts": {
+        "passed": 443
+      }
+    }
+  },
+  "cohort_statuses": {
+    "additional_identity_in_original_TA_file": {
+      "passed": 11,
+      "deselected": 31,
+      "skipped": 1
+    },
+    "migration_added_refactor_test": {
+      "failed": 1,
+      "passed": 3105,
+      "skipped": 3
+    },
+    "migration_added_supplementary_test": {
+      "failed": 23,
+      "passed": 3092,
+      "skipped": 11,
+      "deselected": 10
+    },
+    "original_TA_bench": {
+      "failed": 2,
+      "passed": 175,
+      "not_observed": 3
+    },
+    "original_TA_operator": {
+      "passed": 443
+    },
+    "original_TA_testing_file_in_issue1950": {
+      "skipped": 4,
+      "passed": 2723
+    },
+    "upstream_added_bench": {
+      "passed": 3
+    },
+    "upstream_operator_added_after_issue1950": {
+      "passed": 13
+    },
+    "upstream_testing_added_after_issue1950": {
+      "passed": 15
+    }
+  },
+  "old_four_skip_identities_unchanged": [
+    "testing/python/language/test_tilelang_ascend_language_copy_cv.py::test_copy_cv_experiment[pto]",
+    "testing/python/language/test_tilelang_ascend_language_copy_cv.py::test_copy_vc_experiment[pto]",
+    "testing/python/language/test_tilelang_ascend_language_copy_cv.py::test_ub_to_l1_expert_A5[pto]",
+    "testing/python/language/test_tilelang_ascend_language_reduce_dtype_coverage.py::test_reduce_clear_false_2d[ascendc-float16-sum]"
+  ],
+  "failure_rows": [
+    {
+      "phase": "legacy_bench",
+      "canonical_identity": "examples/cann-bench/dilation_2d/test_dilation_2d.py",
+      "group": "original_TA_bench",
+      "comparison": "baseline_pass_to_current_failure"
+    },
+    {
+      "phase": "legacy_bench",
+      "canonical_identity": "examples/cann-bench/gather/gather.py",
+      "group": "original_TA_bench",
+      "comparison": "baseline_pass_to_current_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k2_e32]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k2_e4]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k2_e9]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k6_e32]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k6_e4]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k6_e9]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k8_e32]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k8_e4]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k8_e9]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k9_e32]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k9_e4]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[aux_fi_k9_e9]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e108_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e128_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e144_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e16_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e256_k8]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e32_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e36_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e64_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e72_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_fusion_examples.py::test_complete_original_factory_source_contract[topk_bwd_e96_k6]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/ecosystem/test_a2a3_linear_rnn_examples.py::test_complete_original_factory_pipeline_with_explicit_source_core_sampling[normalize_linear_attention_ker1]",
+      "group": "migration_added_supplementary_test",
+      "comparison": "new_identity_failure"
+    },
+    {
+      "phase": "testing_pytest",
+      "canonical_identity": "testing/python/refactor/language/test_a2a3_language_copy_reduce.py::test_top_level_ascend_primitives",
+      "group": "migration_added_refactor_test",
+      "comparison": "new_identity_failure"
+    }
+  ],
+  "frozen_native": [
+    {
+      "name": "libtilelang.so",
+      "sha256": "376afdbe0739cad1bf13d00862a70b94c96a2332ae4e347ea289b3b650b3fdbc"
+    },
+    {
+      "name": "tilelang_cython_wrapper.cpython-312-aarch64-linux-gnu.so",
+      "sha256": "7dc8a8055433ff91dfaed26024d25e0ebe5fe6e19f8503e0942862408cd31c01"
+    },
+    {
+      "name": "bisheng",
+      "sha256": "3ad0a69e3acf9a05bce29027e348401ba7d97c05bd41153e9eba12ec443149c5"
+    },
+    {
+      "name": "libruntime.so",
+      "sha256": "ed1a788203bf9da4ebaea2063a7adf81447c289c449764068fe75966b2be195c"
+    },
+    {
+      "name": "libascendcl.so",
+      "sha256": "58a4c13e36cfae4fe1e05692fd22a3312f9ae4804400d1245183598bf0dc6721"
+    }
+  ],
+  "raw_results_versioned": false,
+  "local_report_locator": "refactor_main/reports/p3_1_full_ci_run/combined_002_bench_004_pytest",
+  "facts": [
+    {
+      "path": "plan.json",
+      "sha256": "b31414a858acc4c732e3129524f7c590b8c6bd79f4cc1c2e3f127bf1ac48e22b",
+      "bytes": 14109
+    },
+    {
+      "path": "result.json",
+      "sha256": "dcc77f72ed92ca96ee5f9cb696342398f2f0f7b7a455e73cafa1aaed182ded27",
+      "bytes": 7596
+    },
+    {
+      "path": "cross_window_provenance.json",
+      "sha256": "c3bf63d483c6f2a1b3aea1ebdb31abc2efb920694803eb4de8a420a82ddab192",
+      "bytes": 2489
+    },
+    {
+      "path": "comparison/summary.json",
+      "sha256": "f3d0a90012af15912f67ad4548d99d08c92191ca29ad7b3dbd4be60fed54c2fc",
+      "bytes": 89417
+    },
+    {
+      "path": "comparison/comparison.json",
+      "sha256": "76d66a68bee24b26049c17fad18ee3147e21208dfdd7e0f444c2265c0d77b397",
+      "bytes": 17234907
+    },
+    {
+      "path": "comparison/comparison.csv",
+      "sha256": "4806dcf18c982e9b72acce450988f6178fcfb80d73185b7e6686935e19483c9d",
+      "bytes": 11892785
+    },
+    {
+      "path": "comparison/input_facts.json",
+      "sha256": "c490136e52e4dfa2b58b395ddec510fa1554a438f462c5329df139bd97f4cf99",
+      "bytes": 77614
+    },
+    {
+      "path": "comparison/path_mappings.json",
+      "sha256": "3634a822b5cc5f86abfc389dd68286930e6a8585576bf482e4f2867572c2cce5",
+      "bytes": 116852
+    }
+  ],
+  "comparison_input_errors": 0,
+  "XML_JSONL_stdout_all_node_outcomes_consistent": true,
+  "operator_sources_verified_against_frozen_git": 27,
+  "comparison_CPU_fixtures": 24,
+  "cross_window_view_CPU_fixtures": 3,
+  "no_absent_skipped_deselected_xfail_counted_as_pass": true
+}
