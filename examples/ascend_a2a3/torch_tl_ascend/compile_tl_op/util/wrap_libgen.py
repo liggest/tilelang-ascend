@@ -1,6 +1,6 @@
 from typing import Optional
 from functools import wraps
-from tilelang.jit.adapter.libgen import LibraryGenerator
+from tilelang.ascend.a2a3.compiler import LibraryGenerator
 
 
 def wrap_load_lib(load_lib):
@@ -14,6 +14,4 @@ def wrap_load_lib(load_lib):
     return wrapper
 
 
-# Retain the original optional wrapper as a callable utility. Modern shared and
-# A2/A3 generators already remember supplied load paths; importing this module
-# must not replace the framework's LibraryGenerator.load_lib method.
+LibraryGenerator.load_lib = wrap_load_lib(LibraryGenerator.load_lib)

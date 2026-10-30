@@ -1,14 +1,11 @@
 import sys
 import shutil
 import inspect
-import importlib.util
-import hashlib
-import os
-from functools import lru_cache
 from pathlib import Path
 
 import tilelang
 from tilelang import JITKernel
+from tilelang.jit import JITImpl
 from tilelang.jit.adapter import CythonKernelAdapter
 
 HERE = Path(__file__).parent
@@ -20,43 +17,15 @@ SO_NAME = "libop.so"
 
 
 def _ensure_lib_path():
-    # Both the shared and A2/A3 library generators remember a supplied load path.
-    # The original process-wide LibraryGenerator.load_lib patch is unnecessary.
-    pass
-
-
-def _require_owned_cache():
-    requested = os.environ.get("TILELANG_CACHE_DIR")
-    if not requested:
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before compiling this interop operator")
-    if Path(tilelang.env.TILELANG_CACHE_DIR).resolve() != Path(requested).resolve():
-        raise RuntimeError("TILELANG_CACHE_DIR conflicts with the active cache-directory override; compilation was refused")
-
-
-@lru_cache(maxsize=None)
-def _load_op_module(source_path):
-    # Preserve normal module/factory memo reuse without adding a caller sys.path.
-    name = __name__ + "_adopted_flash_" + hashlib.sha256(str(source_path).encode()).hexdigest()[:16]
-    spec = importlib.util.spec_from_file_location(name, source_path)
-    module = importlib.util.module_from_spec(spec)
-    previous = sys.modules.get(name)
-    sys.modules[name] = module
-    try:
-        spec.loader.exec_module(module)
-    except BaseException:
-        if previous is None:
-            sys.modules.pop(name, None)
-        else:
-            sys.modules[name] = previous
-        raise
-    return module
+    from compile_tl_op.util import wrap_libgen  # noqa: F401
+    # ensure lib_generator.libpath exists
 
 
 def get_jit_op_func():
-    source_path = (EXAMPLE_ROOT / "flash_attention" / "flash_attn_bhsd.py").resolve()
-    op_func = _load_op_module(source_path).flash_attention_fwd
+    OP_PATH = EXAMPLE_ROOT / "flash_attention"  # examples/...
+    sys.path.append(OP_PATH.as_posix())
 
-    from tilelang.jit import JITImpl
+    from flash_attn_bhsd import flash_attention_fwd as op_func
 
     if not isinstance(op_func, JITImpl):
         raise AttributeError(f"{op_func!r} is not decorated by @tilelang.jit")
@@ -65,26 +34,15 @@ def get_jit_op_func():
 
 
 def get_kernel(op_func, *args, force_compile=False, **kwargs) -> JITKernel:
-    _require_owned_cache()
-    from tilelang.env import CacheState
-
-    caller_cache_state = CacheState._enabled
-    try:
-        if force_compile:
-            # As in TA, this bypasses shared caching only. A warm decorated
-            # factory may still reuse its own memo; do not change that contract.
-            tilelang.disable_cache()
-        kernel = op_func(*args, **kwargs)
-        return kernel
-    finally:
-        CacheState._enabled = caller_cache_state
+    if force_compile:
+        tilelang.disable_cache()  # compile will be triggered without caching
+    kernel = op_func(*args, **kwargs)
+    return kernel
 
 
 def source_path_of(op_func):
-    from tilelang.jit import JITImpl
-
     if isinstance(op_func, JITImpl):
-        op_func = op_func.func
+        op_func = op_func.func.orig_func
     while hasattr(op_func, "__wrapped__"):
         op_func = op_func.__wrapped__
     return Path(inspect.getfile(op_func))  # file of the original function
@@ -98,7 +56,6 @@ def so_path_of(kernel: JITKernel):
 
 
 def update_package_files(force_compile=False):
-    _require_owned_cache()
     _ensure_lib_path()
     op_func = get_jit_op_func()
 
@@ -120,7 +77,6 @@ def update_package_files(force_compile=False):
 
 
 def update_so(dst_so_path: Path, force_compile=False):
-    _require_owned_cache()
     _ensure_lib_path()
     op_func = get_jit_op_func()
 

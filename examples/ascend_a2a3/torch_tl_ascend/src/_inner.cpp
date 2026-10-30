@@ -28,24 +28,6 @@ at::Tensor flash_attention_wrapper(const at::Tensor &Q, const at::Tensor &K,
   TORCH_CHECK(V.dim() == 4,
               "tl_ascend.flash_attention: V must be a 4-D tensor");
 
-  // libop.so is compiled for this one static BHSD signature. Reject a
-  // different request before allocation, stream lookup or the raw ABI call.
-  for (const auto *tensor : {&Q, &K, &V}) {
-    TORCH_CHECK(tensor->size(0) == 4 && tensor->size(1) == 16 &&
-                    tensor->size(2) == 4096 && tensor->size(3) == 128,
-                "tl_ascend.flash_attention: compiled BHSD shape must be [4, "
-                "16, 4096, 128]");
-    TORCH_CHECK(tensor->scalar_type() == at::kHalf,
-                "tl_ascend.flash_attention: compiled dtype must be float16");
-    TORCH_CHECK(tensor->is_contiguous(),
-                "tl_ascend.flash_attention: Q, K and V must be contiguous");
-    TORCH_CHECK(tensor->device().type() == c10::DeviceType::PrivateUse1,
-                "tl_ascend.flash_attention: Q, K and V must be NPU tensors");
-    TORCH_CHECK(
-        tensor->device() == Q.device(),
-        "tl_ascend.flash_attention: Q, K and V must be on the same NPU device");
-  }
-
   // Q, K, V: [batch, heads, seq_len, dim]
   const int64_t batch = Q.size(0);
   const int64_t heads = Q.size(1);
@@ -86,15 +68,7 @@ TORCH_LIBRARY_IMPL(tl_ascend, PrivateUse1, m) {
 }
 
 TORCH_LIBRARY_IMPL(tl_ascend, Meta, m) {
-  m.impl(
-      "flash_attention",
-      [](const at::Tensor &, const at::Tensor &,
-         const at::Tensor &) -> at::Tensor {
-        TORCH_CHECK(
-            false,
-            "tl_ascend.flash_attention: Meta/torch.compile is not supported; "
-            "this extension requires the fixed compiled NPU signature");
-      });
+  m.impl("flash_attention", &flash_attention_wrapper);
 }
 
 extern "C" {

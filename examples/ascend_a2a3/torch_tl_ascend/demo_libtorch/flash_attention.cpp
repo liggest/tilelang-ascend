@@ -97,28 +97,6 @@ private:
 
 at::Tensor flash_attention_fwd(const at::Tensor &Q, const at::Tensor &K,
                                const at::Tensor &V) {
-  TORCH_CHECK(Q.dim() == 4, "flash_attention_fwd: Q must be a 4-D tensor");
-  TORCH_CHECK(K.dim() == 4, "flash_attention_fwd: K must be a 4-D tensor");
-  TORCH_CHECK(V.dim() == 4, "flash_attention_fwd: V must be a 4-D tensor");
-
-  // libop.so is compiled for this one static BHSD signature. Reject a
-  // different request before allocation, stream lookup or the raw ABI call.
-  for (const auto *tensor : {&Q, &K, &V}) {
-    TORCH_CHECK(tensor->size(0) == 4 && tensor->size(1) == 16 &&
-                    tensor->size(2) == 4096 && tensor->size(3) == 128,
-                "flash_attention_fwd: compiled BHSD shape must be [4, "
-                "16, 4096, 128]");
-    TORCH_CHECK(tensor->scalar_type() == at::kHalf,
-                "flash_attention_fwd: compiled dtype must be float16");
-    TORCH_CHECK(tensor->is_contiguous(),
-                "flash_attention_fwd: Q, K and V must be contiguous");
-    TORCH_CHECK(tensor->device().type() == c10::DeviceType::PrivateUse1,
-                "flash_attention_fwd: Q, K and V must be NPU tensors");
-    TORCH_CHECK(
-        tensor->device() == Q.device(),
-        "flash_attention_fwd: Q, K and V must be on the same NPU device");
-  }
-
   // lazy loading with static
   static auto *op_lib = []() -> auto {
     static OpLib<CallFlashAttention> lib;
@@ -133,6 +111,10 @@ at::Tensor flash_attention_fwd(const at::Tensor &Q, const at::Tensor &K,
 
   auto dtype = at::kHalf;
   auto accum_dtype = at::kFloat;
+
+  TORCH_CHECK(Q.dim() == 4, "flash_attention_fwd: Q must be a 4-D tensor");
+  TORCH_CHECK(K.dim() == 4, "flash_attention_fwd: K must be a 4-D tensor");
+  TORCH_CHECK(V.dim() == 4, "flash_attention_fwd: V must be a 4-D tensor");
 
   // Q, K, V: [batch, heads, seq_len, dim]
   const int64_t batch = Q.size(0);

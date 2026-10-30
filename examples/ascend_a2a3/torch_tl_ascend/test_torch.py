@@ -1,5 +1,7 @@
-import argparse
 import torch
+import torch_npu  # noqa: F401
+
+import torch_tl_ascend  # noqa: F401
 
 
 def ref_flash_attention(q, k, v):
@@ -13,9 +15,10 @@ def ref_flash_attention(q, k, v):
     return o.to(torch.float16)
 
 
-def _run_original():
+if __name__ == "__main__":
     B, S, H, D = 4, 4096, 16, 128
 
+    torch.set_default_device("npu")
     torch.manual_seed(0)
 
     q = torch.randn((B, H, S, D), dtype=torch.float16)
@@ -32,21 +35,3 @@ def _run_original():
     torch.testing.assert_close(ref_output, output, rtol=1e-2, atol=1e-2)
 
     print("Test Passed!")
-
-
-def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description="Original fixed BHSD [4,16,4096,128] flash-attention test")
-    return parser.parse_args(argv)
-
-
-def main(argv=None):
-    parse_args(argv)
-    import torch_npu  # noqa: F401
-    import torch_tl_ascend  # noqa: F401
-
-    with torch.device("npu"), torch.random.fork_rng(devices=[]):
-        _run_original()
-
-
-if __name__ == "__main__":
-    main()
