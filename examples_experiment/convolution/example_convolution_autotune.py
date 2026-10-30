@@ -17,7 +17,7 @@ pass_configs = {
 }
 
 
-def get_configs(key_args, _key_kwargs=None):
+def get_configs(*key_args, **_key_kwargs):
     if not isinstance(key_args, (tuple, list)) or len(key_args) < 3:
         raise ValueError(f"get_configs: key_args must be (M, N, K), got {key_args}")
     M, N, K = int(key_args[0]), int(key_args[1]), int(key_args[2])
@@ -57,12 +57,8 @@ def ref_prog(A, B):
     return A @ B
 
 
-def _configs_for_main(*key_args, **key_kwargs):
-    return get_configs(key_args, key_kwargs)
-
-
 @tilelang.autotune(
-    configs=_configs_for_main,
+    configs=get_configs,
     ref_prog=ref_prog,
     supply_prog=supply_prog,
     atol=1e-2,
