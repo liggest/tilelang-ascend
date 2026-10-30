@@ -1,0 +1,231 @@
+{
+  "schema": 1,
+  "date_UTC": "2026-10-30",
+  "stage3_accepted": false,
+  "post_fix_complete_daily_manual": "NOT_RUN_EXPLICIT_USER_REQUEST",
+  "baseline_complete_CI_HEAD": "69975dd1c109b128ffc3fc608ebfb52619a38d2f",
+  "TA_source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+  "root_repairs": [
+    {
+      "commit": "b8924c1b807c0d1cae906e349a09dc069a0bdae5",
+      "scope": "gather modern JIT original-factory name adapter"
+    },
+    {
+      "commit": "e4106a75279736f18d527aa0fcf42a06fdbd513e",
+      "scope": "23 active source allocation contracts refreshed; complete old records preserved"
+    },
+    {
+      "commit": "4cfa41c0882933ca16da4e8099e1b7e04df45e86",
+      "scope": "printf test expected StringImm literal; only raw prefix removed"
+    },
+    {
+      "commit": "8e421db75a41a8a74a94134adf079e3d9c420624",
+      "candidate_source_commit": "e53b65e0889fca1cae9733996e3847c24c101fe4",
+      "scope": "Integer FloorDiv/Mod uniformly call shared inline constexpr runtime-template helpers; old proof and dynamic emission removed"
+    }
+  ],
+  "host_source_matrices": [
+    {
+      "suite": "gather_complete.xml",
+      "passed": 221,
+      "native_sha256": "376afdbe0739cad1bf13d00862a70b94c96a2332ae4e347ea289b3b650b3fdbc"
+    },
+    {
+      "suite": "contracts_complete.xml",
+      "passed": 152,
+      "native_sha256": "376afdbe0739cad1bf13d00862a70b94c96a2332ae4e347ea289b3b650b3fdbc"
+    },
+    {
+      "suite": "printf_complete.xml",
+      "passed": 199,
+      "native_sha256": "376afdbe0739cad1bf13d00862a70b94c96a2332ae4e347ea289b3b650b3fdbc"
+    },
+    {
+      "suite": "host_tests.xml",
+      "passed": 26,
+      "native_sha256": "51ef9cb3785c1b821fef6c8ea2eb34d74808bf0606637d086fa6b713e6358bf5",
+      "latest_constexpr_targeted_smoke_only": false
+    },
+    {
+      "suite": "existing_source_family.xml",
+      "passed": 42,
+      "native_sha256": "51ef9cb3785c1b821fef6c8ea2eb34d74808bf0606637d086fa6b713e6358bf5",
+      "latest_constexpr_targeted_smoke_only": false
+    },
+    {
+      "suite": "constexpr_host_smoke.xml",
+      "passed": 2,
+      "native_sha256": "51ef9cb3785c1b821fef6c8ea2eb34d74808bf0606637d086fa6b713e6358bf5",
+      "latest_constexpr_targeted_smoke_only": true
+    },
+    {
+      "suite": "root_select_smoke.xml",
+      "passed": 2,
+      "native_sha256": "def65d72f5f8cf4099287195ce310c3e91fbd5d520c32623cedfe1220aff83bb",
+      "latest_constexpr_targeted_smoke_only": false
+    }
+  ],
+  "root_build": {
+    "source_HEAD": "8e421db75a41a8a74a94134adf079e3d9c420624",
+    "command": [
+      "cmake",
+      "--build",
+      "build",
+      "--target",
+      "tilelang",
+      "-j8"
+    ],
+    "USE_ASCEND": "ON",
+    "OS_exit_code": 0,
+    "four_codegen_and_rt_mod_TU_recompiled": true,
+    "native_sha256": "def65d72f5f8cf4099287195ce310c3e91fbd5d520c32623cedfe1220aff83bb"
+  },
+  "gather_original_complete_CLI": {
+    "source_HEAD": "4cfa41c0882933ca16da4e8099e1b7e04df45e86",
+    "native_sha256": "376afdbe0739cad1bf13d00862a70b94c96a2332ae4e347ea289b3b650b3fdbc",
+    "physical": 3,
+    "logical": 0,
+    "original_cases_passed": 20,
+    "original_exit_code": 0,
+    "original_predicate_passed": true,
+    "owned_group_gone": true,
+    "final_floor_native_not_used_for_this_run": true
+  },
+  "dilation_original_default_all_CLI": {
+    "source_HEAD": "8e421db75a41a8a74a94134adf079e3d9c420624",
+    "native_sha256": "def65d72f5f8cf4099287195ce310c3e91fbd5d520c32623cedfe1220aff83bb",
+    "physical": 3,
+    "logical": 0,
+    "counts": {
+      "L0": 8,
+      "L1": 30,
+      "repeat": 3,
+      "L2": 11,
+      "Boundary": 6
+    },
+    "case28_seed": 127,
+    "case28_matched_ratio": 1.0,
+    "case28_max_abs": 0.0,
+    "original_exit_code": 0,
+    "original_predicate_passed": true,
+    "original_test_and_kernel_bytes_equal_baseline": true,
+    "shared_template_freeze_verified": true,
+    "owned_group_gone_no_signals": true,
+    "after_health_OK_idle": true,
+    "B0E_pass_not_reused": true
+  },
+  "cython_sha256": "7dc8a8055433ff91dfaed26024d25e0ebe5fe6e19f8503e0942862408cd31c01",
+  "CANN": "9.1.0-beta.1",
+  "raw_artifacts_versioned": false,
+  "local_evidence_facts": [
+    {
+      "path": "refactor_main/reports/p3_1_ci_host_repair_candidates/gather_complete.xml",
+      "sha256": "8712eafb76d7085f928f91021bacb8d3c824ab6706421239126a8bbe7d40c3e6"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_ci_host_repair_candidates/contracts_complete.xml",
+      "sha256": "09f1500c582be57b2ce83b78a3f4f9f4dea798bafd1697031fd81cebaf897098"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_ci_host_repair_candidates/printf_complete.xml",
+      "sha256": "99fa0e7371074c2933ce13991f61717c35de8a2e302e23b315e0a419dd5f5585"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_gather_device_recheck_4cfa41c0/run_001/result.json",
+      "sha256": "af1775335fe093029d71d6a0c8c7c41ecfcc68ebaab914af4b930eb7959926af"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_gather_device_recheck_4cfa41c0/run_001/stdout.log",
+      "sha256": "c28a4c704ade6b96668a823778f5cdd933cd71ecf185dee2058e82dee8e5a8d4"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_gather_device_recheck_4cfa41c0/run_001/actual_native.json",
+      "sha256": "857341f6d9b93e0d612f942466466d30519c13ffb53dc6649210549d8dc3b59f"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_gather_device_recheck_4cfa41c0/run_001/cleanup.json",
+      "sha256": "8e88b6aa400d9f0f75af4c239a97a04cb943c56b5f904d113197ea02f2b69548"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/host_tests.xml",
+      "sha256": "aaccf19001df5b006f1f26310bdde9f038bc82a80bd5610a3bc708937961108e"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/existing_source_family.xml",
+      "sha256": "03d2698ca2375df4f1c51367f7cabdf506389f15cd5c0d61e6583bdb6cb7ae8d"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/constexpr_host_smoke.xml",
+      "sha256": "740f416f2bb6df61bdb57f7f03d54c8f91b143e9a5cab436de5d179f97cc7369"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/root_select_smoke.xml",
+      "sha256": "a41c20869dd8d57a0f217f193dfdfe2726571d5593b08834a60f00812607df57"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/root_select_native.json",
+      "sha256": "7356633cb2c7e65c5d1e430d74e7ad16dd804a93de1f42572a3ed888e34d9cd8"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/root_cmake_build_result.json",
+      "sha256": "4ee29bca1803c380b54114ed85b954254c4c1a79560b79defd3f451d042b2743"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/sdk_compile_result.json",
+      "sha256": "86b007506e5948c3c0e9ee15421f28487bcff13ae9014dc08f998da412c2fc2d"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/ascend_sdk_config.json",
+      "sha256": "6769ece8ad6a10d8e0cb7f2c7ec2f9e88e347450e546487d2bbf15fb7d27b9cc"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_floor_template_simplification/pto_sdk_config.json",
+      "sha256": "45bfd771bad5a7bbaefb55d7198194e611d4881563079e7e2f4bdc35436dfc7c"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/plan.json",
+      "sha256": "bc3e8fa23d5ae971e04a59c80ad044a854743d9a608b00d62b3e51d650795352"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/result.json",
+      "sha256": "b93a82b11a7a822f4bdc692bcf5013b999f66e48ab34e1ce310870a978a81f14"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/stdout.log",
+      "sha256": "ea1ab01c0046bf4645186ccd1f2b25150beb6ee3dd818e64ae756773aa340e7d"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/stderr.log",
+      "sha256": "a0d23a11e52812ba754168a149668a09d976bd12fb2bdee96b34bdcca3fc5637"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/actual_native.json",
+      "sha256": "d088a9f8d441970ba82861fe01234b941104430a021621d6fdcba1f3bc6f1927"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/cleanup.json",
+      "sha256": "8f2bae3656efed981adc6f3c07000137ef862e6cfb0dc95743bb3f13bc587741"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/health_after/selected.json",
+      "sha256": "07cc2269f5ee7d1a21f166f22d6d2ff8c82e4d3db380bb93357a937b48058fe1"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/actual_native_maps_00.txt",
+      "sha256": "91afe8a69c1482cbae5bb0ab9b8f1e79d3756cad58f8b18a27e268b43b7b64ae"
+    },
+    {
+      "path": "refactor_main/reports/p3_1_dilation_device_recheck_8e421db7/run_001/actual_native_maps_01.txt",
+      "sha256": "038b00d5b1719484075a78776ba24d6167a14395713508222bf12212038f24eb"
+    }
+  ],
+  "current_source_HEAD": "8e421db75a41a8a74a94134adf079e3d9c420624",
+  "superseded_B0E_device_results_not_claimed_for_simplified_version": true,
+  "shared_integer_math_header_SHA256": "817434ea47ee87e237b2b9b4e8117fee59672aaf14791a04513614182f0a92b4",
+  "actual_new_header_dual_dialect_SDK_compile": {
+    "passed": 2,
+    "ELF_created": true,
+    "ELF_loaded_or_NPU_executed": false,
+    "actual_template_SHA256": "817434ea47ee87e237b2b9b4e8117fee59672aaf14791a04513614182f0a92b4"
+  }
+}
