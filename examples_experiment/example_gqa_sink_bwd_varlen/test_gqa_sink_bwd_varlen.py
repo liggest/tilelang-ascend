@@ -11,24 +11,18 @@ import os
 import sys
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if _SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPT_DIR)
 
-# Load only this private sibling; never mutate global import search paths.
-try:
-    from . import example_gqa_sink_bwd_varlen as _gqa_sink_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
-
-    _spec = _importlib_util.spec_from_file_location("_a2a3_gqa_sink_varlen", _Path(__file__).with_name("example_gqa_sink_bwd_varlen.py"))
-    _gqa_sink_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_gqa_sink_module)
-flashattn_fwd = _gqa_sink_module.flashattn_fwd
-run_bwd_pipeline = _gqa_sink_module.run_bwd_pipeline
-DTYPE_FP16 = _gqa_sink_module.DTYPE_FP16
-BLOCK_M_FWD = _gqa_sink_module.BLOCK_M_FWD
-BLOCK_N_FWD = _gqa_sink_module.BLOCK_N_FWD
-BLOCK_M_BWD = _gqa_sink_module.BLOCK_M_BWD
-BLOCK_N_BWD = _gqa_sink_module.BLOCK_N_BWD
+from example_gqa_sink_bwd_varlen import (
+    flashattn_fwd,
+    run_bwd_pipeline,
+    DTYPE_FP16,
+    BLOCK_M_FWD,
+    BLOCK_N_FWD,
+    BLOCK_M_BWD,
+    BLOCK_N_BWD,
+)
 
 import argparse
 import traceback
@@ -414,8 +408,6 @@ L0_CASES = [
 
 def test_gqa_sink_bwd_l0():
     """L0 precision gate: 8 cases, all 4 outputs blocking."""
-    import torch_npu  # noqa: F401
-
     ok = True
     for name, B, H, groups, q_lens, kv_lens, D, window in L0_CASES:
         custom_sinks = torch.full((H,), 3.0, dtype=torch.float16) if "sink_nonzero" in name else None
@@ -425,8 +417,6 @@ def test_gqa_sink_bwd_l0():
 
 def test_gqa_sink_bwd_l0_determinism():
     """L0 determinism: 3 runs, max_diff must be bit-exact."""
-    import torch_npu  # noqa: F401
-
     print("\n" + "=" * 78)
     print("L0 Determinism: 3x bit-exact check")
     print("=" * 78)
@@ -526,8 +516,6 @@ L1_CASES = [
 
 def test_gqa_sink_bwd_l1():
     """L1 functional test: irregular shapes, different groups/block sizes (blocking)."""
-    import torch_npu  # noqa: F401
-
     ok = True
     for case in L1_CASES:
         name, B, H, groups, q_lens, kv_lens, D, window = case[:8]
@@ -550,8 +538,6 @@ L2_TAIL_CASES = [
 
 def test_gqa_sink_bwd_l2():
     """L2 negative test: non-aligned seq_len, unsupported dtype, illegal shape."""
-    import torch_npu  # noqa: F401
-
     for name, B, H, groups, q_lens, kv_lens, D, window, bm_bwd, bn_bwd in L2_TAIL_CASES:
 
         def _run_fn(name=name, B=B, H=H, groups=groups, q_lens=q_lens, kv_lens=kv_lens, D=D, window=window, bm_bwd=bm_bwd, bn_bwd=bn_bwd):
@@ -620,8 +606,6 @@ BOUNDARY_CASES = [
 
 def test_gqa_sink_bwd_boundary():
     """Boundary test: zero/inf/nan/dbound/large/negative/mixed/tiny sinks + valrange."""
-    import torch_npu  # noqa: F401
-
     H = 4
     for case in BOUNDARY_CASES:
         name, sinks_fn, vrange = case
@@ -636,52 +620,41 @@ def test_gqa_sink_bwd_boundary():
 
 def run_layered_tests(level):
     """Run layered tests from example file's __main__ --level mode."""
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
-        with torch.device("npu"):
-            ok = True
-            if level in ("l0", "all"):
-                print("\n" + "=" * 78)
-                print("L0: Precision Gate (8 cases, block-aligned)")
-                print("=" * 78)
-                l0_ok = test_gqa_sink_bwd_l0()
-                ok &= l0_ok
-                if l0_ok:
-                    test_gqa_sink_bwd_l0_determinism()
-            if level in ("l1", "all"):
-                print("\n" + "=" * 78)
-                print("L1: Functional (irregular shapes, GQA variants)")
-                print("=" * 78)
-                ok &= test_gqa_sink_bwd_l1()
-            if level in ("l2", "all"):
-                print("\n" + "=" * 78)
-                print("L2: Negative Tests (unsupported input rejection)")
-                print("=" * 78)
-                test_gqa_sink_bwd_l2()
-            if level in ("boundary", "all"):
-                print("\n" + "=" * 78)
-                print("Boundary: Special Sink Values (non-blocking)")
-                print("=" * 78)
-                test_gqa_sink_bwd_boundary()
-            if ok:
-                print("\n" + "=" * 78)
-                print("Test Passed!")
-                print("=" * 78)
-            else:
-                print("\n" + "=" * 78)
-                print("Test FAILED (L0/L1 precision gate not met)")
-                print("=" * 78)
-                sys.exit(1)
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+    tilelang.disable_cache()
+    torch.set_default_device("npu")
+    ok = True
+    if level in ("l0", "all"):
+        print("\n" + "=" * 78)
+        print("L0: Precision Gate (8 cases, block-aligned)")
+        print("=" * 78)
+        l0_ok = test_gqa_sink_bwd_l0()
+        ok &= l0_ok
+        if l0_ok:
+            test_gqa_sink_bwd_l0_determinism()
+    if level in ("l1", "all"):
+        print("\n" + "=" * 78)
+        print("L1: Functional (irregular shapes, GQA variants)")
+        print("=" * 78)
+        ok &= test_gqa_sink_bwd_l1()
+    if level in ("l2", "all"):
+        print("\n" + "=" * 78)
+        print("L2: Negative Tests (unsupported input rejection)")
+        print("=" * 78)
+        test_gqa_sink_bwd_l2()
+    if level in ("boundary", "all"):
+        print("\n" + "=" * 78)
+        print("Boundary: Special Sink Values (non-blocking)")
+        print("=" * 78)
+        test_gqa_sink_bwd_boundary()
+    if ok:
+        print("\n" + "=" * 78)
+        print("Test Passed!")
+        print("=" * 78)
+    else:
+        print("\n" + "=" * 78)
+        print("Test FAILED (L0/L1 precision gate not met)")
+        print("=" * 78)
+        sys.exit(1)
 
 
 # ============================================================================
@@ -689,7 +662,7 @@ def run_layered_tests(level):
 # ============================================================================
 
 
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="GQA Sink Bwd Varlen Test Suite — Ascend NPU")
     parser.add_argument(
         "--level",
@@ -700,59 +673,45 @@ def _original_main():
     args = parser.parse_args()
 
     tilelang.disable_cache()
-    with torch.device("npu"):
-        ok = True
-        if args.level in ("l0", "all"):
-            print("\n" + "=" * 78)
-            print("L0: Precision Gate (8 cases, block-aligned)")
-            print("=" * 78)
-            l0_ok = test_gqa_sink_bwd_l0()
-            ok &= l0_ok
-            if l0_ok:
-                test_gqa_sink_bwd_l0_determinism()
+    torch.set_default_device("npu")
 
-        if args.level in ("l1", "all"):
-            print("\n" + "=" * 78)
-            print("L1: Functional (irregular shapes, GQA variants)")
-            print("=" * 78)
-            ok &= test_gqa_sink_bwd_l1()
+    ok = True
+    if args.level in ("l0", "all"):
+        print("\n" + "=" * 78)
+        print("L0: Precision Gate (8 cases, block-aligned)")
+        print("=" * 78)
+        l0_ok = test_gqa_sink_bwd_l0()
+        ok &= l0_ok
+        if l0_ok:
+            test_gqa_sink_bwd_l0_determinism()
 
-        if args.level in ("l2", "all"):
-            print("\n" + "=" * 78)
-            print("L2: Negative Tests (unsupported input rejection)")
-            print("=" * 78)
-            test_gqa_sink_bwd_l2()
+    if args.level in ("l1", "all"):
+        print("\n" + "=" * 78)
+        print("L1: Functional (irregular shapes, GQA variants)")
+        print("=" * 78)
+        ok &= test_gqa_sink_bwd_l1()
 
-        if args.level in ("boundary", "all"):
-            print("\n" + "=" * 78)
-            print("Boundary: Special Sink Values (non-blocking)")
-            print("=" * 78)
-            test_gqa_sink_bwd_boundary()
+    if args.level in ("l2", "all"):
+        print("\n" + "=" * 78)
+        print("L2: Negative Tests (unsupported input rejection)")
+        print("=" * 78)
+        test_gqa_sink_bwd_l2()
 
-        if ok:
-            print("\n" + "=" * 78)
-            print("Test Passed!")
-            print("=" * 78)
-        else:
-            print("\n" + "=" * 78)
-            print("Test FAILED (L0/L1 precision gate not met)")
-            print("=" * 78)
-            sys.exit(1)
+    if args.level in ("boundary", "all"):
+        print("\n" + "=" * 78)
+        print("Boundary: Special Sink Values (non-blocking)")
+        print("=" * 78)
+        test_gqa_sink_bwd_boundary()
 
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+    if ok:
+        print("\n" + "=" * 78)
+        print("Test Passed!")
+        print("=" * 78)
+    else:
+        print("\n" + "=" * 78)
+        print("Test FAILED (L0/L1 precision gate not met)")
+        print("=" * 78)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

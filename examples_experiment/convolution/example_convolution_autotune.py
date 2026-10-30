@@ -5,6 +5,8 @@ import itertools
 import tilelang
 import tilelang.ascend.a2a3.language as T
 
+tilelang.disable_cache()
+
 
 seed = 42
 
@@ -41,11 +43,6 @@ def get_configs(key_args, _key_kwargs=None):
     return configs
 
 
-def _configs_for_main(*key_args, **key_kwargs):
-    """Pass the main callback arguments to the original configuration helper."""
-    return get_configs(key_args, key_kwargs)
-
-
 def supply_prog(params):
     M_val, K_val = int(params[0].shape[0]), int(params[0].shape[1])
     _, N_val = int(params[1].shape[0]), int(params[1].shape[1])
@@ -58,6 +55,10 @@ def supply_prog(params):
 
 def ref_prog(A, B):
     return A @ B
+
+
+def _configs_for_main(*key_args, **key_kwargs):
+    return get_configs(key_args, key_kwargs)
 
 
 @tilelang.autotune(
@@ -136,7 +137,7 @@ def conv_im2col_gemm(
 ) -> torch.Tensor:
     B, C, H, W = input_tensor.shape
     OC, C_k, KH, KW = kernel.shape
-    assert C_k == C, "input channels mismatch: %d vs %d" % (C, C_k)  # noqa: UP031 - preserve the original diagnostic expression.
+    assert C_k == C, "input channels mismatch: %d vs %d" % (C, C_k)
     HO = (H + 2 * padding - KH) // stride + 1
     WO = (W + 2 * padding - KW) // stride + 1
 
@@ -170,11 +171,11 @@ def conv_im2col_gemm(
 
     if use_autotune:
         func = matmul(M_pad, N_pad, K_pad)
-        print("    GEMM(M=%d->%d, N=%d->%d, K=%d->%d) [autotune]" % (M, M_pad, N, N_pad, K, K_pad))  # noqa: UP031 - preserve the original diagnostic expression.
+        print("    GEMM(M=%d->%d, N=%d->%d, K=%d->%d) [autotune]" % (M, M_pad, N, N_pad, K, K_pad))
         print("    Best config:", func.get_tuner_result())
     else:
         func = matmul(M_pad, N_pad, K_pad, block_M=128, block_N=128, K_L1=128)
-        print("    GEMM(M=%d->%d, N=%d->%d, K=%d->%d)" % (M, M_pad, N, N_pad, K, K_pad))  # noqa: UP031 - preserve the original diagnostic expression.
+        print("    GEMM(M=%d->%d, N=%d->%d, K=%d->%d)" % (M, M_pad, N, N_pad, K, K_pad))
 
     print("    init successful!")
     output = func(kernel_flat, input_flat)
@@ -195,14 +196,10 @@ def run_test(name, B_val, C_val, H_val, W_val, OC_val, KH_val, KW_val, stride_va
     ref = F.conv2d(input_t.cpu(), kernel_t.cpu(), stride=stride_val, padding=padding_val).npu()
 
     torch.testing.assert_close(result, ref, rtol=1e-2, atol=1e-2)
-    print("    PASS: %s\n" % name)  # noqa: UP031 - preserve the original diagnostic expression.
+    print("    PASS: %s\n" % name)
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
     use_autotune = True
     tests = [
         dict(
@@ -281,10 +278,10 @@ def main():
 
     mode = "Autotune" if use_autotune else "Fixed Config"
     print("=" * 60)
-    print("TileLang Ascend 2D Convolution Test Suite (%s, 6 scenarios)" % mode)  # noqa: UP031 - preserve the original diagnostic expression.
+    print("TileLang Ascend 2D Convolution Test Suite (%s, 6 scenarios)" % mode)
     print("=" * 60)
     for i, tc in enumerate(tests, 1):
-        print("[%d/6] %s" % (i, tc["name"]))  # noqa: UP031 - preserve the original diagnostic expression.
+        print("[%d/6] %s" % (i, tc["name"]))
         run_test(
             tc["name"],
             tc["B"],
@@ -301,7 +298,3 @@ def main():
     print("=" * 60)
     print("TEST PASSED!")
     print("=" * 60)
-
-
-if __name__ == "__main__":
-    main()

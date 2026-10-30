@@ -169,8 +169,6 @@ def blocksparse_flashattn_ascend(batch, heads, seq_q, seq_kv, dim, downsample_le
 
 
 def test_topk_sparse_attention():
-    import torch_npu  # noqa: F401
-
     BATCH, N_HEADS, SEQ_LEN, D_HEAD = 4, 2, 256, 64
     TOPK = 2
     BLOCK = 64
@@ -208,8 +206,6 @@ def test_topk_sparse_attention():
 
 
 def test_topk_sparse_attention_qlen_lt_klen():
-    import torch_npu  # noqa: F401
-
     BATCH, N_HEADS = 1, 1
     Q_LEN, K_LEN, D_HEAD = 128, 256, 64
     TOPK = 1
@@ -254,16 +250,10 @@ def test_topk_sparse_attention_qlen_lt_klen():
     print("Pass topk sparse attention test with qlen < klen")
 
 
-def _original_main():
+def main():
     test_topk_sparse_attention()
     test_topk_sparse_attention_qlen_lt_klen()
     print("Test passed!")
-
-
-def main():
-    import torch_npu  # noqa: F401
-
-    _original_main()
 
 
 if __name__ == "__main__":

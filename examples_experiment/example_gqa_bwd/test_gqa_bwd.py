@@ -17,28 +17,21 @@ import subprocess
 import sys
 
 import torch
+import torch_npu  # noqa: F401  # register NPU backend
 import tilelang
 
-# Resolve only this private sibling; no unqualified framework fallback.
-try:
-    from . import example_gqa_bwd as _gqa_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
-
-    _spec = _importlib_util.spec_from_file_location("_a2a3_experiment_gqa_bwd", _Path(__file__).with_name("example_gqa_bwd.py"))
-    _gqa_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_gqa_module)
-kernel = _gqa_module.kernel
-flashattn_fwd = _gqa_module.flashattn_fwd
-flashattn_bwd_preprocess = _gqa_module.flashattn_bwd_preprocess
-flashattn_bwd_gemm_s_dp = _gqa_module.flashattn_bwd_gemm_s_dp
-flashattn_bwd_softmax_ds = _gqa_module.flashattn_bwd_softmax_ds
-flashattn_bwd_gemm_dv_dk_dq = _gqa_module.flashattn_bwd_gemm_dv_dk_dq
-flashattn_bwd_postprocess = _gqa_module.flashattn_bwd_postprocess
-run_bwd = _gqa_module.run_bwd
-ref_fwd = _gqa_module.ref_fwd
-ref_bwd = _gqa_module.ref_bwd
+from example_gqa_bwd import (
+    kernel,  # noqa: F401  # required for coverage check API
+    flashattn_fwd,
+    flashattn_bwd_preprocess,
+    flashattn_bwd_gemm_s_dp,
+    flashattn_bwd_softmax_ds,
+    flashattn_bwd_gemm_dv_dk_dq,
+    flashattn_bwd_postprocess,
+    run_bwd,
+    ref_fwd,
+    ref_bwd,
+)
 
 # --- Precision constants (169-line standard) ---
 
@@ -282,8 +275,6 @@ def run_l0_case(case_name, B, H, groups, N, D_qk, D_v, is_causal, scale=1.0, shi
 
 def test_gqa_bwd_l0():
     """Run all 6 L0 cases (rule shapes, block-aligned)."""
-    import torch_npu  # noqa: F401
-
     cases = [
         # (name, B, H, groups, N, D_qk, D_v, is_causal)
         ("l0_gqa_g4", 1, 16, 4, 256, 128, 128, False),
@@ -492,8 +483,6 @@ COVERAGE_NA = {}  # No exemptions — Fusion requires all dimensions
 
 def test_gqa_bwd_l1():
     """L1: functional tests with varying B/H/groups/N/D_qk/causal."""
-    import torch_npu  # noqa: F401
-
     all_passed = True
     all_results = []
 
@@ -534,8 +523,6 @@ def test_gqa_bwd_l2():
 
     Non-blocking — [BOUNDARY_WARN] only records, doesn't affect exit code.
     """
-    import torch_npu  # noqa: F401
-
     print("\n" + "=" * 60)
     print("[L2] Negative tests — invalid inputs should be rejected")
     print("=" * 60)
@@ -584,8 +571,6 @@ def test_gqa_bwd_boundary():
     Uses small shape (B=1, H=4, N=128, D=128, g=2, causal=False).
     Non-blocking — [BOUNDARY_WARN] only records.
     """
-    import torch_npu  # noqa: F401
-
     print("\n" + "=" * 60)
     print("[Boundary] Special value tests (INF/NAN/zero/extreme)")
     print("=" * 60)
@@ -676,8 +661,6 @@ def test_gqa_bwd_regression():
     2. output.sum().backward(): verify PyTorch Autograd compatibility
        with non-contiguous gradient (zero-stride view from sum()).
     """
-    import torch_npu  # noqa: F401
-
     print("\n" + "=" * 60)
     print("[Regression] Issue #1669: non-16-aligned D_qk + Autograd compatibility")
     print("=" * 60)
@@ -695,7 +678,7 @@ def test_gqa_bwd_regression():
     dO_cpu = torch.randn(B, H, N, D_v, dtype=torch.float16)
 
     # Use public Autograd wrapper (tests padding + scale fix end-to-end)
-    attention = _gqa_module.attention
+    from example_gqa_bwd import attention
 
     Q_npu = Q_cpu.to("npu").requires_grad_(True)
     K_npu = K_cpu.to("npu").requires_grad_(True)
@@ -742,7 +725,88 @@ def test_gqa_bwd_regression():
     return all_passed, []
 
 
-_MSPROF_TARGET_SCRIPT = "\"\"\"Auto-generated msprof target: runs GQA BWD pipeline for msprof op capture.\"\"\"\nimport os, sys\n# Guide §4.1: add both op dir (for example_<op>) and project root (for tilelang)\nsys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))\nimport torch\nimport torch_npu  # noqa: F401\nimport tilelang\n# Use JIT cache (not disable_cache) to avoid recompilation timeout.\n# First run compiles + caches; subsequent msprof runs reuse cached binary.\nimport importlib.util as _importlib_util\n_spec = _importlib_util.spec_from_file_location(\"_a2a3_msprof_gqa\", os.path.join(os.path.dirname(os.path.abspath(__file__)), \"example_gqa_bwd.py\"))\n_gqa_module = _importlib_util.module_from_spec(_spec)\n_spec.loader.exec_module(_gqa_module)\nflashattn_fwd = _gqa_module.flashattn_fwd\nflashattn_bwd_preprocess = _gqa_module.flashattn_bwd_preprocess\nflashattn_bwd_gemm_s_dp = _gqa_module.flashattn_bwd_gemm_s_dp\nflashattn_bwd_softmax_ds = _gqa_module.flashattn_bwd_softmax_ds\nflashattn_bwd_gemm_dv_dk_dq = _gqa_module.flashattn_bwd_gemm_dv_dk_dq\nflashattn_bwd_postprocess = _gqa_module.flashattn_bwd_postprocess\n\n# golden config (matches DESIGN.md)\nB, H, N, D_qk, D_v, groups, is_causal = {B}, {H}, {N}, {D_qk}, {D_v}, {groups}, {is_causal}\nH_kv = H // groups\ndim_qk_padded = ((D_qk + 15) // 16) * 16\nDTYPE = torch.float16\n\n# Generate inputs on CPU then .npu() to avoid Cast helper kernels polluting msprof.\ntorch.manual_seed(42)\nQ = torch.randn(B, H, N, dim_qk_padded, dtype=DTYPE).npu()\nK = torch.randn(B, H_kv, N, dim_qk_padded, dtype=DTYPE).npu()\nV = torch.randn(B, H_kv, N, D_v, dtype=DTYPE).npu()\ndO = torch.randn(B, H, N, D_v, dtype=DTYPE).npu()\nif dim_qk_padded > D_qk:\n    Q[:, :, :, D_qk:] = 0\n    K[:, :, :, D_qk:] = 0\ntorch.npu.synchronize()\n\nblock_M = 64 if dim_qk_padded <= 192 else 32\nblock_N_fwd = 128\nblock_N_bwd = 64\n\n# Forward (precompute O, lse)\nfwd_mod = flashattn_fwd(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_fwd)\nO, lse = fwd_mod(Q, K, V)\nprep_mod = flashattn_bwd_preprocess(B, H, N, D_v, blk=32)\nDelta = prep_mod(O, dO)\n\n# Pre-compile all JIT modules\nphase1_mod = flashattn_bwd_gemm_s_dp(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_bwd)\nphase2_mod = flashattn_bwd_softmax_ds(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_bwd)\nphase3_mod = flashattn_bwd_gemm_dv_dk_dq(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_bwd)\npost_dq = flashattn_bwd_postprocess(B, H, N, dim_qk_padded, blk=64)\npost_dk = flashattn_bwd_postprocess(B, H_kv, N, dim_qk_padded, blk=64)\npost_dv = flashattn_bwd_postprocess(B, H_kv, N, D_v, blk=64)\n\ndQ = torch.zeros(B, H, N, dim_qk_padded, dtype=torch.float32, device='npu')\ndK = torch.zeros(B, H_kv, N, dim_qk_padded, dtype=torch.float32, device='npu')\ndV = torch.zeros(B, H_kv, N, D_v, dtype=torch.float32, device='npu')\n\ndef run_bwd_pipeline():\n    dQ.zero_(); dK.zero_(); dV.zero_()\n    _ws_s, _ws_dp = phase1_mod(Q, K, V, dO)\n    _ws_p, _ws_ds, _ws_p_delta, _ws_ds_delta = phase2_mod(_ws_s, _ws_dp, lse, Delta)\n    phase3_mod(Q, K, dO, _ws_p, _ws_ds, _ws_p_delta, _ws_ds_delta, dQ, dK, dV)\n    post_dq(dQ); post_dk(dK); post_dv(dV)\n\n# Script-side warmup: 5 iterations to prime the NPU pipeline (not captured by msprof).\n# Note: fwd_mod/prep_mod above each execute 1 kernel launch (fwd_kernel + prep_kernel),\n# which msprof may capture as the first 2 launches. --warm-up below skips them too.\nfor _ in range(5):\n    run_bwd_pipeline()\ntorch.npu.synchronize()\n# 10 iterations for msprof capture. Each pipeline = 9 kernel launches:\n#   3× ZerosLike + phase1 + phase2 + phase3 + 3× post = 9\n# --warm-up=20 skips the first 20 launches (fwd + prep + 2 full pipelines × 9)\n# --launch-count=45 captures the next 45 launches (5 full pipelines × 9)\nfor _ in range(10):\n    run_bwd_pipeline()\ntorch.npu.synchronize()\n"
+# --- msprof kernel-level profiling (--level msprof) ---
+
+_MSPROF_TARGET_SCRIPT = """\
+\"\"\"Auto-generated msprof target: runs GQA BWD pipeline for msprof op capture.\"\"\"
+import os, sys
+# Guide §4.1: add both op dir (for example_<op>) and project root (for tilelang)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+import torch
+import torch_npu  # noqa: F401
+import tilelang
+# Use JIT cache (not disable_cache) to avoid recompilation timeout.
+# First run compiles + caches; subsequent msprof runs reuse cached binary.
+from example_gqa_bwd import (
+    flashattn_fwd,
+    flashattn_bwd_preprocess,
+    flashattn_bwd_gemm_s_dp,
+    flashattn_bwd_softmax_ds,
+    flashattn_bwd_gemm_dv_dk_dq,
+    flashattn_bwd_postprocess,
+)
+
+# golden config (matches DESIGN.md)
+B, H, N, D_qk, D_v, groups, is_causal = {B}, {H}, {N}, {D_qk}, {D_v}, {groups}, {is_causal}
+H_kv = H // groups
+dim_qk_padded = ((D_qk + 15) // 16) * 16
+DTYPE = torch.float16
+
+# Generate inputs on CPU then .npu() to avoid Cast helper kernels polluting msprof.
+torch.manual_seed(42)
+Q = torch.randn(B, H, N, dim_qk_padded, dtype=DTYPE).npu()
+K = torch.randn(B, H_kv, N, dim_qk_padded, dtype=DTYPE).npu()
+V = torch.randn(B, H_kv, N, D_v, dtype=DTYPE).npu()
+dO = torch.randn(B, H, N, D_v, dtype=DTYPE).npu()
+if dim_qk_padded > D_qk:
+    Q[:, :, :, D_qk:] = 0
+    K[:, :, :, D_qk:] = 0
+torch.npu.synchronize()
+
+block_M = 64 if dim_qk_padded <= 192 else 32
+block_N_fwd = 128
+block_N_bwd = 64
+
+# Forward (precompute O, lse)
+fwd_mod = flashattn_fwd(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_fwd)
+O, lse = fwd_mod(Q, K, V)
+prep_mod = flashattn_bwd_preprocess(B, H, N, D_v, blk=32)
+Delta = prep_mod(O, dO)
+
+# Pre-compile all JIT modules
+phase1_mod = flashattn_bwd_gemm_s_dp(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_bwd)
+phase2_mod = flashattn_bwd_softmax_ds(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_bwd)
+phase3_mod = flashattn_bwd_gemm_dv_dk_dq(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_bwd)
+post_dq = flashattn_bwd_postprocess(B, H, N, dim_qk_padded, blk=64)
+post_dk = flashattn_bwd_postprocess(B, H_kv, N, dim_qk_padded, blk=64)
+post_dv = flashattn_bwd_postprocess(B, H_kv, N, D_v, blk=64)
+
+dQ = torch.zeros(B, H, N, dim_qk_padded, dtype=torch.float32, device='npu')
+dK = torch.zeros(B, H_kv, N, dim_qk_padded, dtype=torch.float32, device='npu')
+dV = torch.zeros(B, H_kv, N, D_v, dtype=torch.float32, device='npu')
+
+def run_bwd_pipeline():
+    dQ.zero_(); dK.zero_(); dV.zero_()
+    _ws_s, _ws_dp = phase1_mod(Q, K, V, dO)
+    _ws_p, _ws_ds, _ws_p_delta, _ws_ds_delta = phase2_mod(_ws_s, _ws_dp, lse, Delta)
+    phase3_mod(Q, K, dO, _ws_p, _ws_ds, _ws_p_delta, _ws_ds_delta, dQ, dK, dV)
+    post_dq(dQ); post_dk(dK); post_dv(dV)
+
+# Script-side warmup: 5 iterations to prime the NPU pipeline (not captured by msprof).
+# Note: fwd_mod/prep_mod above each execute 1 kernel launch (fwd_kernel + prep_kernel),
+# which msprof may capture as the first 2 launches. --warm-up below skips them too.
+for _ in range(5):
+    run_bwd_pipeline()
+torch.npu.synchronize()
+# 10 iterations for msprof capture. Each pipeline = 9 kernel launches:
+#   3× ZerosLike + phase1 + phase2 + phase3 + 3× post = 9
+# --warm-up=20 skips the first 20 launches (fwd + prep + 2 full pipelines × 9)
+# --launch-count=45 captures the next 45 launches (5 full pipelines × 9)
+for _ in range(10):
+    run_bwd_pipeline()
+torch.npu.synchronize()
+"""
 
 
 def run_msprof(
@@ -927,7 +991,7 @@ def run_bench(
 # --- Main entry point ---
 
 
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="Test GQA Flash Attention BWD (BHSD)")
     parser.add_argument(
         "--level",
@@ -1013,21 +1077,6 @@ def _original_main():
     else:
         print("Test FAILED — see [PRECISION_FAIL] above")
         sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

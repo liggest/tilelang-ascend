@@ -1,17 +1,29 @@
-"""Complete original experimental source; runtime requires explicit main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import argparse
 
 import tilelang
 import tilelang.ascend.a2a3.language as tl
 import torch
 
-B, H, L, C = 2, 32, 256, 32
-reverse = False
-head_first = False
-use_fragment = False
+tilelang.disable_cache()
+
+parser = argparse.ArgumentParser(description="Chunk Local Cumsum Scalar on NPU")
+parser.add_argument("--b", type=int, default=2, help="Batch size")
+parser.add_argument("--h", type=int, default=32, help="Head number")
+parser.add_argument("--l", type=int, default=256, help="Sequence length")
+parser.add_argument("--c", type=int, default=32, help="Chunk size")
+parser.add_argument("--reverse", action="store_true", default=False, help="Reverse cumsum")
+parser.add_argument("--head-first", action="store_true", default=False, help="Head first layout")
+parser.add_argument("--no-head-first", action="store_false", dest="head_first", help="Batch first layout")
+parser.add_argument("--use-fragment", action="store_true", default=False, help="Use fragment buffer")
+args = parser.parse_args()
+
+B = args.b
+H = args.h
+L = args.l
+C = args.c
+reverse = args.reverse
+head_first = args.head_first
+use_fragment = args.use_fragment
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -120,38 +132,8 @@ def ref_chunk_cumsum(g, C, reverse=False, head_first=False):
     return g_sum
 
 
-def main():
-    global B, C, H, L, head_first, reverse, use_fragment
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-
-    parser = argparse.ArgumentParser(description="Chunk Local Cumsum Scalar on NPU")
-    parser.add_argument("--b", type=int, default=2, help="Batch size")
-    parser.add_argument("--h", type=int, default=32, help="Head number")
-    parser.add_argument("--l", type=int, default=256, help="Sequence length")
-    parser.add_argument("--c", type=int, default=32, help="Chunk size")
-    parser.add_argument("--reverse", action="store_true", default=False, help="Reverse cumsum")
-    parser.add_argument("--head-first", action="store_true", default=False, help="Head first layout")
-    parser.add_argument("--no-head-first", action="store_false", dest="head_first", help="Batch first layout")
-    parser.add_argument("--use-fragment", action="store_true", default=False, help="Use fragment buffer")
-    args = parser.parse_args()
-
-    B = args.b
-    H = args.h
-    L = args.l
-    C = args.c
-    reverse = args.reverse
-    head_first = args.head_first
-    use_fragment = args.use_fragment
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
+    tilelang.disable_cache()
     torch.manual_seed(0)
 
     print("=== Testing chunk_cumsum (cumsum_gdn) reverse ===")
@@ -203,7 +185,3 @@ def main():
         print("  Passed!")
 
     print("\nKernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

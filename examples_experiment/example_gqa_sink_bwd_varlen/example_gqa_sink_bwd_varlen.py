@@ -13,7 +13,7 @@ Developer mode (NoScope): threads=1, 4-True pass_configs, block_M=64, block_N=64
 
 import tilelang
 import torch
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 
 # ============================================================================
 # pass_configs
@@ -505,74 +505,64 @@ def run_bwd_pipeline(
     return dQ.half(), dK.half(), dV.half(), dSinks, Delta_out
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            tilelang.disable_cache()
-            torch.manual_seed(42)
-
-            B, H, G, N, D = 1, 4, 2, 128, 128
-            H_kv = H // G
-            UQ, UKV = N * B, N * B
-            cu_q = torch.tensor([0, N], dtype=torch.int32, device="npu")
-            cu_k = torch.tensor([0, N], dtype=torch.int32, device="npu")
-
-            Q = torch.randn(UQ, H, D, dtype=torch.float16, device="npu")
-            K = torch.randn(UKV, H_kv, D, dtype=torch.float16, device="npu")
-            V = torch.randn_like(K)
-            sinks = torch.randn(H, dtype=torch.float16, device="npu")
-            dO = torch.randn_like(Q)
-
-            fwd_mod = flashattn_fwd(B, UQ, UKV, N, H, D, G, None, BLOCK_M_FWD, BLOCK_N_FWD)
-            O, lse = fwd_mod(Q, K, V, sinks, cu_q, cu_k)
-            torch.npu.synchronize()
-
-            dQ, dK, dV, dSinks, _ = run_bwd_pipeline(
-                Q,
-                K,
-                V,
-                O,
-                dO,
-                lse,
-                sinks,
-                cu_q,
-                cu_k,
-                B,
-                UQ,
-                UKV,
-                N,
-                N,
-                H,
-                D,
-                D,
-                None,
-                BLOCK_M_BWD,
-                BLOCK_N_BWD,
-                G,
-            )
-
-            assert O.shape == (UQ, H, D)
-            assert dQ.shape == (UQ, H, D)
-            assert dK.shape == (UKV, H_kv, D)
-            assert dV.shape == (UKV, H_kv, D)
-            assert torch.isfinite(O).all()
-            assert torch.isfinite(dQ).all()
-            assert torch.isfinite(dK).all()
-            assert torch.isfinite(dV).all()
-            assert torch.isfinite(dSinks).all()
-
-            print("Test Passed!")
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+# ============================================================================
+# Smoke test (CI entry point — verifies kernel runs and output is non-trivial)
+# ============================================================================
 
 
 if __name__ == "__main__":
-    main()
+    tilelang.disable_cache()
+    torch.set_default_device("npu")
+    torch.manual_seed(42)
+
+    B, H, G, N, D = 1, 4, 2, 128, 128
+    H_kv = H // G
+    UQ, UKV = N * B, N * B
+    cu_q = torch.tensor([0, N], dtype=torch.int32, device="npu")
+    cu_k = torch.tensor([0, N], dtype=torch.int32, device="npu")
+
+    Q = torch.randn(UQ, H, D, dtype=torch.float16, device="npu")
+    K = torch.randn(UKV, H_kv, D, dtype=torch.float16, device="npu")
+    V = torch.randn_like(K)
+    sinks = torch.randn(H, dtype=torch.float16, device="npu")
+    dO = torch.randn_like(Q)
+
+    fwd_mod = flashattn_fwd(B, UQ, UKV, N, H, D, G, None, BLOCK_M_FWD, BLOCK_N_FWD)
+    O, lse = fwd_mod(Q, K, V, sinks, cu_q, cu_k)
+    torch.npu.synchronize()
+
+    dQ, dK, dV, dSinks, _ = run_bwd_pipeline(
+        Q,
+        K,
+        V,
+        O,
+        dO,
+        lse,
+        sinks,
+        cu_q,
+        cu_k,
+        B,
+        UQ,
+        UKV,
+        N,
+        N,
+        H,
+        D,
+        D,
+        None,
+        BLOCK_M_BWD,
+        BLOCK_N_BWD,
+        G,
+    )
+
+    assert O.shape == (UQ, H, D)
+    assert dQ.shape == (UQ, H, D)
+    assert dK.shape == (UKV, H_kv, D)
+    assert dV.shape == (UKV, H_kv, D)
+    assert torch.isfinite(O).all()
+    assert torch.isfinite(dQ).all()
+    assert torch.isfinite(dK).all()
+    assert torch.isfinite(dV).all()
+    assert torch.isfinite(dSinks).all()
+
+    print("Test Passed!")

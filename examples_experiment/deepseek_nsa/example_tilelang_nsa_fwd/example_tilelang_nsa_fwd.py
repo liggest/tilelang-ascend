@@ -10,7 +10,7 @@ no GM workspace buffers (eliminates 256KB GM traffic per iteration).
 """
 
 import tilelang
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 
 # Developer mode pass_configs: sync & C/V split fully auto-managed by passes.
 PASS_CONFIGS = {
@@ -242,101 +242,97 @@ def native_sparse_attention(
     return main
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        import torch  # noqa: E402
-
-        tilelang.disable_cache()
-        torch.manual_seed(0)
-
-        # Single L0 smoke config (matches test_nsa_l0 l0_nsa_basic).
-        # NOTE: use SEQ_LEN (not T) to avoid shadowing tilelang.language as T above.
-        B, SEQ_LEN, H, HQ, D, S, BS, BS_PAD, SCALE = 2, 64, 1, 16, 32, 1, 32, 64, 0.1
-        G = HQ // H  # noqa: F841 - original query heads per KV head (GQA group size)
-        KV_LEN = S * BS_PAD  # 64
-        DTYPE = torch.float16
-
-        # --- Generate inputs on CPU (inline: randn + randperm for block selection). ---
-        # Matches gen_test_inputs: sentinel SEQ_LEN = invalid; sorted for deterministic order.
-        gen = torch.Generator().manual_seed(0)
-        Q = torch.randn((B, SEQ_LEN, HQ, D), dtype=DTYPE, generator=gen)
-        K = torch.randn((B, SEQ_LEN, H, D), dtype=DTYPE, generator=gen)
-        V = torch.randn((B, SEQ_LEN, H, D), dtype=DTYPE, generator=gen)
-        bi = torch.full((B, SEQ_LEN, H, S), SEQ_LEN, dtype=torch.long)
-        bc = torch.zeros((B, SEQ_LEN, H), dtype=torch.long)
-        for b in range(B):
-            for t in range(SEQ_LEN):
-                for h in range(H):
-                    picks = torch.randperm(max(1, t // BS), generator=gen)[:S]
-                    bi[b, t, h, : len(picks)] = picks
-                    bc[b, t, h] = (bi[b, t, h] != SEQ_LEN).sum().item()
-        bi = bi.sort(-1)[0]
-
-        # --- Pre-gather K_selected / V_selected on CPU (inline for single case). ---
-        # K_sel/V_sel: real tokens + padding zeros. Causal mask is computed in-kernel.
-        # Tokens packed at positions s*BS+j for block s, j in [0, BS).
-        K_sel = torch.zeros(B, SEQ_LEN, H, KV_LEN, D, dtype=DTYPE)
-        V_sel = torch.zeros(B, SEQ_LEN, H, KV_LEN, D, dtype=DTYPE)
-        for b in range(B):
-            for t in range(SEQ_LEN):
-                for h in range(H):
-                    bc_val = bc[b, t, h].item()
-                    for s in range(S):
-                        if s >= bc_val:
-                            continue
-                        block_idx = bi[b, t, h, s].item()
-                        for j in range(BS):
-                            pos = block_idx * BS + j
-                            if 0 <= pos < SEQ_LEN:
-                                K_sel[b, t, h, s * BS + j, :] = K[b, pos, h, :]
-                                V_sel[b, t, h, s * BS + j, :] = V[b, pos, h, :]
-
-        # --- Reshape to 3D kernel inputs (inline, no _to_3d_inputs helper). ---
-        # K_sel/V_sel: [B, T, H, KV_LEN, D] -> [B*T*H, KV_LEN, D].
-        K_sel_3d = K_sel.reshape(B * SEQ_LEN * H, KV_LEN, D)
-        V_sel_3d = V_sel.reshape(B * SEQ_LEN * H, KV_LEN, D)
-        # BlockStarts: [B, T, H, S] -> [B*T*H, S] int32 (block_indices * BS, pre-multiplied).
-        block_starts = (bi.to(torch.int32) * BS).reshape(B * SEQ_LEN * H, S)
-
-        # --- Compile + run kernel. ---
-        kernel = native_sparse_attention(
-            batch=B,
-            seq_len=SEQ_LEN,
-            head_kv=H,
-            heads=HQ,
-            dim=D,
-            selected_blocks=S,
-            block_size=BS,
-            bs_pad=BS_PAD,
-            scale=SCALE,
-            is_causal=True,
-        )
-        out = kernel(Q.npu(), K_sel_3d.npu(), V_sel_3d.npu(), block_starts.npu())
-        torch.npu.synchronize()
-
-        # --- CI smoke check: output shape + finite (no golden comparison, per §23.2). ---
-        out_cpu = out.detach().cpu()
-        shape_ok = tuple(out_cpu.shape) == (B, SEQ_LEN, HQ, D)
-        finite_ok = torch.isfinite(out_cpu).all().item()
-        tag = "OK" if (shape_ok and finite_ok) else "FAIL"
-        print(f"[SMOKE_{tag}] out shape={tuple(out_cpu.shape)} finite={finite_ok}")
-        if shape_ok and finite_ok:
-            print("Test Passed!")
-        else:
-            import sys
-
-            sys.exit(1)
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
+# =============================================================================
+# Smoke test entry (CI compatibility)
+#
+# Repository CI (bench_test.sh) runs `python example_tilelang_nsa_fwd.py` and
+# marks PASSED only if stdout contains "Test Passed!". This __main__ block
+# verifies kernel runs and output shape/finite per CI_CHECKLIST §23.2 (shape
+# verification only, no golden comparison — golden is in test file per §23.3).
+#
+# `import torch` is deferred to inside __main__ to avoid making torch a
+# module-level dependency of the example file (keeps tilelang imports clean).
+# =============================================================================
 if __name__ == "__main__":
-    main()
+    import torch  # noqa: E402
+
+    tilelang.disable_cache()
+    torch.manual_seed(0)
+
+    # Single L0 smoke config (matches test_nsa_l0 l0_nsa_basic).
+    # NOTE: use SEQ_LEN (not T) to avoid shadowing tilelang.language as T above.
+    B, SEQ_LEN, H, HQ, D, S, BS, BS_PAD, SCALE = 2, 64, 1, 16, 32, 1, 32, 64, 0.1
+    G = HQ // H  # query heads per KV head (GQA group size)
+    KV_LEN = S * BS_PAD  # 64
+    DTYPE = torch.float16
+
+    # --- Generate inputs on CPU (inline: randn + randperm for block selection). ---
+    # Matches gen_test_inputs: sentinel SEQ_LEN = invalid; sorted for deterministic order.
+    gen = torch.Generator().manual_seed(0)
+    Q = torch.randn((B, SEQ_LEN, HQ, D), dtype=DTYPE, generator=gen)
+    K = torch.randn((B, SEQ_LEN, H, D), dtype=DTYPE, generator=gen)
+    V = torch.randn((B, SEQ_LEN, H, D), dtype=DTYPE, generator=gen)
+    bi = torch.full((B, SEQ_LEN, H, S), SEQ_LEN, dtype=torch.long)
+    bc = torch.zeros((B, SEQ_LEN, H), dtype=torch.long)
+    for b in range(B):
+        for t in range(SEQ_LEN):
+            for h in range(H):
+                picks = torch.randperm(max(1, t // BS), generator=gen)[:S]
+                bi[b, t, h, : len(picks)] = picks
+                bc[b, t, h] = (bi[b, t, h] != SEQ_LEN).sum().item()
+    bi = bi.sort(-1)[0]
+
+    # --- Pre-gather K_selected / V_selected on CPU (inline for single case). ---
+    # K_sel/V_sel: real tokens + padding zeros. Causal mask is computed in-kernel.
+    # Tokens packed at positions s*BS+j for block s, j in [0, BS).
+    K_sel = torch.zeros(B, SEQ_LEN, H, KV_LEN, D, dtype=DTYPE)
+    V_sel = torch.zeros(B, SEQ_LEN, H, KV_LEN, D, dtype=DTYPE)
+    for b in range(B):
+        for t in range(SEQ_LEN):
+            for h in range(H):
+                bc_val = bc[b, t, h].item()
+                for s in range(S):
+                    if s >= bc_val:
+                        continue
+                    block_idx = bi[b, t, h, s].item()
+                    for j in range(BS):
+                        pos = block_idx * BS + j
+                        if 0 <= pos < SEQ_LEN:
+                            K_sel[b, t, h, s * BS + j, :] = K[b, pos, h, :]
+                            V_sel[b, t, h, s * BS + j, :] = V[b, pos, h, :]
+
+    # --- Reshape to 3D kernel inputs (inline, no _to_3d_inputs helper). ---
+    # K_sel/V_sel: [B, T, H, KV_LEN, D] -> [B*T*H, KV_LEN, D].
+    K_sel_3d = K_sel.reshape(B * SEQ_LEN * H, KV_LEN, D)
+    V_sel_3d = V_sel.reshape(B * SEQ_LEN * H, KV_LEN, D)
+    # BlockStarts: [B, T, H, S] -> [B*T*H, S] int32 (block_indices * BS, pre-multiplied).
+    block_starts = (bi.to(torch.int32) * BS).reshape(B * SEQ_LEN * H, S)
+
+    # --- Compile + run kernel. ---
+    kernel = native_sparse_attention(
+        batch=B,
+        seq_len=SEQ_LEN,
+        head_kv=H,
+        heads=HQ,
+        dim=D,
+        selected_blocks=S,
+        block_size=BS,
+        bs_pad=BS_PAD,
+        scale=SCALE,
+        is_causal=True,
+    )
+    out = kernel(Q.npu(), K_sel_3d.npu(), V_sel_3d.npu(), block_starts.npu())
+    torch.npu.synchronize()
+
+    # --- CI smoke check: output shape + finite (no golden comparison, per §23.2). ---
+    out_cpu = out.detach().cpu()
+    shape_ok = tuple(out_cpu.shape) == (B, SEQ_LEN, HQ, D)
+    finite_ok = torch.isfinite(out_cpu).all().item()
+    tag = "OK" if (shape_ok and finite_ok) else "FAIL"
+    print(f"[SMOKE_{tag}] out shape={tuple(out_cpu.shape)} finite={finite_ok}")
+    if shape_ok and finite_ok:
+        print("Test Passed!")
+    else:
+        import sys
+
+        sys.exit(1)

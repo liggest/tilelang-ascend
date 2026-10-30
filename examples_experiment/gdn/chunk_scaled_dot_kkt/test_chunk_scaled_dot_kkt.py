@@ -14,27 +14,15 @@ Exit code contract (script entry point, run via `python test_chunk_scaled_dot_kk
 """
 
 import argparse
+import os
 import sys
 
 import torch
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import tilelang  # noqa: E402
-import importlib.util
-from pathlib import Path
 
-
-# Resolve only the complete adopted sibling; never alter the caller's sys.path.
-def _load_kernel_module():
-    spec = importlib.util.spec_from_file_location(__name__ + "_kernel", Path(__file__).with_name("example_chunk_scaled_dot_kkt.py"))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-_KERNEL_MODULE = _load_kernel_module()
-chunk_scaled_dot_kkt_fwd = _KERNEL_MODULE.chunk_scaled_dot_kkt_fwd
-_preserve_cache_state = _KERNEL_MODULE._preserve_cache_state
-
+from example_chunk_scaled_dot_kkt import chunk_scaled_dot_kkt_fwd  # noqa: E402
 
 # =============================================================================
 # Coverage manifest: dimensions exercised by the suite (D-EXC-* = illegal
@@ -425,13 +413,10 @@ def run_boundary_tests():
 # =============================================================================
 # Main
 # =============================================================================
-@_preserve_cache_state
 def main():
     parser = argparse.ArgumentParser(description="chunk_scaled_dot_kkt precision tests")
     parser.add_argument("--level", default="l0", choices=["l0", "l1", "l2", "boundary", "all"])
     args = parser.parse_args()
-
-    import torch_npu  # noqa: F401
 
     tilelang.disable_cache()
     all_pass = True

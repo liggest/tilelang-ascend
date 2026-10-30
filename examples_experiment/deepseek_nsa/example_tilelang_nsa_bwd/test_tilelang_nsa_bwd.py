@@ -5,27 +5,21 @@ L0/L1/L2 are blocking (exit 1 on fail); Boundary is non-blocking (WARN only).
 """
 
 import argparse
-import os  # noqa: F401 - Preserve the original standalone import.
+import os
 import sys
 
 import torch
 
 import tilelang
 
-# Bind only this private sibling without changing global import resolution.
-try:
-    from . import example_tilelang_nsa_bwd as _nsa_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-    _spec = _importlib_util.spec_from_file_location("_a2a3_experiment_nsa_bwd", _Path(__file__).with_name("example_tilelang_nsa_bwd.py"))
-    _nsa_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_nsa_module)
-_compute_block_mask_cpu = _nsa_module._compute_block_mask_cpu
-_generate_test_data = _nsa_module._generate_test_data
-_run_bwd_pipeline = _nsa_module._run_bwd_pipeline
-_run_nsa_pipeline = _nsa_module._run_nsa_pipeline
+from example_tilelang_nsa_bwd import (  # noqa: E402
+    _compute_block_mask_cpu,
+    _generate_test_data,
+    _run_bwd_pipeline,
+    _run_nsa_pipeline,
+)
 
 
 # ============================================================================
@@ -890,7 +884,7 @@ def test_nsa_bwd_boundary():
 # ============================================================================
 
 
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="NSA Backward layered precision test suite (Ascend)")
     parser.add_argument(
         "--level",
@@ -916,20 +910,6 @@ def _original_main():
         print("Test Passed!")
         sys.exit(0)
     sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

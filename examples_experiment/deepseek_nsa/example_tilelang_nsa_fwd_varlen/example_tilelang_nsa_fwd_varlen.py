@@ -20,7 +20,7 @@ Key design:
 """
 
 import tilelang
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 from tilelang.ascend.a2a3.layout import make_nz_layout, make_zn_layout
 
 # Developer mode pass_configs: sync & C/V split fully auto-managed by passes.
@@ -434,62 +434,56 @@ def _run_kernel_smoke(q, k, v, block_indices, block_counts, offsets, token_indic
     return o_slc.view(B, C_SEQ_LEN, HQ, V_dim)
 
 
-def main():
-    global torch
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        'CI smoke test: single L0 case, self-contained (no test-file import, no golden).\n\n    Runs N=2, C_SEQ=64, HQ=16, H=1, D=64, S=1, BS=32, fp16 and verifies:\n    1. Kernel compiles and runs without error.\n    2. Output shape matches expected [B, C_SEQ_LEN, HQ, D].\n    3. Output has no NaN / Inf (structural sanity check).\n\n    Precision comparison against PyTorch golden is done in\n    test_example_tilelang_nsa_fwd_varlen.py (precision test suite).\n    Outputs "Test Passed!" for CI bench_test.sh.\n    '
-        import torch
-
-        import tilelang
-
-        tilelang.disable_cache()
-
-        # L0 config (single representative case for CI).
-        N, C_SEQ_LEN, H, HQ, D, S, BS = 2, 64, 1, 16, 64, 1, 32
-        DTYPE = torch.float16
-        DTYPE_STR = "float16"
-
-        # === Build self-contained smoke-test inputs (no test-file import) ===
-        q, k, v, bi, bc, off, ti, g, scale = _build_smoke_inputs(N, C_SEQ_LEN, H, HQ, D, S, BS, DTYPE)
-
-        # === Run kernel on NPU ===
-        out = _run_kernel_smoke(q, k, v, bi, bc, off, ti, g, scale, DTYPE_STR)
-
-        # === Structural sanity check (no golden, no precision comparison) ===
-        out_cpu = out.detach().cpu()
-
-        # 1. Shape check: output must match [B, C_SEQ_LEN, HQ, D].
-        expected_shape = (1, C_SEQ_LEN, HQ, D)
-        assert out_cpu.shape == expected_shape, f"Output shape mismatch: got {tuple(out_cpu.shape)}, expected {expected_shape}"
-
-        # 2. NaN / Inf check: output must not contain NaN or Inf.
-        has_nan = torch.isnan(out_cpu).any().item()
-        has_inf = torch.isinf(out_cpu).any().item()
-        assert not has_nan, f"Output contains NaN (shape={tuple(out_cpu.shape)})"
-        assert not has_inf, f"Output contains Inf (shape={tuple(out_cpu.shape)})"
-
-        # 3. Value range sanity: output magnitude should be within a reasonable bound.
-        #    NSA forward output = softmax(QK^T) @ V * g_slc, with Q/K/V in [0,1] and g_slc in [0,1).
-        #    Expected magnitude: |out| <= D * |V_max| * |g_slc_max| ~ 64 * 1 * 1 = 64.
-        out_abs_max = out_cpu.abs().max().item()
-        assert out_abs_max < 100.0, f"Output magnitude unreasonable: max_abs={out_abs_max}"
-
-        print(
-            f"[SMOKE_PASS] l0 N={N} C_SEQ={C_SEQ_LEN} D={D} S={S} BS={BS} dtype={DTYPE_STR} "
-            f"shape={tuple(out_cpu.shape)} max_abs={out_abs_max:.3e}"
-        )
-        print("Test Passed!")
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
-    main()
+    """CI smoke test: single L0 case, self-contained (no test-file import, no golden).
+
+    Runs N=2, C_SEQ=64, HQ=16, H=1, D=64, S=1, BS=32, fp16 and verifies:
+    1. Kernel compiles and runs without error.
+    2. Output shape matches expected [B, C_SEQ_LEN, HQ, D].
+    3. Output has no NaN / Inf (structural sanity check).
+
+    Precision comparison against PyTorch golden is done in
+    test_example_tilelang_nsa_fwd_varlen.py (precision test suite).
+    Outputs "Test Passed!" for CI bench_test.sh.
+    """
+    import torch
+
+    import tilelang
+
+    tilelang.disable_cache()
+
+    # L0 config (single representative case for CI).
+    N, C_SEQ_LEN, H, HQ, D, S, BS = 2, 64, 1, 16, 64, 1, 32
+    DTYPE = torch.float16
+    DTYPE_STR = "float16"
+
+    # === Build self-contained smoke-test inputs (no test-file import) ===
+    q, k, v, bi, bc, off, ti, g, scale = _build_smoke_inputs(N, C_SEQ_LEN, H, HQ, D, S, BS, DTYPE)
+
+    # === Run kernel on NPU ===
+    out = _run_kernel_smoke(q, k, v, bi, bc, off, ti, g, scale, DTYPE_STR)
+
+    # === Structural sanity check (no golden, no precision comparison) ===
+    out_cpu = out.detach().cpu()
+
+    # 1. Shape check: output must match [B, C_SEQ_LEN, HQ, D].
+    expected_shape = (1, C_SEQ_LEN, HQ, D)
+    assert out_cpu.shape == expected_shape, f"Output shape mismatch: got {tuple(out_cpu.shape)}, expected {expected_shape}"
+
+    # 2. NaN / Inf check: output must not contain NaN or Inf.
+    has_nan = torch.isnan(out_cpu).any().item()
+    has_inf = torch.isinf(out_cpu).any().item()
+    assert not has_nan, f"Output contains NaN (shape={tuple(out_cpu.shape)})"
+    assert not has_inf, f"Output contains Inf (shape={tuple(out_cpu.shape)})"
+
+    # 3. Value range sanity: output magnitude should be within a reasonable bound.
+    #    NSA forward output = softmax(QK^T) @ V * g_slc, with Q/K/V in [0,1] and g_slc in [0,1).
+    #    Expected magnitude: |out| <= D * |V_max| * |g_slc_max| ~ 64 * 1 * 1 = 64.
+    out_abs_max = out_cpu.abs().max().item()
+    assert out_abs_max < 100.0, f"Output magnitude unreasonable: max_abs={out_abs_max}"
+
+    print(
+        f"[SMOKE_PASS] l0 N={N} C_SEQ={C_SEQ_LEN} D={D} S={S} BS={BS} dtype={DTYPE_STR} "
+        f"shape={tuple(out_cpu.shape)} max_abs={out_abs_max:.3e}"
+    )
+    print("Test Passed!")

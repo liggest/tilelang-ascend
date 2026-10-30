@@ -7,7 +7,7 @@ GM relay. No T.barrier_all, no manual T.Scope, no manual set_flag/wait_flag.
 
 import tilelang
 import torch
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 
 # Developer mode pass_configs: sync & C/V split fully auto-managed by passes.
 PASS_CONFIGS = {
@@ -275,89 +275,77 @@ def run_kernel(Q, K, V, block_indices, block_counts, block_size, seq_len):
     return output
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        import sys
-
-        tilelang.disable_cache()
-        torch.manual_seed(0)
-
-        # Minimal L0 smoke config.
-        # NOTE: use SEQ_LEN (not T) to avoid shadowing tilelang.language as T above.
-        B, SEQ_LEN, H, HQ, D, S, BS = 2, 64, 1, 16, 16, 1, 32
-        DTYPE = torch.float16
-        G = HQ // H
-
-        Q = torch.randn((B, 1, HQ, D), dtype=DTYPE)
-        K = torch.randn((B, SEQ_LEN, H, D), dtype=DTYPE)
-        V = torch.randn((B, SEQ_LEN, H, D), dtype=DTYPE)
-
-        block_indices = torch.zeros((B, 1, H, S), dtype=torch.long)
-        block_counts = torch.full((B, 1, H), S, dtype=torch.long)
-
-        # Inline PyTorch CPU golden (self-contained, no import from test file).
-        # scale = D^-0.5 (matches kernel, no log2(e) factor).
-        scale = D**-0.5
-        k_e = K.repeat_interleave(G, dim=2).float()  # GQA expand: H -> HQ
-        v_e = V.repeat_interleave(G, dim=2).float()
-        bi_e = block_indices.repeat_interleave(G, dim=2)
-        bc_e = block_counts.repeat_interleave(G, dim=2)
-        q_f = Q.float()
-        # Expand block_idx -> rows [B, 1, HQ, S*BS]
-        row_idx = (bi_e.unsqueeze(-1) * BS + torch.arange(BS)).reshape(B, 1, HQ, S * BS)
-        row_idx = row_idx.clamp(0, k_e.shape[1] - 1)
-        blk_id = torch.arange(S).repeat_interleave(BS)  # Block id per row for masking
-        ref_out = torch.zeros_like(q_f)
-        for b in range(B):
-            q_b = q_f[b, 0] * scale  # [HQ, D]
-            for h in range(HQ):
-                bc = bc_e[b, 0, h].item()
-                if bc <= 0:
-                    continue
-                ri = row_idx[b, 0, h]  # [S*BS]
-                k_g = k_e[b, ri, h, :]  # [S*BS, D]
-                v_g = v_e[b, ri, h, :]
-                attn = q_b[h] @ k_g.T  # [S*BS]
-                attn = attn.masked_fill(blk_id >= bc, float("-inf"))
-                attn = torch.softmax(attn, dim=0)
-                ref_out[b, 0, h] = attn @ v_g
-        ref_out = ref_out.to(Q.dtype)
-
-        out = run_kernel(Q, K, V, block_indices, block_counts, BS, SEQ_LEN)
-
-        # Precision check: mixed tolerance dual-gate (precision-standard.md §4.1).
-        atol, rtol, max_abs_limit, required_ratio = 2**-14, 2**-9, 1e-1, 0.99
-        a = out.detach().cpu().float()
-        g = ref_out.detach().float()
-        # inf/nan structural compare
-        special = ~torch.isfinite(g)
-        if special.any() and (
-            not torch.equal(torch.isnan(a[special]), torch.isnan(g[special]))
-            or not torch.equal(torch.isinf(a[special]), torch.isinf(g[special]))
-        ):
-            print("inf/nan position mismatch")
-            sys.exit(1)
-        m = torch.isfinite(g)
-        if m.sum().item() == 0:
-            ratio, max_abs = 1.0, 0.0
-        else:
-            abs_err = (a[m] - g[m]).abs()
-            ratio = (abs_err <= (atol + rtol * g[m].abs())).float().mean().item()
-            max_abs = abs_err.max().item()
-        print(f"matched_ratio={ratio:.4f} max_abs={max_abs:.3e}")
-        assert ratio >= required_ratio and max_abs <= max_abs_limit
-        print("Test Passed!")
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
+# =============================================================================
+# Smoke test entry (CI compatibility, outputs "Test Passed!")
+# =============================================================================
 if __name__ == "__main__":
-    main()
+    import sys
+
+    tilelang.disable_cache()
+    torch.manual_seed(0)
+
+    # Minimal L0 smoke config.
+    # NOTE: use SEQ_LEN (not T) to avoid shadowing tilelang.language as T above.
+    B, SEQ_LEN, H, HQ, D, S, BS = 2, 64, 1, 16, 16, 1, 32
+    DTYPE = torch.float16
+    G = HQ // H
+
+    Q = torch.randn((B, 1, HQ, D), dtype=DTYPE)
+    K = torch.randn((B, SEQ_LEN, H, D), dtype=DTYPE)
+    V = torch.randn((B, SEQ_LEN, H, D), dtype=DTYPE)
+
+    block_indices = torch.zeros((B, 1, H, S), dtype=torch.long)
+    block_counts = torch.full((B, 1, H), S, dtype=torch.long)
+
+    # Inline PyTorch CPU golden (self-contained, no import from test file).
+    # scale = D^-0.5 (matches kernel, no log2(e) factor).
+    scale = D**-0.5
+    k_e = K.repeat_interleave(G, dim=2).float()  # GQA expand: H -> HQ
+    v_e = V.repeat_interleave(G, dim=2).float()
+    bi_e = block_indices.repeat_interleave(G, dim=2)
+    bc_e = block_counts.repeat_interleave(G, dim=2)
+    q_f = Q.float()
+    # Expand block_idx -> rows [B, 1, HQ, S*BS]
+    row_idx = (bi_e.unsqueeze(-1) * BS + torch.arange(BS)).reshape(B, 1, HQ, S * BS)
+    row_idx = row_idx.clamp(0, k_e.shape[1] - 1)
+    blk_id = torch.arange(S).repeat_interleave(BS)  # Block id per row for masking
+    ref_out = torch.zeros_like(q_f)
+    for b in range(B):
+        q_b = q_f[b, 0] * scale  # [HQ, D]
+        for h in range(HQ):
+            bc = bc_e[b, 0, h].item()
+            if bc <= 0:
+                continue
+            ri = row_idx[b, 0, h]  # [S*BS]
+            k_g = k_e[b, ri, h, :]  # [S*BS, D]
+            v_g = v_e[b, ri, h, :]
+            attn = q_b[h] @ k_g.T  # [S*BS]
+            attn = attn.masked_fill(blk_id >= bc, float("-inf"))
+            attn = torch.softmax(attn, dim=0)
+            ref_out[b, 0, h] = attn @ v_g
+    ref_out = ref_out.to(Q.dtype)
+
+    out = run_kernel(Q, K, V, block_indices, block_counts, BS, SEQ_LEN)
+
+    # Precision check: mixed tolerance dual-gate (precision-standard.md §4.1).
+    atol, rtol, max_abs_limit, required_ratio = 2**-14, 2**-9, 1e-1, 0.99
+    a = out.detach().cpu().float()
+    g = ref_out.detach().float()
+    # inf/nan structural compare
+    special = ~torch.isfinite(g)
+    if special.any() and (
+        not torch.equal(torch.isnan(a[special]), torch.isnan(g[special]))
+        or not torch.equal(torch.isinf(a[special]), torch.isinf(g[special]))
+    ):
+        print("inf/nan position mismatch")
+        sys.exit(1)
+    m = torch.isfinite(g)
+    if m.sum().item() == 0:
+        ratio, max_abs = 1.0, 0.0
+    else:
+        abs_err = (a[m] - g[m]).abs()
+        ratio = (abs_err <= (atol + rtol * g[m].abs())).float().mean().item()
+        max_abs = abs_err.max().item()
+    print(f"matched_ratio={ratio:.4f} max_abs={max_abs:.3e}")
+    assert ratio >= required_ratio and max_abs <= max_abs_limit
+    print("Test Passed!")

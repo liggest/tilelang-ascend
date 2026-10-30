@@ -4,6 +4,7 @@ import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 
+tilelang.disable_cache()
 
 DEFAULT_BLOCK_M = 128
 DEFAULT_BLOCK_N = 128
@@ -282,10 +283,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import torch_npu  # noqa: F401
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
     import sys
 
     if len(sys.argv) == 1:

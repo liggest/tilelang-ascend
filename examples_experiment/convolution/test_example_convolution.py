@@ -62,7 +62,3 @@ def test_convolution_accuracy(
         stride,
         padding,
     )
-
-
-pytestmark = [pytest.mark.usefixtures("isolated_a2a3_cache")]
-pytestmark.append(pytest.mark.a2a3_device)

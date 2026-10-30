@@ -1,19 +1,23 @@
 import argparse
-import os  # noqa: F401 - retained original dependency
+import os
 import sys
 
 import torch
 
 import tilelang
 
-from pathlib import Path as _Path
-import importlib.util as _importlib_util
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-_spec = _importlib_util.spec_from_file_location("_a2a3_mha_sink_backward", _Path(__file__).with_name("mha_sink_bwd_bhsd.py"))
-_mha_bwd_module = _importlib_util.module_from_spec(_spec)
-_spec.loader.exec_module(_mha_bwd_module)
-attention = _mha_bwd_module.attention
-ref_program = _mha_bwd_module.ref_program
+from mha_sink_bwd_bhsd import (  # noqa: E402
+    attention,
+)
+from test_mha_sink_fwd_bhsd import ref_program  # noqa: E402
+
+# Make fwd dir importable (test_mha_sink_fwd_bhsd lives in examples/ascend_a2a3/mha_sink_fwd_bhsd/).
+# bwd lives in examples_experiment/mha_sink_bwd_bhsd/, so reach fwd via ../../examples/ascend_a2a3/.
+_FWD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "examples", "ascend_a2a3", "mha_sink_fwd_bhsd")
+if _FWD_DIR not in sys.path:
+    sys.path.insert(0, _FWD_DIR)
 
 
 # ===========================================================================
@@ -141,8 +145,6 @@ def test_mha_sink_bwd_bhsd_l0():
     Covers: min/single-block, multi-block, multi-batch, default (1x64x4096),
     sliding window, and larger-scale. All verify O/dQ/dK/dV/dsinks precision.
     """
-    import torch_npu  # noqa: F401
-
     device = "npu"
     atol, rtol = 1e-2, 1e-2
 
@@ -273,8 +275,6 @@ def test_mha_sink_bwd_bhsd_l1():
     All seq divisible by 128 (kernel block constraint: fwd 128 + bwd 64/32).
     Returns True iff all cases pass (blocking).
     """
-    import torch_npu  # noqa: F401
-
     device = "npu"
     atol, rtol = 1e-2, 1e-2
     # (name, B, H, N, D, window_size) — varied batch/heads/seq combinations.
@@ -303,8 +303,6 @@ def test_mha_sink_bwd_bhsd_l2():
     uses seq // block integer division, so seq=130/200/300 drops tail elements
     (130 -> kernel sees 128, etc.). Expected to mismatch or error.
     """
-    import torch_npu  # noqa: F401
-
     device = "npu"
     for name, seq in [("l2_seq130", 130), ("l2_seq200", 200), ("l2_seq300", 300)]:
         _run_boundary_case(name, 1, 4, seq, 128, None, "normal", device)
@@ -316,8 +314,6 @@ def test_mha_sink_bwd_bhsd_boundary():
     Non-blocking — records [BOUNDARY_PASS]/[BOUNDARY_WARN] only. Uses seq=128
     (block-aligned) to isolate special-value behavior.
     """
-    import torch_npu  # noqa: F401
-
     device = "npu"
     for name, itype in [
         ("boundary_zero", "zero"),
@@ -344,38 +340,27 @@ def run_layered_tests(level: str, exit_on_fail: bool = True):
     When exit_on_fail=False, returns the bool so the caller can chain perf
     benchmark or other post-precision work.
     """
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
+    tilelang.disable_cache()  # avoid stale compile artifacts (SKILL.md §8 #11)
+    torch.set_default_device("npu")
+    torch.manual_seed(0)
 
-    enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()  # avoid stale compile artifacts (SKILL.md §8 #11)
-        with torch.device("npu"):
-            torch.manual_seed(0)
+    blocking_ok = True  # Only L0/L1 count toward blocking
 
-            blocking_ok = True  # Only L0/L1 count toward blocking
+    if level in ("l0", "all"):
+        blocking_ok &= test_mha_sink_bwd_bhsd_l0()
+    if level in ("l1", "all"):
+        blocking_ok &= test_mha_sink_bwd_bhsd_l1()
+    if level in ("l2", "all"):
+        test_mha_sink_bwd_bhsd_l2()
+    if level in ("boundary", "all"):
+        test_mha_sink_bwd_bhsd_boundary()
 
-            if level in ("l0", "all"):
-                blocking_ok &= test_mha_sink_bwd_bhsd_l0()
-            if level in ("l1", "all"):
-                blocking_ok &= test_mha_sink_bwd_bhsd_l1()
-            if level in ("l2", "all"):
-                test_mha_sink_bwd_bhsd_l2()
-            if level in ("boundary", "all"):
-                test_mha_sink_bwd_bhsd_boundary()
-
-            if exit_on_fail:
-                if blocking_ok:
-                    print("Test Passed!")
-                    sys.exit(0)
-                sys.exit(1)
-            return blocking_ok
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+    if exit_on_fail:
+        if blocking_ok:
+            print("Test Passed!")
+            sys.exit(0)
+        sys.exit(1)
+    return blocking_ok
 
 
 # ===========================================================================
@@ -433,7 +418,7 @@ def run_perf_benchmark(
     print(f"TileLang bwd:  {tl_bwd_ms:.1f} ms   {tl_bwd_tflops:.2f} TFlops")
 
 
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="Attention Sink MHA Backward (Ascend) layered tests + perf benchmark")
     parser.add_argument(
         "--level",
@@ -460,22 +445,6 @@ def _original_main():
         sys.exit(0)
     print("\nTest FAILED!")
     sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            _original_main()
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

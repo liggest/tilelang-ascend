@@ -63,7 +63,3 @@ def test_convolution_autotune_accuracy(
         padding,
         use_autotune=True,
     )
-
-
-pytestmark = [pytest.mark.usefixtures("isolated_a2a3_cache", "isolated_autotune_results")]
-pytestmark.append(pytest.mark.a2a3_device)

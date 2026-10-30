@@ -30,7 +30,7 @@ References:
 
 import tilelang
 import torch
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 
 # ============================================================================
@@ -439,35 +439,20 @@ def run_mla_decode(q, q_pe, kv, k_pe, block_N, block_H, core_num):
     return output
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
-        with torch.device("npu"):
-            torch.manual_seed(0)
-
-            B, H, S, D, PE = 1, 64, 128, 512, 64
-            q = torch.randn(B, H, D, dtype=torch.float16, device="npu")
-            q_pe = torch.randn(B, H, PE, dtype=torch.float16, device="npu")
-            kv = torch.randn(B, S, 1, D, dtype=torch.float16, device="npu")
-            k_pe = torch.randn(B, S, 1, PE, dtype=torch.float16, device="npu")
-
-            core_num = int(torch.npu.get_device_properties("npu").cube_core_num)
-            output = run_mla_decode(q, q_pe, kv, k_pe, block_N=128, block_H=64, core_num=core_num)
-            torch.npu.synchronize()
-
-            print(f"Output shape: {output.shape}, dtype: {output.dtype}")
-            print("Test Passed!")
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
-    main()
+    tilelang.disable_cache()
+    torch.set_default_device("npu")
+    torch.manual_seed(0)
+
+    B, H, S, D, PE = 1, 64, 128, 512, 64
+    q = torch.randn(B, H, D, dtype=torch.float16, device="npu")
+    q_pe = torch.randn(B, H, PE, dtype=torch.float16, device="npu")
+    kv = torch.randn(B, S, 1, D, dtype=torch.float16, device="npu")
+    k_pe = torch.randn(B, S, 1, PE, dtype=torch.float16, device="npu")
+
+    core_num = int(torch.npu.get_device_properties("npu").cube_core_num)
+    output = run_mla_decode(q, q_pe, kv, k_pe, block_N=128, block_H=64, core_num=core_num)
+    torch.npu.synchronize()
+
+    print(f"Output shape: {output.shape}, dtype: {output.dtype}")
+    print("Test Passed!")

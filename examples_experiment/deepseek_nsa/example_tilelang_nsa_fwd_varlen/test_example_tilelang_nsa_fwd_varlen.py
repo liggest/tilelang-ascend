@@ -11,25 +11,15 @@ Run:
 """
 
 import argparse
-import os  # noqa: F401 - Preserve the original standalone module imports.
+import os
 import sys
 
 import tilelang
 import torch
 
-# Bind only this private sibling; original nested subprocess source is preserved.
-try:
-    from . import example_tilelang_nsa_fwd_varlen as _nsa_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
-
-    _spec = _importlib_util.spec_from_file_location(
-        "_a2a3_experiment_nsa_fwd", _Path(__file__).with_name("example_tilelang_nsa_fwd_varlen.py")
-    )
-    _nsa_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_nsa_module)
-native_sparse_attention_varlen = _nsa_module.native_sparse_attention_varlen
+# Import kernel from sibling module.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from example_tilelang_nsa_fwd_varlen import native_sparse_attention_varlen  # noqa: E402
 
 
 # =============================================================================
@@ -503,7 +493,7 @@ def test_nsa_fwd_varlen_boundary():
 # =============================================================================
 # Main: --level dispatch + exit code
 # =============================================================================
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="NSA Forward VarLen precision test suite (Ascend)")
     parser.add_argument(
         "--level",
@@ -531,20 +521,6 @@ def _original_main():
         print("Test Passed!")
         sys.exit(0)
     sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

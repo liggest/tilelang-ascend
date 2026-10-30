@@ -1,20 +1,11 @@
-import os  # noqa: F401 - retained original module dependency
-import sys  # noqa: F401 - retained original module dependency
+import os
+import sys
 
 import torch
 import torch.nn.functional as F
 
-# Resolve only this private sibling; do not mutate global import search paths.
-try:
-    from . import example_indexer_bwd as _dsa_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
-
-    _spec = _importlib_util.spec_from_file_location("_a2a3_dsa_indexer_bwd", _Path(__file__).with_name("example_indexer_bwd.py"))
-    _dsa_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_dsa_module)
-indexer_bwd_interface = _dsa_module.indexer_bwd_interface
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from example_indexer_bwd import indexer_bwd_interface  # noqa: E402
 
 
 def ref_indexer_bwd(
@@ -91,8 +82,6 @@ def test_kernel(
     D=128,
     topk=64,
 ):
-    import torch_npu  # noqa: F401
-
     torch.manual_seed(42)
     q = torch.randn((S, H, D)).npu().bfloat16()
     w = torch.randn((S, H)).npu().bfloat16()
@@ -122,20 +111,6 @@ def test_kernel(
         raise AssertionError("indexer_bwd precision gate failed (bf16 dual-gate)")
 
 
-def main():
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        test_kernel()
-        print("Test Passed!")
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
-    main()
+    test_kernel()
+    print("Test Passed!")

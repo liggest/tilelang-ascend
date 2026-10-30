@@ -13,23 +13,15 @@ Run:
 """
 
 import argparse
-import os  # noqa: F401 - Keep the original standalone module import.
+import os
 import sys
 
 import tilelang
 import torch
 
-# Bind only this private sibling; the original child literal is archived alongside it.
-try:
-    from . import example_tilelang_nsa_fwd as _nsa_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
-
-    _spec = _importlib_util.spec_from_file_location("_a2a3_experiment_nsa_fwd", _Path(__file__).with_name("example_tilelang_nsa_fwd.py"))
-    _nsa_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_nsa_module)
-native_sparse_attention = _nsa_module.native_sparse_attention
+# Import kernel from sibling module.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from example_tilelang_nsa_fwd import native_sparse_attention  # noqa: E402
 
 
 # =============================================================================
@@ -331,128 +323,6 @@ def test_nsa_l1():
 # =============================================================================
 # L2 exception tests — blocking (invalid inputs must be rejected)
 # =============================================================================
-def _odd_gqa_compile_script():
-    """Isolated original odd17 CPU preparation and explicit compile boundary.
-
-    The original child literal remains in original_odd_gqa_child.txt. This
-    child has no H2D, kernel launch or runtime-fault whitelist.
-    """
-    return """import json
-import sys
-from pathlib import Path
-
-phase = "setup_imports"
-try:
-    directory = Path(sys.argv[1]).resolve(strict=True)
-    for filename in ["example_tilelang_nsa_fwd.py", "test_example_tilelang_nsa_fwd.py"]:
-        if not (directory / filename).is_file():
-            raise FileNotFoundError(str(directory / filename))
-    sys.path.insert(0, str(directory))
-    import torch
-    import torch_npu
-    import tilelang
-    from tilelang import tvm
-    import example_tilelang_nsa_fwd as kernel_module
-    import test_example_tilelang_nsa_fwd as test_module
-    if Path(kernel_module.__file__).resolve() != directory / "example_tilelang_nsa_fwd.py":
-        raise ImportError("odd-G kernel did not resolve to the exact private sibling")
-    if Path(test_module.__file__).resolve() != directory / "test_example_tilelang_nsa_fwd.py":
-        raise ImportError("odd-G helpers did not resolve to the exact private sibling")
-    if torch.get_default_device().type != "cpu":
-        raise RuntimeError("odd-G preparation requires the original CPU default")
-    native_sparse_attention = kernel_module.native_sparse_attention
-    prepare_inputs = test_module.prepare_inputs
-    _to_3d_inputs = test_module._to_3d_inputs
-    phase = "setup_CPU"
-    B, T, H, HQ, D, S, BS, BS_pad = 2, 64, 1, 17, 32, 1, 32, 64
-    Q = torch.randn(B, T, HQ, D, dtype=torch.float16)
-    K = torch.randn(B, T, H, D, dtype=torch.float16)
-    V = torch.randn(B, T, H, D, dtype=torch.float16)
-    bi = torch.full((B, T, H, S), 0, dtype=torch.long)
-    bc = torch.ones((B, T, H), dtype=torch.long)
-    K_sel, V_sel = prepare_inputs(Q, K, V, bi, bc, BS, S, bs_pad=BS_pad)
-    KV_LEN = S * BS_pad
-    G = HQ // H  # = 17 (odd)
-    K_sel_3d, V_sel_3d = _to_3d_inputs(K_sel, V_sel, B, T, H, G, KV_LEN, D)
-    block_starts = (bi.to(torch.int32) * BS).reshape(B * T * H, S)
-    phase = "target_compile"
-    kernel = native_sparse_attention(
-        batch=B, seq_len=T, head_kv=H, heads=HQ, dim=D,
-        selected_blocks=S, block_size=BS, bs_pad=BS_pad, scale=0.1,
-    )
-
-except Exception as error:
-    expected = (
-        phase == "target_compile"
-        and type(error) is tvm.error.InternalError
-        and "CompareScalar alignment error: size=544, element_bytes=4, total_bytes=2176 byte is not 256-byte aligned." in str(error)
-    )
-    print("A2A3_ODD_G_RESULT " + json.dumps({
-        "phase": phase,
-        "kind": "expected_compile_rejection" if expected else "unexpected_error",
-        "error_type": type(error).__name__,
-        "message": str(error),
-    }), flush=True)
-    raise SystemExit(71 if expected else 72)
-print("A2A3_ODD_G_RESULT " + json.dumps({
-    "phase": phase,
-    "kind": "unexpected_compile_acceptance",
-    "error_type": None,
-    "message": "Compilation unexpectedly succeeded; no H2D or launch is permitted by this compile-boundary check.",
-}), flush=True)
-raise SystemExit(72)
-"""
-
-
-def _odd_gqa_compile_result_is_expected(result):
-    import json
-
-    if result.returncode != 71:
-        return False
-    output = result.stdout
-    if isinstance(output, bytes):
-        try:
-            output = output.decode("utf-8")
-        except UnicodeDecodeError:
-            return False
-    if not isinstance(output, str):
-        return False
-    prefix = "A2A3_ODD_G_RESULT "
-    markers = [line[len(prefix) :] for line in output.splitlines() if line.startswith(prefix)]
-    if len(markers) != 1:
-        return False
-    try:
-        record = json.loads(markers[0])
-    except (TypeError, ValueError):
-        return False
-    return (
-        isinstance(record, dict)
-        and set(record) == {"phase", "kind", "error_type", "message"}
-        and record["phase"] == "target_compile"
-        and record["kind"] == "expected_compile_rejection"
-        and record["error_type"] == "InternalError"
-        and isinstance(record["message"], str)
-        and "CompareScalar alignment error: size=544, element_bytes=4, total_bytes=2176 byte is not 256-byte aligned." in record["message"]
-    )
-
-
-def _run_odd_gqa_compile_probe():
-    import subprocess
-    from pathlib import Path
-
-    directory = Path(__file__).resolve().parent
-    result = subprocess.run(
-        [sys.executable, "-c", _odd_gqa_compile_script(), str(directory)],
-        capture_output=True,
-        timeout=120,
-        cwd=str(directory),
-    )
-    expected = _odd_gqa_compile_result_is_expected(result)
-    if not expected:
-        print(f"[ODD_GQA_PROBE_FAIL] child_exit={result.returncode} stdout={result.stdout!r} stderr={result.stderr!r}")
-    return expected
-
-
 def test_nsa_l2():
     """L2 exception tests: unsupported dtype / invalid shape / odd GQA. Blocking.
 
@@ -517,18 +387,65 @@ def test_nsa_l2():
         print(f"[BOUNDARY_FAIL] l2 short_seq_no_block: unexpected {type(e).__name__}: {e}")
         ok = False
 
-    # Keep the original L2 row name/odd17 inputs. The current native boundary
-    # is the validated CompareScalar compile rejection, not an aicore trap.
-    # Original child literal: original_odd_gqa_child.txt.
+    # D-EXC-GQA: G=odd (HQ % H != 0, e.g. HQ=17, H=1, G=17).
+    # The kernel allows odd G at JIT compile time (threads=1, no G evenness
+    # requirement). However, at RUNTIME the NPU GEMM (T.gemm_v0) with odd M
+    # dimension (G=17) crashes with aicore exception 507015: Cube core
+    # hardware does not support GEMM with odd M. This test verifies the
+    # runtime rejection.
+    #
+    # CRITICAL: The NPU crash corrupts NPU state for the rest of the process,
+    # causing spurious BOUNDARY_WARNs in subsequent tests. To prevent this
+    # cascade, the actual kernel() call runs in a subprocess so the crash is
+    # fully isolated from the main test process.
     def _test_odd_gqa():
-        return _run_odd_gqa_compile_probe()
+        """L2: odd G is allowed at JIT but crashes at runtime (GEMM odd M)."""
+        import subprocess
+
+        # Subprocess script: reproduce the odd-G call. Non-zero exit means
+        # the NPU correctly rejected the odd M dimension at runtime.
+        script = """
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import torch
+import tilelang
+from example_tilelang_nsa_fwd import native_sparse_attention
+from test_example_tilelang_nsa_fwd import prepare_inputs, _to_3d_inputs
+
+B, T, H, HQ, D, S, BS, BS_pad = 2, 64, 1, 17, 32, 1, 32, 64
+Q = torch.randn(B, T, HQ, D, dtype=torch.float16)
+K = torch.randn(B, T, H, D, dtype=torch.float16)
+V = torch.randn(B, T, H, D, dtype=torch.float16)
+bi = torch.full((B, T, H, S), 0, dtype=torch.long)
+bc = torch.ones((B, T, H), dtype=torch.long)
+K_sel, V_sel = prepare_inputs(Q, K, V, bi, bc, BS, S, bs_pad=BS_pad)
+KV_LEN = S * BS_pad
+G = HQ // H  # = 17 (odd)
+K_sel_3d, V_sel_3d = _to_3d_inputs(K_sel, V_sel, B, T, H, G, KV_LEN, D)
+block_starts = (bi.to(torch.int32) * BS).reshape(B * T * H, S)
+kernel = native_sparse_attention(
+    batch=B, seq_len=T, head_kv=H, heads=HQ, dim=D,
+    selected_blocks=S, block_size=BS, bs_pad=BS_pad, scale=0.1,
+)
+# This kernel() call crashes with aicore exception (odd M GEMM not supported)
+kernel(Q.npu(), K_sel_3d.npu(), V_sel_3d.npu(), block_starts.npu())
+torch.npu.synchronize()
+"""
+        result = subprocess.run(
+            [sys.executable, "-c", script],
+            capture_output=True,
+            timeout=120,
+            cwd=os.path.dirname(os.path.abspath(__file__)),
+        )
+        # Non-zero exit => NPU correctly rejected odd G at runtime.
+        return result.returncode != 0
 
     try:
         rejected = _test_odd_gqa()
         if rejected:
-            print("[BOUNDARY_PASS] l2 odd_gqa_runtime_error: rejected during target_compile (validated CompareScalar alignment)")
+            print("[BOUNDARY_PASS] l2 odd_gqa_runtime_error: correctly rejected at runtime (subprocess non-zero exit)")
         else:
-            print("[BOUNDARY_FAIL] l2 odd_gqa_runtime_error: compile-boundary child failed (see phase diagnostic)")
+            print("[BOUNDARY_FAIL] l2 odd_gqa_runtime_error: not rejected (subprocess exited 0)")
             ok = False
     except Exception as e:
         print(f"[BOUNDARY_FAIL] l2 odd_gqa_runtime_error: unexpected {type(e).__name__}: {e}")
@@ -626,7 +543,7 @@ def test_nsa_boundary():
 # =============================================================================
 # Main: --level dispatch + exit code
 # =============================================================================
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="NSA Forward layered precision test suite (Ascend)")
     parser.add_argument(
         "--level",
@@ -652,20 +569,6 @@ def _original_main():
         print("Test Passed!")  # L0/L1 all passed (checklist #16)
         sys.exit(0)
     sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

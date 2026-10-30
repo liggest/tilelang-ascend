@@ -88,8 +88,3 @@ def test_dequant_gemm_fine_grained_int8_accuracy(
         block_K=64,
         output_dtype=output_dtype,
     )
-
-
-pytestmark = [pytest.mark.usefixtures("isolated_a2a3_cache")]
-test_dequant_gemm_fine_grained_fp16_accuracy = pytest.mark.a2a3_device(test_dequant_gemm_fine_grained_fp16_accuracy)
-test_dequant_gemm_fine_grained_int8_accuracy = pytest.mark.a2a3_device(test_dequant_gemm_fine_grained_int8_accuracy)

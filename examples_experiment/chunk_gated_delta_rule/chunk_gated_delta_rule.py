@@ -1,11 +1,9 @@
-"""Complete original experimental source; runtime requires explicit main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import tilelang
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 import torch
 import argparse
+
+tilelang.disable_cache()
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_SYNC: True,
@@ -365,17 +363,7 @@ def test_chunk_gated_delta_rule_varlen(seqlens, H, Hg, K, V, use_g=True, use_ini
     torch.testing.assert_close(ht.cpu(), ref_ht.cpu(), rtol=1e-5, atol=1e-5)
 
 
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Test chunk gated delta rule (varlen mode only: [1, T_total])")
     parser.add_argument("--use_g", type=lambda x: x.lower() == "true", default=True, help="Whether to use gating (True/False)")
     parser.add_argument(
@@ -399,7 +387,3 @@ def main():
         seqlens=seqlens, H=args.H, Hg=args.Hg, K=args.K, V=args.V, use_g=args.use_g, use_initial_state=args.use_initial_state
     )
     print("Batch Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

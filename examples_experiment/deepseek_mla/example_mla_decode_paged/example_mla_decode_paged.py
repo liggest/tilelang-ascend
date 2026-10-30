@@ -24,7 +24,7 @@ For the layered test suite (L0/L1/L2/Boundary), see
 
 import torch
 import tilelang
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 
 # Developer pass_configs: combineCV auto-separates C/V, AUTO_CV_SYNC auto-inserts sync.
@@ -481,11 +481,5 @@ def _smoke_test():
         )
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    _smoke_test()
-
-
 if __name__ == "__main__":
-    main()
+    _smoke_test()

@@ -12,25 +12,15 @@ L0/L1/L2 failures block (exit code 1). Boundary failures are non-blocking (warni
 """
 
 import argparse
+import os
 import sys
 
 import tilelang
 import torch
 import torch.nn.functional as F
 
-# Load only the exact private sibling without mutating import search paths.
-try:
-    from . import example_mla_decode_persistent as _mla_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
-
-    _spec = _importlib_util.spec_from_file_location(
-        "_a2a3_experiment_mla_decode_persistent", _Path(__file__).with_name("example_mla_decode_persistent.py")
-    )
-    _mla_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_mla_module)
-run_mla_decode = _mla_module.run_mla_decode  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from example_mla_decode_persistent import run_mla_decode  # noqa: E402
 
 try:
     from einops import rearrange, einsum
@@ -515,7 +505,12 @@ def test_mla_decode_persistent_boundary():
         print(f"[BOUNDARY_WARN] boundary boundary_dbound: exception: {e}")
 
 
-def _original_main():
+# ============================================================================
+# Main entry: --level dispatcher
+# ============================================================================
+
+
+def main():
     parser = argparse.ArgumentParser(description="MLA Decode Persistent test suite")
     parser.add_argument(
         "--level",
@@ -525,37 +520,23 @@ def _original_main():
     args = parser.parse_args()
 
     tilelang.disable_cache()
-    with torch.device("npu"):
-        torch.manual_seed(42)
+    torch.set_default_device("npu")
+    torch.manual_seed(42)
 
-        blocking_ok = True
-        if args.level in ("l0", "all"):
-            blocking_ok &= test_mla_decode_persistent_l0()
-        if args.level in ("l1", "all"):
-            blocking_ok &= test_mla_decode_persistent_l1()
-        if args.level in ("l2", "all"):
-            blocking_ok &= test_mla_decode_persistent_l2()
-        if args.level in ("boundary", "all"):
-            test_mla_decode_persistent_boundary()
+    blocking_ok = True
+    if args.level in ("l0", "all"):
+        blocking_ok &= test_mla_decode_persistent_l0()
+    if args.level in ("l1", "all"):
+        blocking_ok &= test_mla_decode_persistent_l1()
+    if args.level in ("l2", "all"):
+        blocking_ok &= test_mla_decode_persistent_l2()
+    if args.level in ("boundary", "all"):
+        test_mla_decode_persistent_boundary()
 
-        if blocking_ok:
-            print("\nTest Passed!")
-            sys.exit(0)
-        sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+    if blocking_ok:
+        print("\nTest Passed!")
+        sys.exit(0)
+    sys.exit(1)
 
 
 if __name__ == "__main__":

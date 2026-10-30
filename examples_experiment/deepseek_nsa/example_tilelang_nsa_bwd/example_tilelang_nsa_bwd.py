@@ -38,7 +38,7 @@ Key NPU adaptations vs GPU reference:
 
 import tilelang
 import torch
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 
 # ============================================================================
@@ -629,60 +629,49 @@ def _run_bwd_pipeline(q, k, v, o_slc, lse_slc, do_slc, B, T, H, HQ, D, S, BS):
     return dq, dk, dv
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        import sys
-
-        tilelang.disable_cache()
-        torch.manual_seed(0)
-
-        # Minimal L0 smoke config (matches test_tilelang_nsa_bwd l0_default).
-        # NOTE: use SEQ_LEN (not T) to avoid shadowing tilelang.language as T.
-        B, SEQ_LEN, H, HQ, D, S, BS = 1, 32, 1, 16, 32, 1, 32
-        dtype = torch.float16
-
-        q, k, v, do_slc, block_indices, block_counts = _generate_test_data(B, SEQ_LEN, H, HQ, D, S, BS, dtype)
-
-        q_npu = q.to("npu")
-        k_npu = k.to("npu")
-        v_npu = v.to("npu")
-        do_npu = do_slc.to("npu")
-        bi_npu = block_indices.to("npu")
-        bc_npu = block_counts.to("npu")
-
-        o_slc, lse_slc, dq, dk, dv, _bm = _run_nsa_pipeline(q_npu, k_npu, v_npu, do_npu, bi_npu, bc_npu, B, SEQ_LEN, H, HQ, D, S, BS)
-
-        # CI smoke check: 5 outputs finite + shape OK
-        ok = True
-        for name, out, expected_shape in [
-            ("o_slc", o_slc, (B, SEQ_LEN, HQ, D)),
-            ("lse_slc", lse_slc, (B, SEQ_LEN, HQ)),
-            ("dq", dq, (B, SEQ_LEN, HQ, D)),
-            ("dk", dk, (B, SEQ_LEN, H, D)),
-            ("dv", dv, (B, SEQ_LEN, H, D)),
-        ]:
-            out_cpu = out.cpu()
-            shape_ok = tuple(out_cpu.shape) == expected_shape
-            finite_ok = torch.isfinite(out_cpu).all().item()
-            tag = "OK" if (shape_ok and finite_ok) else "FAIL"
-            print(f"[SMOKE_{tag}] {name} shape={tuple(out_cpu.shape)} finite={finite_ok}")
-            ok = ok and shape_ok and finite_ok
-
-        if ok:
-            print("Test Passed!")
-        else:
-            sys.exit(1)
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
+# ============================================================================
+# __main__: CI smoke test (shape + finite check — precision in test file)
+# ============================================================================
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    tilelang.disable_cache()
+    torch.manual_seed(0)
+
+    # Minimal L0 smoke config (matches test_tilelang_nsa_bwd l0_default).
+    # NOTE: use SEQ_LEN (not T) to avoid shadowing tilelang.language as T.
+    B, SEQ_LEN, H, HQ, D, S, BS = 1, 32, 1, 16, 32, 1, 32
+    dtype = torch.float16
+
+    q, k, v, do_slc, block_indices, block_counts = _generate_test_data(B, SEQ_LEN, H, HQ, D, S, BS, dtype)
+
+    q_npu = q.to("npu")
+    k_npu = k.to("npu")
+    v_npu = v.to("npu")
+    do_npu = do_slc.to("npu")
+    bi_npu = block_indices.to("npu")
+    bc_npu = block_counts.to("npu")
+
+    o_slc, lse_slc, dq, dk, dv, _bm = _run_nsa_pipeline(q_npu, k_npu, v_npu, do_npu, bi_npu, bc_npu, B, SEQ_LEN, H, HQ, D, S, BS)
+
+    # CI smoke check: 5 outputs finite + shape OK
+    ok = True
+    for name, out, expected_shape in [
+        ("o_slc", o_slc, (B, SEQ_LEN, HQ, D)),
+        ("lse_slc", lse_slc, (B, SEQ_LEN, HQ)),
+        ("dq", dq, (B, SEQ_LEN, HQ, D)),
+        ("dk", dk, (B, SEQ_LEN, H, D)),
+        ("dv", dv, (B, SEQ_LEN, H, D)),
+    ]:
+        out_cpu = out.cpu()
+        shape_ok = tuple(out_cpu.shape) == expected_shape
+        finite_ok = torch.isfinite(out_cpu).all().item()
+        tag = "OK" if (shape_ok and finite_ok) else "FAIL"
+        print(f"[SMOKE_{tag}] {name} shape={tuple(out_cpu.shape)} finite={finite_ok}")
+        ok = ok and shape_ok and finite_ok
+
+    if ok:
+        print("Test Passed!")
+    else:
+        sys.exit(1)

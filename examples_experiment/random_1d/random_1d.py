@@ -1,22 +1,27 @@
-"""Complete original experimental source; runtime requires explicit main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-M = 1024
-SEED = 42
-BLOCK_SIZE = 128
-TOTAL_BLOCK_SIZE = 256
 import argparse
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 
+tilelang.disable_cache()
+
+parser = argparse.ArgumentParser(description="NPU Random Number Generation Kernel")
+parser.add_argument("--m", type=int, default=1024, help="Number of elements")
+parser.add_argument("--seed", type=int, default=42, help="Random seed")
+parser.add_argument("--block_size", type=int, default=128, help="Block size per vid")
+parser.add_argument("--benchmark", action="store_true", help="Run benchmark")
+args = parser.parse_args()
+
+M = args.m
+SEED = args.seed
+BLOCK_SIZE = args.block_size
+
 LCG_A = 1103515245
 LCG_C = 12345
 
 VEC_NUM = 2
+TOTAL_BLOCK_SIZE = BLOCK_SIZE * VEC_NUM
 
 pass_configs = {
     tilelang.PassConfigKey.TL_ASCEND_AUTO_CV_COMBINE: True,
@@ -75,30 +80,7 @@ def reference_random_1d(M, seed):
     return torch.from_numpy(result)
 
 
-def main():
-    global BLOCK_SIZE, M, SEED, TOTAL_BLOCK_SIZE
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-
-    parser = argparse.ArgumentParser(description="NPU Random Number Generation Kernel")
-    parser.add_argument("--m", type=int, default=1024, help="Number of elements")
-    parser.add_argument("--seed", type=int, default=42, help="Random seed")
-    parser.add_argument("--block_size", type=int, default=128, help="Block size per vid")
-    parser.add_argument("--benchmark", action="store_true", help="Run benchmark")
-    args = parser.parse_args()
-
-    M = args.m
-    SEED = args.seed
-    BLOCK_SIZE = args.block_size
-    TOTAL_BLOCK_SIZE = BLOCK_SIZE * VEC_NUM
+if __name__ == "__main__":
     func = random_1d(M, BLOCK_SIZE, SEED, LCG_A, LCG_C)
 
     print("init successful!")
@@ -110,7 +92,3 @@ def main():
     ref_output = reference_random_1d(M, SEED)
     torch.testing.assert_close(output_truncated.cpu(), ref_output, rtol=0, atol=0)
     print("Random Kernel Output Match!")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,6 +1,3 @@
-"""Complete original experimental source; runtime requires explicit main()."""
-
-from tilelang.env import CacheState
 import argparse
 import math
 
@@ -8,6 +5,8 @@ import torch
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
+
+tilelang.disable_cache()
 
 
 def torch_grouped_gemm(a_list, b_list):
@@ -154,31 +153,19 @@ def test_grouped_gemm_fwd_ptr():
     run_tilelang_grouped_gemm_fwd_ptr([100, 200, 300], 128, 96, 32, 32, 32)
 
 
-def main():
-    import torch_npu  # noqa: F401
-
-    _prior_cache_enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--batch_sizes", type=str, default="64,128,256", help="comma-separated per-group M sizes")
-        parser.add_argument("--K", type=int, default=4096, help="reduce dim")
-        parser.add_argument("--N", type=int, default=4096, help="output dim")
-        parser.add_argument("--profile", action="store_true", help="benchmark the kernel")
-        args = parser.parse_args()
-
-        batch_sizes_list = [int(x.strip()) for x in args.batch_sizes.split(",") if x.strip()]
-        block_M = 64
-        block_N = 128
-        block_K = 64
-
-        run_tilelang_grouped_gemm_fwd_ptr(batch_sizes_list, args.K, args.N, block_M, block_N, block_K, profile=args.profile)
-    finally:
-        if _prior_cache_enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--batch_sizes", type=str, default="64,128,256", help="comma-separated per-group M sizes")
+    parser.add_argument("--K", type=int, default=4096, help="reduce dim")
+    parser.add_argument("--N", type=int, default=4096, help="output dim")
+    parser.add_argument("--profile", action="store_true", help="benchmark the kernel")
+    args = parser.parse_args()
+
+    batch_sizes_list = [int(x.strip()) for x in args.batch_sizes.split(",") if x.strip()]
+    block_M = 64
+    block_N = 128
+    block_K = 64
+
+    run_tilelang_grouped_gemm_fwd_ptr(batch_sizes_list, args.K, args.N, block_M, block_N, block_K, profile=args.profile)
+
+    # test_grouped_gemm_fwd_ptr()

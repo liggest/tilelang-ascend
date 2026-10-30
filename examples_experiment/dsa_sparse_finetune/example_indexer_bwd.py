@@ -5,26 +5,14 @@ import ctypes
 import torch
 
 import tilelang
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 
+try:  # fast raw-stream query (0.9 us vs 33 us for torch.npu.current_stream)
+    import torch_npu  # noqa: F401
 
-_npu_raw_stream = None
-_npu_raw_stream_attempted = False
-
-
-def _resolve_raw_stream(device):
-    """Keep the original raw-stream/None fallback, resolving only on use."""
-    global _npu_raw_stream, _npu_raw_stream_attempted
-    if not _npu_raw_stream_attempted:
-        try:
-            import torch_npu
-
-            _npu_raw_stream = torch_npu._C._npu_getCurrentRawStream
-        except Exception:
-            _npu_raw_stream = None
-        _npu_raw_stream_attempted = True
-    return _npu_raw_stream(device) if _npu_raw_stream is not None else torch.npu.current_stream().npu_stream
-
+    _npu_raw_stream = torch_npu._C._npu_getCurrentRawStream
+except Exception:  # pragma: no cover - non-NPU import context
+    _npu_raw_stream = None
 
 __all__ = [
     "tl_indexer_bwd_fast",
@@ -44,10 +32,8 @@ class _CachedLauncher:
     Marshals the ctypes argument vector once per distinct argument tuple and
     replays ``adapter.lib.call`` directly (~13 us/launch vs ~750 us through
     the stock cython path). The cache slot holds strong references to the
-    last marshaled tensors (keyed on id()). The timings above are original
-    TA historical measurements, not a performance claim for this port. The
-    local adapter also validates metadata/storage on cache hits; unsupported
-    descriptors or changed storage use the complete validating Kernel path.
+    last marshaled tensors (keyed on id()), so key hits are always safe;
+    misses fall back to the full validating path.
     """
 
     __slots__ = (
@@ -60,7 +46,6 @@ class _CachedLauncher:
         "_args_refs",
         "_dev",
         "_view_spec",
-        "_args_signature",
     )
 
     def __init__(self, kernel, view_spec=None):
@@ -75,8 +60,6 @@ class _CachedLauncher:
         self._params_len = len(adapter.params) if ok else -1
         self._key = None
         self._args = None
-        self._args_refs = ()
-        self._args_signature = None
         self._dev = None
         self._view_spec = view_spec or {}
 
@@ -91,92 +74,58 @@ class _CachedLauncher:
             return t.reshape(-1)
         return t
 
-    @staticmethod
-    def _metadata_signature(args):
-        signature = []
-        for tensor in args:
-            if not isinstance(tensor, torch.Tensor) or not tensor.is_contiguous():
-                return None
-            signature.append((tuple(tensor.shape), tuple(tensor.stride()), tensor.storage_offset(), tensor.data_ptr()))
-        return tuple(signature)
-
-    @staticmethod
-    def _shape_value(tensors, descriptor):
-        if not isinstance(descriptor, (tuple, list)) or len(descriptor) != 4:
-            return None
-        kind, buffer_index, shape_index, scale = descriptor
-        if any(type(value) is not int for value in descriptor) or kind != 0 or scale != 1:
-            return None
-        if not 0 <= buffer_index < len(tensors) or not 0 <= shape_index < tensors[buffer_index].ndim:
-            return None
-        return int(tensors[buffer_index].shape[shape_index])
-
     def _marshal(self, args):
-        # Raw pointers may only reference original contiguous storage; reshape
-        # copies must stay in the complete validating Kernel path.
-        if self._metadata_signature(args) is None:
-            return None
         ad = self._adapter
-        tensors = [self._apply_view(t, self._view_spec.get(i, "")) for i, t in enumerate(args)]
-        c_args = [ctypes.c_void_p(t.data_ptr()) for t in tensors]
-        mapping = getattr(ad, "dynamic_symbolic_map", None)
-        sources = getattr(ad, "dynamic_symbolic_sources", None)
-        if not isinstance(mapping, dict) or (mapping and not isinstance(sources, dict)):
-            return None
-        for variable, descriptor in mapping.items():
-            value = self._shape_value(tensors, descriptor)
-            references = sources.get(str(variable))
-            if value is None or not isinstance(references, (tuple, list)) or not references:
+        tensors = [self._apply_view(t, self._view_spec.get(i, "")) if isinstance(t, torch.Tensor) else t for i, t in enumerate(args)]
+        c_args = []
+        for t in tensors:
+            if not isinstance(t, torch.Tensor):
                 return None
-            if any(self._shape_value(tensors, reference) != value for reference in references):
+            if not t.is_contiguous():
+                raise ValueError("kernel tensors must be contiguous")
+            c_args.append(ctypes.c_void_p(t.data_ptr()))
+        for variable, (kind, bidx, sidx, scale) in ad.dynamic_symbolic_map.items():
+            # Modern adapters distinguish shape/stride sources and scaling.
+            # Keep this raw fast path restricted to the original shape domain.
+            if kind != 0 or scale != 1:
                 return None
+            value = int(tensors[bidx].shape[sidx])
+            for source_kind, source_bidx, source_sidx, source_scale in ad.dynamic_symbolic_sources.get(str(variable), ()):
+                if source_kind != 0 or source_scale != 1:
+                    return None
+                if int(tensors[source_bidx].shape[source_sidx]) != value:
+                    return None
             c_args.append(ctypes.c_int64(value))
-        c_args.append(None)
-        # Hold both id-key owners and every actual flattened view. No raw
-        # pointer outlives the Tensor that owns its storage.
-        self._args_refs = tuple(args) + tuple(tensors)
+        c_args.append(None)  # stream slot (filled per call)
         return c_args
 
     def __call__(self, *args, stream=-1):
         plen = self._params_len
         if plen == len(args) and (stream == -1 or isinstance(stream, int)):
             key = tuple(map(id, args))
-            signature = self._metadata_signature(args)
             if key == self._key:
-                if signature is not None and signature == self._args_signature:
-                    dev = self._dev
-                    if stream == -1:
-                        stream = _resolve_raw_stream(dev)
-                    c_args = self._args
-                    c_args[-1] = ctypes.c_void_p(stream)
-                    self._lib.call(*c_args)
-                    return
-                # Tensor identities alone do not protect resized/rebound
-                # storage. This call must pass the full original validator.
-                self._key = None
-                self._args = None
-                self._args_refs = ()
-                self._args_signature = None
-            elif signature is not None:
-                c_args = self._marshal(args)
-                if c_args is not None:
-                    dev = args[0].get_device()
-                    if stream == -1:
-                        stream = _resolve_raw_stream(dev)
-                    c_args[-1] = ctypes.c_void_p(stream)
-                    self._key = key
-                    self._args = c_args
-                    self._args_signature = signature
-                    self._dev = dev
-                    self._lib.call(*c_args)
-                    return
-        # Preserve the original fallback return/exception and stream protocol.
-        # Pass noncontiguous originals directly so validation cannot receive
-        # temporary contiguous output copies with a different storage owner.
-        if any(isinstance(t, torch.Tensor) and not t.is_contiguous() for t in args):
-            args2 = args
-        else:
-            args2 = tuple(self._apply_view(t, self._view_spec.get(i, "")) if isinstance(t, torch.Tensor) else t for i, t in enumerate(args))
+                dev = self._dev
+                if stream == -1:
+                    stream = _npu_raw_stream(dev) if _npu_raw_stream is not None else torch.npu.current_stream().npu_stream
+                c_args = self._args
+                c_args[-1] = ctypes.c_void_p(stream)
+                self._lib.call(*c_args)
+                return
+            c_args = self._marshal(args)
+            if c_args is not None:
+                dev = args[0].get_device()
+                if stream == -1:
+                    stream = _npu_raw_stream(dev) if _npu_raw_stream is not None else torch.npu.current_stream().npu_stream
+                c_args[-1] = ctypes.c_void_p(stream)
+                # commit slot (strong refs via _args_refs keep ids and views alive)
+                self._key = key
+                self._args = c_args
+                self._args_refs = args
+                self._dev = dev
+                self._lib.call(*c_args)
+                return
+        # full validating fallback (also applies the view spec)
+        args2 = tuple(self._apply_view(t, self._view_spec.get(i, "")) if isinstance(t, torch.Tensor) else t for i, t in enumerate(args))
         return self._kernel(*args2, stream=stream) if stream != -1 else self._kernel(*args2)
 
 
@@ -1207,54 +1156,33 @@ def indexer_bwd_interface(
 indexer_bwd = indexer_bwd_interface
 
 
-def main():
-    from tilelang.env import CacheState
-    import os
-    from pathlib import Path
-    from tilelang import env
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    enabled = CacheState.is_enabled()
-    try:
-        import torch.nn.functional as F
-
-        A2A3CythonKernelCache().clear_cache()
-        torch.manual_seed(42)
-        S, H, D, topk = 2048, 16, 128, 64
-
-        q = torch.randn(S, H, D).bfloat16().npu()
-        w = torch.randn(S, H).bfloat16().npu()
-        k = torch.randn(S, D).bfloat16().npu()
-        offsets = torch.tensor([0, 1023, S], dtype=torch.int32).npu()
-
-        parts = []
-        for i in range(offsets.shape[0] - 1):
-            seg = int(offsets[i + 1].item()) - int(offsets[i].item())
-            mask = torch.arange(seg)[:, None] >= torch.arange(topk)[None, :]
-            parts.append(F.softmax(torch.where(mask, torch.ones(seg, topk), float("-inf")), dim=-1, dtype=torch.float32))
-        attn_score = torch.cat(parts, dim=0).npu()
-        topk_indices = torch.arange(topk, dtype=torch.int32).unsqueeze(0).repeat(S, 1).npu()
-        index_score = attn_score  # smoke input; values only affect magnitudes
-
-        dq, dw, dk = indexer_bwd_interface(q, w, k, attn_score, index_score, topk_indices, offsets)
-        assert dq.shape == (S, H, D) and dw.shape == (S, H) and dk.shape == (S, D)
-        for name, out in (("dq", dq), ("dw", dw), ("dk", dk)):
-            assert torch.isfinite(out.float()).all().item(), f"{name} contains NaN/Inf"
-        print(f"[SMOKE_PASS] indexer_bwd S={S} H={H} D={D} topk={topk} bf16 varlen(1023+1025)")
-        print("Test Passed!")
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
-
-
 if __name__ == "__main__":
-    main()
+    # Smoke test: default configuration (S=2048, H=16, D=128, topk=64, bf16,
+    # varlen [0, 1023, 2048]); checks the three gradient outputs are
+    # shape-correct and finite.
+    import torch.nn.functional as F
+
+    tilelang.disable_cache()
+    torch.manual_seed(42)
+    S, H, D, topk = 2048, 16, 128, 64
+
+    q = torch.randn(S, H, D).bfloat16().npu()
+    w = torch.randn(S, H).bfloat16().npu()
+    k = torch.randn(S, D).bfloat16().npu()
+    offsets = torch.tensor([0, 1023, S], dtype=torch.int32).npu()
+
+    parts = []
+    for i in range(offsets.shape[0] - 1):
+        seg = int(offsets[i + 1].item()) - int(offsets[i].item())
+        mask = torch.arange(seg)[:, None] >= torch.arange(topk)[None, :]
+        parts.append(F.softmax(torch.where(mask, torch.ones(seg, topk), float("-inf")), dim=-1, dtype=torch.float32))
+    attn_score = torch.cat(parts, dim=0).npu()
+    topk_indices = torch.arange(topk, dtype=torch.int32).unsqueeze(0).repeat(S, 1).npu()
+    index_score = attn_score  # smoke input; values only affect magnitudes
+
+    dq, dw, dk = indexer_bwd_interface(q, w, k, attn_score, index_score, topk_indices, offsets)
+    assert dq.shape == (S, H, D) and dw.shape == (S, H) and dk.shape == (S, D)
+    for name, out in (("dq", dq), ("dw", dw), ("dk", dk)):
+        assert torch.isfinite(out.float()).all().item(), f"{name} contains NaN/Inf"
+    print(f"[SMOKE_PASS] indexer_bwd S={S} H={H} D={D} topk={topk} bf16 varlen(1023+1025)")
+    print("Test Passed!")

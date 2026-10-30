@@ -44,7 +44,3 @@ def test_blocksparse_gemm_accuracy(case_name: str) -> None:
         example.test_boundary_sparse()
     else:
         raise AssertionError(f"Unknown blocksparse_gemm case: {case_name}")
-
-
-pytestmark = [pytest.mark.usefixtures("isolated_a2a3_cache", "isolated_autotune_results")]
-pytestmark.append(pytest.mark.a2a3_device)

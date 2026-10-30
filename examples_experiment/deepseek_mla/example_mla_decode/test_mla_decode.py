@@ -10,26 +10,18 @@ Usage:
 
 import argparse
 import functools
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import torch
 import torch.nn.functional as F
 
 import tilelang
+from example_mla_decode import BLOCK_N, mla_decode
 
-# Package import or an exact sibling-file load; never fall back to a
-# different implementation with the same unqualified module name.
-try:
-    from . import example_mla_decode as _mla_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
-
-    _spec = _importlib_util.spec_from_file_location("_a2a3_experiment_mla_decode", _Path(__file__).with_name("example_mla_decode.py"))
-    _mla_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_mla_module)
-BLOCK_N = _mla_module.BLOCK_N
-mla_decode = _mla_module.mla_decode
+tilelang.disable_cache()
 
 
 # ========== Retry wrapper for intermittent compile failures ==========
@@ -138,6 +130,11 @@ def check_precision(actual, golden, dtype):
     return (ratio >= required_ratio and max_abs <= max_abs_limit), ratio, max_abs
 
 
+# ========== Test helpers ==========
+
+_col_indices_cpu = torch.arange(BLOCK_N, dtype=torch.float32)
+
+
 def _gen_randn(shape):
     return torch.randn(shape, dtype=torch.float16, device="cpu")
 
@@ -184,7 +181,7 @@ def run_test_case(batch, heads, kv_head_num, seqlen_kv, dim, pe_dim, actual_seql
     ref_out = ref_mla_decode(q, q_pe, kv_orig, k_pe_orig)
 
     kernel = mla_decode(batch, heads, kv_head_num, seqlen_kv, dim, pe_dim, actual_seqlen_kv)
-    col_indices = _get_col_indices_cpu().npu()
+    col_indices = _col_indices_cpu.npu()
     output = kernel(q.npu(), q_pe.npu(), kv.npu(), k_pe.npu(), col_indices)
     torch.npu.synchronize()
     return check_precision(output, ref_out, "float16")
@@ -273,7 +270,7 @@ def test_l2():
         qpe32 = torch.randn(1, 64, 64, dtype=torch.float32, device="cpu").npu()
         kv32 = torch.randn(1, 128, 1, 512, dtype=torch.float32, device="cpu").npu()
         kpe32 = torch.randn(1, 128, 1, 64, dtype=torch.float32, device="cpu").npu()
-        kernel(q32, qpe32, kv32, kpe32, _get_col_indices_cpu().npu())
+        kernel(q32, qpe32, kv32, kpe32, _col_indices_cpu.npu())
         print("[BOUNDARY_FAIL] l2 exc_dtype float32: not rejected")
         ok = False
     except (ValueError, TypeError) as e:
@@ -355,7 +352,7 @@ def test_boundary():
 # ========== Main: --level dispatch ==========
 
 
-def _original_main():
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--level", default="l0", choices=["l0", "l1", "l2", "boundary", "all"])
     args = parser.parse_args()
@@ -376,31 +373,6 @@ def _original_main():
         print("\nTest Passed!")
         sys.exit(0)
     sys.exit(1)
-
-
-_col_indices_cpu = None
-
-
-def _get_col_indices_cpu():
-    global _col_indices_cpu
-    if _col_indices_cpu is None:
-        _col_indices_cpu = torch.arange(BLOCK_N, dtype=torch.float32, device="cpu")
-    return _col_indices_cpu
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        tilelang.disable_cache()
-        _original_main()
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

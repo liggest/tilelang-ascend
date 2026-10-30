@@ -38,7 +38,3 @@ def test_dequant_gemm_w4a8_accuracy(m: int, n: int, k: int) -> None:
     example.tilelang.disable_cache()
     torch.manual_seed(42)
     example.test(m, n, k)
-
-
-pytestmark = [pytest.mark.usefixtures("isolated_a2a3_cache")]
-pytestmark.append(pytest.mark.a2a3_device)

@@ -14,8 +14,9 @@ Kernels:
 """
 
 import torch
+import torch_npu  # noqa: F401  # register NPU backend
 import tilelang
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 
 # pass_configs — Developer mode (CV fusion: 4 keys enabled)
@@ -783,62 +784,50 @@ attention = _attention.apply
 kernel = attention  # alias for coverage check API
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        with torch.device("npu"):
-            tilelang.disable_cache()
-            torch.manual_seed(42)
-
-            # Minimal smoke config: B=1, H=4, N=128, D_qk=128, D_v=128, groups=2, causal=True
-            B, H, N, D_qk, D_v = 1, 4, 128, 128, 128
-            groups = 2
-            is_causal = True
-            H_kv = H // groups
-            dim_qk_padded = ((D_qk + 15) // 16) * 16
-            block_M = 64
-            block_N_fwd = 128
-            block_N_bwd = 64
-
-            Q = torch.randn(B, H, N, dim_qk_padded, dtype=torch.float16, device="npu")
-            K = torch.randn(B, H_kv, N, dim_qk_padded, dtype=torch.float16, device="npu")
-            V = torch.randn(B, H_kv, N, D_v, dtype=torch.float16, device="npu")
-            dO = torch.randn(B, H, N, D_v, dtype=torch.float16, device="npu")
-
-            # Forward
-            O, lse = flashattn_fwd(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_fwd)(Q, K, V)
-            torch.npu.synchronize()
-            print(f"Forward done: O={O.shape}, lse={lse.shape}")
-
-            # Preprocess: Delta = sum(O * dO)
-            Delta = flashattn_bwd_preprocess(B, H, N, D_v, blk=32)(O, dO)
-            torch.npu.synchronize()
-
-            # bwd pipeline (3 sub-kernel serial launch)
-            dQ_fp16, dK_fp16, dV_fp16, dQ_fp32, dK_fp32, dV_fp32 = run_bwd(Q, K, V, dO, lse, Delta, is_causal, groups, block_M, block_N_bwd)
-            torch.npu.synchronize()
-            print(f"Backward done: dQ={dQ_fp16.shape}, dK={dK_fp16.shape}, dV={dV_fp16.shape}")
-
-            # Quick precision check against golden (CPU)
-            Q_cpu, K_cpu, V_cpu, dO_cpu = Q.cpu(), K.cpu(), V.cpu(), dO.cpu()
-            O_ref, lse_ref = ref_fwd(Q_cpu, K_cpu, V_cpu, is_causal, groups)
-            dQ_ref, dK_ref, dV_ref = ref_bwd(Q_cpu, K_cpu, V_cpu, dO_cpu, lse_ref, is_causal, groups)
-
-            print(f"O:  max_diff={(O.cpu().float() - O_ref.float()).abs().max():.4e}")
-            print(f"dQ: max_diff={(dQ_fp16.cpu().float() - dQ_ref.float()).abs().max():.4e}")
-            print(f"dK: max_diff={(dK_fp16.cpu().float() - dK_ref.float()).abs().max():.4e}")
-            print(f"dV: max_diff={(dV_fp16.cpu().float() - dV_ref.float()).abs().max():.4e}")
-            print("Test Passed!")
-
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
+# --- Main: smoke test ---
 
 
 if __name__ == "__main__":
-    main()
+    tilelang.disable_cache()
+    torch.set_default_device("npu")
+    torch.manual_seed(42)
+
+    # Minimal smoke config: B=1, H=4, N=128, D_qk=128, D_v=128, groups=2, causal=True
+    B, H, N, D_qk, D_v = 1, 4, 128, 128, 128
+    groups = 2
+    is_causal = True
+    H_kv = H // groups
+    dim_qk_padded = ((D_qk + 15) // 16) * 16
+    block_M = 64
+    block_N_fwd = 128
+    block_N_bwd = 64
+
+    Q = torch.randn(B, H, N, dim_qk_padded, dtype=torch.float16, device="npu")
+    K = torch.randn(B, H_kv, N, dim_qk_padded, dtype=torch.float16, device="npu")
+    V = torch.randn(B, H_kv, N, D_v, dtype=torch.float16, device="npu")
+    dO = torch.randn(B, H, N, D_v, dtype=torch.float16, device="npu")
+
+    # Forward
+    O, lse = flashattn_fwd(B, H, N, D_qk, D_v, groups, is_causal, block_M, block_N_fwd)(Q, K, V)
+    torch.npu.synchronize()
+    print(f"Forward done: O={O.shape}, lse={lse.shape}")
+
+    # Preprocess: Delta = sum(O * dO)
+    Delta = flashattn_bwd_preprocess(B, H, N, D_v, blk=32)(O, dO)
+    torch.npu.synchronize()
+
+    # bwd pipeline (3 sub-kernel serial launch)
+    dQ_fp16, dK_fp16, dV_fp16, dQ_fp32, dK_fp32, dV_fp32 = run_bwd(Q, K, V, dO, lse, Delta, is_causal, groups, block_M, block_N_bwd)
+    torch.npu.synchronize()
+    print(f"Backward done: dQ={dQ_fp16.shape}, dK={dK_fp16.shape}, dV={dV_fp16.shape}")
+
+    # Quick precision check against golden (CPU)
+    Q_cpu, K_cpu, V_cpu, dO_cpu = Q.cpu(), K.cpu(), V.cpu(), dO.cpu()
+    O_ref, lse_ref = ref_fwd(Q_cpu, K_cpu, V_cpu, is_causal, groups)
+    dQ_ref, dK_ref, dV_ref = ref_bwd(Q_cpu, K_cpu, V_cpu, dO_cpu, lse_ref, is_causal, groups)
+
+    print(f"O:  max_diff={(O.cpu().float() - O_ref.float()).abs().max():.4e}")
+    print(f"dQ: max_diff={(dQ_fp16.cpu().float() - dQ_ref.float()).abs().max():.4e}")
+    print(f"dK: max_diff={(dK_fp16.cpu().float() - dK_ref.float()).abs().max():.4e}")
+    print(f"dV: max_diff={(dV_fp16.cpu().float() - dV_ref.float()).abs().max():.4e}")
+    print("Test Passed!")

@@ -4,6 +4,8 @@ import torch.nn.functional as F
 import tilelang
 import tilelang.ascend.a2a3.language as T
 
+tilelang.disable_cache()
+
 
 seed = 42
 
@@ -81,7 +83,7 @@ def im2col(input_tensor: torch.Tensor, KH: int, KW: int, stride: int, padding: i
 def conv_im2col_gemm(input_tensor: torch.Tensor, kernel: torch.Tensor, stride: int = 1, padding: int = 0) -> torch.Tensor:
     B, C, H, W = input_tensor.shape
     OC, C_k, KH, KW = kernel.shape
-    assert C_k == C, "input channels mismatch: %d vs %d" % (C, C_k)  # noqa: UP031 - preserve the original diagnostic expression.
+    assert C_k == C, "input channels mismatch: %d vs %d" % (C, C_k)
     HO = (H + 2 * padding - KH) // stride + 1
     WO = (W + 2 * padding - KW) // stride + 1
 
@@ -114,7 +116,7 @@ def conv_im2col_gemm(input_tensor: torch.Tensor, kernel: torch.Tensor, stride: i
             input_flat = input_padded.contiguous()
 
     func = matmul(M_pad, N_pad, K_pad, block_M, block_N, block_K)
-    print("    GEMM(M=%d->%d, N=%d->%d, K=%d->%d)" % (M, M_pad, N, N_pad, K, K_pad))  # noqa: UP031 - preserve the original diagnostic expression.
+    print("    GEMM(M=%d->%d, N=%d->%d, K=%d->%d)" % (M, M_pad, N, N_pad, K, K_pad))
     print("    init successful!")
     output = func(kernel_flat, input_flat)
 
@@ -134,14 +136,10 @@ def run_test(name, B_val, C_val, H_val, W_val, OC_val, KH_val, KW_val, stride_va
     ref = F.conv2d(input_t.cpu(), kernel_t.cpu(), stride=stride_val, padding=padding_val).npu()
 
     torch.testing.assert_close(result, ref, rtol=1e-2, atol=1e-2)
-    print("    PASS: %s\n" % name)  # noqa: UP031 - preserve the original diagnostic expression.
+    print("    PASS: %s\n" % name)
 
 
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
-
-    A2A3CythonKernelCache().clear_cache()
+if __name__ == "__main__":
     tests = [
         # 1. Original: all dims perfectly aligned to block size 128
         dict(
@@ -227,12 +225,8 @@ def main():
     print("TileLang Ascend 2D Convolution Test Suite (6 scenarios)")
     print("=" * 60)
     for i, tc in enumerate(tests, 1):
-        print("[%d/6] %s" % (i, tc["name"]))  # noqa: UP031 - preserve the original diagnostic expression.
+        print("[%d/6] %s" % (i, tc["name"]))
         run_test(tc["name"], tc["B"], tc["C"], tc["H"], tc["W"], tc["OC"], tc["KH"], tc["KW"], tc.get("stride", 1), tc.get("padding", 0))
     print("=" * 60)
     print("TEST PASSED!")
     print("=" * 60)
-
-
-if __name__ == "__main__":
-    main()

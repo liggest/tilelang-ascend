@@ -13,25 +13,18 @@ Run:
 """
 
 import argparse
+import os
 import sys
 
 import tilelang
 import torch
 
-# Bind only the exact private sibling; never mutate import search paths.
-try:
-    from . import example_tilelang_nsa_decode as _nsa_module
-except ImportError:
-    import importlib.util as _importlib_util
-    from pathlib import Path as _Path
-
-    _spec = _importlib_util.spec_from_file_location(
-        "_a2a3_experiment_nsa_decode", _Path(__file__).with_name("example_tilelang_nsa_decode.py")
-    )
-    _nsa_module = _importlib_util.module_from_spec(_spec)
-    _spec.loader.exec_module(_nsa_module)
-nsa_decode = _nsa_module.nsa_decode
-run_kernel = _nsa_module.run_kernel
+# Import kernel + helpers from sibling module.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from example_tilelang_nsa_decode import (  # noqa: E402
+    nsa_decode,
+    run_kernel,
+)
 
 
 # =============================================================================
@@ -379,7 +372,7 @@ def test_nsa_boundary():
 # =============================================================================
 # Main: --level dispatch + exit code
 # =============================================================================
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="NSA Decode layered precision test suite (Ascend)")
     parser.add_argument(
         "--level",
@@ -405,20 +398,6 @@ def _original_main():
         print("Test Passed!")
         sys.exit(0)
     sys.exit(1)
-
-
-def main():
-    import torch_npu  # noqa: F401
-    from tilelang.env import CacheState
-
-    enabled = CacheState.is_enabled()
-    try:
-        _original_main()
-    finally:
-        if enabled:
-            CacheState.enable()
-        else:
-            CacheState.disable()
 
 
 if __name__ == "__main__":

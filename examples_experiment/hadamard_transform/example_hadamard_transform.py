@@ -1,13 +1,11 @@
-"""Complete original experimental source; runtime requires explicit main()."""
-
-import os
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
 import argparse
 import math
 
 import tilelang
-import tilelang.ascend.a2a3.language as T
+from tilelang.ascend.a2a3 import language as T
 import torch
+
+tilelang.disable_cache()
 
 
 def is_pow_of_2(n):
@@ -207,7 +205,7 @@ def ref_hadamard(x: torch.Tensor):
     return torch.nn.functional.linear(x_fp32, H).to(x.dtype)
 
 
-def _original_main():
+def main():
     parser = argparse.ArgumentParser(description="Hadamard Transform on Ascend NPU (Complete)")
     parser.add_argument("--batch", type=int, default=4, help="Batch size")
     parser.add_argument("--dim", type=int, default=2048, help="Dimension (must be power of 2)")
@@ -262,20 +260,6 @@ def _original_main():
         atol = 1e-3
     torch.testing.assert_close(y.cpu(), y_ref.cpu(), rtol=rtol, atol=atol)
     print(f"Test passed! (rtol={rtol}, atol={atol})")
-
-
-def main():
-    if not os.environ.get("TILELANG_CACHE_DIR"):
-        raise RuntimeError("Set a dedicated TILELANG_CACHE_DIR before running this cache-clearing example.")
-    from pathlib import Path
-    from tilelang import env
-
-    if Path(env.TILELANG_CACHE_DIR).resolve() != Path(os.environ["TILELANG_CACHE_DIR"]).resolve():
-        raise RuntimeError("The resolved cache differs from the explicit TILELANG_CACHE_DIR; remove the caller cache override first.")
-    import torch_npu  # noqa: F401
-
-    A2A3CythonKernelCache().clear_cache()
-    _original_main()
 
 
 if __name__ == "__main__":
