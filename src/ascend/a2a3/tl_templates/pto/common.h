@@ -1,3 +1,5 @@
+#include "ascend/a2a3/tl_templates/integer_math.h"
+
 #include <pto/pto-inst.hpp>
 #include <type_traits>
 

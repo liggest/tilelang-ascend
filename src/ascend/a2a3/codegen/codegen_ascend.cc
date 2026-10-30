@@ -419,50 +419,34 @@ void CodeGenTileLangAscend::PrintStorageScope(const std::string &scope,
 
 void CodeGenTileLangAscend::VisitExpr_(const FloorDivNode *op,
                                        std::ostream &os) {
-  PrimExpr expr = GetRef<PrimExpr>(op);
-  if (floor_arithmetic_.CanUseTrunc(expr)) {
-    os << "(";
+  if (op->dtype.is_int() || op->dtype.is_uint()) {
+    os << "::tl::ascend::floor_div(";
     PrintExpr(op->a, os);
-    os << " / ";
+    os << ", ";
     PrintExpr(op->b, os);
     os << ")";
     return;
   }
-  ICHECK(op->dtype.is_scalar() && op->dtype.is_int());
-  std::string helper = floor_arithmetic_.EmitHelper(
-      false, decl_stream, "__aicore__", [this](const std::string &name) {
-        return name_supply_->FreshName(name);
-      });
-  // Helpers are module declarations; later functions may reuse their names
-  // for parameters or locals after CodeGenC resets its name supply.
-  os << "::" << helper << "(";
+  os << "(";
   PrintExpr(op->a, os);
-  os << ", ";
+  os << " / ";
   PrintExpr(op->b, os);
   os << ")";
 }
 
 void CodeGenTileLangAscend::VisitExpr_(const FloorModNode *op,
                                        std::ostream &os) {
-  PrimExpr expr = GetRef<PrimExpr>(op);
-  if (floor_arithmetic_.CanUseTrunc(expr)) {
-    os << "(";
+  if (op->dtype.is_int() || op->dtype.is_uint()) {
+    os << "::tl::ascend::floor_mod(";
     PrintExpr(op->a, os);
-    os << " % ";
+    os << ", ";
     PrintExpr(op->b, os);
     os << ")";
     return;
   }
-  ICHECK(op->dtype.is_scalar() && op->dtype.is_int());
-  std::string helper = floor_arithmetic_.EmitHelper(
-      true, decl_stream, "__aicore__", [this](const std::string &name) {
-        return name_supply_->FreshName(name);
-      });
-  // Helpers are module declarations; later functions may reuse their names
-  // for parameters or locals after CodeGenC resets its name supply.
-  os << "::" << helper << "(";
+  os << "(";
   PrintExpr(op->a, os);
-  os << ", ";
+  os << " % ";
   PrintExpr(op->b, os);
   os << ")";
 }
@@ -1208,7 +1192,6 @@ void CodeGenTileLangAscend::AddFunction(const GlobalVar &gvar,
   DeclareFunction(gvar, f);
   // clear previous generated state.
   this->InitFuncState(f);
-  floor_arithmetic_.Analyze(f->body);
   current_resource_scope_ = -1;
   buffer_dtypes_.clear();
   for (const auto &entry : f->buffer_map) {

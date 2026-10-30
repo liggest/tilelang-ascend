@@ -17,7 +17,6 @@
 
 #include "backend/common/codegen/codegen_c_base.h"
 #include "constant.h"
-#include "floor_arithmetic.h"
 
 namespace tvm {
 namespace tl {
@@ -81,7 +80,6 @@ public:
 private:
   void EmitConstant(const Call &call, const Optional<Var> &var);
   ConstantDeclarations constants_;
-  FloorArithmetic floor_arithmetic_;
   std::unordered_map<Var, std::string, ObjectPtrHash, ObjectPtrEqual>
       constant_vars_;
 

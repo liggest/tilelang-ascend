@@ -1,3 +1,5 @@
+#include "ascend/a2a3/tl_templates/integer_math.h"
+
 // clang-format off
 #include "catlass/catlass.hpp"
 #include "catlass/arch/arch.hpp"
