@@ -2,15 +2,13 @@
 
 # TileLang-Ascend A2/A3 文档与来源资料
 
-> 本目录来自固定TA版本，A2/A3当前使用先读迁移指南。原通用GPU/CPU与伪IR页面保持其原方言，不代表A2/A3支持承诺；旧站点配置在_source_config中非活动保存。
+> 本目录来自固定TA版本，A2/A3当前使用先读迁移指南。原通用GPU/CPU与伪IR页面保持其原方言，不代表A2/A3支持承诺。
 
 :::{toctree}
 :maxdepth: 2
 :caption: A2/A3 MIGRATION
 
 migration
-skills
-AGENTS.candidate
 :::
 
 [GitHub](https://github.com/tile-ai/tilelang)

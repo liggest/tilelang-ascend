@@ -234,9 +234,9 @@ examples/ascend_a2a3/{op}/
 | 中断后想从头开始 | 不想续跑 | 删除 `examples/ascend_a2a3/{op}/.orchestrator_state.json`，重新触发 orchestrator |
 | 状态文件结构异常 | 字段缺失或旧格式 | Orchestrator 会自动迁移；严重情况下删除状态文件重跑 |
 
-## 与项目根 AGENTS.md 的关系
+## 开发原则
 
-代理体系遵循根 [AGENTS.md](../../docs/ascend_a2a3/AGENTS.candidate.md) 的 6 项核心原则：
+代理体系遵循以下 6 项核心原则：
 
 1. 不要凭记忆猜 API
 2. 从示例入手
@@ -249,7 +249,6 @@ Orchestrator 在调度 Subagent 时会在 prompt 中明确提醒这些原则，S
 
 ## 相关文档
 
-- [AGENTS.md](../../docs/ascend_a2a3/AGENTS.candidate.md) — 项目级开发规范与代理体系入口
 - [tilelang-op-orchestrator.md](tilelang-op-orchestrator.md) — Primary 代理完整规范
 - [tilelang-op-analyst.md](tilelang-op-analyst.md) — Stage 1 设计代理
 - [tilelang-op-developer.md](tilelang-op-developer.md) — Stage 2/3 开发代理

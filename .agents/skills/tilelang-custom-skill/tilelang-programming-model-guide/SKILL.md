@@ -29,7 +29,7 @@ description: TileLang Ascend Developer/Expert 模式选择与 pass_configs 配�
 | **适用场景** | 大多数算子，跨平台兼容 | 极致性能优化，需要底层控制 |
 | **示例目录** | `examples/ascend_a2a3/developer_mode/` | `examples/ascend_a2a3/flash_attention/fa_opt/flash_attn_bhsd_expert_*.py` |
 
-以下示例路径表示固定 TA 来源的迁移目标，不保证当前都存在或已验证。先查 `maint/ascend_a2a3/ecosystem_ports.json`；缺目标时只读取固定 pin 的原 source，不能执行不存在的路径或据此宣称当前支持。
+使用前核对对应目录中的实际实现和支持范围。
 
 **混合模式**：Developer 主体 + 少量 Ascend 专属 `T.tile.xxx`。仍使用 Developer 的
 pass_configs，由编译器生成 resource scope 和同步；不要因为用了 `T.tile.*` 就关闭 CombineCV。

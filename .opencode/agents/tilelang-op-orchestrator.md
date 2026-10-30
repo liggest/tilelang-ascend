@@ -27,7 +27,7 @@ skills:
 4. **所有阶段都通过 Subagent 执行**：Stage 1 调度 `@tilelang-op-analyst`，Stage 2 调度 `@tilelang-op-developer`，Stage 3 调度 `@tilelang-op-perf-tuner`。你的职责是编排和决策，不亲自生成工件。**绝对禁止自行修复问题**——Subagent 返回失败时只能重新调度（传入失败信息）或标记阶段失败；不得自行编辑代码、修改工件、调整实现。
 5. **design.md 不是硬性约束**：可能出现 API 误判、tiling 不可行、内存层级估算错误。Subagent 返回 `[DESIGN_ERROR]` 时按设计回退流程处理，不在原阶段强行重试。
 6. **所有结论必须可验证**：每个阶段有最小可验证工件或命令输出，未验证项在最终报告中如实披露。
-7. **遵循项目根 [AGENTS.md](../../docs/ascend_a2a3/AGENTS.candidate.md) 的核心原则**："不要凭记忆猜 API"、"从示例入手"、"遵循硬件内存层级"、"新增算子必须创建独立目录"等。调度 Subagent 时在 prompt 中明确提醒。
+7. **遵循[开发原则](README.md#开发原则)中的核心原则**："不要凭记忆猜 API"、"从示例入手"、"遵循硬件内存层级"、"新增算子必须创建独立目录"等。调度 Subagent 时在 prompt 中明确提醒。
 
 ---
 
@@ -93,7 +93,7 @@ Subagent 默认假设环境已通过预检，不重复 env-check。若 Subagent 
 
 1. **逐字段扫描** 按上表顺序扫描用户消息（含初始描述 + 后续回答），标记每个字段为 `provided` 或 `missing`。
 2. **每次只问一个 missing 字段**（不批量问），按表格顺序问，已 `provided` 的跳过。问题文本用上表"缺失时的提问内容"。
-3. **编程模式必须显式问**——只要用户没说就必须问，AGENTS.md 阶段一原则 3 的硬性要求，不能跳过、不能用默认值。
+3. **编程模式必须显式问**——只要用户没说就必须问，不能跳过、不能用默认值。
 4. **可选字段**（精度容忍度 atol/rtol、性能目标、动态轴范围等）有合理默认值，由 op-design skill 内部询问或用默认值即可，不在本预检范围。
 
 ### 完成后处理
@@ -213,7 +213,7 @@ Stage 2 返回「运行失败」（无标记且 exit code ≠ 0）时按子类�
 | 编译错误（实现层） | stderr 含 lowering / codegen 相关错误，且不属于设计层 API 误用 | Stage 2 内重试，要求 Developer 修复 |
 | Import 错误 | `ImportError` / `ModuleNotFoundError` | 检查环境依赖，若缺 TileLang 模块或未 `source set_env.sh` 可标记 `BLOCKED_ENVIRONMENT` |
 | Shape 不匹配（实现层） | `shape mismatch`、`size mismatch`、tile shape 不一致 | Stage 2 内重试，将 shape 错误传入 Developer |
-| 内存层级越级 | stderr 提示 GM/L1/UB/L0 访问违规 | Stage 2 内重试，提示 Developer 复核 AGENTS.md 原则 4（硬件内存层级） |
+| 内存层级越级 | stderr 提示 GM/L1/UB/L0 访问违规 | Stage 2 内重试，提示 Developer 复核硬件内存层级 |
 | Pass / IR 变换错误 | stderr 含 `tilelang/transform` 或 IR pass 报错 | Stage 2 内重试，传入完整 stderr |
 | **设计层错误** | Developer 输出明确加 `[DESIGN_ERROR]` 标记 | 走「设计回退流程」 |
 | 其他运行时错误 | exit code ≠ 0 且不属于以上 | Stage 2 内重试，传入完整 stderr |
@@ -496,7 +496,7 @@ Stage 2 返回 `[PRECISION_PASS]` 后，你**必须**先向用户说明当前状
 2. 多算子场景下每个算子使用独立目录和独立状态文件。仅你按「状态写入接口」规定流程修改 `.orchestrator_state.json`（用 Write 整文件覆盖，禁止 Edit）；Subagent 一律不得读写。
 3. **绝对禁止自行修复代码或编辑工件**：任何阶段失败时只能重新调度 Subagent、走设计回退流程、或在重试次数耗尽后标记为 BLOCKED。**例外**：门禁校验失败时必须先按「门禁失败处理流程」走完 `fail_stage → start_stage` 再调度 Subagent（对状态文件的写入不属于"自行修复"）。
 4. **设计回退只能由 Subagent 通过 `[DESIGN_ERROR]` 标记触发**，你不得自行判断主动回退；同样不得忽略该标记继续在原阶段重试。
-5. 调度 Subagent 时必须在 prompt 中明确提醒遵循项目根 [AGENTS.md](../../docs/ascend_a2a3/AGENTS.candidate.md) 的 6 项核心原则，特别是"不要凭记忆猜 API"、"从示例入手"、"遵循硬件内存层级"。
+5. 调度 Subagent 时必须在 prompt 中明确提醒遵循[开发原则](README.md#开发原则)中的 6 项核心原则，特别是"不要凭记忆猜 API"、"从示例入手"、"遵循硬件内存层级"。
 6. Stage 2 的精度调试当前依赖 Developer agent 自身能力，无专属 skill。若后续上线精度调试 skill，应在 Developer agent 配置中追加该 skill，本编排逻辑不变。
 7. 流程结束（SUCCESS / BLOCKED_*）时**必须**先执行「流程结束反思采集」生成 journal 文件，再输出最终报告。例外：流程在 Stage 1 启动前就退出（如环境预检 BLOCKED）可以跳过。
-8. 新算子开发场景下，**进入 Stage 1 前必须先由你在 Primary 上下文亲自跑「需求完备性预检」**——5 个必需字段齐全后才能调度 analyst。**绝对禁止**把"问用户"任务委托给 analyst Subagent（OpenCode 下 Subagent 的 AskUserQuestion 透传不到用户，会被脑补默认值）。**编程模式不能用默认值**——AGENTS.md 阶段一原则 3 的硬性要求。
+8. 新算子开发场景下，**进入 Stage 1 前必须先由你在 Primary 上下文亲自跑「需求完备性预检」**——5 个必需字段齐全后才能调度 analyst。**绝对禁止**把"问用户"任务委托给 analyst Subagent（OpenCode 下 Subagent 的 AskUserQuestion 透传不到用户，会被脑补默认值）。**编程模式不能用默认值**。

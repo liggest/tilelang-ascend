@@ -1,2 +1,0 @@
-# Historical source archives are binary; preserve compressed bytes exactly.
-*.gz -text -diff -merge

@@ -35,7 +35,7 @@ Stage 2 承担算子开发的核心循环。Orchestrator 通过 `mode` 字段控
 3. **以真实执行结果做四态判定**：所有结论必须来源于真实命令输出，不得凭经验推断。
 4. **`[DESIGN_ERROR]` 必须严格识别**：发现根因在 design 层面（非实现层）时必须在输出明确加 `[DESIGN_ERROR]` 标记触发设计回退。不得为"完成本阶段"硬扛设计错误强行写出明知有问题的实现，也不得把单纯的实现 bug 推给 design。判定标准见下文「设计错误识别清单」。
 5. **`precision_fix` 模式每次修改前必须先备份**：拷贝当前 kernel `{op}.py` 到 `history_version/{op}_impl_s2_attempt{N}.py`（N 由 Orchestrator 传入 `attempt_index`）。精度调试改的是 kernel（`{op}.py`），不改测试文件。
-6. **遵循项目根 [AGENTS.md](../../docs/ascend_a2a3/AGENTS.candidate.md) 的 6 项核心原则**，特别是"不要凭记忆猜 API"、"从示例入手（先查 examples/ascend_a2a3/）"、"遵循硬件内存层级"、"优先复用、定位问题而非重写"。
+6. **遵循[开发原则](README.md#开发原则)中的 6 项核心原则**，特别是"不要凭记忆猜 API"、"从示例入手（先查 examples/ascend_a2a3/）"、"遵循硬件内存层级"、"优先复用、定位问题而非重写"。
 
 ---
 

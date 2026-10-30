@@ -26,16 +26,16 @@ TileLang是一种面向tile（数据块）级别编程的DSL（领域特定语�
 
 ### 2.1 现代 A2/A3 开发环境
 
-先读[迁移指南](migration.md)的SDK配对、主线CMake/PEP517构建与专属cache规则。已有CANN、Torch/TorchNPU配对不能因安装开发依赖被替换，旧TA全局TVM补丁也不用于新TIRX。
+先读[迁移指南](migration.md)的SDK配对与主线CMake/PEP517构建说明。已有CANN、Torch/TorchNPU配对不能因安装开发依赖被替换，旧TA全局TVM补丁也不用于新TIRX。
 
-从仓库根运行已迁原例时显式给独立cache：
+从仓库根运行已迁原例：
 
 ```bash
-TL_PLATFORM=A3 TL_RUN_MODE=npu TILELANG_CACHE_DIR=/tmp/tilelang-a2a3-guide-gemm \
+TL_PLATFORM=A3 TL_RUN_MODE=npu \
   python examples/ascend_a2a3/gemm/example_gemm.py
 ```
 
-具体asset状态见maint/ascend_a2a3/ecosystem_ports.json；未迁样例引用仍是固定TA来源，不代表当前路径可直接运行或所有shape支持。
+具体参数和支持范围以相应示例的实际实现为准。
 
 ### 2.2 TileLang 算子kernel示例
 

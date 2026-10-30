@@ -18,5 +18,3 @@ tilelang.ascend.a2a3.language (common eager frontend)
 新 IR 是 `tvm.tirx`；`s_tir` 仅提供明确共享变换。旧 `vid` 对应 `cthread`，默认/显式 launch 标记不同。`Var()` 创建真实 Var，不表示缺失；依 main IR skill 用 `Optional<Var>` 表达空状态。Buffer/Var/节点身份和结构相等按主线技能区分。
 
 Python `T.Kernel(..., is_npu=True)`、`T.Scope`、`T.tile`、L1/UB/L0 分级语义来自 TA；A5 `tilelang.ascend.language` 的 MixedKernel/SimdVF 不得作为其替代。`T.gemm` 的 generic GPU 分支不是 A2/A3 矩阵原语支持证明；查真实 `T.mma` / `T.tile` 原语和已迁原例。
-
-原架构图和文件行数保留在对应 `_source_config/skill-sources` 来源文件中，不作为当前架构事实。

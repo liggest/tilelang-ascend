@@ -51,7 +51,7 @@ cmake --build build -j8
 export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
 ```
 
-依赖安装前后的 Torch/TorchNPU metadata 必须与保存的精确 constraints 一致（含 local version）；解析不能满足时停止并修复依赖，不删约束换 SDK。上述构建命令无需设置 `TILELANG_CACHE_DIR`；运行会清理 cache 的原脚本时，按下一节示例先创建并导出专属目录，不能使用调用者默认 cache。
+依赖安装前后的 Torch/TorchNPU metadata 必须与保存的精确 constraints 一致（含 local version）；解析不能满足时停止并修复依赖，不删约束换 SDK。上述构建命令无需设置 `TILELANG_CACHE_DIR`。
 
 这条路径只构建，不替你安装 CANN、TorchNPU 或运行设备测试。需要安装 wheel 或 editable 包时，用主线 `pip install .` / `pip install -e .` 与同样的 CMake 配置参数，按现行 build 文档处理 native/Cython 产物。
 
@@ -69,22 +69,17 @@ export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
 
 迁移新增的 A2/A3 host/source 组件测试统一放在 `testing/ascend_a2a3/python/refactor/{原 testing/ascend 子目录}`；主线原有 `testing/ascend/` 文件保持原位。两者和原 TA 算子资产测试不是同一集合。先确认具体资产已经完成迁移；未完成资产的显式阻断或原已有失败不能算通过。
 
-2026-10-30 目录调整前，实验目标曾为 `examples_experiment/ascend_a2a3/`，新增组件测试曾位于 `testing/ascend/`；这些路径仅保留在历史报告/搬移清单中，原 source pin、source path、历史测试范围和数量不随目标路径调整改写。逐文件去向见 `maint/ascend_a2a3/experiment_layout_move.json`，完整 TA CI 等效命令另按当前受控入口执行。
-
 使用原 factory、decorator、`pass_configs`、`out_idx`、`workspace_idx`、shape/dtype 和原 golden 门槛。例如运行已迁移的原脚本时：
 
 ```bash
 (
   export TL_PLATFORM=A3
   export TL_RUN_MODE=npu
-  TILELANG_CACHE_DIR=$(mktemp -d /tmp/tilelang-a2a3-doc-gemm.XXXXXXXX) || exit 1
-  export TILELANG_CACHE_DIR
-  echo "示例专属 cache: $TILELANG_CACHE_DIR"
   python examples/ascend_a2a3/gemm/example_gemm.py
 )
 ```
 
-这个子 shell 只新建随机目录，不复用或删除调用者默认 cache；变量不影响外层环境，结束后保留该目录供排查。脚本的 `main()` 会真实清理这个专属目录内的缓存。
+原脚本中的 `tilelang.cache.clear_cache()` 按约定适配为 `tilelang.disable_cache()`；原有入口结构、输入和判定保持不变。
 
 具体脚本的参数、内存预算和支持范围以该脚本及其迁移记录为准。上面的路径选择不是所有 shape 或设备的通过承诺。
 
@@ -104,7 +99,7 @@ export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
 | `src/target/codegen_ascend*.{cc,h}` | `src/ascend/a2a3/codegen/` |
 | TA op/layout/template | `src/ascend/a2a3/op/`、`layout/`、`tl_templates/` |
 
-公开 Python pass 名称保留，由本地 wrapper 访问隔离 native FFI；不要把旧 TA 注册覆盖主线 A5/共享入口。pass/build 逐项表见 [FFI 来源映射](../../maint/ascend_a2a3/ffi_map.json)。设备 build FFI 为 `target.build.tilelang_ascend_a2a3` 和 `target.build.tilelang_pto_a2a3`，native 第三个参数显式传入平台；公共 codegen wrapper 负责解析平台及 instrumentation。原 `tl.Scope` 在新本地 native 入口为 `tl.A2A3Scope`。
+公开 Python pass 名称保留，由本地 wrapper 访问隔离 native FFI；不要把旧 TA 注册覆盖主线 A5/共享入口。设备 build FFI 为 `target.build.tilelang_ascend_a2a3` 和 `target.build.tilelang_pto_a2a3`，native 第三个参数显式传入平台；公共 codegen wrapper 负责解析平台及 instrumentation。原 `tl.Scope` 在新本地 native 入口为 `tl.A2A3Scope`。
 
 新 TVM IR 使用 `tvm.tirx`、`SBlock`/`SBlockRealize`、`Bind` 与 `AllocBuffer`。旧 `LetStmt`、`Allocate`、`CustomizedCodeNode` 不是把名字全局替换就能构造的新 API。修改 pass 前读主线 {download}`IR 技能 <../../.agents/skills/tilelang-tvm-ir/SKILL.md>`。原 `_src_code` 公开调用已通过本地语言入口承接，不能因此宣称为被删除的通用旧节点创建了全局等价别名。
 
@@ -122,11 +117,9 @@ Python 手动 `T.set_flag(src, dst, event_id)`/`wait_flag` 保留原 TA 语言�
 
 ## 文档与技能的来源边界
 
-本目录保留原 TA 文档中的通用 GPU/CPU 教学资料；这些页面的 CUDA/线程示例仍属于其原方言，不是 A2/A3 API 示例。旧站点 `conf.py`、Makefile、CNAME 和旧安装配置保存在 `_source_config/`，不参与主站配置。
+本目录保留原 TA 文档中的通用 GPU/CPU 教学资料；这些页面的 CUDA/线程示例仍属于其原方言，不是 A2/A3 API 示例。
 
-现有 main backend/build/IR/A5 技能保持原内容；TA 独有技能逐项适配并记录来源，不把旧全局 `AGENTS` 或自动 push/pull/装环境的操作当成本次迁移授权。新 `AGENTS` 合并候选在专审通过前不激活。
-
-非活动原文档案使用确定性gzip保存原始字节，避免当前格式工具改写历史资料。查看方式为`gzip -dc <archive.gz>`；清单同时记录archive hash、解压后source hash和Git blob。压缩只是来源保存，不是API或设备通过证据；活动用户文档、实际SKILL和法律LICENSE/NOTICE不压缩。
+现有 main backend/build/IR/A5 技能保持原内容；TA 独有技能逐项适配并记录来源，不把旧全局 `AGENTS` 或自动 push/pull/装环境的操作当成本次迁移授权。
 
 ```{toctree}
 :maxdepth: 1

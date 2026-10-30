@@ -1,8 +1,8 @@
 # 主线技能与 TA A2/A3 来源技能
 
-现有 main backend/build/dev-guide/tvm-ir/layout/semantic/A5 等技能逐字保持；此页后续保留 TA 原工作流并适配 A2/A3路径。先读 [迁移指南](../docs/ascend_a2a3/migration.md) 和 [21项技能状态](../docs/ascend_a2a3/skills.md)。A2/A3使用tilelang.ascend.a2a3.language，A5使用tilelang.ascend.language。
+现有 main backend/build/dev-guide/tvm-ir/layout/semantic/A5 等技能逐字保持；此页后续保留 TA 原工作流并适配 A2/A3路径。先读 [迁移指南](../docs/ascend_a2a3/migration.md)。A2/A3使用tilelang.ascend.a2a3.language，A5使用tilelang.ascend.language。
 
-根AGENTS尚未从TA直接激活；[合并候选](../docs/ascend_a2a3/AGENTS.candidate.md)与原文供专审。下面的OpenCode流程只用于明确的TA A2/A3新kernel任务；不覆盖main编译器开发或重复已有用户授权。旧A5sim转换资产标为来源参考，不能据它宣称A2sim或当前A5执行已验收。
+下面的OpenCode流程只用于明确的TA A2/A3新kernel任务；不覆盖main编译器开发或重复已有用户授权。旧A5sim转换资产标为来源参考，不能据它宣称A2sim或当前A5执行已验收。
 
 # TileLang-Ascend OpenCode 工作流
 
@@ -12,7 +12,7 @@
 环境预检 → 算子设计 → 代码实现+测试+精度调试（一站式） → （可选）性能调优
 ```
 
-本仓库为 [OpenCode](https://opencode.ai) 预配置了项目规范（[AGENTS.md](../docs/ascend_a2a3/AGENTS.candidate.md)）、专家技能（Skills）和协作代理（Agents），开箱即用。
+本仓库为 [OpenCode](https://opencode.ai) 预配置了专家技能（Skills）和协作代理（Agents），开箱即用。
 
 ---
 
@@ -133,11 +133,9 @@ claude --agent tilelang-op-orchestrator
 
 ## 核心架构
 
-### AGENTS.md — 项目规范
+### 开发规范
 
-[AGENTS.md](../docs/ascend_a2a3/AGENTS.candidate.md) 是 OpenCode 的项目级自定义指令文件，在本仓库使用 OpenCode 时自动加载生效。
-
-该文件定义了：
+算子开发涉及以下规范：
 
 - **Skills 索引**：按触发时机分类的技能清单
 - **6 项核心原则**：不要凭记忆猜 API、从示例入手、注意双层修改、遵循硬件内存层级、优先复用定位问题而非重写、新增算子必须创建独立目录
@@ -204,7 +202,7 @@ Stage 2: 代码实现 + 测试 + 精度调试（一站式）→ @tilelang-op-dev
 
 **调用方式**：
 
-- **自动匹配** — 描述目标，OpenCode 根据 AGENTS.md 的 Skills 表自动选择
+- **自动匹配** — 描述目标，按 Skills 的适用范围选择
 - **斜杠命令** — 明确指定：`/tilelang-op-design`
 - **自然语言点名** — `请使用 tilelang-op-develop 技能`
 
@@ -495,7 +493,6 @@ Developer 在 Stage 2 中识别到这些情形时，会在输出加 `[DESIGN_ERR
 
 ## 相关文档
 
-- [AGENTS.md](../docs/ascend_a2a3/AGENTS.candidate.md) — 项目级开发规范
 - [.opencode/agents/README.md](../.opencode/agents/README.md) — 代理体系技术细节
 - [TileLang-Ascend Programming Guide](../docs/ascend_a2a3/TileLang-Ascend%20Programming%20Guide.md) — 编程指南
 - [.agents/skills/](skills) — Skill 库源文件
