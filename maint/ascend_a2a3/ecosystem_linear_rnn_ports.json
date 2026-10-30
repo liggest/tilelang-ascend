@@ -1798,7 +1798,7 @@
         }
       ],
       "host_prototype": "uint8_t* K_handle, uint8_t* V_handle, uint8_t* Acc_handle, aclrtStream stream",
-      "main_source_sha256": "d612f331e1f0497c668f15176453827a2694fbcf6f2ab98c1f7022c109bd1284",
+      "main_source_sha256": "3e1b3c2f5b650e7bb30d6b323d485130a1e25c4ebacb1768c9337e4703f29ef1",
       "TA_source_sha256": "4a12dddcf2464e2316ab539cc28023c2e57cbd9d29b66e0c1303aa628033ea57",
       "final_op_calls": {
         "tl.ascend_auto_set_flag": 6,
@@ -1821,7 +1821,7 @@
           "ascend_ub",
           "half",
           "32",
-          "128"
+          "16640"
         ],
         [
           "acc_l0",
@@ -1842,7 +1842,7 @@
           "ascend_ub",
           "half",
           "2048",
-          "192"
+          "128"
         ],
         [
           "k_l1",
@@ -1856,21 +1856,21 @@
           "ascend_ub",
           "float",
           "2048",
-          "4288"
+          "4224"
         ],
         [
           "sumk_ub",
           "ascend_ub",
           "float",
           "32",
-          "12480"
+          "12416"
         ],
         [
           "tmp_ub",
           "ascend_ub",
           "uint8_t",
           "4096",
-          "12608"
+          "12544"
         ],
         [
           "v_l1",
@@ -2054,5 +2054,19 @@
       "source_sampling": "none",
       "source_review": "p3_linear_L1/source_allocation_effect_review.json"
     }
-  ]
+  ],
+  "source_contract_refresh": {
+    "baseline_head": "69975dd1c109b128ffc3fc608ebfb52619a38d2f",
+    "source_generation_reference_head": "69975dd1c109b128ffc3fc608ebfb52619a38d2f",
+    "TA_source_pin": "463c234ce3087205c092e931207ca87b4cd5494c",
+    "TA_storage_branch": "is_npu=True, source-only controlled helper, no TorchNPU registration or device execution",
+    "main_native_sha256": "376afdbe0739cad1bf13d00862a70b94c96a2332ae4e347ea289b3b650b3fdbc",
+    "TA_native_sha256": "c5c7b65ddd2480de548697ae9a340b13fd3ece9b9640439010a3e0b4964efd9c",
+    "history_path": "maint/ascend_a2a3/source_contract_history/baseline_69975dd1_allocation_views.json",
+    "updated_ids": [
+      "normalize_linear_attention_ker1"
+    ],
+    "comparison": "Complete original factory AST, frontend and host ABI, exact named allocation views and synchronization agree; full CPP equivalence after explicit include prefix, unique block-variable alpha, pure single-use float binding and proved full-chunk DMA mask adaptations only.",
+    "scope": "Source contracts only; original complete CI failures and device outcomes are retained separately."
+  }
 }
