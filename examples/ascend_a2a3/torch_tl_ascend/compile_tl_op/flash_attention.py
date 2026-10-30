@@ -62,7 +62,6 @@ def update_package_files(force_compile=False):
     op_source_path = source_path_of(op_func)
     print(f"Grabbing {op_source_path.suffix} of {op_func!r} ({op_source_path.as_posix()})")
     package_source_path = PACKAGE_SOURCE_ROOT / op_source_path.name
-    PACKAGE_SOURCE_ROOT.mkdir(parents=True, exist_ok=True)
     shutil.copy(op_source_path, package_source_path)
 
     B, S, H, D = 4, 4096, 16, 128
