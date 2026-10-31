@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 
 import tilelang
+from tilelang.ascend.a2a3 import kernel_cache
 import tilelang.ascend.a2a3.language as T
 import tilelang.ascend.a2a3.language.reduce_ascend as reduce_ascend_lang
 
@@ -26,7 +27,8 @@ pass_configs = {
 
 @pytest.fixture(autouse=True)
 def clear_cache(isolated_a2a3_cache):
-    """Keep original per-module clearing away from caller caches."""
+    """Clear tilelang cache before tests."""
+    kernel_cache.clear_cache()
     yield
 
 
