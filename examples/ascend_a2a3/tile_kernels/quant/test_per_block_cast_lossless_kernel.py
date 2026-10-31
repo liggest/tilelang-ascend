@@ -71,7 +71,7 @@ def _test_params() -> list:
 
 
 @pytest.fixture
-def isolated_kernel_cache(tmp_path):
+def isolated_kernel_cache(tmp_path, monkeypatch):
     """Give the case its own kernel cache directory.
 
     The Example clears the kernel cache when it is imported, and here that
@@ -82,14 +82,8 @@ def isolated_kernel_cache(tmp_path):
     """
     from tilelang import env
 
-    cache_dir = vars(type(env))["TILELANG_CACHE_DIR"]
-    # None must remain a live environment lookup after teardown.
-    previous = cache_dir._forced_value
-    env.TILELANG_CACHE_DIR = str(tmp_path)
-    try:
-        yield
-    finally:
-        env.TILELANG_CACHE_DIR = previous
+    monkeypatch.setattr(type(env), "TILELANG_CACHE_DIR", str(tmp_path))
+    yield
 
 
 def _load_per_block_cast_example() -> ModuleType:
