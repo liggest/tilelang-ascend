@@ -667,14 +667,8 @@ jobs:
               git submodule foreach --recursive 'git reset -q --hard && git clean -qffdx'
 
               # 1. 增量编译项目
-              # 保持容器预装的 Torch/TorchNPU，依赖冲突时失败而不替换。
-              CI_REQUIREMENTS=\$(mktemp -d)
-              trap 'rm -rf \"\$CI_REQUIREMENTS\"' EXIT
-              STACK_CONSTRAINTS=\"\$CI_REQUIREMENTS/constraints.txt\"
-              python -c 'from importlib.metadata import version; print(\"torch==\" + version(\"torch\")); print(\"torch-npu==\" + version(\"torch-npu\"))' > \"\$STACK_CONSTRAINTS\"
-              sed -E '/^[[:space:]]*torch([<>=!~;[:space:]]|\$)|^[[:space:]]*torch[-_]npu([<>=!~;[:space:]]|\$)/d' requirements.txt > \"\$CI_REQUIREMENTS/runtime.txt\"
-              python -m pip install -c \"\$STACK_CONSTRAINTS\" -r requirements-dev.txt
-              python -m pip install --no-build-isolation -c \"\$STACK_CONSTRAINTS\" -r \"\$CI_REQUIREMENTS/runtime.txt\" pytest pytest-xdist pytest-forked pytest-cov coverage pandas matplotlib PyYAML pybind11 decorator absl-py attrs scipy tornado
+              python -m pip install -r requirements-dev.txt
+              python -m pip install -r requirements.txt pytest pytest-xdist pytest-forked pytest-cov coverage pandas matplotlib PyYAML pybind11 decorator absl-py attrs scipy tornado
               BUILD_JOBS=\$(( \$(nproc) / 2 ))
               if [ \"\$BUILD_JOBS\" -lt 1 ]; then BUILD_JOBS=1; fi
               export CMAKE_BUILD_PARALLEL_LEVEL=\"\$BUILD_JOBS\"
