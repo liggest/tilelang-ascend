@@ -1,7 +1,7 @@
 import pytest
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 from tilelang.ascend.a2a3.layout import make_zn_layout, make_nz_layout
 import torch
 
@@ -55,7 +55,7 @@ DEV_CONFIGS = {
 @pytest.fixture(autouse=True)
 def clear_cache(isolated_a2a3_cache):
     """Clear tilelang cache before the session."""
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     yield
 
 

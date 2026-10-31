@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 from tilelang.env import CacheState
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
@@ -138,7 +138,7 @@ TARGETS = ["ascendc", "pto"]
 @pytest.fixture(autouse=True)
 def clear_cache(isolated_a2a3_cache):
     """Clear tilelang cache before the session."""
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     yield
 
 

@@ -5,7 +5,7 @@ import torch
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 
 """
 Test suite for T.tile.sort API.
@@ -269,7 +269,7 @@ def run_test_sort_fp16_index_large(actual_num, dtype, target):
 @pytest.fixture(autouse=True)
 def clear_cache(isolated_a2a3_cache):
     """Clear tilelang cache before tests."""
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     yield
 
 
@@ -523,7 +523,7 @@ if __name__ == "__main__":
     import torch_npu  # noqa: F401
 
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     print("=" * 60)
     print(f"T.tile.sort test: dtype={args.dtype}, target={args.target}")

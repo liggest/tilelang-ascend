@@ -173,3 +173,8 @@ class A2A3CythonKernelCache(CythonKernelCache):
             compile_flags=compile_flags,
             backend_context=backend_context,
         )
+
+
+def clear_cache() -> None:
+    """Clear the existing A2/A3 Cython cache's memory and disk entries."""
+    A2A3CythonKernelCache().clear_cache()

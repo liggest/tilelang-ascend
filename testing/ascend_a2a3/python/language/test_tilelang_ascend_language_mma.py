@@ -1,7 +1,7 @@
 import pytest
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 import torch
 import argparse
 from tilelang.ascend.a2a3.layout import make_zn_layout
@@ -64,7 +64,7 @@ def matmul(M, N, K, block_M, block_N, block_K, K_L1, dtype="float16", accum_dtyp
 def run_test(M, N, K, block_M, block_N, block_k, K_L1, target):
     device = "npu"
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     # 1. Compile the operator
     func_def = matmul(M, N, K, block_M, block_N, block_k, K_L1)

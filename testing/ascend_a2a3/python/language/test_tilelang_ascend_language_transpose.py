@@ -3,7 +3,7 @@ import argparse
 import pytest
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 
 pytestmark = pytest.mark.usefixtures("isolated_a2a3_cache")
 import torch
@@ -78,7 +78,7 @@ def transpose_inplace_kernel(M, dtype="float16"):
 
 def run_test_transpose(M, N, dtype, target):
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     func = tilelang.compile(
         transpose_kernel(M, N, dtype),
@@ -292,7 +292,7 @@ def test_transpose_non_aligned_raises(shape, dtype):
 @pytest.mark.parametrize("shape", [(16, 16), (32, 32)])
 def test_transpose_inplace_rejected(dtype, target, shape):
     M, _ = shape
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     with pytest.raises(ValueError, match="does not support in-place"):
         tilelang.compile(

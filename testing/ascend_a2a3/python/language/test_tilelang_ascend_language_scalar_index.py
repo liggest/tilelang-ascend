@@ -20,7 +20,7 @@ import torch
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 
 pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
 
@@ -53,7 +53,7 @@ def scalar_index_2d(B, N, dtype="int32"):
 @pytest.mark.parametrize("target", ["ascendc"])
 @pytest.mark.parametrize("B,N", [(4, 8), (3, 16), (2, 32)])
 def test_scalar_index_2d(B, N, target):
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     func = tilelang.compile(
         scalar_index_2d(B, N),
         out_idx=[1],

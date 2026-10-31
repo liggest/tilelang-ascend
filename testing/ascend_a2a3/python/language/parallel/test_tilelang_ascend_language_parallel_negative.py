@@ -15,7 +15,7 @@ backend wraps it differently -- if so, widen the ``pytest.raises`` tuple.
 import pytest
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 import tvm
 
 pass_configs = {
@@ -43,7 +43,7 @@ def clear_cache(isolated_a2a3_cache):
         compiler.resolve_compile_config(tvm.target.Target(TARGET))
     except FileNotFoundError as error:
         pytest.skip(f"requires the actual AscendC toolchain configuration: {error}")
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     yield
 
 

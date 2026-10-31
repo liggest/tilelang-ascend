@@ -4,7 +4,7 @@ import torch
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 
 pytestmark = pytest.mark.a2a3_device
 
@@ -19,7 +19,7 @@ pass_configs = {
 @pytest.fixture
 def clear_cache(isolated_a2a3_cache):
     """Clear tilelang cache before tests"""
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     yield
 
 

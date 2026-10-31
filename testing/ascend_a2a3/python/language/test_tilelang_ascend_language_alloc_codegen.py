@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 
 
 DEV_CONFIGS = {
@@ -19,7 +19,7 @@ pytestmark = [pytest.mark.a2a3_native, pytest.mark.usefixtures("isolated_a2a3_ca
 def clear_cache(isolated_a2a3_cache, monkeypatch):
     # Explicit source-test platform; no runtime hardware inference is needed.
     monkeypatch.setenv("TL_PLATFORM", "A3")
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
 
 def dev_L1_explicit_splice(dim, block_N=128, block_size=128, live_max=64):

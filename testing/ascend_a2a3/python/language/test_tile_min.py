@@ -4,8 +4,8 @@ import torch
 
 import tilelang.ascend.a2a3.language as T
 
-from testing.ascend_a2a3.python.base import BinaryOpSpec, register_binary_op_tests
-from testing.ascend_a2a3.python.base.binary_op import (
+from base import BinaryOpSpec, register_binary_op_tests
+from base.binary_op import (
     make_1d_kernel,
     make_buffload_kernel,
     make_buffer_mismatch_kernel,

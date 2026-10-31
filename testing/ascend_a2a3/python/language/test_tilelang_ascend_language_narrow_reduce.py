@@ -24,7 +24,7 @@ import torch
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 
 pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
 
@@ -99,7 +99,7 @@ def _data(M, buf_n, op, lo, hi):
 @pytest.mark.parametrize("valid", [64, 32, 16])
 def test_narrow_reduce_real_shape(op, valid):
     M, buf_n = 16, 512
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     func = tilelang.compile(
         narrow_via_real_shape(M, buf_n, valid, op),
         out_idx=[-1],
@@ -115,7 +115,7 @@ def test_narrow_reduce_real_shape(op, valid):
 @pytest.mark.parametrize("offset", [0, 64, 448])
 def test_narrow_reduce_column_slice(op, offset):
     M, buf_n, valid = 16, 512, 64
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     func = tilelang.compile(
         narrow_via_slice(M, buf_n, valid, op, offset),
         out_idx=[-1],

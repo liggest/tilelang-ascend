@@ -36,7 +36,7 @@ import torch
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 
 pytestmark = [pytest.mark.a2a3_device, pytest.mark.usefixtures("isolated_a2a3_cache")]
 
@@ -123,7 +123,7 @@ def kernel_driven_mma(dtype="float16", accum_dtype="float"):
 @pytest.mark.parametrize("n_act", [N, 96, 32])
 def test_kernel_driven_mma(n_act):
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     func = tilelang.compile(
         kernel_driven_mma(),

@@ -3,7 +3,7 @@ import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 from tilelang.env import CacheState
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 from unittest.mock import patch
 
 pytestmark = pytest.mark.a2a3_device
@@ -57,7 +57,7 @@ VEC_PASS_CONFIGS = {
 def clear_cache(isolated_a2a3_cache):
     """Clear the tilelang cache before the session (a stale kernel could mask a
     codegen regression -- a rebuilt kernel could otherwise return a cached one)."""
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
     yield
 
 

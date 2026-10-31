@@ -1,7 +1,7 @@
 import pytest
 import tilelang
 import tilelang.ascend.a2a3.language as T
-from tilelang.ascend.a2a3.kernel_cache import A2A3CythonKernelCache
+from tilelang.ascend.a2a3 import kernel_cache
 
 pytestmark = pytest.mark.usefixtures("isolated_a2a3_cache")
 import torch
@@ -227,7 +227,7 @@ def select_kernel_mod3(N, dtype="float16"):
 def run_test_mod1(M, N, block_M, block_N, dtype, target):
     device = "npu"
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     # 1. Compile the operator
     func_def = select_kernel_mod1(M, N, block_M, block_N, dtype=dtype)
@@ -255,7 +255,7 @@ def run_test_mod1(M, N, block_M, block_N, dtype, target):
 def run_test_mod2(M, N, block_M, block_N, dtype, target):
     device = "npu"
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     # 1. Compile the operator
     func_def = select_kernel_mod2(M, N, block_M, block_N, dtype=dtype)
@@ -283,7 +283,7 @@ def run_test_mod2(M, N, block_M, block_N, dtype, target):
 def run_test_1d_scalar(N, dtype, target):
     device = "npu"
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     # 1. Compile the operator
     func_def = select_kernel_1d_scalar(N, dtype=dtype)
@@ -311,7 +311,7 @@ def run_test_1d_scalar(N, dtype, target):
 def run_test_1d_tensor(N, dtype, target):
     device = "npu"
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     # 1. Compile the operator
     func_def = select_kernel_1d_tensor(N, dtype=dtype)
@@ -339,7 +339,7 @@ def run_test_1d_tensor(N, dtype, target):
 def run_test_mod3(dtype, target):
     device = "npu"
     torch.manual_seed(0)
-    A2A3CythonKernelCache().clear_cache()
+    kernel_cache.clear_cache()
 
     # 1. Compile the operator
     N = CMPMASK_SPR_MAX[dtype]
