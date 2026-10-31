@@ -686,9 +686,8 @@ jobs:
               cp -ra build/. build-cache/
 
               # 2. 加载环境变量
-              export TL_ROOT=\"\$PWD\"
-              export PYTHONPATH=\"\$PWD\${PYTHONPATH:+:\$PYTHONPATH}\"
-              export ACL_OP_INIT_MODE=1
+              echo 'Sourcing environment...'
+              source set_env.sh
               echo \"TILELANG_PATH=\$PWD\" >> \"\$GITHUB_ENV\"
 
               # 3. 运行测试用例
