@@ -2641,7 +2641,12 @@ void CodeGenTileLangAscendPto::PrintfOpCodegen(const CallNode *op,
     if (i > 0) {
       this->stream << ", ";
     }
-    this->stream << PrintExpr(op->args[i]);
+    if (const auto *literal = op->args[i].as<StringImmNode>()) {
+      // TA printf strings already contain C literal escapes.
+      this->stream << "\"" << literal->value << "\"";
+    } else {
+      this->stream << PrintExpr(op->args[i]);
+    }
   }
   this->stream << ");\n";
 }

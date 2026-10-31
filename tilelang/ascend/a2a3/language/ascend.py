@@ -545,11 +545,8 @@ def printf(format_str: str, *args):
     """
     Prints formatted output.
 
-    This function processes the format string and arguments (including Buffer
-    pointer conversion) before generating the hardware intrinsic call. StringImm
-    keeps raw text; the native C printer emits its escaped string literal.
-    Unicode follows the modern raw Unicode/UTF-8 contract rather than TA's
-    pre-escaped Latin-1 byte spellings for U+0080..U+00FF.
+    This function processes the format string and arguments (handling string escaping
+    and Buffer pointer conversion) before generating the hardware intrinsic call.
     It is commonly used for debugging kernel logic.
 
     Args:
@@ -561,16 +558,17 @@ def printf(format_str: str, *args):
         tvm.tir.Call: A TIR intrinsic call to `tl.ascend_printf`.
     """
     format_str = format_str.replace("%p", "0x%x")
-    # Modern CodeGenC escapes StringImm when emitting a C string literal.
-    # Preserve raw text here so newline/backslash characters are escaped once.
+    escaped_format = format_str.encode("unicode_escape").decode("utf-8")
 
     args_list = list(args)
     for i in range(len(args_list)):
         if isinstance(args_list[i], Buffer):
             args_list[i] = args_list[i].access_ptr("r")
+        if isinstance(args_list[i], str):
+            args_list[i] = args_list[i].encode("unicode_escape").decode("utf-8")
     new_args = tuple(args_list)
 
-    all_args = (format_str,) + new_args
+    all_args = (escaped_format,) + new_args
     return tir.call_intrin("handle", tir.op.Op.get("tl.ascend_printf"), *all_args)
 
 

@@ -342,19 +342,19 @@ def test_broadcast_axis_inference(axis):
         ("é🙂\n", None),
     ],
 )
-def test_printf_passes_raw_strings_to_modern_c_printer(format_string, string_argument):
+def test_printf_preserves_ta_preescaped_strings(format_string, string_argument):
     arguments = [] if string_argument is None else [string_argument]
     call = T.printf(format_string, *arguments)
     assert call.op.name == "tl.ascend_printf"
-    assert call.args[0].value == format_string
+    assert call.args[0].value == format_string.encode("unicode_escape").decode("utf-8")
     if string_argument is not None:
-        assert call.args[1].value == string_argument
+        assert call.args[1].value == string_argument.encode("unicode_escape").decode("utf-8")
 
 
 def test_printf_preserves_pointer_format_and_buffer_access():
     buffer = _buffer("printf_pointer", scope="global")
     call = T.printf("p=%p\n", buffer)
-    assert call.args[0].value == "p=0x%x\n"
+    assert call.args[0].value == r"p=0x%x\n"
     assert call.args[1].op.name == "tirx.tvm_access_ptr"
     assert call.args[1].args[1].same_as(buffer.data)
 
@@ -362,9 +362,9 @@ def test_printf_preserves_pointer_format_and_buffer_access():
 @pytest.mark.parametrize("dialect,prefix", [("ascendc", "AscendC::PRINTF"), ("pto", "cce::printf")])
 @pytest.mark.parametrize(
     "format_string,c_literal",
-    [("one\ttwo\\tail\n", r'"one\ttwo\\tail\n"'), ('quote="\n', r'"quote=\"\n"'), ("é🙂\n", '"é🙂\\n"')],
+    [("one\ttwo\\tail\n", '"one\\ttwo\\\\tail\\n"'), ('quote="\n', '"quote="\\n"'), ("é🙂\n", '"\\xe9\\U0001f642\\n"')],
 )
-def test_printf_full_pipeline_uses_modern_string_literals(dialect, prefix, format_string, c_literal):
+def test_printf_full_pipeline_preserves_ta_string_literals(dialect, prefix, format_string, c_literal):
     import tilelang
 
     @T.prim_func

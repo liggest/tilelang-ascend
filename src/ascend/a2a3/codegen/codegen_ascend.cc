@@ -2501,7 +2501,10 @@ void CodeGenTileLangAscend::PrintfOpCodegen(const CallNode *op,
     if (i > 0) {
       this->stream << ", ";
     }
-    if (auto *arg = op->args[i].as<CallNode>()) {
+    if (const auto *literal = op->args[i].as<StringImmNode>()) {
+      // TA printf strings already contain C literal escapes.
+      this->stream << "\"" << literal->value << "\"";
+    } else if (auto *arg = op->args[i].as<CallNode>()) {
       if (arg->op.same_as(builtin::tvm_access_ptr())) {
         this->stream << PrintBufferOffset(arg, false) << ".GetPhyAddr()";
       } else {

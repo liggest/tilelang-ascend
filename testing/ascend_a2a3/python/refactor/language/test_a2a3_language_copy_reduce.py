@@ -170,7 +170,7 @@ def test_top_level_ascend_primitives():
         T.loop_break(),
     ]
     assert all(isinstance(call, tvm.tirx.Call) for call in calls)
-    assert calls[7].args[0].value == "ptr=0x%x\n"
+    assert calls[7].args[0].value == r"ptr=0x%x\n"
     assert int(calls[8].args[3]) == 2
 
 
