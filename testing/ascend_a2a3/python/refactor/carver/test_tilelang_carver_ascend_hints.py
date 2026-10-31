@@ -1,9 +1,9 @@
 """Ascend Carver search works from an offline chip profile without an NPU."""
 
 import pytest
-from tvm.target import Target
 
 from tilelang import carver
+from tvm.target import Target
 from tilelang.carver.arch import get_arch
 import tilelang.carver.arch.ascend as ascend_arch
 
