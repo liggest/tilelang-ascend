@@ -86,7 +86,7 @@ def get_precision(dtype):
     """Return (atol, rtol, max_abs_error_limit, required_matched_ratio).
 
     Float: mixed tolerance; Int: exact match (0 error).
-    Matches https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/.agents/skills/tilelang-op-test-design/references/precision-standard.md §4.1.
+    Matches .agents/skills/tilelang-op-test-design/references/precision-standard.md §4.1.
     """
     fp_table = {
         "float16": (2**-14, 2**-9, 1e-1, 0.99),

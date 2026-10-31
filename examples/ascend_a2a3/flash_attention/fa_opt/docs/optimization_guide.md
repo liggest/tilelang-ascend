@@ -327,5 +327,5 @@ Performance below expectations
 ## Appendix: Related Resources
 
 - [T.pipelined Detailed Tutorial](https://github.com/tile-ai/tilelang-ascend/blob/ascendc_pto/docs/tutorials/t_pipelined.md)
-- [TileLang-Ascend Programming Guide](https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/docs/TileLang-Ascend%20Programming%20Guide.md)
+- [TileLang-Ascend Programming Guide](../../../../../docs/ascend_a2a3/TileLang-Ascend Programming Guide.md)
 - [MindStudio Insight Download](https://gitcode.com/Ascend/msinsight/releases/tag_MindStudio_26.0.0-alpha.1)
