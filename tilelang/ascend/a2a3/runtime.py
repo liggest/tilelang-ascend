@@ -59,7 +59,7 @@ def resolve_allocation_shape(
     dynamic shapes. Source symbols are matched by name because cached parameter
     reflection and the original frontend IR may own different Var handles.
     """
-    analyzer = tvm.arith.Analyzer()
+    analyzer = None
     values = {}
     for variable, source in symbolic_map.items():
         candidates = symbolic_sources.get(str(variable), [source])
@@ -83,6 +83,8 @@ def resolve_allocation_shape(
                 if str(variable) not in values:
                     raise KeyError(f"Unfounded symbolic var: {variable}")
                 substitutions[variable] = tirx.IntImm(variable.dtype, values[str(variable)])
+            if analyzer is None:
+                analyzer = tvm.arith.Analyzer()
             value = analyzer.simplify(tirx.stmt_functor.substitute(dimension, substitutions))
             if not isinstance(value, tirx.IntImm):
                 raise ValueError(f"Shape not constant: {dimension}")
