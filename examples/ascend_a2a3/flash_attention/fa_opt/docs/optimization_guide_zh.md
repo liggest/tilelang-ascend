@@ -327,5 +327,5 @@ for i in T.pipelined(outer, num_stages):
 
 - [Case study：Expert v2 三槽在线 Softmax 优化历程](../expert_v2/README.md)
 - [T.pipelined 详细教程](https://github.com/tile-ai/tilelang-ascend/blob/ascendc_pto/docs/tutorials/t_pipelined.md)
-- [TileLang-Ascend Programming Guide](../../../../../docs/ascend_a2a3/TileLang-Ascend Programming Guide.md)
+- [TileLang-Ascend Programming Guide](https://github.com/tile-ai/tilelang-ascend/blob/463c234ce3087205c092e931207ca87b4cd5494c/docs/TileLang-Ascend%20Programming%20Guide.md)
 - [MindStudio Insight 下载](https://gitcode.com/Ascend/msinsight/releases/tag_MindStudio_26.0.0-alpha.1)
