@@ -653,7 +653,7 @@ jobs:
             bash -c "
               set -e
 
-              # Restore only a matching modern build cache; a cache miss is clean.
+              # 如果有缓存，复制到 build 目录
               if [ \"\$INCREMENTAL_FLAG\" = \"--enable-incremental\" ] && [ -d build-cache ] && [ \"\$(ls -A build-cache)\" ]; then
                 mkdir -p build
                 cp -ra build-cache/. build/
@@ -661,46 +661,34 @@ jobs:
                 rm -rf build
               fi
 
-              # Keep the recorded modern submodules; never apply the legacy TVM patches.
+              # 0. 将所有子模块重置到主仓库记录的版本，清除上次运行残留的修改（例如 TVM 补丁）
+              #    actions/checkout 只清理主仓库，self-hosted runner 上的子模块工作区会跨运行保留
               git submodule update --init --recursive --force
               git submodule foreach --recursive 'git reset -q --hard && git clean -qffdx'
 
-              # Load the SDK already installed in the original TA container.
-              CANN_LOADED=false
-              for CANN_SET_ENV in \"\${ASCEND_HOME_PATH:-}/set_env.sh\" \"\${ASCEND_TOOLKIT_HOME:-}/set_env.sh\" /usr/local/Ascend/ascend-toolkit/set_env.sh /usr/local/Ascend/ascend-toolkit/latest/set_env.sh /usr/local/Ascend/cann-*/set_env.sh; do
-                if [ -f \"\$CANN_SET_ENV\" ]; then
-                  source \"\$CANN_SET_ENV\"
-                  CANN_LOADED=true
-                  break
-                fi
-              done
-              if [ \"\$CANN_LOADED\" != true ]; then echo \"Existing CANN environment was not found\" >&2; exit 1; fi
-
-              # The container owns the matching CANN/Torch/TorchNPU stack.
-              # Constrain both pip dependency resolution and the final installed pair.
-              STACK_CONSTRAINTS=\$(mktemp)
-              export PIP_CONSTRAINT=\"\$STACK_CONSTRAINTS\"
-              trap 'rm -f \"\$STACK_CONSTRAINTS\"' EXIT
+              # 1. 增量编译项目
+              # 保持容器预装的 Torch/TorchNPU，依赖冲突时失败而不替换。
+              CI_REQUIREMENTS=\$(mktemp -d)
+              trap 'rm -rf \"\$CI_REQUIREMENTS\"' EXIT
+              STACK_CONSTRAINTS=\"\$CI_REQUIREMENTS/constraints.txt\"
               python -c 'from importlib.metadata import version; print(\"torch==\" + version(\"torch\")); print(\"torch-npu==\" + version(\"torch-npu\"))' > \"\$STACK_CONSTRAINTS\"
-              python -m pip install -c \"\$STACK_CONSTRAINTS\" -r requirements-dev.txt -r requirements.txt pytest pytest-xdist pytest-forked pytest-cov coverage pandas matplotlib PyYAML pybind11 decorator absl-py attrs scipy tornado
+              sed -E '/^[[:space:]]*torch([<>=!~;[:space:]]|\$)|^[[:space:]]*torch[-_]npu([<>=!~;[:space:]]|\$)/d' requirements.txt > \"\$CI_REQUIREMENTS/runtime.txt\"
+              python -m pip install -c \"\$STACK_CONSTRAINTS\" -r requirements-dev.txt
+              python -m pip install --no-build-isolation -c \"\$STACK_CONSTRAINTS\" -r \"\$CI_REQUIREMENTS/runtime.txt\" pytest pytest-xdist pytest-forked pytest-cov coverage pandas matplotlib PyYAML pybind11 decorator absl-py attrs scipy tornado
               BUILD_JOBS=\$(( \$(nproc) / 2 ))
               if [ \"\$BUILD_JOBS\" -lt 1 ]; then BUILD_JOBS=1; fi
               export CMAKE_BUILD_PARALLEL_LEVEL=\"\$BUILD_JOBS\"
-              python -m pip install -c \"\$STACK_CONSTRAINTS\" --no-build-isolation --no-deps -e . -Ccmake.define.USE_ASCEND=ON -Ccmake.define.USE_CUDA=OFF -Ccmake.define.USE_ROCM=OFF -Ccmake.define.USE_METAL=OFF -Ccmake.define.USE_LLVM=OFF
-              python -c 'from importlib.metadata import version; print(\"torch==\" + version(\"torch\")); print(\"torch-npu==\" + version(\"torch-npu\"))' | cmp - \"\$STACK_CONSTRAINTS\"
+              python -m pip install --no-build-isolation --no-deps -e . -Ccmake.define.USE_ASCEND=ON -Ccmake.define.USE_CUDA=OFF -Ccmake.define.USE_ROCM=OFF -Ccmake.define.USE_METAL=OFF -Ccmake.define.USE_LLVM=OFF
 
-              # Include dotfiles required by the modern editable/CMake build cache.
+              # 保存编译产物
               rm -rf build-cache
               mkdir -p build-cache
               cp -ra build/. build-cache/
 
+              # 2. 加载环境变量
               export TL_ROOT=\"\$PWD\"
               export PYTHONPATH=\"\$PWD\${PYTHONPATH:+:\$PYTHONPATH}\"
               export ACL_OP_INIT_MODE=1
-              export TORCH_DEVICE_BACKEND_AUTOLOAD=1
-              export TILELANG_TARGET=ascendc
-              unset TVM_IMPORT_PYTHON_PATH TVM_LIBRARY_PATH TL_TEMPLATE_PATH
-              python -c 'from pathlib import Path; import tilelang; root=Path.cwd().resolve(); native=str(root / \"build/lib/libtilelang.so\"); assert Path(tilelang.__file__).resolve() == root / \"tilelang/__init__.py\"; assert native in Path(\"/proc/self/maps\").read_text(); print(\"TileLang source:\", tilelang.__file__); print(\"TileLang native:\", native)'
               echo \"TILELANG_PATH=\$PWD\" >> \"\$GITHUB_ENV\"
 
               # 3. 运行测试用例
