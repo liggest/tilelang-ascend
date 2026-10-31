@@ -6,6 +6,7 @@ from .cpu import *
 from .cdna import *
 from .rdna import *
 from .metal import *
+from .ascend import Ascend, is_ascend_arch, is_cube_supported_precision
 from tvm.target import Target
 import torch
 from tilelang.backend.target import determine_target
@@ -14,11 +15,15 @@ from tilelang.rocm.target import target_get_rdna_generation, target_is_rdna
 
 def get_arch(target: str | Target = "cuda") -> TileDevice:
     if isinstance(target, str):
-        target = determine_target(target, return_object=True)
+        target = Target({"kind": "llvm", "keys": ["ascend"]}) if target == "ascend" else determine_target(target, return_object=True)
 
     if target.kind.name == "cuda":
         return CUDA(target)
+    elif target.kind.name == "ascend":
+        return Ascend(target)
     elif target.kind.name == "llvm":
+        if "ascend" in target.keys:
+            return Ascend(target)
         return CPU(target)
     elif target.kind.name == "hip":
         if target_is_rdna(target):
@@ -62,4 +67,7 @@ __all__ = [
     "RDNA",
     "METAL",
     "CPU",
+    "Ascend",
+    "is_ascend_arch",
+    "is_cube_supported_precision",
 ]

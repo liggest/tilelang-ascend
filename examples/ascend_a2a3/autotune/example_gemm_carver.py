@@ -1,17 +1,12 @@
-"""Preserved TA Ascend Carver recommendation workflow, pending evaluation.
-
-Source: 0deb8b93da11b7f0becbcded732d9633b7ca4e34:examples/autotune/example_gemm_carver.py
-Source SHA256: 7626ce7a9b7b5e7fdceb8c46671c4c79083aa3b668ee32634ca5bf2a045292f3
-The kernel and hint-to-config mapping are retained. No static configuration
-stands in for the unavailable Ascend Carver architecture/policies.
-"""
-
 import argparse
+import itertools  # noqa: F401
 
 import tilelang
 import tilelang.ascend.a2a3.language as T
 import torch
 
+from tilelang import carver
+from tilelang.carver.arch.ascend import Ascend
 
 tilelang.disable_cache()
 
@@ -32,19 +27,7 @@ pass_configs = {
 }
 
 
-def get_config(M, N, K) -> list[dict]:
-    raise NotImplementedError(
-        "A2/A3 Ascend Carver architecture and policy migration is deferred for "
-        "later evaluation. Legacy source files do not enable this capability. "
-        "Use example_gemm_autotune.py for the migrated shared autotuner."
-    )
-
-
-def _original_recommend_configs(M, N, K) -> list[dict]:
-    """Retain the original recommendation flow as inactive porting source."""
-    from tilelang import carver
-    from tilelang.carver.arch.ascend import Ascend
-
+def get_config() -> list[dict]:
     arch = Ascend()
     carver_template = carver.MatmulTemplate(
         M=M,
@@ -73,12 +56,18 @@ def ref_prog(A, B):
 
 
 def supply_prog(params):
-    M, K = (int(dim) for dim in params[0].shape)
-    _, N = (int(dim) for dim in params[1].shape)
     torch.manual_seed(0)
     return [torch.randn(M, K).half().npu(), torch.randn(K, N).half().npu()]
 
 
+@tilelang.autotune(
+    configs=get_config(),
+    ref_prog=ref_prog,
+    supply_prog=supply_prog,
+    atol=1e-2,
+    rtol=1e-2,
+)
+@tilelang.jit(out_idx=[-1], pass_configs=pass_configs)
 def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"):
     m_num = M // block_M
     n_num = N // block_N
@@ -110,16 +99,9 @@ def matmul(M, N, K, block_M, block_N, K_L1, dtype="float16", accum_dtype="float"
     return main
 
 
-def make_matmul(M, N, K):
-    # Keep genuine recommend_hints output as the sole search-space producer.
-    configs = get_config(M, N, K)
-    return tilelang.autotune(configs=configs, ref_prog=ref_prog, supply_prog=supply_prog, atol=1e-2, rtol=1e-2)(
-        tilelang.jit(out_idx=[-1], pass_configs=pass_configs)(matmul)
-    )
+# To trigger auto-tuning, we should not provide the tunable parameters (block_M, block_N, K_L1)
+# If provided, the auto-tuner will skip the tuning process and use the provided values.
+func = matmul(M, N, K)
 
-
-# Ascend Carver migration remains explicitly deferred by the agreed scope.
-tuned = make_matmul(M, N, K)
-func = tuned(M, N, K)
 print("Best Config:", func.get_tuner_result())
 print("Test passed!")

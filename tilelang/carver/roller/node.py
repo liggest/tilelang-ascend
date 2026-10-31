@@ -409,7 +409,10 @@ class PrimFuncNode(Node):
         assert self.get_tag("tensorcore_config")
 
         C_ax_m, C_ax_n = self.get_tag("tensorcore_config")
-        wmma_m, wmma_n, wmma_k = [16, 16, 16]  # just for testing, any number is ok
+        wmma_m, wmma_n, wmma_k = [16, 16, 16]
+        arch = self.get_tag("arch")
+        if arch and getattr(arch, "platform", "") == "ascend":
+            wmma_m, wmma_n, wmma_k = getattr(arch, "cube_shape", [16, 16, 16])
 
         output_buffer_shape = self.block_analyzer.sch.get(self.reduction_block).writes[0].buffer.shape
         valid_region = []
