@@ -135,22 +135,8 @@ if [ -n "$TEST_DIRS" ] || [ -n "$EXPERIMENT_DIRS" ]; then
 else
     echo "Running full tests (all directories, examples + experiment)"
 fi
-# Scope exceptions are not migrated tests and never contribute to pass counts.
-# Resolve once outside the collector's command-substitution subshells.
-SCOPE_ARGS=()
-[ -n "$TEST_DIRS" ] && SCOPE_ARGS+=(--dirs "${DIR_ARRAY[@]}")
-[ -n "$EXPERIMENT_DIRS" ] && SCOPE_ARGS+=(--experiment-dirs "${EXP_DIR_ARRAY[@]}")
-SCOPE_RESOLVER="${PROJECT_ROOT}/scripts/ci/ci_scope.py"
-SCOPE_TSV=$(python "$SCOPE_RESOLVER" "${SCOPE_ARGS[@]}" --format tsv) || exit 1
-declare -A DEFERRED_SOURCES=()
+# Keep the existing collection/report schema with no deferred workloads.
 scope_deferred_count=0
-while IFS=$'\t' read -r source reason; do
-    [ -n "$source" ] || continue
-    DEFERRED_SOURCES["$source"]="$reason"
-    scope_deferred_count=$((scope_deferred_count + 1))
-    echo "[DEFERRED] $source: $reason"
-done <<< "$SCOPE_TSV"
-echo "Scope deferred: $scope_deferred_count (not executed; excluded from pass counts)"
 # ===========================================
 
 # ================= 配置区 =================
@@ -226,10 +212,6 @@ should_skip_python_script() {
     local repo_relative
 
     repo_relative=$(realpath --relative-to="$PROJECT_ROOT" "$candidate")
-    if [[ -n "${DEFERRED_SOURCES[$repo_relative]:-}" ]]; then
-        echo "Skip explicitly deferred source: $candidate (${DEFERRED_SOURCES[$repo_relative]})" >&2
-        return 0
-    fi
     if [[ -n "${MIGRATED_SOURCES[$repo_relative]:-}" ]]; then
         echo "Skip migrated operator in legacy runner: $candidate" >&2
         return 0
