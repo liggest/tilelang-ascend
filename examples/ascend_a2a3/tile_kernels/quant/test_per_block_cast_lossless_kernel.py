@@ -80,14 +80,16 @@ def isolated_kernel_cache(tmp_path):
     compiling into; against this one it deletes nothing anyone else holds. Each
     case runs in its own fork, so nothing it compiles was reusable regardless.
     """
-    import tilelang.cache
+    from tilelang import env
 
-    previous = tilelang.cache.get_cache_dir()
-    tilelang.cache.set_cache_dir(str(tmp_path))
+    cache_dir = vars(type(env))["TILELANG_CACHE_DIR"]
+    # None must remain a live environment lookup after teardown.
+    previous = cache_dir._forced_value
+    env.TILELANG_CACHE_DIR = str(tmp_path)
     try:
         yield
     finally:
-        tilelang.cache.set_cache_dir(str(previous))
+        env.TILELANG_CACHE_DIR = previous
 
 
 def _load_per_block_cast_example() -> ModuleType:
