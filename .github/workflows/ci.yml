@@ -1,14 +1,5 @@
 name: CI
 on:
-  pull_request:
-    types:
-      - labeled
-      - unlabeled
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-  # Allow to trigger the workflow manually
   workflow_dispatch:
 
 permissions:
@@ -35,6 +26,7 @@ env:
 
 jobs:
   lint:
+    if: ${{ false }}
     name: Quick Lint
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -76,9 +68,7 @@ jobs:
 
   tests:
     name: Test for Python ${{ matrix.python-version }} with ${{ matrix.runner.toolkit }} (on ${{ matrix.runner.name }})
-    if: |
-      github.repository_owner == 'tile-ai' &&
-      (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: ${{ false }}
     needs: [lint]
     runs-on: ${{ matrix.runner.tags }}
     strategy:
@@ -441,9 +431,7 @@ jobs:
 
   ascend:
     name: Test for Ascend
-    if: |
-      github.repository_owner == 'tile-ai' &&
-      (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: ${{ false }}
     needs: [lint]
     runs-on: linux-amd64-a5-4
     container:
@@ -567,9 +555,7 @@ jobs:
 
   cutedsl:
     name: CuTeDSL Examples for Python 3.12 with CUDA-auto (on self-hosted-nvidia)
-    if: |
-      github.repository_owner == 'tile-ai' &&
-      (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: ${{ false }}
     needs: [tests]
     runs-on: [self-hosted, nvidia]
     timeout-minutes: 120

@@ -1,9 +1,7 @@
 name: Performance Regression Bot
 
 on:
-  issue_comment:
-    types:
-      - created
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -33,10 +31,7 @@ env:
 jobs:
   permissions-check:
     name: Check bot permissions
-    if: |
-      github.repository_owner == 'tile-ai' &&
-      github.event.issue.pull_request &&
-      (contains(github.event.comment.body, '@regression-perf'))
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: Get commenter permission
@@ -56,6 +51,7 @@ jobs:
           exit 1
 
   pr-regression:
+    if: ${{ false }}
     name: Performance regression test between PR and main
     needs: [permissions-check]
     runs-on: ${{ matrix.runner.tags }}

@@ -1,9 +1,6 @@
 name: Documentation
 
 on:
-  pull_request_target:
-    types:
-      - closed
   workflow_dispatch:
 
 permissions:
@@ -12,16 +9,7 @@ permissions:
 jobs:
   docs:
     name: Build and Publish Docs
-    if: |
-      github.repository_owner == 'tile-ai' &&
-      (
-        (
-          github.event_name == 'pull_request_target' &&
-          github.event.pull_request.merged == true &&
-          github.event.pull_request.base.ref == 'main'
-        ) ||
-        github.event_name == 'workflow_dispatch'
-      )
+    if: ${{ false }}
     runs-on: [self-hosted, nvidia]
     steps:
       - name: Checkout repository
